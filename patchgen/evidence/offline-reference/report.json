@@ -1,0 +1,11 @@
+{
+  "status": "validation_passed",
+  "human_approval_required": true,
+  "mode": "offline_replay",
+  "prompt_version": "1.0",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "outcome": "patch",
+  "workspace": "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/offline-reference/workspace",
+  "workflow_elapsed_seconds": 10.893795415991917,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

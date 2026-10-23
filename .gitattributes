@@ -1,0 +1,4 @@
+# Unified diff artifacts require single-space blank context lines.
+patchgen/**/*.patch -whitespace
+# Preserve raw command output exactly.
+patchgen/evidence/**/*.log -whitespace

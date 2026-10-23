@@ -1,0 +1,62 @@
+{
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "review_method": "source inspection of constructor assignments and decoded metadata reads; not a measured human baseline",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/main.py",
+      "language": "python",
+      "positions": [
+        {
+          "start_line": 31,
+          "end_line": 31,
+          "reason": "construction or read of removed Entity.name"
+        },
+        {
+          "start_line": 87,
+          "end_line": 87,
+          "reason": "construction or read of removed Entity.name"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "language": "typescript",
+      "positions": [
+        {
+          "start_line": 11,
+          "end_line": 11,
+          "reason": "construction or read of removed Entity.name"
+        },
+        {
+          "start_line": 59,
+          "end_line": 59,
+          "reason": "construction or read of removed Entity.name"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "language": "csharp",
+      "positions": [
+        {
+          "start_line": 15,
+          "end_line": 15,
+          "reason": "construction or read of removed Entity.name"
+        },
+        {
+          "start_line": 38,
+          "end_line": 38,
+          "reason": "construction or read of removed Entity.name"
+        }
+      ]
+    }
+  ],
+  "expected_fields": [
+    "entity_id"
+  ],
+  "legacy_payload_hex": "0a0a6c65676163792d303031120772657469726564",
+  "limitations": [
+    "single manually located case",
+    "no automatic detector or impact-locator evaluation"
+  ]
+}

@@ -1,0 +1,138 @@
+diff --git a/runtimes/python/main.py b/runtimes/python/main.py
+--- a/runtimes/python/main.py
++++ b/runtimes/python/main.py
+@@ -27,8 +27,6 @@
+         raise ValueError(f"Unsupported schema version: {version}")
+     entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+     fields = {"entity_id": entity.entity_id}
+-    if version == "v1":
+-        fields["name"] = entity.name
+     print(json.dumps({"runtime": "python", "version": version, "fields": fields}, ensure_ascii=True), flush=True)
+     return entity, fields
+ 
+@@ -83,6 +81,4 @@
+     else:
+         module = importlib.import_module(f"{args.version}.entity_pb2")
+         entity = module.Entity(entity_id="py_101")
+-        if args.version == "v1":
+-            entity.name = "Sensor A"
+         process_entity(entity.SerializeToString(), args.version)
+diff --git a/runtimes/typescript/main.ts b/runtimes/typescript/main.ts
+--- a/runtimes/typescript/main.ts
++++ b/runtimes/typescript/main.ts
+@@ -8,7 +8,7 @@
+ export function processEntity(rawBytes: Uint8Array, version: string) {
+   if (version !== "v1" && version !== "v2") throw new Error(`Unsupported schema version: ${version}`);
+   const entity = version === "v1" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);
+-  const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
++  const fields = { entity_id: entity.entityId };
+   console.log(JSON.stringify({ runtime: "typescript", version, fields }));
+   return { entity, fields };
+ }
+@@ -56,7 +56,7 @@
+ } else {
+   const version = process.argv.includes("--v2") ? "v2" : "v1";
+   const bytes = version === "v1"
+-    ? EntityV1.encode({ entityId: "ts_303", name: "Sensor C" }).finish()
++    ? EntityV1.encode({ entityId: "ts_303" }).finish()
+     : EntityV2.encode({ entityId: "ts_303" }).finish();
+   processEntity(bytes, version);
+ }
+diff --git a/runtimes/csharp/main.cs b/runtimes/csharp/main.cs
+--- a/runtimes/csharp/main.cs
++++ b/runtimes/csharp/main.cs
+@@ -12,7 +12,7 @@
+     {
+         var decoded = Simulation.V1.Entity.Parser.ParseFrom(rawBytes);
+         entity = decoded;
+-        fields = new() { ["entity_id"] = decoded.EntityId, ["name"] = decoded.Name };
++        fields = new() { ["entity_id"] = decoded.EntityId };
+     }
+     else if (version == "v2")
+     {
+@@ -35,7 +35,7 @@
+ {
+     var version = args.Contains("--v2") ? "v2" : "v1";
+     IMessage entity = version == "v1"
+-        ? new Simulation.V1.Entity { EntityId = "cs_202", Name = "Sensor B" }
++        ? new Simulation.V1.Entity { EntityId = "cs_202" }
+         : new Simulation.V2.Entity { EntityId = "cs_202" };
+     ProcessEntity(entity.ToByteArray(), version);
+     return 0;
+diff --git a/proto/v1/entity.proto b/proto/v1/entity.proto
+--- a/proto/v1/entity.proto
++++ b/proto/v1/entity.proto
+@@ -4,5 +4,6 @@
+ 
+ message Entity {
+   string entity_id = 1;
+-  string name = 2;
++  reserved 2;
++  reserved "name";
+ }
+diff --git a/testbed/tests/e2e_test.py b/testbed/tests/e2e_test.py
+--- a/testbed/tests/e2e_test.py
++++ b/testbed/tests/e2e_test.py
+@@ -10,10 +10,10 @@
+ 
+ RUNTIMES = ['python', 'typescript', 'csharp']
+ CASES = [
+-    {'entity_id': 'roundtrip-001', 'name': 'Sensor A'},
+-    {'entity_id': '', 'name': ''},
+-    {'entity_id': 'entity-雪-🚀', 'name': 'Café / Δ / 🚀'},
+-    {'entity_id': 'entity-004', 'name': 'quotes " and newline\n and backslash \\'},
++    {'entity_id': 'roundtrip-001'},
++    {'entity_id': ''},
++    {'entity_id': 'entity-雪-🚀'},
++    {'entity_id': 'quotes \" and newline\n and backslash \\'},
+ ]
+ CASE_NAMES = ['Standard text', 'Empty strings', 'Unicode', 'Escaped text']
+ RUNTIME_NAMES = {'python': 'Python', 'typescript': 'TypeScript', 'csharp': 'C#'}
+@@ -37,7 +37,7 @@
+     assert [item['runtime'] for item in observations] == RUNTIMES, 'missing or reordered decoder observations'
+     for item in observations:
+         assert item['fields'] == expected, f"{item['runtime']} decoded different stable fields: {item['fields']!r}"
+-    actual = {'entity_id': received.entity_id, 'name': received.name}
++    actual = {'entity_id': received.entity_id}
+     assert actual == expected, f'final stable fields changed: {actual!r}'
+     # The service trace is intentionally changing transport metadata, not an Entity field.
+     assert trace == RUNTIMES, f'incorrect service trace: {trace!r}'
+@@ -71,7 +71,7 @@
+             runtime = RUNTIME_NAMES[observation['runtime']]
+             print(f'    {runtime} [PASS]: {format_fields(observation["fields"])}')
+         print_encoded('Encoded response', returned_bytes)
+-        print(f'  Decoded response [PASS]: {format_fields({"entity_id": received.entity_id, "name": received.name})}')
++        print(f'  Decoded response [PASS]: {format_fields({"entity_id": received.entity_id})}')
+         print('  Service order [PASS]: ' + ' -> '.join(RUNTIME_NAMES[runtime] for runtime in trace) + '\n')
+     print(f'PASS: {len(CASES)}/{len(CASES)} round-trip cases passed.')
+ 
+diff --git a/testbed/tests/test_evidence.py b/testbed/tests/test_evidence.py
+--- a/testbed/tests/test_evidence.py
++++ b/testbed/tests/test_evidence.py
+@@ -5,7 +5,7 @@
+ 
+ class EvidenceTests(unittest.TestCase):
+     def setUp(self):
+-        self.fields = {'entity_id': '001', 'name': 'Sensor A'}
++        self.fields = {'entity_id': '001'}
+         self.message = Entity(**self.fields)
+         self.observations = [{'runtime': runtime, 'fields': dict(self.fields)} for runtime in RUNTIMES]
+ 
+@@ -14,7 +14,7 @@
+ 
+     def test_intermediate_misdecode_fails_even_when_final_payload_matches(self):
+         observations = copy.deepcopy(self.observations)
+-        observations[1]['fields']['name'] = 'wrong'
++        observations[1]['fields']['entity_id'] = 'wrong'
+         with self.assertRaisesRegex(AssertionError, 'typescript decoded'):
+             validate_evidence(self.fields, self.message, observations, RUNTIMES)
+ 
+@@ -24,7 +24,7 @@
+ 
+     def test_final_payload_change_fails(self):
+         with self.assertRaisesRegex(AssertionError, 'final stable fields'):
+-            validate_evidence(self.fields, Entity(entity_id='wrong', name='Sensor A'), self.observations, RUNTIMES)
++            validate_evidence(self.fields, Entity(entity_id='wrong'), self.observations, RUNTIMES)
+ 
+     def test_trace_fails_separately(self):
+         with self.assertRaisesRegex(AssertionError, 'incorrect service trace'):
