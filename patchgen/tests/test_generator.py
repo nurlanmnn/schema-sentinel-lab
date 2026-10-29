@@ -89,6 +89,25 @@ class GeneratorTests(unittest.TestCase):
             self.assertEqual(result.returncode,1)
             self.assertEqual(json.loads((output/'report.json').read_text())['status'],'failed')
 
+    def test_explicit_source_preparation_does_not_change_caller_head(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base=Path(temp)
+            replay=base/'response.json';replay.write_text(json.dumps(response()))
+            output=base/'prepared'
+            before=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True)
+            try:
+                result=subprocess.run([sys.executable,'-m','patchgen.generator','--prepare-source',
+                    '--source',str(ROOT),'--response',str(replay),'--output',str(output)],cwd=ROOT,capture_output=True,text=True)
+                self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+                self.assertEqual(subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True),before)
+                self.assertEqual(subprocess.check_output(['git','rev-parse','HEAD'],cwd=output/'source',text=True).strip(),CASE['source_revision'])
+                self.assertFalse((output/'workspace').exists())
+                report=json.loads((output/'report.json').read_text())
+                import hashlib
+                self.assertEqual(hashlib.sha256((output/'generator-source.py').read_bytes()).hexdigest(),report['generator_sha256'])
+            finally:
+                subprocess.run(['git','-C',str(ROOT),'worktree','remove','--force',str(output/'source')],check=False,capture_output=True)
+
     def test_stale_source_and_malformed_patch_in_isolation(self):
         with tempfile.TemporaryDirectory() as temp:
             repo=Path(temp)/'repo'; repo.mkdir()

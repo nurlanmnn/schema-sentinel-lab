@@ -1,0 +1,8 @@
+{
+  "model": "ministral-3:8b",
+  "elapsed_seconds": 98.60261983296368,
+  "result": {
+    "status": "success"
+  },
+  "scope": "one additional model download; excludes inference"
+}

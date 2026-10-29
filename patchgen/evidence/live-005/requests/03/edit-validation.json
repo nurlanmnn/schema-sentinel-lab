@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "path": "runtimes/csharp/main.cs",
+  "error": "replacement must be complete newline-terminated lines, or empty for deletion"
+}

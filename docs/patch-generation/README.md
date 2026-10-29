@@ -1,29 +1,32 @@
 # Local patch-generation example
 
-This is a review-only SS-70/71/72 slice. It accepts manually prepared impact sites,
-calls a local model once, stores evidence and checks a proposal in a detached
+The working path generates runtime edits only and validates them against a
+separate trusted test migration. Model-generated test migration is still an
+unsuccessful experiment. This is a review-only SS-70/71/72 slice. It accepts manually prepared impact sites,
+makes one request per supplied file, stores evidence and checks a proposal in a detached
 worktree. No repair loop or automatic merge is implemented.
 
 Install Python 3.13, Node 22+, .NET 8 SDK, Buf, and Ollama. Buf uses the existing
 pinned plugins in `buf.gen.yaml`; their registry must be reachable. The runtime
 setup uses existing dependency manifests and lockfiles. On macOS, install Buf
 with `brew install bufbuild/buf/buf`. Start `ollama serve` if needed, then
-`ollama pull ministral-3:3b`. Model setup is separate from request measurement.
+`ollama pull ministral-3:8b`. Model setup is separate from request measurement.
 
-Prepare the exact source once (run from this implementation checkout):
-
-```sh
-git worktree add --detach ../patchgen-source 26304c1ed2f4738676a9607e8fe21e17ebd090f0
-```
-
-One command produces and evaluates a new proposal:
+One command prepares the exact source, produces and evaluates a new proposal
+(run from this implementation checkout):
 
 ```sh
-python3 -m patchgen.generator --source ../patchgen-source --output patchgen/evidence/my-run --validate
+python3 -m patchgen.generator --prepare-source --model ministral-3:8b --fixture patchgen/fixtures/entity-name-removal/runtime-input.json --validation-profile entity-name-removal --output patchgen/evidence/my-run --validate
 ```
 
-The output directory must be new. The fixture defaults to the saved removal case.
-Use `--fixture` for another contract record. `--validate` runs `buf generate`, the
+`--prepare-source` creates a detached snapshot at the fixture commit under the
+new output directory. To use an existing checkout, omit that flag and pass
+`--source PATH`; its HEAD and file text must match the fixture exactly.
+
+The output directory must be new. The default fixture is the original broader
+five-file experiment; use the runtime-only command above for the passing scope.
+Use `--fixture` for another contract record. Both local `ministral-3:3b` and
+`ministral-3:8b` are allowlisted; no cloud model or remote endpoint is accepted. `--validate` runs `buf generate`, the
 existing `run_local.py` setup/build/unit/round-trip checks, then an independent
 oracle with four field-value cases plus a legacy field-2 payload. Without that
 flag the result is explicitly `applied_unvalidated`. Failures exit nonzero.
@@ -37,13 +40,33 @@ Retained artifacts: input, prompt version/hash, exact request/settings, model ta
 and digest/quantization/license metadata, serving version, raw response, proposal,
 diff, request-time allocation samples, report, validation log and worktree. A
 failed attempt is retained without repair or manual correction of its response.
-After passing validation, `validated.patch` also includes regenerated bindings.
+After passing validation, `validated.patch` also includes regenerated bindings
+and, when explicitly selected, the independent test migration. Review this
+complete bundle; `proposal.patch` alone is the model runtime edits plus the
+supplied schema and does not include the evaluator-owned tests. The selected
+profile and its source/schema/test-patch hashes are saved separately.
 Model usefulness is assessed separately from offline harness correctness.
+Each new run saves `generator-source.py` and `oracle-source.py`; the report
+contains their hashes. Command logs include individual elapsed durations.
+Nested source/application worktrees and installed dependencies are ignored by Git.
+
+Prompt 2.3 requests small line-range replacements using an Ollama JSON schema.
+The source is numbered with original 1-based lines. Ranges must be valid and
+nonoverlapping, and every supplied impact line must be covered. Each replacement
+is an array of source lines; the host supplies line separators. The host owns the path,
+copies the supplied new_schema, and assembles a unified diff.
+`--strategy exact_edits` selects prompt 2.0; `--strategy file_content` selects
+prompt 2.1. Both remain available for reproducing the earlier experiments. There is one request per file and no repair loop.
+A clarification or invalid file blocks partial application. Raw responses are
+retained under `requests/01/` through `05/` for the original five-file fixture (three requests for the runtime-only fixture). The independent
+oracle also checks six deliberately bad evidence cases to detect weakened
+assertions and verifies that the original four test categories still exist. Python syntax and retention of original unit-test names are checked
+before running builds. Human review remains required even after validation.
 
 Offline reference verification (does not call a model):
 
 ```sh
-python3 -m patchgen.generator --source ../patchgen-source --response patchgen/reference/entity-name-removal/response.json --output patchgen/evidence/offline-reference --validate
+python3 -m patchgen.generator --prepare-source --response patchgen/reference/entity-name-removal/response.json --output patchgen/evidence/offline-reference-replay --validate
 ```
 
 Tests: `python3 -m unittest discover -s patchgen/tests -v`.
@@ -57,3 +80,11 @@ latency, or general schema propagation performance.
 Review every generated patch and its evidence before acceptance. Automatic
 change detection/location, pub/sub, mixed-version guarantees, a 20-case benchmark,
 license adoption by the team and human acceptance remain separate work.
+
+
+Current result: see `evaluation-2026-10-28.md`. One live runtime-only run passed;
+there is no successful live generation of both runtime and test migrations.
+The validation profile is opt-in, pinned to this exact change/revision, and only
+allows two evaluator-owned test files. Test sources and reference answers are
+not passed to the runtime model. To repeat the broader failed scope, use the
+original `input.json` fixture without `--validation-profile`.

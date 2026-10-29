@@ -1,0 +1,23 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 30,
+      "end_line": 31,
+      "replacement_lines": [
+        "    fields = {\"entity_id\": entity.entity_id}"
+      ]
+    },
+    {
+      "start_line": 86,
+      "end_line": 87,
+      "replacement_lines": []
+    }
+  ],
+  "rationale": "Removed all references to the deleted `Entity.name` field in both construction and read operations. The `process_entity` function no longer includes `name` in the output fields for v1, and entity creation no longer sets a name when version is v1.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated bindings will handle the reserved field correctly without requiring explicit handling of field number 2 or the name string.",
+    "No other implicit references to `name` exist in the codebase beyond these two sites."
+  ]
+}

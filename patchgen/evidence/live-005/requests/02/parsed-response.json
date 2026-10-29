@@ -1,0 +1,21 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement": "  const fields = { entity_id: entity.entityId };"
+    },
+    {
+      "start_line": 59,
+      "end_line": 59,
+      "replacement": "    ? EntityV1.encode({ entityId: \"ts_303\" }).finish()"
+    }
+  ],
+  "rationale": "Removed all references to the `name` field from v1 construction and reads. The generated bindings will handle the reserved field correctly, so no explicit handling is needed for legacy payloads with field 2. The `entity_id` remains the only required field in v1.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated protobuf bindings for EntityV1 will correctly ignore/reserve field 2 and not expose it as a property or require its presence during decode/encode.",
+    "No other implicit uses of `name` exist in the file beyond the explicitly flagged lines."
+  ]
+}

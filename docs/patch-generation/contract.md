@@ -49,3 +49,40 @@ Questions for change-detection and impact-location review:
 - How should source movement between detection and proposal generation be refreshed?
 
 The first slice rejects stale context rather than rebasing a generated proposal.
+
+
+Prompt strategy 2.0 (28 October) retains this public contract. Internally it
+requests one JSON response per affected file with outcome, edits (exact before
+and after text), rationale, confidence and assumptions. The host converts those
+edits to the public unified diff and copies the provided new_schema. Confidence
+on the combined proposal is the minimum of the per-file estimates, still
+uncalibrated. A file requiring clarification stops the entire proposal. See
+`docs/decisions/0002-patch-generator-edits.md` for rationale and boundaries.
+
+Prompt 2.1 adds a complete-file response (`updated_source` instead of edits).
+The host creates the diff against the pinned input source. Empty or unchanged
+patch outcomes fail; non-patch outcomes cannot contain replacement source. This
+changes the internal request strategy, not the public input/output contract.
+
+Prompt 2.2 (current default) instead supplies numbered original source and asks
+for inclusive start_line/end_line ranges plus complete replacement lines. The
+host rejects out-of-range, overlapping, unchanged and partial-line edits.
+Runtime requests omit test-only guidance. Test requests require expected values
+to remain unchanged when a negative case corrupts actual data. This retains the
+public contract and leaves independent reference answers outside every prompt.
+
+Prompt 2.3 represents replacement text as an array of source lines; the host
+adds separators. This replaces prompt 2.2's newline-terminated string format,
+which the model did not follow. Each supplied impact line must be covered and
+each edit must touch a supplied site. Ranges still refer to the original file;
+these checks do not prove semantic correctness or automatic impact recall.
+
+
+The runtime-only fixture `runtime-input.json` uses the same contract and source
+revision but lists only the three runtime files. With the explicit trusted
+`entity-name-removal` validation profile, the host applies separately maintained
+test changes after the model proposal. These changes are restricted to two test
+files and pinned by source, schema and patch hashes. They never enter model
+prompts. Reports distinguish runtime generation from independent test migration;
+the complete validated review bundle includes both plus regenerated bindings.
+The original five-file fixture remains saved and has no passing live result.

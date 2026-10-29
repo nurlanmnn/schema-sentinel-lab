@@ -1,0 +1,61 @@
+$ git worktree add --detach /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace 26304c1ed2f4738676a9607e8fe21e17ebd090f0
+Preparing worktree (detached HEAD 26304c1)
+HEAD is now at 26304c1 Show encoded Protobuf bytes and actual decoded values in test output
+
+exit=0; elapsed_seconds=0.359712
+$ git apply --check /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/proposal.patch
+
+exit=0; elapsed_seconds=0.012494
+$ git apply /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/proposal.patch
+
+exit=0; elapsed_seconds=0.010978
+$ buf generate
+
+exit=0; elapsed_seconds=2.524581
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 run_local.py
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m venv "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/.venv"
+
+> "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/.venv/bin/python" -m pip install -r runtimes/python/requirements.txt
+Collecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))
+  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)
+Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-4.25.8
+
+[notice] A new release of pip is available: 25.2 -> 26.2.2
+[notice] To update, run: /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/.venv/bin/python -m pip install --upgrade pip
+
+> /opt/homebrew/bin/npm ci --prefix runtimes/typescript
+
+added 14 packages, and audited 15 packages in 896ms
+
+found 0 vulnerabilities
+
+> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj
+  Determining projects to restore...
+  Restored /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/runtimes/csharp/CsharpApp.csproj (in 1.62 sec).
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+
+> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/runtimes/csharp/main.cs(38,59): error CS0117: 'Entity' does not contain a definition for 'Name' [/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/runtimes/csharp/CsharpApp.csproj]
+
+Build FAILED.
+
+/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/runtimes/csharp/main.cs(38,59): error CS0117: 'Entity' does not contain a definition for 'Name' [/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-004/workspace/runtimes/csharp/CsharpApp.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.40
+
+Command failed (exit 1). See the output above.
+
+exit=1; elapsed_seconds=9.079100

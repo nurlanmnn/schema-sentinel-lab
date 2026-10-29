@@ -1,0 +1,27 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 8,
+      "end_line": 8,
+      "replacement": "        self.fields = {'entity_id': '001'}\n"
+    },
+    {
+      "start_line": 9,
+      "end_line": 9,
+      "replacement": "        self.message = Entity(**self.fields)\n"
+    },
+    {
+      "start_line": 17,
+      "end_line": 17,
+      "replacement": ""
+    }
+  ],
+  "rationale": "Removed all references to the obsolete 'name' field from construction and assertions. The test preserves entity_id, service order, and validation logic while ensuring no legacy payloads with field 2 are incorrectly decoded as valid v1 entities. Negative tests remain intact by corrupting retained fields only.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The Entity constructor in the testbed uses **kwargs to unpack a dictionary, so removing 'name' from the dict will not break construction.",
+    "'validate_evidence' validates field presence/absence and service order but does not rely on the specific value of entity_id or name beyond its existence (or absence).",
+    "The host regenerates bindings after schema change, so no manual protobuf binding edits are required in this file."
+  ]
+}

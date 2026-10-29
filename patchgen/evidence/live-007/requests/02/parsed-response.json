@@ -1,0 +1,25 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "  const fields = { entity_id: entity.entityId };"
+      ]
+    },
+    {
+      "start_line": 59,
+      "end_line": 59,
+      "replacement_lines": [
+        "    ? EntityV1.encode({ entityId: \"ts_303\" }).finish()"
+      ]
+    }
+  ],
+  "rationale": "Removed all references to the deleted `name` field from v1 construction and read operations. The `entity_id` field remains intact as specified in the schema change. No other fields or logic were affected.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated bindings for EntityV1 will not expose a `name` property after regeneration, so direct access is safe to remove.",
+    "No other implicit uses of the `name` field exist in this file beyond the explicitly marked positions."
+  ]
+}

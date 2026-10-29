@@ -1,5 +1,6 @@
 """Independent field-removal oracle. Never included in model prompts."""
 import importlib.util
+import copy
 import json
 import os
 import signal
@@ -10,6 +11,38 @@ import time
 import urllib.request
 
 
+def check_evidence_rejections(root, Entity):
+    """Exercise migrated assertions with adversarial data, outside model-controlled tests."""
+    spec = importlib.util.spec_from_file_location('migrated_evidence',root / 'testbed/tests/e2e_test.py')
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    cases = module.CASES
+    assert len(cases) == 4 and all(set(case) == {'entity_id'} for case in cases), 'four retained-field round-trip cases required'
+    identifiers = [case['entity_id'] for case in cases]
+    assert '' in identifiers, 'empty-string case missing'
+    assert any(any(ord(char)>127 for char in value) for value in identifiers), 'Unicode case missing'
+    assert any(all(char in value for char in ('"','\n','\\')) for value in identifiers), 'escaped-string case missing'
+    expected = {'entity_id':'independent-001'}
+    runtimes = ['python','typescript','csharp']
+    entity = Entity(**expected)
+    observations = [{'runtime':r,'fields':dict(expected)} for r in runtimes]
+    module.validate_evidence(expected,entity,observations,runtimes)
+    wrong = copy.deepcopy(observations); wrong[1]['fields']['entity_id']='wrong'
+    extra = copy.deepcopy(observations); extra[1]['fields']['name']='retired'
+    tests = [('intermediate identifier',entity,wrong,runtimes),
+             ('removed metadata',entity,extra,runtimes),
+             ('final identifier',Entity(entity_id='wrong'),observations,runtimes),
+             ('missing runtime',entity,observations[:-1],runtimes),
+             ('runtime order',entity,list(reversed(observations)),runtimes),
+             ('trace',entity,observations,list(reversed(runtimes)))]
+    for label,received,items,trace in tests:
+        try:
+            module.validate_evidence(expected,received,items,trace)
+        except AssertionError:
+            print(f'PASS independent rejection: {label}',flush=True)
+        else:
+            raise AssertionError(f'migrated evidence accepted invalid {label}')
+
+
 def main(workspace):
     root = Path(workspace).resolve()
     sys.path.insert(0, str(root / 'generated/python'))
@@ -17,6 +50,7 @@ def main(workspace):
     from v2.entity_pb2 import Entity as EntityV2
     assert list(Entity.DESCRIPTOR.fields_by_name) == ['entity_id']
     assert list(EntityV2.DESCRIPTOR.fields_by_name) == ['entity_id']
+    check_evidence_rejections(root,Entity)
     spec = importlib.util.spec_from_file_location('trusted_runner',root / 'testbed/scripts/run-local.py')
     runner = importlib.util.module_from_spec(spec); spec.loader.exec_module(runner)
     process = subprocess.Popen([sys.executable,str(root / 'testbed/scripts/run-local.py'),'--serve'],cwd=root,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,

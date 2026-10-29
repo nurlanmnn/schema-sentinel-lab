@@ -1,0 +1,21 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 30,
+      "end_line": 31,
+      "replacement": ""
+    },
+    {
+      "start_line": 86,
+      "end_line": 87,
+      "replacement": ""
+    }
+  ],
+  "rationale": "Removed all references to the deleted `Entity.name` field in v1 construction and observation processing. The logic for handling v2 remains unchanged, as it does not use the removed field. Fields dictionary construction now only includes `entity_id`, preserving the intended behavior of excluding the removed field.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated bindings will correctly handle reserved fields without requiring explicit handling in the codebase, as per the host's instructions.",
+    "No other implicit or external references to `Entity.name` exist outside the explicitly flagged lines."
+  ]
+}

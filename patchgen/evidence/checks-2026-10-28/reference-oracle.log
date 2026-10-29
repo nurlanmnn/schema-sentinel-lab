@@ -1,0 +1,20 @@
+PASS independent rejection: intermediate identifier
+PASS independent rejection: removed metadata
+PASS independent rejection: final identifier
+PASS independent rejection: missing runtime
+PASS independent rejection: runtime order
+PASS independent rejection: trace
+PASS independent oracle: normal
+PASS independent oracle: empty
+PASS independent oracle: unicode
+PASS independent oracle: escaped
+PASS independent oracle: legacy
+Services are running:
+  Python: http://127.0.0.1:8000/health
+  TypeScript: http://127.0.0.1:8001/health
+  C#: http://127.0.0.1:8002/health
+Logs: /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/offline-reference/workspace/testbed/artifacts
+Press Ctrl+C to stop all three services.
+
+Services stopped.
+

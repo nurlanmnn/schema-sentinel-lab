@@ -1,0 +1,19 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "before": "const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };",
+      "after": "const fields = { entity_id: entity.entityId };"
+    },
+    {
+      "before": "EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()",
+      "after": "EntityV1.encode({ entityId: \"ts_303\" }).finish()"
+    }
+  ],
+  "rationale": "The removed `name` field from the Entity protobuf schema must be eliminated from all construction and read operations in the TypeScript runtime. The first edit removes the conditional spread of `name` into the fields object, as it is no longer part of the v1 schema. The second edit removes the `name` field during entity construction for testing purposes, preserving the same test coverage but with an empty string value (implicitly) instead of a literal name.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated TypeScript bindings will handle reserved fields gracefully without requiring explicit handling in the codebase.",
+    "No other runtime logic depends on the presence or absence of `name` beyond what is explicitly shown in the source context."
+  ]
+}

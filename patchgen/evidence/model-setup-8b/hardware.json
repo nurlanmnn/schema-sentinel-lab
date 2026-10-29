@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-28",
+  "machine": "MacBook Pro Mac16,1",
+  "chip": "Apple M4",
+  "unified_memory_bytes": 17179869184,
+  "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "ollama": "0.30.8",
+  "buf": "1.75.0",
+  "model_source": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512",
+  "license": "Apache-2.0",
+  "serving_license": "MIT",
+  "resources": "local machine; no paid compute",
+  "assessment": "One additional 6.0 GB listed Q4_K_M candidate; 3B unloaded before evaluation."
+}

@@ -1,0 +1,78 @@
+[
+  {
+    "runtime": "python",
+    "version": "v1",
+    "command": [
+      "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-007/workspace/.venv/bin/python",
+      "runtimes/python/main.py"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.07211716700112447,
+    "stdout": "{\"runtime\": \"python\", \"version\": \"v1\", \"fields\": {\"entity_id\": \"py_101\"}}\n",
+    "stderr": ""
+  },
+  {
+    "runtime": "python",
+    "version": "v2",
+    "command": [
+      "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/live-007/workspace/.venv/bin/python",
+      "runtimes/python/main.py",
+      "--version",
+      "v2"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.05413179099559784,
+    "stdout": "{\"runtime\": \"python\", \"version\": \"v2\", \"fields\": {\"entity_id\": \"py_101\"}}\n",
+    "stderr": ""
+  },
+  {
+    "runtime": "typescript",
+    "version": "v1",
+    "command": [
+      "node",
+      "runtimes/typescript/dist/runtimes/typescript/main.js"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.17447187495417893,
+    "stdout": "{\"runtime\":\"typescript\",\"version\":\"v1\",\"fields\":{\"entity_id\":\"ts_303\"}}\n",
+    "stderr": ""
+  },
+  {
+    "runtime": "typescript",
+    "version": "v2",
+    "command": [
+      "node",
+      "runtimes/typescript/dist/runtimes/typescript/main.js",
+      "--v2"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.02778137498535216,
+    "stdout": "{\"runtime\":\"typescript\",\"version\":\"v2\",\"fields\":{\"entity_id\":\"ts_303\"}}\n",
+    "stderr": ""
+  },
+  {
+    "runtime": "csharp",
+    "version": "v1",
+    "command": [
+      "dotnet",
+      "runtimes/csharp/bin/Release/net8.0/CsharpApp.dll"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.14643908402649686,
+    "stdout": "{\"runtime\":\"csharp\",\"version\":\"v1\",\"fields\":{\"entity_id\":\"cs_202\"}}\n",
+    "stderr": ""
+  },
+  {
+    "runtime": "csharp",
+    "version": "v2",
+    "command": [
+      "dotnet",
+      "runtimes/csharp/bin/Release/net8.0/CsharpApp.dll",
+      "--v2"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.03754404099890962,
+    "stdout": "{\"runtime\":\"csharp\",\"version\":\"v2\",\"fields\":{\"entity_id\":\"cs_202\"}}\n",
+    "stderr": ""
+  }
+]
