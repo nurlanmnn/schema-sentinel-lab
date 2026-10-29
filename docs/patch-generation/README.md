@@ -88,3 +88,11 @@ The validation profile is opt-in, pinned to this exact change/revision, and only
 allows two evaluator-owned test files. Test sources and reference answers are
 not passed to the runtime model. To repeat the broader failed scope, use the
 original `input.json` fixture without `--validation-profile`.
+
+
+Three-case expansion: [benchmark seed report](benchmark-seed-2026-10-28.md).
+Live rename/type proposals failed; an unused enum addition passed with no runtime
+edits. Independent rename/type reference replays passed separately. Run
+`python3 -m patchgen.benchmark --output patchgen/evidence/benchmark-next` for all
+three live cases sequentially. See [adapter 1.0](adapter.md) for fixture-fed wiring
+and the real prototype's measured 2/6 impact recall; full integration is pending.

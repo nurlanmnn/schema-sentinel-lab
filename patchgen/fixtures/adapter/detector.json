@@ -1,0 +1,14 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independently prepared fixture; not live detector",
+  "status": "complete",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "change": {
+    "id": "entity-name-rename",
+    "category": "field_renamed",
+    "schema_path": "proto/v1/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string display_name = 2;\n}\n"
+  },
+  "intended_behavior": "Rename v1 Entity.name to display_name on the same wire field 2. Preserve every value, including empty/Unicode/escaped text, and entity_id. Runtime observation key becomes display_name. v2 is unchanged. Regenerate bindings; Python display_name, TypeScript displayName, C# DisplayName. Do not edit test sources."
+}

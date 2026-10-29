@@ -1,0 +1,9 @@
+{
+  "adapter_version": "1.0",
+  "detector_producer": "independently prepared fixture; not live detector",
+  "locator_producer": "manually reviewed fixture; not live locator",
+  "detector_sha256": "d3d6349cf7f1a16dd7425d3b867f20cb455e6de8b677241d799c576b73bf6a35",
+  "locator_sha256": "d65feb2032613d3581c7ba2b672aaf829675d792e252eb1aa17d4b528642c785",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "integration_scope": "validated supplied records; completeness asserted by producer, not proved by adapter"
+}

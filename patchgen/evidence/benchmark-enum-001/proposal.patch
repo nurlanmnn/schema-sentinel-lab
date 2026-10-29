@@ -1,0 +1,9 @@
+diff --git a/proto/v1/entity.proto b/proto/v1/entity.proto
+--- a/proto/v1/entity.proto
++++ b/proto/v1/entity.proto
+@@ -10,4 +10,5 @@
+ enum Status {
+   STATUS_UNSPECIFIED = 0;
+   STATUS_ACTIVE = 1;
++  STATUS_SUSPENDED = 2;
+ }

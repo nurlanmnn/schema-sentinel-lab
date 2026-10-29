@@ -1,0 +1,8 @@
+{
+  "source_revision": "d573c55e0d157f6b8c909df81b189aadd9040c1b",
+  "change_id": "unused-enum-addition",
+  "category": "enum_value_added",
+  "runtime_sites": [],
+  "expected_runtime_outcome": "no_change",
+  "independent": true
+}

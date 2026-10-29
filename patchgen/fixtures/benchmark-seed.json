@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "base_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "enum_seed_revision": "d573c55e0d157f6b8c909df81b189aadd9040c1b",
+  "cases": [
+    "entity-name-rename",
+    "v2-identifier-bytes",
+    "unused-enum-addition"
+  ],
+  "enum_seed_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n\nenum Status {\n  STATUS_UNSPECIFIED = 0;\n  STATUS_ACTIVE = 1;\n}\n",
+  "enum_seed_commit_message": "Prepare unused enum benchmark seed\n"
+}

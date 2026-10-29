@@ -109,7 +109,12 @@ LINE_SCHEMA['properties']['edits'] = {'type':'array','items':{
     'properties':{'start_line':{'type':'integer','minimum':1},'end_line':{'type':'integer','minimum':1},
                   'replacement_lines':{'type':'array','items':{'type':'string'}}},'required':['start_line','end_line','replacement_lines']}}
 
-STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3'}
+MIGRATION_SYSTEM = LINE_SYSTEM.replace(
+    'After binding regeneration, removed fields/properties DO NOT EXIST. Delete their reads and assignments\ncompletely. Setting a removed property to empty string or null is still INVALID. Do not invent a new field\nor rename the removed field to an alias. Constructors and dictionaries may contain only retained fields.\nPreserve retained field values and existing version branches unless a branch only handles the removed\nfield; delete an otherwise empty obsolete branch. Address ALL relevant sites in this file, not just one.',
+    'Follow the supplied category and intended_behavior: removals delete obsolete uses; renames migrate\nreads and construction; type changes use only the explicitly defined conversion. Keep version-specific\nbehavior separate. Do not guess missing semantics: return needs_clarification. Candidate inspection\nanchors for an unaffected additive change may return no_change without edits. Only patch outcomes must\ncover every supplied position. Preserve unrelated values and behavior. Address all necessary sites.')
+BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-addition')
+
+STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4'}
 
 
 class ContractError(ValueError):
@@ -188,13 +193,13 @@ def edit_prompt(case, file, strategy='exact_edits'):
     # Reuse the input allowlist so reference/caller metadata never enters a request.
     payload = json.loads(prompt(case)[1]['content'])
     payload['affected_files'] = [file_context(file)]
-    payload['response_schema'] = {'exact_edits':EDIT_SCHEMA,'file_content':FILE_SCHEMA,'line_edits':LINE_SCHEMA}[strategy]
+    payload['response_schema'] = {'exact_edits':EDIT_SCHEMA,'file_content':FILE_SCHEMA,'line_edits':LINE_SCHEMA,'migration_edits':LINE_SCHEMA}[strategy]
     payload['prompt_version'] = STRATEGY_VERSIONS[strategy]
-    if strategy == 'line_edits':
+    if strategy in ('line_edits','migration_edits'):
         context = payload['affected_files'][0]
         context['source_lines'] = [{'line':i,'text':line} for i,line in enumerate(context.pop('source_context').splitlines(),1)]
-    system = {'exact_edits':EDIT_SYSTEM,'file_content':FILE_SYSTEM,'line_edits':LINE_SYSTEM}[strategy]
-    if strategy == 'line_edits' and file['path'].startswith('testbed/tests/'):
+    system = {'exact_edits':EDIT_SYSTEM,'file_content':FILE_SYSTEM,'line_edits':LINE_SYSTEM,'migration_edits':MIGRATION_SYSTEM}[strategy]
+    if strategy in ('line_edits','migration_edits') and file['path'].startswith('testbed/tests/'):
         system += TEST_GUIDANCE
     return [{'role':'system','content':system},
             {'role':'user','content':json.dumps(payload,indent=2)}]
@@ -405,7 +410,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
         print(f'Generating {index}/{len(case["affected_files"])}: {file["path"]}',flush=True)
         try:
             value = request_model(edit_prompt(case,file,strategy),model,endpoint,directory)
-            if strategy == 'line_edits':
+            if strategy in ('line_edits','migration_edits'):
                 updated = resolve_lines(file['source_context'],value,file['positions'])
             else:
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
@@ -433,7 +438,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 
 def load_validation_profile(case, name):
-    if name != 'entity-name-removal':
+    if name not in ('entity-name-removal','entity-name-rename'):
         raise ContractError('unknown trusted validation profile')
     directory = Path(__file__).parent / 'reference' / name
     profile = json.loads((directory / 'validation-profile.json').read_text())
@@ -487,7 +492,10 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
             command(['buf','generate'],workspace,log)
             command([sys.executable,'run_local.py'],workspace,log,timeout=600)
             python = workspace / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
-            command([str(python), str(Path(__file__).with_name('oracle.py')), str(workspace)], workspace,log)
+            if case['change']['id'] in BENCHMARK_CASES:
+                command([str(python), str(output / 'benchmark-oracle-source.py'), str(workspace),case['change']['id']], workspace,log)
+            else:
+                command([str(python), str(Path(__file__).with_name('oracle.py')), str(workspace)], workspace,log)
         (output / 'validated.patch').write_text(command(['git','diff','--no-ext-diff'],workspace))
     return str(workspace)
 
@@ -500,7 +508,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--model',default='ministral-3:8b')
     parser.add_argument('--strategy',choices=tuple(STRATEGY_VERSIONS),default='line_edits')
-    parser.add_argument('--validation-profile',choices=('entity-name-removal',),help='explicit independent test migration; never sent to the model')
+    parser.add_argument('--validation-profile',choices=('entity-name-removal','entity-name-rename'),help='explicit independent test migration; never sent to the model')
     parser.add_argument('--endpoint',default='http://127.0.0.1:11434')
     parser.add_argument('--response',type=Path,help='offline test replay; never counted as live generation')
     parser.add_argument('--validate',action='store_true',help='run regeneration, builds, unit tests and independent oracle')
@@ -508,6 +516,7 @@ def main():
     output = args.output.resolve(); output.mkdir(parents=True,exist_ok=False)
     (output / 'generator-source.py').write_bytes(Path(__file__).read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
+    (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
     report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else 'live_model',
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
@@ -517,6 +526,7 @@ def main():
         case = validate_input(json.loads(args.fixture.read_text()))
         save(output / 'input.json',case)
         report['source_revision'] = case['source_revision']
+        report['benchmark_oracle_sha256'] = hashlib.sha256(Path(__file__).with_name('benchmark_oracle.py').read_bytes()).hexdigest()
         validation_profile = load_validation_profile(case,args.validation_profile) if args.validation_profile else None
         if validation_profile:
             report['validation_profile'] = validation_profile[0]

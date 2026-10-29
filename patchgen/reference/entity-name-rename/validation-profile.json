@@ -1,0 +1,13 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "change_id": "entity-name-rename",
+  "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+  "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
+  "allowed_test_paths": [
+    "testbed/tests/e2e_test.py",
+    "testbed/tests/test_evidence.py"
+  ],
+  "model_editable": false,
+  "origin": "independent evaluator migration; excluded from prompts"
+}

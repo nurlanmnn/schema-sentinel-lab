@@ -1,0 +1,44 @@
+{
+  "prototype_revision": "c82fee7630b982e4da2ceda9f7fb6804fb01221c",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "prototype_sha256": "314967ce4919977d7ef5cc4f0a464373afa076384ecf9635a793585159515e62",
+  "mode": "real prototype Tree-sitter function; field supplied independently; not end-to-end integration",
+  "detector_parsed_fields": [
+    {
+      "field": "name",
+      "message": "Entity",
+      "type": "FIELD_NO_DELETE"
+    }
+  ],
+  "detector_descriptor_provenance": "legacy committed bins refer to model.proto, not current entity.proto; stale input cannot be trusted for integration",
+  "expected_sites": 6,
+  "true_positive_sites": 2,
+  "recall": 0.3333333333333333,
+  "missing_sites": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "line": 15
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "line": 38
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "line": 11
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "line": 59
+    }
+  ],
+  "extra_sites": [],
+  "errors": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "error": "AttributeError('dlsym(0x7349a110, tree_sitter_csharp): symbol not found')"
+    }
+  ],
+  "semgrep": "not run: executable unavailable",
+  "human_approval_required": true
+}

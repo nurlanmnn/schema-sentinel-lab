@@ -23,3 +23,11 @@ Remote refs checked at this handoff: main `c82fee7630b982e4da2ceda9f7fb6804fb012
 shared-proto branch `df6eb89b544a26e3d7dca00836f490ce5ba35d68`, and testbed branch
 `26304c1ed2f4738676a9607e8fe21e17ebd090f0`. New benchmark/source contracts must name
 their exact revisions rather than silently retarget the evaluated fixture.
+
+
+Continuation evidence is now in `benchmark-seed-2026-10-28.md` and `adapter.md`.
+The three-case seed and versioned boundary are implemented locally. The measured
+prototype misses sites and its partial output is rejected; full integration and
+human approval remain open. SS-72 received the separate review evidence, SS-22 the
+benchmark results, and SS-70 the adapter/coverage evidence. Existing issue scope,
+ownership and review statuses were preserved.

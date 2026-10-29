@@ -1,0 +1,16 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "2.4",
+  "strategy": "migration_edits",
+  "generator_sha256": "6fa782525ad9ee0fc25811f5506978555a6bba66b036a45bebed3fd8e139da0e",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "benchmark_oracle_sha256": "315aa26db4d0f94fd9adcb8064b77dd41f2a2921d304800906576aeea5b00634",
+  "source_preparation": "explicit snapshot of fixture revision; original checkout untouched",
+  "outcome": "patch",
+  "error": "command failed (2): /Library/Frameworks/Python.framework/Versions/3.13/bin/python3: 3 -m venv \"/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/.venv\"\n\n> \"/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.2.2\n[notice] To update, run: /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 912ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/runtimes/csharp/CsharpApp.csproj (in 828 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\nmain.ts(11,80): error TS2339: Property 'decode' does not exist on type '{ new (label?: string | undefined, options?: TextDecoderOptions | undefined): TextDecoder; prototype: TextDecoder; }'.\nmain.ts(60,47): error TS2339: Property 'encode' does not exist on type '{ new (): TextEncoder; prototype: TextEncoder; }'.\n\nCommand failed (exit 2). See the output above.\n",
+  "workflow_elapsed_seconds": 115.87110279098852,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

@@ -1,0 +1,5 @@
+$ git worktree add --detach /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-enum-001/source d573c55e0d157f6b8c909df81b189aadd9040c1b
+Preparing worktree (detached HEAD d573c55)
+HEAD is now at d573c55 Prepare unused enum benchmark seed
+
+exit=0; elapsed_seconds=0.383812

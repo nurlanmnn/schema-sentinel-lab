@@ -1,0 +1,16 @@
+{
+  "contract_version": "1.0",
+  "outcome": "patch",
+  "diff": "diff --git a/proto/v1/entity.proto b/proto/v1/entity.proto\n--- a/proto/v1/entity.proto\n+++ b/proto/v1/entity.proto\n@@ -10,4 +10,5 @@\n enum Status {\n   STATUS_UNSPECIFIED = 0;\n   STATUS_ACTIVE = 1;\n+  STATUS_SUSPENDED = 2;\n }\n",
+  "rationale": "runtimes/python/main.py: The supplied enum addition (STATUS_SUSPENDED = 2) is unused in the schema and does not affect any runtime logic or data flow in the provided Python source file. The `process_entity` function, entity construction, and all other operations only interact with fields explicitly defined in the Entity message (`entity_id`, `name`). There are no references to the Status enum anywhere in the codebase, nor is there any indication that this enum will be used in future logic or serialized/deserialized data. The candidate position (line 3) is an import statement unrelated to the protobuf schema's enum values. No edits are required as the runtime behavior remains unchanged and no Entity field references Status.\nruntimes/typescript/main.ts: The `Status` enum was added to the schema but is unused in any Entity field or runtime logic. The supplied candidate file (`runtimes/typescript/main.ts`) does not reference the `Status` enum at all, nor does it encode/decode any fields that would require handling of this new enum value. Since the intended behavior explicitly states that no Entity field refers to Status and none of the runtimes consume it, no edits are necessary in the runtime code. The host will handle schema regeneration and binding updates without requiring changes to this file.\nruntimes/csharp/main.cs: The schema change adds an unused enum value `STATUS_SUSPENDED` to the `Status` enum, which is not referenced in any Entity field or consumed by the runtime logic. The provided C# source file does not interact with the `Status` enum at all\u2014it only processes `Entity` messages (with fields `entity_id` and `name`) and does not deserialize or serialize status values. No edits are required to maintain compatibility or functionality.",
+  "confidence": 1.0,
+  "assumptions": [
+    "runtimes/python/main.py: The host will regenerate bindings for the new schema, ensuring compatibility with future code that might use STATUS_SUSPENDED.",
+    "runtimes/python/main.py: No existing or planned logic in this runtime depends on the Status enum's values.",
+    "runtimes/typescript/main.ts: The `Status` enum is truly unused across all Entity fields and runtime logic.",
+    "runtimes/typescript/main.ts: No future version of the schema or runtime will introduce a dependency on `STATUS_SUSPENDED`.",
+    "runtimes/typescript/main.ts: Generated bindings (e.g., `EntityV1.decode`, `EntityV1.encode`) are not manually overridden in this file.",
+    "runtimes/csharp/main.cs: The `Status` enum is truly unused in the runtime logic, as no code references it (e.g., no field parsing, serialization, or conditional checks).",
+    "runtimes/csharp/main.cs: The host will regenerate bindings for the new schema, ensuring compatibility with future changes if needed."
+  ]
+}

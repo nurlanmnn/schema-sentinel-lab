@@ -1,0 +1,32 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()), [\"name\"] = decoded.Name };"
+      ]
+    },
+    {
+      "start_line": 21,
+      "end_line": 21,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) };"
+      ]
+    },
+    {
+      "start_line": 39,
+      "end_line": 39,
+      "replacement_lines": [
+        "        : new Simulation.V2.Entity { EntityId = System.Text.Encoding.UTF8.GetBytes(\"cs_202\") }"
+      ]
+    }
+  ],
+  "rationale": "The schema change requires converting string identifiers to bytes for v2 entities, with UTF-8 encoding on construction and decoding during observation. The edits ensure that string values are properly encoded to bytes when constructing v2 entities and decoded back to strings for output fields. This preserves the intended behavior of round-tripping valid UTF-8 text while maintaining version-specific handling.",
+  "confidence": 1,
+  "assumptions": [
+    "The protobuf-generated `EntityId` field in v2 is a bytes type, accessible via `.ToByteArray()` for conversion to string.",
+    "UTF-8 encoding/decoding handles valid Unicode and escaped text correctly as specified."
+  ]
+}

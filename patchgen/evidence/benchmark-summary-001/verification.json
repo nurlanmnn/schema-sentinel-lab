@@ -1,0 +1,15 @@
+{
+  "unit_tests": "37 passed",
+  "prototype_measurement": "locator-001/report.json",
+  "adapter": "adapter-001/input.json equals reviewed rename fixture",
+  "new_source_files": {
+    "patchgen/benchmark_oracle.py": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "patchgen/benchmark.py": "fb8e6e7ee703ff9deb2838d24c01d9d44c98b1e68e4db5c515cc420480eb5f9f",
+    "patchgen/adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9",
+    "patchgen/__init__.py": "d61485e0c9bca796b59b7bed414fb01933f792350350470fb3f01411b14f23a7",
+    "patchgen/generator.py": "66202bed20148789d5761c2a512b2fa33d8a7fd2f52f1068ec21a2c49e081245",
+    "patchgen/oracle.py": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "patchgen/locator_probe.py": "11a2fc7c0029990dbdf277362b07b546b454d6fdb9a6fed0719ec29a5378731a"
+  },
+  "human_acceptance": "pending"
+}

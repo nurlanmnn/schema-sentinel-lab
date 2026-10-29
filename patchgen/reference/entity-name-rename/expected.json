@@ -1,0 +1,30 @@
+{
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "change_id": "entity-name-rename",
+  "category": "field_renamed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/main.py",
+      "lines": [
+        31,
+        87
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "lines": [
+        11,
+        59
+      ]
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "lines": [
+        15,
+        38
+      ]
+    }
+  ],
+  "expected_runtime_outcome": "patch",
+  "independent": true
+}

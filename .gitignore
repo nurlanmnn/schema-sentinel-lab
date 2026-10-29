@@ -9,5 +9,5 @@ obj/
 testbed/artifacts/
 .generated_semgrep.yml
 # Retain compact patch-generation evidence, not nested checkouts and installed dependencies.
-patchgen/evidence/*/workspace/
-patchgen/evidence/*/source/
+patchgen/evidence/**/workspace/
+patchgen/evidence/**/source/

@@ -1,0 +1,16 @@
+{
+  "status": "validation_passed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "2.4",
+  "strategy": "migration_edits",
+  "generator_sha256": "6fa782525ad9ee0fc25811f5506978555a6bba66b036a45bebed3fd8e139da0e",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "d573c55e0d157f6b8c909df81b189aadd9040c1b",
+  "benchmark_oracle_sha256": "315aa26db4d0f94fd9adcb8064b77dd41f2a2921d304800906576aeea5b00634",
+  "source_preparation": "explicit snapshot of fixture revision; original checkout untouched",
+  "outcome": "patch",
+  "workspace": "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-enum-001/workspace",
+  "workflow_elapsed_seconds": 117.08874345797813,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

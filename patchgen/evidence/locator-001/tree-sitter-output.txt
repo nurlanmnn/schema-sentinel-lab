@@ -1,0 +1,2 @@
+  └─ [Tree-Sitter Impact Match] patchgen/evidence/benchmark-rename-001/source/runtimes/python/main.py:31:32 -> Property 'name' accessed
+  └─ [Tree-Sitter Impact Match] patchgen/evidence/benchmark-rename-001/source/runtimes/python/main.py:87:19 -> Property 'name' accessed

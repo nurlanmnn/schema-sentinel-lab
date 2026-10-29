@@ -1,0 +1,50 @@
+$ git worktree add --detach /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace 26304c1ed2f4738676a9607e8fe21e17ebd090f0
+Preparing worktree (detached HEAD 26304c1)
+HEAD is now at 26304c1 Show encoded Protobuf bytes and actual decoded values in test output
+
+exit=0; elapsed_seconds=0.269577
+$ git apply --check /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/proposal.patch
+
+exit=0; elapsed_seconds=0.011786
+$ git apply /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/proposal.patch
+
+exit=0; elapsed_seconds=0.010820
+$ buf generate
+
+exit=0; elapsed_seconds=2.163125
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 run_local.py
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m venv "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/.venv"
+
+> "/Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/.venv/bin/python" -m pip install -r runtimes/python/requirements.txt
+Collecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))
+  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)
+Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-4.25.8
+
+[notice] A new release of pip is available: 25.2 -> 26.2.2
+[notice] To update, run: /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/.venv/bin/python -m pip install --upgrade pip
+
+> /opt/homebrew/bin/npm ci --prefix runtimes/typescript
+
+added 14 packages, and audited 15 packages in 912ms
+
+found 0 vulnerabilities
+
+> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj
+  Determining projects to restore...
+  Restored /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/benchmark-type-001/workspace/runtimes/csharp/CsharpApp.csproj (in 828 ms).
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+main.ts(11,80): error TS2339: Property 'decode' does not exist on type '{ new (label?: string | undefined, options?: TextDecoderOptions | undefined): TextDecoder; prototype: TextDecoder; }'.
+main.ts(60,47): error TS2339: Property 'encode' does not exist on type '{ new (): TextEncoder; prototype: TextEncoder; }'.
+
+Command failed (exit 2). See the output above.
+
+exit=2; elapsed_seconds=6.309131

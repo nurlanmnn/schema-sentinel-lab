@@ -1,0 +1,4 @@
+{
+  "fields": [],
+  "scope": "fresh descriptors; package/path change prevents the prototype from yielding the expected field record"
+}

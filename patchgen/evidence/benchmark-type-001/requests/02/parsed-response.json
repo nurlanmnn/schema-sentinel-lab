@@ -1,0 +1,24 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "  const fields = { entity_id: version === \"v1\" ? entity.entityId : TextDecoder.decode(entity.entityId), ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };"
+      ]
+    },
+    {
+      "start_line": 60,
+      "end_line": 60,
+      "replacement_lines": [
+        "    : EntityV2.encode({ entityId: TextEncoder.encode(\"ts_303\") }).finish();"
+      ]
+    }
+  ],
+  "rationale": "The field `entity_id` in v2 is now a bytes type, requiring explicit UTF-8 encoding when constructing entities and decoding when observing. Line 11 updates the observation logic to decode the bytes back to a string for consistency with the output requirement. Line 60 encodes the sample identifier as UTF-8 bytes during construction to match the new schema.",
+  "confidence": 1,
+  "assumptions": [
+    "The generated protobuf bindings for v2 Entity will handle the bytes-to-string conversion automatically in decode/encode operations, so no additional logic is needed there beyond explicit encoding on construction and decoding on observation."
+  ]
+}

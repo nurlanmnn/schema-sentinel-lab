@@ -1,0 +1,5 @@
+{
+  "exit": 100,
+  "stdout": "{\"start_line\":1,\"start_column\":1,\"end_line\":1,\"end_column\":1,\"type\":\"FILE_NO_DELETE\",\"message\":\"Previously present file \\\"v1/entity.proto\\\" was deleted.\"}\n",
+  "stderr": ""
+}

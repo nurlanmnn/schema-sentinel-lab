@@ -1,0 +1,31 @@
+{
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "change_id": "v2-identifier-bytes",
+  "category": "field_type_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/main.py",
+      "lines": [
+        29,
+        85
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "lines": [
+        11,
+        60
+      ]
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "lines": [
+        21,
+        39
+      ]
+    }
+  ],
+  "expected_runtime_outcome": "patch",
+  "independent": true,
+  "candidate_note": "Initial live input includes two extra candidate lines (Python 50, C# 15); they are not required impact sites."
+}

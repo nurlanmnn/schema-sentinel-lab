@@ -1,0 +1,114 @@
+diff --git a/generated/csharp/V1/Entity.cs b/generated/csharp/V1/Entity.cs
+index 9d7d89d..026f664 100644
+--- a/generated/csharp/V1/Entity.cs
++++ b/generated/csharp/V1/Entity.cs
+@@ -26,16 +26,26 @@ namespace Simulation.V1 {
+           string.Concat(
+             "Cg92MS9lbnRpdHkucHJvdG8SDXNpbXVsYXRpb24udjEiOQoGRW50aXR5EhsK",
+             "CWVudGl0eV9pZBgBIAEoCVIIZW50aXR5SWQSEgoEbmFtZRgCIAEoCVIEbmFt",
+-            "ZWIGcHJvdG8z"));
++            "ZSpJCgZTdGF0dXMSFgoSU1RBVFVTX1VOU1BFQ0lGSUVEEAASEQoNU1RBVFVT",
++            "X0FDVElWRRABEhQKEFNUQVRVU19TVVNQRU5ERUQQAmIGcHJvdG8z"));
+       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+           new pbr::FileDescriptor[] { },
+-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
++          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.V1.Status), }, null, new pbr::GeneratedClrTypeInfo[] {
+             new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.V1.Entity), global::Simulation.V1.Entity.Parser, new[]{ "EntityId", "Name" }, null, null, null, null)
+           }));
+     }
+     #endregion
+ 
+   }
++  #region Enums
++  public enum Status {
++    [pbr::OriginalName("STATUS_UNSPECIFIED")] Unspecified = 0,
++    [pbr::OriginalName("STATUS_ACTIVE")] Active = 1,
++    [pbr::OriginalName("STATUS_SUSPENDED")] Suspended = 2,
++  }
++
++  #endregion
++
+   #region Messages
+   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+   public sealed partial class Entity : pb::IMessage<Entity>
+diff --git a/generated/python/v1/entity_pb2.py b/generated/python/v1/entity_pb2.py
+index aababf8..2919eff 100644
+--- a/generated/python/v1/entity_pb2.py
++++ b/generated/python/v1/entity_pb2.py
+@@ -14,13 +14,15 @@ _sym_db = _symbol_database.Default()
+ 
+ 
+ 
+-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fv1/entity.proto\x12\rsimulation.v1\"9\n\x06\x45ntity\x12\x1b\n\tentity_id\x18\x01 \x01(\tR\x08\x65ntityId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04nameb\x06proto3')
++DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fv1/entity.proto\x12\rsimulation.v1\"9\n\x06\x45ntity\x12\x1b\n\tentity_id\x18\x01 \x01(\tR\x08\x65ntityId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name*I\n\x06Status\x12\x16\n\x12STATUS_UNSPECIFIED\x10\x00\x12\x11\n\rSTATUS_ACTIVE\x10\x01\x12\x14\n\x10STATUS_SUSPENDED\x10\x02\x62\x06proto3')
+ 
+ _globals = globals()
+ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'v1.entity_pb2', _globals)
+ if _descriptor._USE_C_DESCRIPTORS == False:
+   DESCRIPTOR._options = None
++  _globals['_STATUS']._serialized_start=93
++  _globals['_STATUS']._serialized_end=166
+   _globals['_ENTITY']._serialized_start=34
+   _globals['_ENTITY']._serialized_end=91
+ # @@protoc_insertion_point(module_scope)
+diff --git a/generated/ts/v1/entity.ts b/generated/ts/v1/entity.ts
+index 0e866c2..0e95084 100644
+--- a/generated/ts/v1/entity.ts
++++ b/generated/ts/v1/entity.ts
+@@ -3,6 +3,45 @@ import * as _m0 from "protobufjs/minimal";
+ 
+ export const protobufPackage = "simulation.v1";
+ 
++export enum Status {
++  STATUS_UNSPECIFIED = 0,
++  STATUS_ACTIVE = 1,
++  STATUS_SUSPENDED = 2,
++  UNRECOGNIZED = -1,
++}
++
++export function statusFromJSON(object: any): Status {
++  switch (object) {
++    case 0:
++    case "STATUS_UNSPECIFIED":
++      return Status.STATUS_UNSPECIFIED;
++    case 1:
++    case "STATUS_ACTIVE":
++      return Status.STATUS_ACTIVE;
++    case 2:
++    case "STATUS_SUSPENDED":
++      return Status.STATUS_SUSPENDED;
++    case -1:
++    case "UNRECOGNIZED":
++    default:
++      return Status.UNRECOGNIZED;
++  }
++}
++
++export function statusToJSON(object: Status): string {
++  switch (object) {
++    case Status.STATUS_UNSPECIFIED:
++      return "STATUS_UNSPECIFIED";
++    case Status.STATUS_ACTIVE:
++      return "STATUS_ACTIVE";
++    case Status.STATUS_SUSPENDED:
++      return "STATUS_SUSPENDED";
++    case Status.UNRECOGNIZED:
++    default:
++      return "UNRECOGNIZED";
++  }
++}
++
+ export interface Entity {
+   entityId: string;
+   name: string;
+diff --git a/proto/v1/entity.proto b/proto/v1/entity.proto
+index 9cd89fe..a40ff81 100644
+--- a/proto/v1/entity.proto
++++ b/proto/v1/entity.proto
+@@ -10,4 +10,5 @@ message Entity {
+ enum Status {
+   STATUS_UNSPECIFIED = 0;
+   STATUS_ACTIVE = 1;
++  STATUS_SUSPENDED = 2;
+ }
