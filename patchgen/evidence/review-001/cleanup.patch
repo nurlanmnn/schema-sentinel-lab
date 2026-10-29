@@ -1,0 +1,11 @@
+diff --git a/runtimes/python/main.py b/runtimes/python/main.py
+--- a/runtimes/python/main.py
++++ b/runtimes/python/main.py
+@@ -26,7 +26,6 @@
+     if version not in ("v1", "v2"):
+         raise ValueError(f"Unsupported schema version: {version}")
+     entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+-    fields = {"entity_id": entity.entity_id}
+     fields = {"entity_id": entity.entity_id}
+     print(json.dumps({"runtime": "python", "version": version, "fields": fields}, ensure_ascii=True), flush=True)
+     return entity, fields

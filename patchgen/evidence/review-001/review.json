@@ -1,0 +1,18 @@
+{
+  "review_version": "1.0",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "original_run": "live-007",
+  "original_validated_patch_sha256": "8f23914516f40101092ae9900cdad45ad39ea82759a0ad146c19b0df17715cf1",
+  "reviewed_patch_sha256": "5a2d64a9fd802508f7061d4d6745d89d0097e4b51484900800d5aa7a01cfd130",
+  "cleanup": "Removed exactly one redundant adjacent Python fields assignment; no model response or original evidence modified.",
+  "reviewer": "automated technical review",
+  "human_approval_required": true,
+  "acceptance": "pending human review",
+  "checks": [
+    "Python syntax",
+    "Python v1/v2 serialization and decoded fields",
+    "invalid-version rejection",
+    "git diff --check"
+  ],
+  "unchanged_evidence": "Original live-007 validation covers all three runtimes; unchanged TypeScript/C# checks were not repeated."
+}
