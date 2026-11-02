@@ -1,0 +1,83 @@
+{
+  "review_version": "1.0",
+  "change_id": "entity-name-removal-001",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "validation_passed",
+  "mode": "deterministic_proposal",
+  "strategy": "deterministic_remove_name_v1",
+  "approval_eligible": true,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "c55192113b13fb1bddbfda3733e24d588fd9f463b2cd6602e8703aadcd37da3e",
+      "bytes": 12500
+    },
+    "request.json": {
+      "sha256": "599dbd27428e7fe1958c53c4c99d2844b429fbdc594bfc00ce70bbbbcc2f2ce9",
+      "bytes": 915
+    },
+    "report.json": {
+      "sha256": "6cccd4e93f1f3e4e3dcd1fcea376caa3c28fc4a5908d476738316137ba04f221",
+      "bytes": 3043
+    },
+    "provenance.json": {
+      "sha256": "1fe7433e0779eeab5d452c6544f90712ee20afb5a8bef209c7d0f82d541779a4",
+      "bytes": 507
+    },
+    "detector.json": {
+      "sha256": "c05cdd422dffe4e354d2266e23bf2d6a8f636041d206fe23736d89ed9035df5c",
+      "bytes": 1725
+    },
+    "locator.json": {
+      "sha256": "0281f8e69fe6918819e29309abae3d0d10126f4d6e69598c87d0a0ff3550ad92",
+      "bytes": 2754
+    },
+    "measurement.json": {
+      "sha256": "3a8c08d80c0c84763fdae8d33b671ccd8741c6c7203814a40c990db93d2ca898",
+      "bytes": 130
+    },
+    "implementation.json": {
+      "sha256": "6fc56508311e43431880a9d85fa5566081c53f0070a84312914cb60e21aabb43",
+      "bytes": 873
+    },
+    "proposal/report.json": {
+      "sha256": "9a06992320669d25707250ef42958585a6a7356e15fee016e8ae1ba6690004bf",
+      "bytes": 1629
+    },
+    "proposal/assembly.json": {
+      "sha256": "672319bea0d712ad7ee8e3a9fd345976b2b5abe62916e0a28e531ed439477774",
+      "bytes": 193
+    },
+    "proposal/proposal.json": {
+      "sha256": "8be11ad28ed62e7b862dbf0ad9514bfe1cb4727a0524e10a7a3c35db9adbdf4e",
+      "bytes": 3587
+    },
+    "proposal/proposal.patch": {
+      "sha256": "1dbed45d07658da1684ac522c9e5feb3d6e024bc195f6a88813a405e11aae897",
+      "bytes": 2966
+    },
+    "proposal/validated.patch": {
+      "sha256": "07012838aa1b81004306aa7ffab743cb58d4c5a96921c79b71e7e5f47c4443a0",
+      "bytes": 14822
+    },
+    "proposal/validation.log": {
+      "sha256": "1debe1a96faa4aca010040f827cd552fb4e2c39ae22ceae51a47cd3a98c3fac0",
+      "bytes": 9261
+    },
+    "proposal/validation-profile.json": {
+      "sha256": "52c18f11cb8a853f1d2177e0fe34d8cb9f87467a362f9416fca8d26803c8a2d7",
+      "bytes": 532
+    },
+    "proposal/validation-tests.patch": {
+      "sha256": "ff9017e8b036fea0b2cb97ba36d7f2abb12117c7dfe1b88f6e54c8910b8c41fa",
+      "bytes": 3449
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

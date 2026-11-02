@@ -1,0 +1,14 @@
+{
+  "revision": "13cd17ce123078f46b5839d82dd514e87361d6e6",
+  "files": {
+    "detector.py": "abed5121c265741632e39e9ac693099d97a9f91d36b332d5e97a55fd06f9f201",
+    "locator.py": "74459f3101db5e330c31fc315ddb72a3ae5fcfffd36f2860951c918b5457c8ac",
+    "pipeline.py": "fd64af871136e1cf5f6608420decd93a00bd5b8b7a6b51b8c92dd255bcb7593b",
+    "adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9",
+    "generator.py": "20d18cd1eb04e8e8fb72e6463648bc16083b51a4180c7846d4f3589d9691308a",
+    "rename_tokens.py": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+    "rename_roles.py": "baf426c540bc140f7b6325dc9d6d9172419c6d848dedfde5cf20b25ad778efbb",
+    "type_utf8.py": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+    "remove_name.py": "1265821f708cb54b0460f01cd1939105bc64a4222acf992c1c0ebba8f45198e8"
+  }
+}

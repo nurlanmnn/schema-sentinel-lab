@@ -233,3 +233,12 @@ The software suite passes 103 tests (`blocked-review-tests-001.log`), including
 real descriptor rejection through review export, rejection-only synthetic decision
 verification, and rejection of a passing claim without a proposal. No real human
 decision has been recorded. See decision 0011.
+
+The final suite after checking the actual `.venv` interpreter passes **104 tests**
+(`review-demo-tests-final-001.log`). `demo-removal-integrated-001` also passes
+the positive proposal/validation/review path. The remote-cloned checkout was then
+fetched to `13cd17c` and its one-command removal demo passed at
+`fresh-clone-001/removal-demo-final`, including the Python 3.13 environment check.
+All three bounded policies have now been exercised from that full remote clone
+at the revisions listed in its reproducibility summary. Human acceptance remains
+pending; no background server or model service was required by these demos.
