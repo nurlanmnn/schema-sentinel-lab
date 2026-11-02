@@ -1,0 +1,102 @@
+{
+  "status": "validation_passed",
+  "implementation": {
+    "revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "files": {
+      "detector.py": "abed5121c265741632e39e9ac693099d97a9f91d36b332d5e97a55fd06f9f201",
+      "locator.py": "74459f3101db5e330c31fc315ddb72a3ae5fcfffd36f2860951c918b5457c8ac",
+      "pipeline.py": "becaa48c470af80b0ed03aaa9e19dbc32bb2b7549ba31f6ec2cb850bf3968400",
+      "adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9",
+      "generator.py": "4c01bc9f2f58edc634b29f67f5ee97e18de3b96364979ddc6d793d8d7206423d",
+      "rename_tokens.py": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+      "rename_roles.py": "d62c278f024be46d4d8f7542073981ff11a7ca7d0e92b4cb4bac7bc528654fa1",
+      "type_utf8.py": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+      "remove_name.py": "1265821f708cb54b0460f01cd1939105bc64a4222acf992c1c0ebba8f45198e8"
+    }
+  },
+  "measurement": {
+    "expected_sites": 9,
+    "matched_sites": 9,
+    "recall": 1.0,
+    "missed": [],
+    "extra": [],
+    "classification_correct": true
+  },
+  "human_approval_required": true,
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof",
+  "proposal_exit_code": 0,
+  "proposal_report": {
+    "status": "validation_passed",
+    "human_approval_required": true,
+    "mode": "offline_replay",
+    "prompt_version": "2.5",
+    "strategy": "candidate_edits",
+    "generator_sha256": "4c01bc9f2f58edc634b29f67f5ee97e18de3b96364979ddc6d793d8d7206423d",
+    "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "codegen": "local_pinned",
+    "local_codegen_sha256": "30361cb781d82b30bf605266b77682f9c33dfb7262782ed55800f9b905b611ae",
+    "validation_profile": {
+      "profile_version": "1.0",
+      "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+      "change_id": "telemetry-speed-rename",
+      "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+      "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allowed_test_paths": [],
+      "telemetry_case": "rename"
+    },
+    "telemetry_oracle_sha256": "ae52b310e24647c7cede85f98ee34e95e9b5d0bafd96c934ca70211217c71345",
+    "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+    "outcome": "patch",
+    "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-003/proposal/workspace",
+    "local_codegen_toolchain": {
+      "protoc_version": "libprotoc 25.1",
+      "ts_proto_version": "1.165.0",
+      "buf_version": "1.75.0",
+      "sha256": {
+        "protoc": "b6ed65c0d20a9ab88ec6995644f747d557cb9a087eab0152fef5367c34645dc3",
+        "ts-proto-plugin": "29b7513e6485545b535ba9f7a3f2d746336e39b456262bc1a6b1e65ac61d43ea",
+        "ts-proto-build": "0ba82c2d4fccaeead72f4a64a7701adc3a6fe1111d6feb5d2e689fdf87753ada",
+        "package-lock.json": "86df52e5c6979a52dcd6a57b82c79637d33dc69af0fec8dda9704d253a80c7b1"
+      }
+    },
+    "telemetry_validation": {
+      "status": "passed",
+      "case": "rename",
+      "runtime_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+      "source_dirty": true,
+      "source_sha256": {
+        "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+        "runtimes/python/telemetry_runtime.py": "40e861d49ca641c7c20dcd0354231036b7ad0105bf91edf276c18fd1f2f61a27",
+        "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+        "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+        "runtimes/typescript/telemetry.ts": "e651bc8ecfd8fc69a6df59f137686b7e55f6d3ca3e50e9697fa62239e9f1a69d",
+        "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+        "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+        "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+        "runtimes/csharp/Telemetry.cs": "9e5ce886746bbd38ed53ceb1ab1f51d915b905e450ec7714626bc7197b1a4cd2",
+        "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+        "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+        "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+        "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+        "proto/telemetry/vehicle.proto": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+        "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+        "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+        "generated/ts/telemetry/vehicle.ts": "bb0aef3210e1299a2fb01446cb95d367cea1ba2455968a11a6e15afa525e07cc",
+        "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+        "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+        "generated/csharp/Telemetry/Vehicle.cs": "638c2f6a6c7f2c8bfebf7601e7de6bb9a3e9dbb1a8053b8cb4958a4268a9a442",
+        "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+        "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+        "generated/python/telemetry/vehicle_pb2.py": "03d658ac8349f5aa4fe92a08edf3065ac2315f229b79d062cd4c89c23dbef4ff"
+      },
+      "runtime_cases": 24,
+      "model_requests": 0,
+      "scope": "eight authored float32 cases; not arbitrary wire or units safety"
+    },
+    "workflow_elapsed_seconds": 6.370986999943852,
+    "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+  }
+}

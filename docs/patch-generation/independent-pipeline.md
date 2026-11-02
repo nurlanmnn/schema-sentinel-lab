@@ -145,3 +145,12 @@ baseline and require independent fan-out validation in addition to the relay
 checks. Evaluator-owned semantic expectations and full pub/sub evidence are
 included in new review bundles. These are transport extensions of the same
 three cases; see decision 0013 for exact scope and retained failures.
+
+The buildable `telemetry-speed-rename` fixture extends the same independent path
+into an authored speed/threshold domain. Its pinned profile forbids test edits and
+adds a host-owned eight-case telemetry oracle on actual generated Python/TS/C#
+runtimes. The TypeScript rename roles recognize canonical snake_case observation
+keys paired with the descriptor-derived generated camelCase property, still
+requiring the explicit observation policy and retaining receiver-identity limits.
+Use `--local-codegen` for the explicit preinstalled local alternative to Buf's
+remote plugins. It records source/toolchain identity; default behavior stays remote.

@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-003/proposal/workspace/.venv/bin/python",
+    "runtimes/python/main.py",
+    "--telemetry"
+  ],
+  "exit_code": 0,
+  "stdout": "[{\"fields\": {\"vehicle_id\": \"stopped\", \"ground_speed_mps\": 0.0}, \"speeding\": false, \"constructed_payload\": \"CgdzdG9wcGVk\"}, {\"fields\": {\"vehicle_id\": \"below\", \"ground_speed_mps\": 29.5}, \"speeding\": false, \"constructed_payload\": \"CgViZWxvdxUAAOxB\"}, {\"fields\": {\"vehicle_id\": \"boundary\", \"ground_speed_mps\": 30.0}, \"speeding\": false, \"constructed_payload\": \"Cghib3VuZGFyeRUAAPBB\"}, {\"fields\": {\"vehicle_id\": \"above\", \"ground_speed_mps\": 30.5}, \"speeding\": true, \"constructed_payload\": \"CgVhYm92ZRUAAPRB\"}, {\"fields\": {\"vehicle_id\": \"reverse\", \"ground_speed_mps\": -1.0}, \"speeding\": false, \"constructed_payload\": \"CgdyZXZlcnNlFQAAgL8=\"}, {\"fields\": {\"vehicle_id\": \"\\u8eca-\\u03b1\", \"ground_speed_mps\": 12.5}, \"speeding\": false, \"constructed_payload\": \"Cgbou4otzrEVAABIQQ==\"}, {\"fields\": {\"vehicle_id\": \"\", \"ground_speed_mps\": 4.0}, \"speeding\": false, \"constructed_payload\": \"FQAAgEA=\"}, {\"fields\": {\"vehicle_id\": \"fast\", \"ground_speed_mps\": 256.0}, \"speeding\": true, \"constructed_payload\": \"CgRmYXN0FQAAgEM=\"}]\n",
+  "stderr": ""
+}

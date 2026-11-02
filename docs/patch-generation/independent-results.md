@@ -287,3 +287,28 @@ The active pub/sub fixtures pin 6ead28a. `pipeline-pubsub-rename-004`,
 including decoder-error log signatures. New review bundles retain both sets of
 evidence. This adds no distinct schema-change benchmark cases, no live model
 success and no human acceptance. See decision 0014 for earlier retained failures.
+
+### Buildable telemetry rename (2026-11-02)
+
+Baseline commit `32e39a2` adds VehicleTelemetry generated bindings and a small
+stdin/stdout producer/consumer in each language. Pipeline run
+`pipeline-telemetry-rename-003` independently classified the same-wire-number
+speed rename and located 9/9 authored runtime lines, no extras. The deterministic
+proposal passed regeneration, builds, existing Entity checks, and 24 telemetry
+runtime/case checks. The evaluator independently encodes wire bytes and checks
+producer serialization and strict >30 m/s behavior. `review-telemetry-rename-001`
+is reviewable, with no actual human approval.
+
+The first pipeline run failed a TypeScript syntax-role constraint; retained as
+`pipeline-telemetry-rename-001`. Remote generation was rate-limited and its build
+failure remains `telemetry-baseline-build-001.log`. An explicit pinned local
+alternative reproduced the existing Entity bindings byte-for-byte. See decision
+0015 and the local codegen license/toolchain records. These results cover finite
+authored cases and do not prove general type, units or receiver resolution.
+
+Real controls: `telemetry-reference-replay-003` validates the known answer offline;
+`telemetry-threshold-negative-003` compiles but fails the independent oracle at
+exactly 30 m/s when Python is changed to >=30. The negative review cannot approve.
+Earlier control runs 001/002 failed patch-format/authoring checks and are retained
+as invalid controls. `demo-telemetry-rename-001` passes the end-to-end launcher.
+Final suites: 114 patchgen tests, 23 testbed tests. None records human acceptance.

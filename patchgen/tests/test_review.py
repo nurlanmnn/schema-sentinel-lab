@@ -40,6 +40,44 @@ class ReviewTests(unittest.TestCase):
         self.assertTrue((self.bundle/'review.js').is_file())
         self.assertIn('No decision recorded.',(self.bundle/'index.html').read_text())
 
+    def telemetry_run(self):
+        from testbed.telemetry.run import expected, requests
+        self.report['validation_profile'] = {'telemetry_case':'rename'}
+        result = dict(status='passed',case='rename',runtime_revision='a'*40,runtime_cases=24)
+        self.report['telemetry_validation'] = result
+        self.report['telemetry_oracle_sha256'] = sha(b'TEST ONLY')
+        directory = self.run/'proposal/telemetry';directory.mkdir(exist_ok=True)
+        (directory/'report.json').write_text(json.dumps(result))
+        (directory/'expected.json').write_text(json.dumps(dict(requests=requests(),results=expected('rename'))))
+        (self.run/'proposal/telemetry-oracle-source.py').write_bytes(b'TEST ONLY')
+        for runtime in ('python','typescript','csharp'):
+            (directory/(runtime+'.json')).write_text(json.dumps(dict(exit_code=0,stdout=json.dumps(expected('rename')))))
+        self.write_run()
+
+    def test_telemetry_requires_full_evidence_and_checks_runtime_results(self):
+        self.telemetry_run()
+        missing = self.run/'proposal/telemetry/csharp.json'
+        original = missing.read_text();missing.unlink()
+        with self.assertRaisesRegex(ContractError,'complete host evidence'): export(self.run,self.bundle)
+        missing.write_text(original)
+        record = json.loads(original);results = json.loads(record['stdout']);results[2]['speeding']=True
+        record['stdout']=json.dumps(results);missing.write_text(json.dumps(record))
+        with self.assertRaisesRegex(ContractError,'runtime evidence mismatch'): export(self.run,self.bundle)
+        missing.write_text(original)
+        export(self.run,self.bundle)
+        self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
+
+    def test_local_codegen_requires_matching_source_and_toolchain(self):
+        self.report['codegen'] = 'local_pinned';self.write_run()
+        with self.assertRaisesRegex(ContractError,'complete host evidence'): export(self.run,self.bundle)
+        tools = dict(protoc_version='libprotoc 25.1',ts_proto_version='1.165.0')
+        self.report['local_codegen_toolchain']=tools;self.report['local_codegen_sha256']=sha(b'TEST ONLY');self.write_run()
+        (self.run/'proposal/local-codegen-source.py').write_bytes(b'TEST ONLY')
+        file=self.run/'proposal/local-codegen-toolchain.json';file.write_text(json.dumps(dict(tools,ts_proto_version='2.0')))
+        with self.assertRaisesRegex(ContractError,'codegen evidence mismatch'): export(self.run,self.bundle)
+        file.write_text(json.dumps(tools));export(self.run,self.bundle)
+        self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
+
     def pubsub_run(self):
         self.report['validation_profile'] = {'pubsub_case': 'rename'}
         result = dict(status='passed', case='rename', runtime_revision='a'*40,

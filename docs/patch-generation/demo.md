@@ -63,3 +63,24 @@ subscriber must reject before acknowledgement and leave its message pending.
 The review includes failure logs and cleanup evidence. This negative control is
 not counted among valid deliveries or distinct schema-change cases. Earlier
 retained reviews keep their older source revision and validation scope.
+
+### Buildable telemetry rename
+
+With the preinstalled pinned local tools described in `tools/codegen/README.md`:
+
+```sh
+python3.13 run_demo.py --case telemetry-rename --local-codegen --output patchgen/evidence/NEW-TELEMETRY-DEMO
+```
+
+This runs the independent pipeline on baseline `32e39a2`: float field 2 changes
+from speed_mps to ground_speed_mps. Three real generated-binding runtimes must
+preserve producer bytes, float values, observation keys and the >30 m/s predicate
+for eight authored cases each. The existing Entity checks also run. Tests are
+host-owned; no model requests or reference answers are used for the proposal.
+The portable review retains evaluator source, all process results and the complete
+validated patch. Passing only makes it eligible for human review.
+
+`--local-codegen` is explicit and also available on the pipeline/generator CLIs.
+Omitting it keeps the existing remote Buf path. The local path does not install
+tools or silently retry a failed remote run. This is one distinct buildable
+migration, not twenty cases, a new LLM success, or telemetry pub/sub coverage.

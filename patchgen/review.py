@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 import shutil
 from patchgen.generator import ContractError, PUBSUB_ARTIFACTS
+from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, check_results, expected, requests
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
@@ -15,7 +16,9 @@ ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detect
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
 PUBSUB_NEGATIVE_ARTIFACTS = tuple('proposal/pubsub-malformed/' + name for name in PUBSUB_ARTIFACTS)
-ARTIFACTS += PUBSUB_REVIEW_ARTIFACTS + PUBSUB_NEGATIVE_ARTIFACTS
+TELEMETRY_ARTIFACTS = tuple('proposal/telemetry/'+name for name in TELEMETRY_FILES) + ('proposal/telemetry-oracle-source.py',)
+LOCAL_CODEGEN_ARTIFACTS = ('proposal/local-codegen-source.py', 'proposal/local-codegen-toolchain.json')
+ARTIFACTS += PUBSUB_REVIEW_ARTIFACTS + PUBSUB_NEGATIVE_ARTIFACTS + TELEMETRY_ARTIFACTS + LOCAL_CODEGEN_ARTIFACTS
 ASSETS = Path(__file__).with_name('review_assets')
 
 
@@ -71,6 +74,42 @@ def check_pubsub_evidence(root, report, available=None):
             raise ContractError('pubsub review has inconsistent negative-control evidence')
 
 
+def check_host_evidence(root, report, available=None):
+    if report.get('status') != 'validation_passed':
+        return
+    def required(names):
+        if available is not None and not set(names) <= set(available):
+            raise ContractError('passing review requires complete host evidence')
+        if any(not artifact_path(root,name).is_file() for name in names):
+            raise ContractError('passing review requires complete host evidence')
+    if report.get('codegen') == 'local_pinned':
+        required(LOCAL_CODEGEN_ARTIFACTS)
+        tools = json.loads(artifact_path(root,'proposal/local-codegen-toolchain.json').read_text())
+        if (sha(artifact_path(root,'proposal/local-codegen-source.py').read_bytes()) != report.get('local_codegen_sha256')
+                or tools != report.get('local_codegen_toolchain') or tools.get('protoc_version') != 'libprotoc 25.1'
+                or tools.get('ts_proto_version') != '1.165.0'):
+            raise ContractError('local codegen evidence mismatch')
+    if report.get('validation_profile',{}).get('telemetry_case'):
+        required(TELEMETRY_ARTIFACTS)
+        result = json.loads(artifact_path(root,'proposal/telemetry/report.json').read_text())
+        if (result != report.get('telemetry_validation') or result.get('status') != 'passed'
+                or result.get('case') != 'rename' or result.get('runtime_cases') != 24
+                or result.get('runtime_revision') != report.get('source_revision')
+                or sha(artifact_path(root,'proposal/telemetry-oracle-source.py').read_bytes()) != report.get('telemetry_oracle_sha256')):
+            raise ContractError('telemetry review has inconsistent validation evidence')
+        retained = json.loads(artifact_path(root,'proposal/telemetry/expected.json').read_text())
+        if retained != dict(requests=requests(),results=expected('rename')):
+            raise ContractError('telemetry review has inconsistent expected cases')
+        for runtime in ('python','typescript','csharp'):
+            record = json.loads(artifact_path(root,'proposal/telemetry/'+runtime+'.json').read_text())
+            try:
+                if type(record.get('exit_code')) is not int or record['exit_code'] != 0:
+                    raise ValueError('runtime did not exit successfully')
+                check_results(json.loads(record['stdout']),expected('rename'))
+            except (KeyError,ValueError) as error:
+                raise ContractError('telemetry runtime evidence mismatch') from error
+
+
 def export(run, output):
     run, output = run.resolve(), output.resolve()
     if output == run or run in output.parents:
@@ -89,6 +128,7 @@ def export(run, output):
     if passing and (not (run/'proposal/validated.patch').is_file() or not (run/'proposal/validated.patch').stat().st_size):
         raise ContractError('passing review requires the complete validated patch')
     check_pubsub_evidence(run, report)
+    check_host_evidence(run, report)
     output.mkdir(parents=True,exist_ok=False)
     artifacts={}
     for name in ARTIFACTS:
@@ -165,6 +205,7 @@ def verify(bundle, decision):
     if report.get('source_revision')!=manifest['source_revision'] or case.get('source_revision')!=manifest['source_revision'] or case['change']['id']!=manifest['change_id']:
         raise ContractError('review metadata mismatch')
     check_pubsub_evidence(bundle/'artifacts', report, artifacts)
+    check_host_evidence(bundle/'artifacts', report, artifacts)
     if record['decision']=='approve' and (report_name != 'proposal/report.json' or not manifest.get('approval_eligible') or report.get('status')!='validation_passed'
                                          or 'proposal/validated.patch' not in artifacts):
         raise ContractError('approval requires passing validation and complete patch')

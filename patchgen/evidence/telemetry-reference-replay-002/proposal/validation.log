@@ -1,0 +1,49 @@
+$ git worktree add --detach /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/workspace 32e39a2fa9e6aeeab326afa6708868191785dad5
+Preparing worktree (detached HEAD 32e39a2)
+HEAD is now at 32e39a2 Add buildable three-language telemetry baseline and independent behavior oracle
+
+exit=0; elapsed_seconds=0.589735
+$ git apply --check /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.011916
+$ git apply /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.012071
+Pinned local generation completed: protoc 25.1, ts-proto 1.165.0, Buf descriptors
+$ /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python run_local.py
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m venv "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/workspace/.venv"
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/workspace/.venv/bin/python" -m pip install -r runtimes/python/requirements.txt
+Collecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))
+  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)
+Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-4.25.8
+
+[notice] A new release of pip is available: 25.2 -> 26.2.2
+[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/workspace/.venv/bin/python -m pip install --upgrade pip
+
+> /opt/homebrew/bin/npm ci --prefix runtimes/typescript
+
+added 14 packages, and audited 15 packages in 462ms
+
+found 0 vulnerabilities
+
+> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj
+  Determining projects to restore...
+  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-reference-replay-002/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 99 ms).
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+telemetry.ts(9,77): error TS2561: Object literal may only specify known properties, but 'groundGroundSpeedMps' does not exist in type 'VehicleTelemetry'. Did you mean to write 'groundSpeedMps'?
+telemetry.ts(10,77): error TS2551: Property 'groundGroundSpeedMps' does not exist on type 'VehicleTelemetry'. Did you mean 'groundSpeedMps'?
+telemetry.ts(11,39): error TS2551: Property 'groundGroundSpeedMps' does not exist on type 'VehicleTelemetry'. Did you mean 'groundSpeedMps'?
+
+Command failed (exit 2). See the output above.
+
+exit=2; elapsed_seconds=3.381727

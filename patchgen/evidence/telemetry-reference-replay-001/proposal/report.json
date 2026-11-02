@@ -1,0 +1,28 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "offline_replay",
+  "prompt_version": "2.5",
+  "strategy": "candidate_edits",
+  "generator_sha256": "4c01bc9f2f58edc634b29f67f5ee97e18de3b96364979ddc6d793d8d7206423d",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "30361cb781d82b30bf605266b77682f9c33dfb7262782ed55800f9b905b611ae",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "change_id": "telemetry-speed-rename",
+    "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "rename"
+  },
+  "telemetry_oracle_sha256": "ae52b310e24647c7cede85f98ee34e95e9b5d0bafd96c934ca70211217c71345",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "malformed patch: git diff headers required",
+  "workflow_elapsed_seconds": 0.11748599994461983,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

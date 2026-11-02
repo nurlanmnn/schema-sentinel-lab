@@ -1,0 +1,28 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "offline_replay",
+  "prompt_version": "2.5",
+  "strategy": "candidate_edits",
+  "generator_sha256": "4c01bc9f2f58edc634b29f67f5ee97e18de3b96364979ddc6d793d8d7206423d",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "30361cb781d82b30bf605266b77682f9c33dfb7262782ed55800f9b905b611ae",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "change_id": "telemetry-speed-rename",
+    "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "rename"
+  },
+  "telemetry_oracle_sha256": "ae52b310e24647c7cede85f98ee34e95e9b5d0bafd96c934ca70211217c71345",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: ry-threshold-negative-002/proposal/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.2.2\n[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-threshold-negative-002/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 390ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-threshold-negative-002/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 97 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\ntelemetry.ts(9,77): error TS2561: Object literal may only specify known properties, but 'groundGroundSpeedMps' does not exist in type 'VehicleTelemetry'. Did you mean to write 'groundSpeedMps'?\ntelemetry.ts(10,77): error TS2551: Property 'groundGroundSpeedMps' does not exist on type 'VehicleTelemetry'. Did you mean 'groundSpeedMps'?\ntelemetry.ts(11,39): error TS2551: Property 'groundGroundSpeedMps' does not exist on type 'VehicleTelemetry'. Did you mean 'groundSpeedMps'?\n\nCommand failed (exit 2). See the output above.\n",
+  "workflow_elapsed_seconds": 3.789199624909088,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

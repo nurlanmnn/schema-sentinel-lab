@@ -51,3 +51,10 @@ scope. No real human approval has been recorded by automated tests.
   its `test-only-decision.json` is not human acceptance of a project patch.
 - `review-tests-002.log`: full suite passes 82 software tests, including artifact
   tampering, stale revision, failed approval and injected-text rejection checks.
+
+Telemetry profiles additionally require all five telemetry artifacts plus the
+host evaluator snapshot. Export and verification check source revision, evaluator
+hash, case count, expected cases, actual process exit codes and decoded outputs.
+A compile-only success with the wrong speed threshold is ineligible. Explicit
+local generation retains its source and pinned toolchain record in the manifest.
+No automated run supplies a real human decision.

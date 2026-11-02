@@ -120,3 +120,20 @@ Its success status is `expected_rejection_observed`, not `passed` delivery.
 The second checks Buffer/plain-array handling in the TypeScript processor for
 both versions. This covers truncated length-delimited fields only, not all
 malformed protobuf or fault recovery. See decision 0014.
+
+## Telemetry producer/consumer checks
+
+The canonical `proto/telemetry/vehicle.proto` is generated into each language.
+The runtime `--telemetry` mode reads a small JSON request array on stdin, decodes
+its Protobuf payloads and constructs independent samples using generated bindings.
+It is a local benchmark interface, not another HTTP service or pub/sub topic.
+After the normal build, run:
+
+```sh
+.venv/bin/python -m testbed.telemetry.run --case baseline --output patchgen/evidence/NEW-TELEMETRY-BASELINE
+```
+
+Eight cases per runtime check exact wire construction, float values, canonical
+observation keys and strict >30 m/s behavior. The evaluator imports no generated
+bindings. `run_demo.py --case telemetry-rename` validates a proposed rename
+against a host-owned copy of that evaluator and exports review evidence.

@@ -1,0 +1,28 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "offline_replay",
+  "prompt_version": "2.5",
+  "strategy": "candidate_edits",
+  "generator_sha256": "4c01bc9f2f58edc634b29f67f5ee97e18de3b96364979ddc6d793d8d7206423d",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "30361cb781d82b30bf605266b77682f9c33dfb7262782ed55800f9b905b611ae",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "change_id": "telemetry-speed-rename",
+    "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "rename"
+  },
+  "telemetry_oracle_sha256": "ae52b310e24647c7cede85f98ee34e95e9b5d0bafd96c934ca70211217c71345",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (1): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/telemetry-threshold-negative-003/proposal/workspace/.venv/bin/python: 907a26839c8fe12df5fb39fe8\",\n    \"runtimes/csharp/Telemetry.cs\": \"9e5ce886746bbd38ed53ceb1ab1f51d915b905e450ec7714626bc7197b1a4cd2\",\n    \"runtimes/csharp/CsharpApp.csproj\": \"e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d\",\n    \"runtimes/csharp/main.cs\": \"99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a\",\n    \"proto/v1/entity.proto\": \"4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1\",\n    \"proto/v2/entity.proto\": \"6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366\",\n    \"proto/telemetry/vehicle.proto\": \"e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5\",\n    \"generated/ts/v1/entity.ts\": \"95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792\",\n    \"generated/ts/v2/entity.ts\": \"fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93\",\n    \"generated/ts/telemetry/vehicle.ts\": \"bb0aef3210e1299a2fb01446cb95d367cea1ba2455968a11a6e15afa525e07cc\",\n    \"generated/csharp/V1/Entity.cs\": \"20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24\",\n    \"generated/csharp/V2/Entity.cs\": \"cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5\",\n    \"generated/csharp/Telemetry/Vehicle.cs\": \"638c2f6a6c7f2c8bfebf7601e7de6bb9a3e9dbb1a8053b8cb4958a4268a9a442\",\n    \"generated/python/v1/entity_pb2.py\": \"d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc\",\n    \"generated/python/v2/entity_pb2.py\": \"ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972\",\n    \"generated/python/telemetry/vehicle_pb2.py\": \"03d658ac8349f5aa4fe92a08edf3065ac2315f229b79d062cd4c89c23dbef4ff\"\n  },\n  \"runtime_cases\": 0,\n  \"model_requests\": 0,\n  \"scope\": \"eight authored float32 cases; not arbitrary wire or units safety\",\n  \"error\": \"telemetry wire/units/threshold mismatch at case 2\"\n}\n",
+  "workflow_elapsed_seconds": 5.717222332954407,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

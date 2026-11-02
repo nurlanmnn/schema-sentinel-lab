@@ -1,0 +1,46 @@
+[
+  {
+    "token_id": 1,
+    "line": 12,
+    "start_byte": 599,
+    "end_byte": 607,
+    "kind": "identifier",
+    "text": "SpeedMps",
+    "allowed": [
+      "GroundSpeedMps"
+    ]
+  },
+  {
+    "token_id": 2,
+    "line": 13,
+    "start_byte": 721,
+    "end_byte": 732,
+    "kind": "string_literal",
+    "text": "\"speed_mps\"",
+    "allowed": [
+      "\"ground_speed_mps\""
+    ]
+  },
+  {
+    "token_id": 3,
+    "line": 13,
+    "start_byte": 743,
+    "end_byte": 751,
+    "kind": "identifier",
+    "text": "SpeedMps",
+    "allowed": [
+      "GroundSpeedMps"
+    ]
+  },
+  {
+    "token_id": 4,
+    "line": 14,
+    "start_byte": 806,
+    "end_byte": 814,
+    "kind": "identifier",
+    "text": "SpeedMps",
+    "allowed": [
+      "GroundSpeedMps"
+    ]
+  }
+]

@@ -151,3 +151,9 @@ flowchart LR
 See [testbed development](testbed/README.md) for individual service commands and
 optional Docker commands. The [impact locator guide](docs/impact-locator.md)
 covers the separate Buf, Semgrep, and Tree-sitter prototype.
+
+For a distinct buildable telemetry migration, run `run_demo.py --case telemetry-rename`
+(or add `--local-codegen` after installing the pinned tools in
+[tools/codegen](tools/codegen/README.md)). It checks float32 producer/consumer bytes,
+renamed observations and a speed threshold in all three languages. See
+[decision 0015](docs/decisions/0015-buildable-telemetry-benchmark.md) for evidence and scope.

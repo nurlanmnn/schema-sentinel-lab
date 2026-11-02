@@ -10,6 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'telemetry-rename': ('telemetry-speed-rename', 'deterministic_rename_roles'),
     'removal': ('entity-name-removal', 'deterministic_remove_name_v1'),
     'rename': ('entity-name-rename', 'deterministic_rename_roles'),
     'utf8': ('v2-identifier-bytes', 'deterministic_utf8_v2'),
@@ -57,7 +58,7 @@ def preflight(case, output):
     return fixture
 
 
-def execute(case, output):
+def execute(case, output, local_codegen=False):
     output = check_output(output)
     fixture = preflight(case, output)
     output.mkdir(parents=True)
@@ -85,13 +86,21 @@ def execute(case, output):
             if not environment_version.startswith('Python 3.13.'):
                 raise RuntimeError('Existing .venv must use Python 3.13; choose a fresh clone or recreate that environment before running.')
             run([python, '-m', 'pip', 'install', '-r', ROOT / 'patchgen/pipeline-requirements.txt'])
-            run([python, '-m', 'patchgen.pipeline', '--fixture',
-                 ROOT / 'patchgen/fixtures' / CASES[case][0] / 'runtime-input.json',
-                 '--output', output / 'run', '--generate', '--strategy', CASES[case][1],
-                 '--review-output', output / 'review'])
+            command = [python, '-m', 'patchgen.pipeline', '--fixture',
+                       ROOT / 'patchgen/fixtures' / CASES[case][0] / 'runtime-input.json',
+                       '--output', output / 'run', '--generate', '--strategy', CASES[case][1],
+                       '--review-output', output / 'review']
+            if local_codegen:
+                command.append('--local-codegen')
+            run(command)
             pipeline = json.loads((output / 'run/report.json').read_text())
             if pipeline['status'] != 'validation_passed' or not (output / 'review/index.html').is_file():
                 raise RuntimeError('Demo did not produce a validated proposal and review bundle.')
+            if case == 'telemetry-rename':
+                result = pipeline.get('proposal_report',{}).get('telemetry_validation',{})
+                if result.get('status') != 'passed' or result.get('runtime_cases') != 24:
+                    raise RuntimeError('Telemetry demo lacks passing behavior evidence.')
+                report['telemetry_validation'] = {key:result[key] for key in ('status','case','runtime_cases')}
             if case.startswith('pubsub-'):
                 pubsub = pipeline.get('proposal_report', {}).get('pubsub_validation', {})
                 if pubsub.get('status') != 'passed' or pubsub.get('decoded_deliveries') != 24:
@@ -112,11 +121,12 @@ def execute(case, output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--local-codegen',action='store_true',help='use preinstalled pinned local codegen tools; see tools/codegen/README.md')
     parser.add_argument('--case', choices=tuple(CASES), default='utf8')
     parser.add_argument('--output', type=Path, required=True, help='new directory for logs, run, and portable review')
     args = parser.parse_args()
     try:
-        return execute(args.case, args.output)
+        return execute(args.case, args.output, args.local_codegen)
     except (OSError, RuntimeError, subprocess.SubprocessError) as error:
         print(str(error), file=sys.stderr)
         return 1

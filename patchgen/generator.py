@@ -492,6 +492,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 # Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
 VALIDATION_PROFILES = {
+    'telemetry-speed-rename': ('telemetry-speed-rename', None),
     'entity-name-removal': ('entity-name-removal', None),
     'entity-name-rename': ('entity-name-rename', None),
     'pubsub-name-removal': ('entity-name-removal', 'removal'),
@@ -508,7 +509,9 @@ def load_validation_profile(case, name):
     profile = json.loads((directory / 'validation-profile.json').read_text())
     patch = (directory / 'validation-tests.patch').read_text()
     oracle_case, pubsub_case = VALIDATION_PROFILES[name]
-    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case != 'v2-identifier-bytes' else []
+    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case not in ('v2-identifier-bytes','telemetry-speed-rename') else []
+    if (profile.get('telemetry_case') != ('rename' if name == 'telemetry-speed-rename' else None)):
+        raise ContractError('trusted profile has wrong telemetry selection')
     if not pubsub_case and ('pubsub_case' in profile or 'oracle_case' in profile):
         raise ContractError('historical profile cannot select a different oracle or transport')
     if pubsub_case and (profile.get('pubsub_case') != pubsub_case or profile.get('oracle_case') != oracle_case
@@ -526,11 +529,11 @@ def load_validation_profile(case, name):
     if allowed:
         check_patch(patch,{'affected_files':[{'path':p} for p in allowed], 'change':{'schema_path':allowed[0]}})
     elif patch:
-        raise ContractError('UTF-8 pubsub profile cannot modify tests')
+        raise ContractError('trusted profile cannot modify tests')
     return profile,patch
 
 
-def apply_and_validate(repo, case, proposal, output, run_checks, validation_profile=None):
+def apply_and_validate(repo, case, proposal, output, run_checks, validation_profile=None, local_codegen=False):
     verify_source(repo, case)
     check_patch(proposal['diff'], case)
     patch = output / 'proposal.patch'; patch.write_text(proposal['diff'])
@@ -563,11 +566,23 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
                         raise ContractError(f'proposal removed original tests: {file["path"]}')
         if run_checks:
             # These commands are fixed by the host, never chosen by the model.
-            command(['buf','generate'],workspace,log)
+            if local_codegen:
+                from tools.codegen.generate import generate
+                save(output/'local-codegen-toolchain.json', generate(workspace))
+                log.write('Pinned local generation completed: protoc 25.1, ts-proto 1.165.0, Buf descriptors\n')
+            else:
+                command(['buf','generate'],workspace,log)
             command([sys.executable,'run_local.py'],workspace,log,timeout=600)
             python = workspace / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
             oracle_case = validation_profile[0].get('oracle_case', case['change']['id']) if validation_profile else case['change']['id']
-            if oracle_case in BENCHMARK_CASES:
+            if validation_profile and validation_profile[0].get('telemetry_case'):
+                command([str(python), str(output/'telemetry-oracle-source.py'), '--root', str(workspace),
+                         '--case', 'rename', '--output', str(output/'telemetry')], workspace,log)
+                result = json.loads((output/'telemetry/report.json').read_text())
+                if (result.get('status') != 'passed' or result.get('runtime_cases') != 24
+                        or result.get('runtime_revision') != case['source_revision']):
+                    raise ContractError('telemetry validation did not retain passing evidence')
+            elif oracle_case in BENCHMARK_CASES:
                 command([str(python), str(output / 'benchmark-oracle-source.py'), str(workspace),oracle_case], workspace,log)
             else:
                 command([str(python), str(Path(__file__).with_name('oracle.py')), str(workspace)], workspace,log)
@@ -604,6 +619,7 @@ def main():
     parser.add_argument('--validation-profile',choices=tuple(VALIDATION_PROFILES),help='explicit independent test migration; never sent to the model')
     parser.add_argument('--endpoint',default='http://127.0.0.1:11434')
     parser.add_argument('--response',type=Path,help='offline test replay; never counted as live generation')
+    parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local codegen, host tools only')
     parser.add_argument('--validate',action='store_true',help='run regeneration, builds, unit tests and independent oracle')
     args = parser.parse_args()
     output = args.output.resolve(); output.mkdir(parents=True,exist_ok=False)
@@ -636,9 +652,18 @@ def main():
         save(output / 'input.json',case)
         report['source_revision'] = case['source_revision']
         report['benchmark_oracle_sha256'] = hashlib.sha256(Path(__file__).with_name('benchmark_oracle.py').read_bytes()).hexdigest()
+        report['codegen'] = 'local_pinned' if args.local_codegen else 'buf_remote'
+        if args.local_codegen:
+            raw = (Path(__file__).resolve().parents[1]/'tools/codegen/generate.py').read_bytes()
+            (output/'local-codegen-source.py').write_bytes(raw)
+            report['local_codegen_sha256'] = hashlib.sha256(raw).hexdigest()
         validation_profile = load_validation_profile(case,args.validation_profile) if args.validation_profile else None
         if validation_profile:
             report['validation_profile'] = validation_profile[0]
+            if validation_profile[0].get('telemetry_case'):
+                raw = (Path(__file__).resolve().parents[1]/'testbed/telemetry/run.py').read_bytes()
+                (output/'telemetry-oracle-source.py').write_bytes(raw)
+                report['telemetry_oracle_sha256'] = hashlib.sha256(raw).hexdigest()
             if validation_profile[0].get('pubsub_case'):
                 harness = output / 'pubsub-harness/testbed/pubsub'
                 harness.mkdir(parents=True)
@@ -670,8 +695,12 @@ def main():
         (output / 'proposal.patch').write_text(proposal['diff'])
         report['outcome'] = proposal['outcome']
         if proposal['outcome'] == 'patch':
-            report['workspace'] = apply_and_validate(source,case,proposal,output,args.validate,validation_profile)
+            report['workspace'] = apply_and_validate(source,case,proposal,output,args.validate,validation_profile,args.local_codegen)
             report['status'] = 'validation_passed' if args.validate else 'applied_unvalidated'
+            if args.validate and args.local_codegen:
+                report['local_codegen_toolchain'] = json.loads((output/'local-codegen-toolchain.json').read_text())
+            if args.validate and validation_profile and validation_profile[0].get('telemetry_case'):
+                report['telemetry_validation'] = json.loads((output/'telemetry/report.json').read_text())
             if args.validate and validation_profile and validation_profile[0].get('pubsub_case'):
                 report['pubsub_validation'] = json.loads((output / 'pubsub/report.json').read_text())
                 report['pubsub_negative_control'] = json.loads((output / 'pubsub-malformed/report.json').read_text())

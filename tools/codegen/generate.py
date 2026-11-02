@@ -4,6 +4,7 @@ Install protoc 25.1 at .tools/protoc-25.1 and npm ci --prefix tools/codegen.
 Tool paths are owned by the implementation checkout, never by a proposed patch.
 """
 import argparse
+import hashlib
 from pathlib import Path
 import subprocess
 import sys
@@ -37,6 +38,12 @@ def generate(workspace, tools_root=ROOT):
                         '--csharp_out=generated/csharp', '--csharp_opt=base_namespace=Simulation',
                         '--plugin=protoc-gen-ts_proto='+str(plugin), '--ts_proto_out=generated/ts', *files],
                        cwd=workspace,check=True)
+    return dict(protoc_version=version, ts_proto_version='1.165.0',
+                buf_version=subprocess.check_output(['buf','--version'],text=True).strip(),
+                sha256={name:hashlib.sha256(path.read_bytes()).hexdigest() for name,path in {
+                    'protoc':protoc, 'ts-proto-plugin':plugin.resolve(),
+                    'ts-proto-build':tools_root/'tools/codegen/node_modules/ts-proto/build/plugin.js',
+                    'package-lock.json':tools_root/'tools/codegen/package-lock.json'}.items()})
 
 
 if __name__ == '__main__':

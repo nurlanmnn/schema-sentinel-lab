@@ -6,7 +6,7 @@ import json
 import re
 from patchgen.detector import detect
 from tree_sitter import Language, Parser
-from patchgen.locator import FACTORIES, walk
+from patchgen.locator import FACTORIES, walk, names
 from patchgen.rename_tokens import inventory as base_inventory, make_prompt as base_prompt, resolve as base_resolve
 from patchgen.generator import ContractError, require
 
@@ -48,7 +48,7 @@ def inventory(case, file):
                 if (ancestor and ancestor.type == 'variable_declarator'
                         and text(ancestor.child_by_field_name('name')) == 'fields'
                         and value.type == 'member_expression'
-                        and text(value.child_by_field_name('property')) == token['text']):
+                        and text(value.child_by_field_name('property')) in names(event['old_name'])):
                     # Explicit testbed policy: fields observation keys use canonical names.
                     if 'Runtime observation key becomes' in case['intended_behavior']:
                         role = 'canonical_observation_key'

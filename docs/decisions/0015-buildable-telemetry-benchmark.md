@@ -28,3 +28,39 @@ This baseline alone is not a generated migration, a model success, human
 approval, pub/sub telemetry integration or completion of the twenty-case MVP.
 The rename must earn independent proposal, build, behavior and review evidence.
 No human decision, merge or team deployment is authorized by passing checks.
+
+## Rename pipeline checkpoint
+
+The fixture is pinned to baseline `32e39a2`. Independent detection classifies the
+same-number float field rename; syntax location recovers the nine authored
+construction/observation/threshold lines with no extra candidate lines. This
+small-case recall does not establish receiver identity or general completeness.
+The host rename policy proposes the patch without reading known-correct answers.
+Its existing TypeScript observation role now recognizes snake_case keys paired
+with descriptor-derived camelCase reads; unrelated value properties and missing
+explicit observation policy still reject. Confidence remains an unestimated zero.
+
+`pipeline-telemetry-rename-001` failed on that syntax-role limitation. `002`
+passed builds, existing Entity checks and 24 telemetry cases; `003` also retained
+local toolchain identity and exported `review-telemetry-rename-001`. The trusted
+profile pins source/schema/change and allows no test patch. A host snapshot of
+the telemetry evaluator runs against the isolated proposal, never overlaying
+runtime code. The complete validated patch includes regenerated bindings.
+Review export/verification requires all telemetry outputs and oracle source,
+checks its hash and source identity, and rechecks each retained runtime result
+against the fixed host cases. Local generation also retains and checks its source
+and toolchain record. Portable manifests hash these artifacts. No human decision
+has been recorded.
+
+## Real evaluator controls
+
+`demo-telemetry-rename-001` passes the one-command path and review export.
+`telemetry-reference-replay-003` passes an evaluator-authored known-correct patch;
+this is an offline answer check, not another production or model success.
+`telemetry-threshold-negative-003` changes Python's predicate to >=30: generation
+and compilation succeed and Entity checks pass, but the telemetry evaluator
+rejects case 2 (exactly 30 m/s). Its review bundle explicitly disallows approval.
+The first control attempts lacked required git diff headers and the second had a
+mistaken doubled TypeScript replacement; all those invalid control artifacts are
+retained as failures, not counted as semantic negative-control evidence.
+Final suites at this checkpoint: 114 patchgen tests and 23 testbed tests pass.
