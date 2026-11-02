@@ -1,0 +1,14 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.0",
+  "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+  "change_id": "inventory-label-cardinality",
+  "old_schema_sha256": "73c7cc1cc350698d5e9ca997292728d50b006193c93950ee3a0e2222825bdc4c",
+  "status": "partial",
+  "files": [],
+  "scanned": [],
+  "issues": [
+    "detector incomplete"
+  ],
+  "resolution_scope": "resolved syntax candidates, receiver types unproved; conservative cross-version matches"
+}

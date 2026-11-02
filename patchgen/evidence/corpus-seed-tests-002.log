@@ -1,0 +1,6 @@
+test_seed_revision_is_reconstructible (patchgen.tests.test_corpus.CorpusTests.test_seed_revision_is_reconstructible) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.123s
+
+OK

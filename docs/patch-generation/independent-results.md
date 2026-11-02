@@ -173,3 +173,32 @@ The full software suite passes 93 tests (`removal-tests-001.log`). Removal tests
 include reservation/shape checks, side-effect rejection, changed binding/guard
 rejection, unresolved candidates, preservation and no-model/no-reference use.
 See decision 0009 for the source-shape assumptions and boundaries.
+
+## Authored domain boundary corpus — 2 November 2026
+
+Eight additional detector/locator scenarios cover telemetry, inventory and order
+evolution. Five changes are structurally classified as supported: speed rename,
+speed precision, quantity width, active enum addition and currency removal.
+Four reach complete conservative locator scans, recovering 36/36 manually
+inventoried lines with no extras in these snippets. Active enum consumers remain
+unsupported. Three changes (units-only semantics, repeated-to-scalar labels and
+optional amount presence) remain partial and cannot reach generation.
+
+**Zero new generated/validated migrations** are counted. This is component
+evaluation on authored snippets, not eight additional full migration successes
+or completion of the twenty-case realistic end-to-end benchmark. Two telemetry
+cases share source sites. The complete scenario/limitation table and reproduction
+command are in `patchgen/corpus/README.md`.
+
+`domain-corpus-001` retained a scorer bug: production records were present, but
+the scorer read `missing` instead of the adapter's `missed` key and left the match
+flag true after that exception. Its summary must not be used. The scorer now
+sets matches only after complete scoring and marks exceptions false; a regression
+test injects scorer failure. `domain-corpus-002` is the corrected measured run,
+with all eight expected supported/partial outcomes and no row errors. All expected
+outcomes matching does not mean all cases are supported migrations.
+
+`domain-corpus-003` confirms the same results after explicitly fixing the seed
+object format to SHA-1 and disabling automatic line-ending conversion during
+staging. The final corpus suite checkpoint is 96 passing software tests
+(`corpus-tests-001.log`), with seed reconstruction rechecked separately.

@@ -1,0 +1,150 @@
+{
+  "scope": "descriptor/locator evaluation only; no proposal or migration validation",
+  "scenario_count": 8,
+  "expectation_matches": 8,
+  "detector_complete": 5,
+  "locator_complete": 4,
+  "generated_validated_migrations": 0,
+  "model_requests": 0,
+  "human_acceptance": false,
+  "catalog_sha256": "f7bcbb1b606c72d96030b868a62e83f8a7507f64e1a8e6d487dd74737881335b",
+  "implementation": {
+    "corpus.py": "037338e4eca5ccacb31a09291d1d06dfd95c9fc9183969003f9875b3ae0f1aae",
+    "detector.py": "abed5121c265741632e39e9ac693099d97a9f91d36b332d5e97a55fd06f9f201",
+    "locator.py": "826290b92542f8927044eab7136ff9e80f1f00d1c985eced02c4348efc76e8ae",
+    "adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9"
+  },
+  "implementation_revision": "5c4f9c0547facb9f9593ed92342c2cd50a799adf",
+  "records": [
+    {
+      "id": "telemetry-speed-rename",
+      "domain": "telemetry",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+      "detector_status": "complete",
+      "category": "field_renamed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      },
+      "error": "'missing'"
+    },
+    {
+      "id": "telemetry-speed-precision",
+      "domain": "telemetry",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+      "detector_status": "complete",
+      "category": "field_type_changed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      },
+      "error": "'missing'"
+    },
+    {
+      "id": "telemetry-speed-units",
+      "domain": "telemetry",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+      "detector_status": "partial",
+      "category": "ambiguous",
+      "locator_status": "partial",
+      "measurement": null
+    },
+    {
+      "id": "inventory-quantity-width",
+      "domain": "inventory",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+      "detector_status": "complete",
+      "category": "field_type_changed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      },
+      "error": "'missing'"
+    },
+    {
+      "id": "inventory-label-cardinality",
+      "domain": "inventory",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+      "detector_status": "partial",
+      "category": "ambiguous",
+      "locator_status": "partial",
+      "measurement": null
+    },
+    {
+      "id": "inventory-state-backorder",
+      "domain": "inventory",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+      "detector_status": "complete",
+      "category": "enum_value_added",
+      "locator_status": "partial",
+      "measurement": null
+    },
+    {
+      "id": "orders-remove-currency",
+      "domain": "orders",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+      "detector_status": "complete",
+      "category": "field_removed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      },
+      "error": "'missing'"
+    },
+    {
+      "id": "orders-amount-presence",
+      "domain": "orders",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+      "detector_status": "partial",
+      "category": "ambiguous",
+      "locator_status": "partial",
+      "measurement": null
+    }
+  ],
+  "limitations": [
+    "Small authored consumer snippets; no generated bindings, builds or runtime migration.",
+    "Expected unsupported outcomes are visible limitations, not successful migrations.",
+    "Impact inventories are manual source inspection, not a measured human baseline.",
+    "No broad recall or twenty-case end-to-end benchmark claim."
+  ]
+}

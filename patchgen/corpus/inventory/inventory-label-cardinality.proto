@@ -1,0 +1,9 @@
+syntax = "proto3";
+package demo.inventory;
+enum StockState { STOCK_UNKNOWN = 0; STOCK_AVAILABLE = 1; }
+message StockItem {
+  string sku = 1;
+  int32 quantity = 2;
+  string labels = 3;
+  StockState state = 4;
+}

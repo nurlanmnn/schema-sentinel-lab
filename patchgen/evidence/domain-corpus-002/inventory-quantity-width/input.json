@@ -1,0 +1,80 @@
+{
+  "contract_version": "1.0",
+  "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+  "change": {
+    "id": "inventory-quantity-width",
+    "category": "field_type_changed",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.inventory;\nenum StockState { STOCK_UNKNOWN = 0; STOCK_AVAILABLE = 1; }\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  repeated string labels = 3;\n  StockState state = 4;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.inventory;\nenum StockState { STOCK_UNKNOWN = 0; STOCK_AVAILABLE = 1; }\nmessage StockItem {\n  string sku = 1;\n  int64 quantity = 2;\n  repeated string labels = 3;\n  StockState state = 4;\n}\n"
+  },
+  "intended_behavior": "Support stock quantities beyond signed 32-bit. Preserve exact integer quantities across runtimes; TypeScript number precision requires an explicit binding/representation policy.",
+  "affected_files": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "language": "csharp",
+      "source_context": "using Demo.Inventory;\nclass InventoryReader {\n    static StockItem Sample() => new StockItem { Sku = \"A-1\", Quantity = 24, Labels = { \"fragile\" }, State = StockState.StockAvailable };\n    static object Observe(StockItem item) => new { quantity = item.Quantity, labels = item.Labels, state = item.State };\n    static bool CanFulfill(StockItem item, int requested) => item.Quantity >= requested && item.State == StockState.StockAvailable;\n}\n",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: assignment_expression"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: anonymous_object_creation_expression, member_access_expression"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: member_access_expression"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "language": "python",
+      "source_context": "from generated.inventory_pb2 import StockItem, STOCK_AVAILABLE\n\ndef sample():\n    return StockItem(sku=\"A-1\", quantity=24, labels=[\"fragile\"], state=STOCK_AVAILABLE)\ndef observe(item):\n    return {\"quantity\": item.quantity, \"labels\": list(item.labels), \"state\": item.state}\ndef can_fulfill(item, requested):\n    return item.quantity >= requested and item.state == STOCK_AVAILABLE\n",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: keyword_argument"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: attribute"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "language": "typescript",
+      "source_context": "import { StockItem, StockState } from \"./generated/inventory\";\nexport const sample = () => StockItem.create({ sku: \"A-1\", quantity: 24, labels: [\"fragile\"], state: StockState.STOCK_AVAILABLE });\nexport const observe = (item: StockItem) => ({ quantity: item.quantity, labels: item.labels, state: item.state });\nexport const canFulfill = (item: StockItem, requested: number) => item.quantity >= requested && item.state === StockState.STOCK_AVAILABLE;\n",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: pair"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression, pair"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression"
+        }
+      ]
+    }
+  ]
+}

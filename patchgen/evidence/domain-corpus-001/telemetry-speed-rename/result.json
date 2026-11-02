@@ -1,0 +1,19 @@
+{
+  "id": "telemetry-speed-rename",
+  "domain": "telemetry",
+  "proposal_validation": "not_run",
+  "human_approval_required": true,
+  "expectation_match": true,
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "detector_status": "complete",
+  "category": "field_renamed",
+  "locator_status": "complete",
+  "measurement": {
+    "expected_sites": 9,
+    "matched_sites": 9,
+    "recall": 1.0,
+    "missed": [],
+    "extra": []
+  },
+  "error": "'missing'"
+}

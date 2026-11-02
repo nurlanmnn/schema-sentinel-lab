@@ -1,0 +1,29 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.0",
+  "status": "complete",
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "old_schema_sha256": "7d68ca52eafb3ad70dfa051daba58aafd02ed0a4f06e2cb491dc61e5dfad3dc1",
+  "new_schema_sha256": "ba49b66941dd252bc920ea1b79c14067b0280039683c6bec51a09419676cccd1",
+  "old_descriptor_sha256": "7bfc6e1591e341b94bab10eea5d2e8d8c824ccfce2b9c47883c9c03e2c4b9c41",
+  "new_descriptor_sha256": "1d759c56cb03828f4d5d263ff140c55d67d5acd53bf938689565d217b81952da",
+  "events": [
+    {
+      "category": "field_renamed",
+      "message": "demo.telemetry.VehicleTelemetry",
+      "field_number": 2,
+      "old_name": "speed_mps",
+      "new_name": "ground_speed_mps"
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "telemetry-speed-rename",
+    "category": "field_renamed",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float ground_speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Rename ground speed without changing meters/second; observation key becomes ground_speed_mps. Preserve speeding threshold."
+}
