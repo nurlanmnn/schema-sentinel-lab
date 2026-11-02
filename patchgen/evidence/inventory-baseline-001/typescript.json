@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "runtimes/typescript/dist/runtimes/typescript/main.js",
+    "--inventory"
+  ],
+  "exit_code": 0,
+  "stdout": "[{\"fields\":{\"sku\":\"empty-stock\",\"quantity\":\"0\"},\"in_stock\":false,\"constructed_payload\":\"CgtlbXB0eS1zdG9jaw==\"},{\"fields\":{\"sku\":\"single\",\"quantity\":\"1\"},\"in_stock\":true,\"constructed_payload\":\"CgZzaW5nbGUQAQ==\"},{\"fields\":{\"sku\":\"backorder\",\"quantity\":\"-1\"},\"in_stock\":false,\"constructed_payload\":\"CgliYWNrb3JkZXIQ////////////AQ==\"},{\"fields\":{\"sku\":\"int32-max\",\"quantity\":\"2147483647\"},\"in_stock\":true,\"constructed_payload\":\"CglpbnQzMi1tYXgQ/////wc=\"},{\"fields\":{\"sku\":\"int32-min\",\"quantity\":\"-2147483648\"},\"in_stock\":false,\"constructed_payload\":\"CglpbnQzMi1taW4QgICAgPj/////AQ==\"},{\"fields\":{\"sku\":\"\u7bb1-\u03b1\",\"quantity\":\"42\"},\"in_stock\":true,\"constructed_payload\":\"CgbnrrEtzrEQKg==\"},{\"fields\":{\"sku\":\"\",\"quantity\":\"7\"},\"in_stock\":true,\"constructed_payload\":\"EAc=\"},{\"fields\":{\"sku\":\"long-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\"quantity\":\"123\"},\"in_stock\":true,\"constructed_payload\":\"CoUBbG9uZy14eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eBB7\"}]\n",
+  "stderr": ""
+}

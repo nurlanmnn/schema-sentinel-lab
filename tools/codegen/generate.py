@@ -36,9 +36,9 @@ def generate(workspace, tools_root=ROOT):
                        cwd=workspace,check=True)
         subprocess.run([str(protoc), '--descriptor_set_in='+str(descriptor), '--python_out=generated/python',
                         '--csharp_out=generated/csharp', '--csharp_opt=base_namespace=Simulation',
-                        '--plugin=protoc-gen-ts_proto='+str(plugin), '--ts_proto_out=generated/ts', *files],
+                        '--plugin=protoc-gen-ts_proto='+str(plugin), '--ts_proto_out=generated/ts', '--ts_proto_opt=forceLong=string', *files],
                        cwd=workspace,check=True)
-    return dict(protoc_version=version, ts_proto_version='1.165.0',
+    return dict(protoc_version=version, ts_proto_version='1.165.0', ts_proto_options=['forceLong=string'],
                 buf_version=subprocess.check_output(['buf','--version'],text=True).strip(),
                 sha256={name:hashlib.sha256(path.read_bytes()).hexdigest() for name,path in {
                     'protoc':protoc, 'ts-proto-plugin':plugin.resolve(),

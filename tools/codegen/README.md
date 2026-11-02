@@ -36,3 +36,9 @@ this records engineering due diligence, not a legal certification.
 
 Sources: [Protobuf v25.1 LICENSE](https://github.com/protocolbuffers/protobuf/blob/v25.1/LICENSE),
 [ts-proto v1.165.0 LICENSE](https://github.com/stephenh/ts-proto/blob/v1.165.0/LICENSE).
+
+The remote and local paths use `forceLong=string` for future Protobuf 64-bit
+integer fields. This keeps generated TypeScript values exact across JavaScript's
+safe-integer boundary. The inventory JSON contract also uses decimal strings.
+Int32 fields keep their generated number representation. Existing Entity and
+telemetry generated files are byte-identical under this option.

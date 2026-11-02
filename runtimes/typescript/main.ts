@@ -1,3 +1,4 @@
+import { runInventory } from "./inventory";
 import { runTelemetry } from "./telemetry";
 import { createServer, IncomingMessage } from "node:http";
 import { Entity as EntityV1 } from "../../generated/ts/v1/entity";
@@ -42,7 +43,9 @@ async function subscribe(): Promise<void> {
   }
 }
 
-if (process.argv.includes("--telemetry")) {
+if (process.argv.includes("--inventory")) {
+  runInventory();
+} else if (process.argv.includes("--telemetry")) {
   runTelemetry();
 } else if (process.argv.includes("--subscribe")) {
   subscribe().catch(error => { console.error(error); process.exitCode = 1; });

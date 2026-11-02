@@ -1,0 +1,119 @@
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+
+> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CsharpApp -> /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/csharp/bin/Release/net8.0/CsharpApp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.50
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m unittest discover -s testbed/tests -p test_*.py -v
+test_final_payload_change_fails (test_evidence.EvidenceTests.test_final_payload_change_fails) ... ok
+test_intermediate_misdecode_fails_even_when_final_payload_matches (test_evidence.EvidenceTests.test_intermediate_misdecode_fails_even_when_final_payload_matches) ... ok
+test_matching_decoders (test_evidence.EvidenceTests.test_matching_decoders) ... ok
+test_missing_runtime_fails (test_evidence.EvidenceTests.test_missing_runtime_fails) ... ok
+test_trace_fails_separately (test_evidence.EvidenceTests.test_trace_fails_separately) ... ok
+test_cleanup_stops_a_running_child_process (test_local_runner.LocalRunnerTests.test_cleanup_stops_a_running_child_process) ... ok
+test_macos_and_linux_use_the_bin_interpreter (test_local_runner.LocalRunnerTests.test_macos_and_linux_use_the_bin_interpreter) ... ok
+test_missing_tools_fail_before_installation (test_local_runner.LocalRunnerTests.test_missing_tools_fail_before_installation) ... ok
+test_occupied_port_does_not_start_or_stop_other_programs (test_local_runner.LocalRunnerTests.test_occupied_port_does_not_start_or_stop_other_programs) ... ok
+test_python_server_starts_without_reverse_dns (test_local_runner.LocalRunnerTests.test_python_server_starts_without_reverse_dns) ... ok
+test_windows_uses_the_scripts_interpreter (test_local_runner.LocalRunnerTests.test_windows_uses_the_scripts_interpreter) ... ok
+test_bad_requests_and_capacity (test_pubsub.BrokerTests.test_bad_requests_and_capacity) ... ok
+test_fanout_isolation_independent_fifo_and_poll_redelivery (test_pubsub.BrokerTests.test_fanout_isolation_independent_fifo_and_poll_redelivery) ... ok
+test_independent_wire_encoder_known_bytes (test_pubsub.BrokerTests.test_independent_wire_encoder_known_bytes) ... ok
+test_invalid_ack_does_not_mutate_and_duplicate_rejects (test_pubsub.BrokerTests.test_invalid_ack_does_not_mutate_and_duplicate_rejects) ... ok
+test_migration_expectations_are_explicit_and_independent_of_wire_bytes (test_pubsub.BrokerTests.test_migration_expectations_are_explicit_and_independent_of_wire_bytes) ... ok
+test_no_history_replay (test_pubsub.BrokerTests.test_no_history_replay) ... ok
+test_observation_shape_rejected_before_queue_mutation (test_pubsub.BrokerTests.test_observation_shape_rejected_before_queue_mutation) ... ok
+test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject (test_pubsub.EvidenceTests.test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject) ... ok
+test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads (test_pubsub.EvidenceTests.test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads) ... ok
+test_real_http_malformed_routes_types_and_success (test_pubsub.HttpBrokerTests.test_real_http_malformed_routes_types_and_success) ... ok
+test_valid_and_boundary (test_telemetry.TelemetryOracleTests.test_valid_and_boundary) ... ok
+test_wrong_units_threshold_key_or_construction_rejected (test_telemetry.TelemetryOracleTests.test_wrong_units_threshold_key_or_construction_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.524s
+
+OK
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" testbed/scripts/run-local.py
+
+Round-trip tests
+Route: Python -> TypeScript -> C#
+
+[PASS] 1/4 - Standard text
+  Input: entity_id="roundtrip-001", name="Sensor A"
+  Encoded request (25 bytes, hex):
+    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
+    08 53 65 6e 73 6f 72 20 41
+  Decoded by each service:
+    Python [PASS]: entity_id="roundtrip-001", name="Sensor A"
+    TypeScript [PASS]: entity_id="roundtrip-001", name="Sensor A"
+    C# [PASS]: entity_id="roundtrip-001", name="Sensor A"
+  Encoded response (25 bytes, hex):
+    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
+    08 53 65 6e 73 6f 72 20 41
+  Decoded response [PASS]: entity_id="roundtrip-001", name="Sensor A"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 2/4 - Empty strings
+  Input: entity_id="", name=""
+  Encoded request (0 bytes, hex):
+    (empty)
+  Decoded by each service:
+    Python [PASS]: entity_id="", name=""
+    TypeScript [PASS]: entity_id="", name=""
+    C# [PASS]: entity_id="", name=""
+  Encoded response (0 bytes, hex):
+    (empty)
+  Decoded response [PASS]: entity_id="", name=""
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 3/4 - Unicode
+  Input: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Encoded request (36 bytes, hex):
+    0a 0f 65 6e 74 69 74 79 2d e9 9b aa 2d f0 9f 9a
+    80 12 11 43 61 66 c3 a9 20 2f 20 ce 94 20 2f 20
+    f0 9f 9a 80
+  Decoded by each service:
+    Python [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+    TypeScript [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+    C# [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Encoded response (36 bytes, hex):
+    0a 0f 65 6e 74 69 74 79 2d e9 9b aa 2d f0 9f 9a
+    80 12 11 43 61 66 c3 a9 20 2f 20 ce 94 20 2f 20
+    f0 9f 9a 80
+  Decoded response [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 4/4 - Escaped text
+  Input: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Encoded request (51 bytes, hex):
+    0a 0a 65 6e 74 69 74 79 2d 30 30 34 12 25 71 75
+    6f 74 65 73 20 22 20 61 6e 64 20 6e 65 77 6c 69
+    6e 65 0a 20 61 6e 64 20 62 61 63 6b 73 6c 61 73
+    68 20 5c
+  Decoded by each service:
+    Python [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+    TypeScript [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+    C# [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Encoded response (51 bytes, hex):
+    0a 0a 65 6e 74 69 74 79 2d 30 30 34 12 25 71 75
+    6f 74 65 73 20 22 20 61 6e 64 20 6e 65 77 6c 69
+    6e 65 0a 20 61 6e 64 20 62 61 63 6b 73 6c 61 73
+    68 20 5c
+  Decoded response [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+PASS: 4/4 round-trip cases passed.

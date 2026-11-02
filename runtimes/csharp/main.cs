@@ -54,6 +54,11 @@ if (args.Contains("--subscribe"))
     }
 }
 
+if (args.Contains("--inventory"))
+{
+    InventoryRuntime.Run();
+    return 0;
+}
 if (args.Contains("--telemetry"))
 {
     TelemetryRuntime.Run();

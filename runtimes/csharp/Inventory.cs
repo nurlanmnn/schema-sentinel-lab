@@ -1,0 +1,20 @@
+using System.Globalization;
+using System.Text.Json;
+using Google.Protobuf;
+
+static class InventoryRuntime
+{
+    public static void Run()
+    {
+        var requests = JsonSerializer.Deserialize<InventoryRequest[]>(Console.In.ReadToEnd(),
+            new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException("Missing requests");
+        var results = requests.Select(request => {
+            var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
+            var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
+            return new { fields, in_stock = entity.Quantity > 0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
+        });
+        Console.WriteLine(JsonSerializer.Serialize(results));
+    }
+}
+record InventoryRequest(string Payload, string Sku, string Quantity);
