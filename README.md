@@ -7,6 +7,16 @@ review-only patch generator. See [measured results](docs/patch-generation/indepe
 for the bounded scope and retained failures. Human approval is required for every
 proposed patch. The inherited testbed instructions follow.
 
+For the complete independent proposal/validation/review path, see the
+[one-command demo](docs/patch-generation/demo.md):
+
+```sh
+python3.13 run_demo.py --output patchgen/evidence/my-demo
+```
+
+Install the prerequisites listed in that guide first. This bounded deterministic
+demo makes zero model calls and leaves human approval pending.
+
 
 UCF Senior Design project for testing schema changes across Python, TypeScript,
 and C#. The testbed sends one Protobuf `Entity` through all three services and
