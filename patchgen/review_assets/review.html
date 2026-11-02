@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'">
+<title>{{TITLE}} · Schema Sentinel review</title><link rel="stylesheet" href="review.css"><script src="review.js" defer></script></head>
+<body><header class="masthead"><a href="#top" class="brand">S<span class="brand-rule">/</span>S <span>SCHEMA SENTINEL</span></a><span class="local">LOCAL REVIEW · NO AUTOMATIC MERGE</span></header>
+<main id="top"><section class="intro"><div><p class="eyebrow">PATCH REVIEW / 01</p><h1>A change.<br>A human decision.</h1><p class="subtitle">Inspect the proposal and its validation evidence before recording your decision.</p></div><div class="identity"><p class="eyebrow">CHANGE</p><h2>{{TITLE}}</h2><dl><dt>Validation</dt><dd>{{STATUS}}</dd><dt>Proposal mode</dt><dd>{{MODE}}</dd><dt>Strategy</dt><dd>{{STRATEGY}}</dd><dt>Source revision</dt><dd class="revision">{{REVISION}}</dd></dl><p class="pending">● Human review pending</p></div></section>
+<div class="review-grid"><div class="primary"><section class="behavior"><p class="eyebrow">01 / INTENDED BEHAVIOR</p><p>{{BEHAVIOR}}</p></section>
+<section class="patch-section"><div class="section-title"><div><p class="eyebrow">02 / COMPLETE PATCH</p><h2>Read the changes.</h2></div><a class="text-link" href="#artifacts">Evidence files ↗</a></div><p class="note">When validation passes, this includes regenerated bindings and any separately supplied test migration.</p><pre class="diff" tabindex="0" aria-label="Complete review patch"><code>{{DIFF}}</code></pre></section>
+<section id="artifacts" class="artifacts"><p class="eyebrow">03 / RETAINED EVIDENCE</p><h2>Follow the evidence.</h2><ul>{{LINKS}}</ul><a class="text-link" href="manifest.json">Artifact hashes / manifest.json ↗</a></section></div>
+<aside><form id="decision-form" data-eligible="{{ELIGIBLE}}"><p class="eyebrow">04 / YOUR DECISION</p><h2>Review, then decide.</h2><p>Validation is one input. Confirm the semantics, scope and complete patch.</p><label for="reviewer">Reviewer</label><input id="reviewer" name="reviewer" autocomplete="name" required placeholder="Your name">
+<label for="rationale">Reason for your decision</label><textarea id="rationale" name="rationale" rows="4" required placeholder="What supports your decision? Any remaining concerns?"></textarea>
+<label class="ack"><input id="ack" type="checkbox" required><span>I reviewed the complete patch and the retained evidence.</span></label>
+<div class="actions"><button id="approve" type="submit" value="approve">Export approval</button><button class="reject" type="submit" value="reject">Export rejection</button></div>
+<p id="gate-message" class="gate" role="status"></p><p class="decision-status" id="decision-status" aria-live="polite">No decision recorded.</p><p class="fine">Exports a decision file tied to this evidence manifest. Source code stays untouched. Records are self-reported; reviewer identity is not authenticated.</p></form></aside></div>
+<footer><span>Schema Sentinel / independent lab</span><span>Proposal → validation → human review</span></footer></main>
+<script id="review-data" type="application/json">{{DATA}}</script></body></html>

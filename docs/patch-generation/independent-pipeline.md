@@ -114,3 +114,8 @@ string-to-bytes change with valid UTF-8 textual observations. It uses no model o
 reference response. Constructor/observation syntax and version dispatch must
 match supported shapes; unmatched candidate lines reject. v1 candidates remain
 unchanged. This is not arbitrary type/semantic migration. See decision 0007.
+
+Add `--review-output NEW-SIBLING-DIRECTORY` to a proposal run to export a local
+human-review page after validation/rejection. See [review workflow](review.md).
+The review copies evidence, hashes artifacts and exports human decision records;
+it never applies or merges code. No real human approval is implied by export.

@@ -1,0 +1,69 @@
+{
+  "review_version": "1.0",
+  "change_id": "v2-identifier-bytes",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "validation_status": "validation_passed",
+  "mode": "deterministic_proposal",
+  "strategy": "deterministic_utf8_v2",
+  "approval_eligible": true,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "63b4d7bc35ea764d23ffa5cf1e2ac6b01c02f77c64dac06b6e255881811e9329",
+      "bytes": 13090
+    },
+    "report.json": {
+      "sha256": "75789e8d9bd597e3cb25e80c2a8501a5cbe4d41d9ab2b3de75392cffd6003f91",
+      "bytes": 2465
+    },
+    "provenance.json": {
+      "sha256": "9007564da7fc125b7755874084a938d5d9f5674d762deab83a829b0e7e2863e7",
+      "bytes": 507
+    },
+    "detector.json": {
+      "sha256": "64b180d72a3e5f1bb18399ee735655c6c148875da89c1f049b6aa4962dc3a410",
+      "bytes": 1898
+    },
+    "locator.json": {
+      "sha256": "c8875094c781c8c0d8bfea333930fca30acb27dedb4155c6f6b3b69180578edb",
+      "bytes": 3335
+    },
+    "measurement.json": {
+      "sha256": "009f1e855b82f40090d162784e9a771802d10d9591fef15a421542f0df916e2a",
+      "bytes": 349
+    },
+    "implementation.json": {
+      "sha256": "2fd1680dabe424f3c66dc9ad307455906ade87ac9e0a9b7b7f499e57a779ff20",
+      "bytes": 783
+    },
+    "proposal/report.json": {
+      "sha256": "d7fb9201b116214fc6b2760e6e5773f0f30b287e62a972ee79ae3191c96c683f",
+      "bytes": 926
+    },
+    "proposal/assembly.json": {
+      "sha256": "703504ab1710cb10b4eb8d450a2c0659a430394831017440f9601dbf13070dbb",
+      "bytes": 193
+    },
+    "proposal/proposal.json": {
+      "sha256": "f834cfa0845c9c5443e2a2ef1bb2bbf8ec65c1c0c9dc628600db191e2daa2ede",
+      "bytes": 4188
+    },
+    "proposal/proposal.patch": {
+      "sha256": "3e64afedcb2286c1f502d1b86274533f99db2b64225bcb28fe15a263a036b1a2",
+      "bytes": 3563
+    },
+    "proposal/validated.patch": {
+      "sha256": "a4ea12dfeee0a132a6b9156a4500720f59a95dcd6949a2d2b6d74e2e7b63dc81",
+      "bytes": 10370
+    },
+    "proposal/validation.log": {
+      "sha256": "7210cee2b7ff359b28b1a279089b399de35363033b326f139ed3e83d0a901573",
+      "bytes": 8983
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

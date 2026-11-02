@@ -123,3 +123,25 @@ wrong-type/binding rejection, unresolved candidate rejection, v1 preservation
 and no-model/no-reference construction checks. No new realistic schema-change
 case or human baseline is counted. The remaining MVP work includes review UX,
 benchmark expansion, active enum consumers, pub/sub and CI.
+
+## Portable human-review interface — 2 November 2026
+
+A local review interface now displays complete patches, intended behavior,
+source revision, proposal mode, validation status and retained evidence links.
+SHA-256 manifests tie exported decision records to the evidence. Failed validation
+disables approval. The CLI rejects changed artifacts/manifests and incomplete
+reviewer acknowledgements. Records are self-reported, not authenticated signatures;
+no code application or merge exists. Real human approval is still pending.
+
+`pipeline-type-review-001` passes the full type pipeline and exports
+`review-type-integrated-001` in one command. Browser checks of `review-type-001`
+and `review-rejected-001` confirm required fields and failed-approval gating.
+A synthetic rejection downloaded through the UI verifies via the CLI; its
+reviewer is explicitly AUTOMATED UI TEST and it is not a human project decision.
+Normal and narrow layouts were inspected. A one-pixel fractional viewport rounding
+difference at the narrow test size is not content overflow; patch lines scroll
+inside their diff panel. Full suite: 82 tests (`review-tests-002.log`).
+
+The review page closes the local presentation gap; authenticated collaboration,
+automatic acceptance, benchmark breadth, human timing, active enum handling,
+pub/sub and CI remain separate milestones. See decision 0008 and review.md.

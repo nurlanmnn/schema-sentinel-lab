@@ -1,0 +1,6 @@
+{
+  "strategy": "deterministic_utf8_v2",
+  "model_requests": 0,
+  "automatic_repairs": 0,
+  "policy": "explicit v2 UTF-8 text conversion; invalid byte and mixed-version policy outside scope"
+}

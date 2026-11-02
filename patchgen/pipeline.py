@@ -80,11 +80,20 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
+    parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
     parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2'),default='candidate_edits')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
+        if args.review_output and not (args.generate or args.response):
+            raise ContractError('--review-output requires --generate or --response')
+        if args.review_output and (args.review_output.exists() or args.review_output.resolve() == args.output.resolve()
+                                   or args.output.resolve() in args.review_output.resolve().parents):
+            raise ContractError('review output must be new and outside pipeline output')
         report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response,args.strategy)
+        if args.review_output:
+            from patchgen.review import export
+            export(args.output,args.review_output)
         print(json.dumps(report,indent=2))
         return int(report['status']=='failed')
     except (ValueError,OSError,KeyError,subprocess.SubprocessError) as error:

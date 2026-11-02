@@ -1,0 +1,29 @@
+{
+  "review_version": "1.0",
+  "change_id": "synthetic-ui-test",
+  "source_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "validation_status": "failed",
+  "mode": "synthetic_test",
+  "strategy": "ui-test-only",
+  "approval_eligible": false,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "8c51305f6553055ad70dca4c5873c04eed8d1107a4af577a5df753ec86e61b04",
+      "bytes": 183
+    },
+    "report.json": {
+      "sha256": "83d6a2710a53c00b866e780b2916f9c214d65caacf0dec1b07e306a2c36cbefa",
+      "bytes": 137
+    },
+    "proposal/report.json": {
+      "sha256": "83d6a2710a53c00b866e780b2916f9c214d65caacf0dec1b07e306a2c36cbefa",
+      "bytes": 137
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

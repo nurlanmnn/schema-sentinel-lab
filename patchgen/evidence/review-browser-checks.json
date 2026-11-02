@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "check": "passing proposal empty approval",
+      "result": "blocked by required Reviewer field; no decision recorded"
+    },
+    {
+      "check": "failed proposal approval gate",
+      "approval_enabled": false,
+      "rejection_enabled": true
+    },
+    {
+      "check": "synthetic UI rejection",
+      "result": "downloaded via browser and verified by CLI; no real human acceptance"
+    },
+    {
+      "check": "narrow responsive breakpoint",
+      "result": "inspected stacked layout; patch scroll contained; <=1px fractional rounding"
+    }
+  ],
+  "human_approval_recorded": false,
+  "external_publication": false
+}

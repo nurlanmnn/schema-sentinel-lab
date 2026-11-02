@@ -1,0 +1,164 @@
+$ git worktree add --detach /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace 26304c1ed2f4738676a9607e8fe21e17ebd090f0
+Preparing worktree (detached HEAD 26304c1)
+HEAD is now at 26304c1 Show encoded Protobuf bytes and actual decoded values in test output
+
+exit=0; elapsed_seconds=0.238589
+$ git apply --check /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.012261
+$ git apply /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.010960
+$ buf generate
+
+exit=0; elapsed_seconds=1.890757
+$ /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python run_local.py
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m venv "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/.venv"
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/.venv/bin/python" -m pip install -r runtimes/python/requirements.txt
+Collecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))
+  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)
+Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-4.25.8
+
+[notice] A new release of pip is available: 25.2 -> 26.2.2
+[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/.venv/bin/python -m pip install --upgrade pip
+
+> /opt/homebrew/bin/npm ci --prefix runtimes/typescript
+
+added 14 packages, and audited 15 packages in 459ms
+
+found 0 vulnerabilities
+
+> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj
+  Determining projects to restore...
+  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 389 ms).
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+
+> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CsharpApp -> /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/runtimes/csharp/bin/Release/net8.0/CsharpApp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.63
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/.venv/bin/python" -m unittest discover -s testbed/tests -p test_*.py -v
+test_final_payload_change_fails (test_evidence.EvidenceTests.test_final_payload_change_fails) ... ok
+test_intermediate_misdecode_fails_even_when_final_payload_matches (test_evidence.EvidenceTests.test_intermediate_misdecode_fails_even_when_final_payload_matches) ... ok
+test_matching_decoders (test_evidence.EvidenceTests.test_matching_decoders) ... ok
+test_missing_runtime_fails (test_evidence.EvidenceTests.test_missing_runtime_fails) ... ok
+test_trace_fails_separately (test_evidence.EvidenceTests.test_trace_fails_separately) ... ok
+test_cleanup_stops_a_running_child_process (test_local_runner.LocalRunnerTests.test_cleanup_stops_a_running_child_process) ... ok
+test_macos_and_linux_use_the_bin_interpreter (test_local_runner.LocalRunnerTests.test_macos_and_linux_use_the_bin_interpreter) ... ok
+test_missing_tools_fail_before_installation (test_local_runner.LocalRunnerTests.test_missing_tools_fail_before_installation) ... ok
+test_occupied_port_does_not_start_or_stop_other_programs (test_local_runner.LocalRunnerTests.test_occupied_port_does_not_start_or_stop_other_programs) ... ok
+test_python_server_starts_without_reverse_dns (test_local_runner.LocalRunnerTests.test_python_server_starts_without_reverse_dns) ... ok
+test_windows_uses_the_scripts_interpreter (test_local_runner.LocalRunnerTests.test_windows_uses_the_scripts_interpreter) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.006s
+
+OK
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/.venv/bin/python" testbed/scripts/run-local.py
+
+Round-trip tests
+Route: Python -> TypeScript -> C#
+
+[PASS] 1/4 - Standard text
+  Input: entity_id="roundtrip-001", name="Sensor A"
+  Encoded request (25 bytes, hex):
+    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
+    08 53 65 6e 73 6f 72 20 41
+  Decoded by each service:
+    Python [PASS]: entity_id="roundtrip-001", name="Sensor A"
+    TypeScript [PASS]: entity_id="roundtrip-001", name="Sensor A"
+    C# [PASS]: entity_id="roundtrip-001", name="Sensor A"
+  Encoded response (25 bytes, hex):
+    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
+    08 53 65 6e 73 6f 72 20 41
+  Decoded response [PASS]: entity_id="roundtrip-001", name="Sensor A"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 2/4 - Empty strings
+  Input: entity_id="", name=""
+  Encoded request (0 bytes, hex):
+    (empty)
+  Decoded by each service:
+    Python [PASS]: entity_id="", name=""
+    TypeScript [PASS]: entity_id="", name=""
+    C# [PASS]: entity_id="", name=""
+  Encoded response (0 bytes, hex):
+    (empty)
+  Decoded response [PASS]: entity_id="", name=""
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 3/4 - Unicode
+  Input: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Encoded request (36 bytes, hex):
+    0a 0f 65 6e 74 69 74 79 2d e9 9b aa 2d f0 9f 9a
+    80 12 11 43 61 66 c3 a9 20 2f 20 ce 94 20 2f 20
+    f0 9f 9a 80
+  Decoded by each service:
+    Python [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+    TypeScript [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+    C# [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Encoded response (36 bytes, hex):
+    0a 0f 65 6e 74 69 74 79 2d e9 9b aa 2d f0 9f 9a
+    80 12 11 43 61 66 c3 a9 20 2f 20 ce 94 20 2f 20
+    f0 9f 9a 80
+  Decoded response [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 4/4 - Escaped text
+  Input: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Encoded request (51 bytes, hex):
+    0a 0a 65 6e 74 69 74 79 2d 30 30 34 12 25 71 75
+    6f 74 65 73 20 22 20 61 6e 64 20 6e 65 77 6c 69
+    6e 65 0a 20 61 6e 64 20 62 61 63 6b 73 6c 61 73
+    68 20 5c
+  Decoded by each service:
+    Python [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+    TypeScript [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+    C# [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Encoded response (51 bytes, hex):
+    0a 0a 65 6e 74 69 74 79 2d 30 30 34 12 25 71 75
+    6f 74 65 73 20 22 20 61 6e 64 20 6e 65 77 6c 69
+    6e 65 0a 20 61 6e 64 20 62 61 63 6b 73 6c 61 73
+    68 20 5c
+  Decoded response [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+PASS: 4/4 round-trip cases passed.
+
+exit=0; elapsed_seconds=6.853721
+$ /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/.venv/bin/python /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/benchmark-oracle-source.py /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace v2-identifier-bytes
+{"runtime": "python", "version": "v2", "fields": {"entity_id": "normal-001"}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": ""}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": "entity-\u96ea-\ud83d\ude80"}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": "quotes \"\n\\"}}
+PASS independent: 4 UTF-8 v2 payloads decoded and reencoded in Python, TypeScript and C#
+PASS independent: 4 v1 payloads through three services, 6 standalone samples, v2 Python text cases and invalid version
+Services are running:
+  Python: http://127.0.0.1:8000/health
+  TypeScript: http://127.0.0.1:8001/health
+  C#: http://127.0.0.1:8002/health
+Logs: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-type-deterministic-001/proposal/workspace/testbed/artifacts
+Press Ctrl+C to stop all three services.
+
+Services stopped.
+
+
+exit=0; elapsed_seconds=1.742953

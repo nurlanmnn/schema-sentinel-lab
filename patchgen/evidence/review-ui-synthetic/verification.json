@@ -1,0 +1,7 @@
+{
+  "status": "verified",
+  "decision": "reject",
+  "reviewer": "AUTOMATED UI TEST",
+  "manifest_sha256": "f7fba1fe82b9ea6b0d004b1d0e332780fe0812c663537e67d9dfced47210367e",
+  "meaning": "self-reported decision matches exported evidence; no code applied or identity authentication"
+}
