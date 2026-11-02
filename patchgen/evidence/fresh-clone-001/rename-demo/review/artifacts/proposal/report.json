@@ -1,0 +1,31 @@
+{
+  "status": "validation_passed",
+  "human_approval_required": true,
+  "mode": "deterministic_proposal",
+  "prompt_version": "host-rename/1.0",
+  "strategy": "deterministic_rename_roles",
+  "generator_sha256": "53bfe23bb3d1c2e59d48312fa0c4dcdfe3a126cb1e2440e3ca9b28c0d2a5a7bd",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "rename_token_sha256": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+  "rename_role_sha256": "baf426c540bc140f7b6325dc9d6d9172419c6d848dedfde5cf20b25ad778efbb",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+    "change_id": "entity-name-rename",
+    "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+    "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
+    "allowed_test_paths": [
+      "testbed/tests/e2e_test.py",
+      "testbed/tests/test_evidence.py"
+    ],
+    "model_editable": false,
+    "origin": "independent evaluator migration; excluded from prompts"
+  },
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/fresh-clone-001/rename-demo/run/proposal/workspace",
+  "workflow_elapsed_seconds": 10.408306375029497,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

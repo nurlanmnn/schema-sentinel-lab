@@ -145,3 +145,31 @@ inside their diff panel. Full suite: 82 tests (`review-tests-002.log`).
 The review page closes the local presentation gap; authenticated collaboration,
 automatic acceptance, benchmark breadth, human timing, active enum handling,
 pub/sub and CI remain separate milestones. See decision 0008 and review.md.
+
+## Fresh-clone reproduction and bounded removal — 2 November 2026
+
+`fresh-clone-001` was a full remote clone from the private personal repository,
+with no copied virtual environment or runtime installs. The new one-command
+launcher passed the UTF-8 case at `e5d47a3` and rename at `a026d9f`, exporting
+portable review bundles. The second launch initially rejected a free port because
+of recently completed connections; its console record is retained, the Unix
+preflight was corrected, and the next launch passed. Existing system tools and
+package download caches were available: this is fresh-checkout reproducibility
+on this host, not a clean OS, cross-platform or offline result. Exact versions,
+revisions and reports are in `fresh-clone-001/reproducibility-summary.json`.
+
+`pipeline-removal-deterministic-001` independently detects and locates the v1
+name removal (6/6 known runtime sites, no extras), then constructs a bounded AST
+removal proposal with no model calls or reference replay. It passed regeneration,
+TypeScript/.NET compilation, 11 existing unit tests, four three-service round
+trips, six deliberately corrupted-evidence rejection checks, four independent
+retained-identifier payloads and a legacy payload containing removed field 2.
+The trusted evaluator test migration is supplied separately, not generated.
+`review-removal-deterministic-001` presents the complete patch; no human decision
+has been recorded. This completes deterministic proposal coverage for the same
+three related seed cases and does not add benchmark breadth or live-model success.
+
+The full software suite passes 93 tests (`removal-tests-001.log`). Removal tests
+include reservation/shape checks, side-effect rejection, changed binding/guard
+rejection, unresolved candidates, preservation and no-model/no-reference use.
+See decision 0009 for the source-shape assumptions and boundaries.

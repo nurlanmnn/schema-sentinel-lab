@@ -1,0 +1,16 @@
+{
+  "status": "validation_passed",
+  "human_approval_required": true,
+  "mode": "deterministic_proposal",
+  "prompt_version": "host-utf8/1.0",
+  "strategy": "deterministic_utf8_v2",
+  "generator_sha256": "53bfe23bb3d1c2e59d48312fa0c4dcdfe3a126cb1e2440e3ca9b28c0d2a5a7bd",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "type_utf8_sha256": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "outcome": "patch",
+  "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/fresh-clone-001/utf8-demo/run/proposal/workspace",
+  "workflow_elapsed_seconds": 7.1400556670269,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

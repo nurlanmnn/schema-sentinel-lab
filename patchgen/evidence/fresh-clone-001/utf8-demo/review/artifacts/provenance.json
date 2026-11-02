@@ -1,0 +1,9 @@
+{
+  "adapter_version": "1.0",
+  "detector_producer": "independent-descriptor-detector/1.0",
+  "locator_producer": "independent-tree-sitter-locator/1.0",
+  "detector_sha256": "55a08956427cf5b7d7786735f662bf90a0cce8a7e90945acecd9b7add6e44d9b",
+  "locator_sha256": "41956564865f8981a6bfeef8acf0ccd2740df640d592c897f99513e8efc8f4b9",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "integration_scope": "validated supplied records; completeness asserted by producer, not proved by adapter"
+}

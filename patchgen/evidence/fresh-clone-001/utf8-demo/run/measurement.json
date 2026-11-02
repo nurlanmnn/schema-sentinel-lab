@@ -1,0 +1,21 @@
+{
+  "expected_sites": 6,
+  "matched_sites": 6,
+  "recall": 1.0,
+  "missed": [],
+  "extra": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "line": 15
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "line": 38
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "line": 59
+    }
+  ],
+  "classification_correct": true
+}

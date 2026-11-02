@@ -1,0 +1,30 @@
+{
+  "status": "validation_passed",
+  "human_approval_required": true,
+  "mode": "deterministic_proposal",
+  "prompt_version": "host-remove/1.0",
+  "strategy": "deterministic_remove_name_v1",
+  "generator_sha256": "20d18cd1eb04e8e8fb72e6463648bc16083b51a4180c7846d4f3589d9691308a",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "remove_name_sha256": "1265821f708cb54b0460f01cd1939105bc64a4222acf992c1c0ebba8f45198e8",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+    "change_id": "entity-name-removal-001",
+    "new_schema_sha256": "16704bf1cafa25c444eaf22b67de84bd965c842439c1b27d66b9aaef2f695128",
+    "test_patch_sha256": "ff9017e8b036fea0b2cb97ba36d7f2abb12117c7dfe1b88f6e54c8910b8c41fa",
+    "allowed_test_paths": [
+      "testbed/tests/e2e_test.py",
+      "testbed/tests/test_evidence.py"
+    ],
+    "origin": "independent reference test migration; never included in model inputs",
+    "model_editable": false
+  },
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-removal-deterministic-001/proposal/workspace",
+  "workflow_elapsed_seconds": 9.757463707937859,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

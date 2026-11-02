@@ -19,7 +19,8 @@ python3.13 run_demo.py --output patchgen/evidence/my-demo
 
 On Windows, use `py -3.13` in place of `python3.13`. The default `utf8` case
 supports the explicitly defined v2 identifier string-to-bytes UTF-8 policy.
-Use `--case rename` for the bounded v1 name-to-display_name migration. Each run
+Use `--case rename` for the bounded v1 name-to-display_name migration or
+`--case removal` for v1 name removal with reserved number/name. Each run
 needs a new output directory. The launcher creates `.venv`, installs the pinned
 analysis dependencies, runs descriptor detection, syntax location, deterministic
 proposal construction, compilation and independent runtime checks, then exports
@@ -34,7 +35,7 @@ Use the [review instructions](review.md) to serve it locally, export a decision,
 and verify the record. No automatic approval, patch application to the working
 checkout, merge or deployment follows.
 
-This is two bounded deterministic policies on one small testbed, not a live
+This is three bounded deterministic policies on one small testbed, not a live
 LLM success, a twenty-case benchmark, general semantic migration, pub/sub
 integration or a measured human baseline. Versions and implementation revision
 are retained in the demo report; pipeline snapshots retain actual source hashes.

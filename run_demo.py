@@ -10,6 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'removal': ('entity-name-removal', 'deterministic_remove_name_v1'),
     'rename': ('entity-name-rename', 'deterministic_rename_roles'),
     'utf8': ('v2-identifier-bytes', 'deterministic_utf8_v2'),
 }

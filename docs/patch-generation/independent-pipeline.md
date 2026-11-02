@@ -1,5 +1,8 @@
 # Independent detector/locator pipeline
 
+For a fresh checkout, use the [one-command setup and demo](demo.md). It installs
+the pinned analysis environment and exports review evidence without a model.
+
 This Lab implementation builds old/new Protobuf descriptors with matching file
 and package identity, locates conservative runtime syntax candidates in Python,
 TypeScript and C#, and feeds normalized records into adapter 1.0 and the existing
@@ -119,3 +122,12 @@ Add `--review-output NEW-SIBLING-DIRECTORY` to a proposal run to export a local
 human-review page after validation/rejection. See [review workflow](review.md).
 The review copies evidence, hashes artifacts and exports human decision records;
 it never applies or merges code. No real human approval is implied by export.
+
+## Bounded field removal
+
+`--generate --strategy deterministic_remove_name_v1` supports the explicit
+v1 name-removal fixture. It removes recognized AST construction/observation items
+and dedicated empty Python guards, and requires reserved field number/name.
+Unknown roles, side-effectful values and unresolved candidates reject. It makes
+zero model calls, reads no reference response, and uses the existing independent
+removal validator/test migration. See decision 0009 and the demo's `--case removal`.

@@ -19,9 +19,9 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits")
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
                           files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
-                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py','rename_roles.py','type_utf8.py')})
+                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py')})
     save(output/'implementation.json',implementation)
-    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py','rename_roles.py','type_utf8.py'):
+    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py'):
         (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
     revision=require(case,'source_revision',str,'request')
     if not re.fullmatch(r'[0-9a-f]{40}',revision):
@@ -81,7 +81,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
-    parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1'),default='candidate_edits')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
