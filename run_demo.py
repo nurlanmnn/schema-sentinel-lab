@@ -42,6 +42,10 @@ def preflight(case, output):
         raise RuntimeError('Pinned testbed commit is absent. Use a full clone, or fetch full history before rerunning.')
     for port in (8000, 8001, 8002):
         with socket.socket() as probe:
+            # Match the runtime servers: completed connections in TIME_WAIT do
+            # not mean a listener is still active after a successful prior run.
+            if sys.platform != 'win32':
+                probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
                 probe.bind(('127.0.0.1', port))
             except OSError as error:
