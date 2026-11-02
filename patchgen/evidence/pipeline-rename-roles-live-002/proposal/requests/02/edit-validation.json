@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "path": "runtimes/python/main.py",
+  "error": "edited candidate line requires all rename tokens; mixed roles unsupported"
+}

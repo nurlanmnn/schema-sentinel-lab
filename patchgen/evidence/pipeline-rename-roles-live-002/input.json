@@ -1,0 +1,65 @@
+{
+  "contract_version": "1.0",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "change": {
+    "id": "entity-name-rename",
+    "category": "field_renamed",
+    "schema_path": "proto/v1/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string display_name = 2;\n}\n"
+  },
+  "intended_behavior": "Rename v1 Entity.name to display_name on the same wire field 2. Preserve every value, including empty/Unicode/escaped text, and entity_id. Runtime observation key becomes display_name. v2 is unchanged. Regenerate bindings; Python display_name, TypeScript displayName, C# DisplayName. Do not edit test sources.",
+  "affected_files": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "language": "csharp",
+      "source_context": "using System.Text.Json;\nusing Google.Protobuf;\n\nconst string observationsHeader = \"X-Schema-Sentinel-Observations\";\nconst string traceHeader = \"X-Service-Trace\";\n\nstatic (IMessage Entity, Dictionary<string, string> Fields) ProcessEntity(byte[] rawBytes, string version)\n{\n    IMessage entity;\n    Dictionary<string, string> fields;\n    if (version == \"v1\")\n    {\n        var decoded = Simulation.V1.Entity.Parser.ParseFrom(rawBytes);\n        entity = decoded;\n        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };\n    }\n    else if (version == \"v2\")\n    {\n        var decoded = Simulation.V2.Entity.Parser.ParseFrom(rawBytes);\n        entity = decoded;\n        fields = new() { [\"entity_id\"] = decoded.EntityId };\n    }\n    else throw new ArgumentException($\"Unsupported version: {version}\");\n    Console.WriteLine(JsonSerializer.Serialize(new { runtime = \"csharp\", version, fields }));\n    return (entity, fields);\n}\n\nif (args.Contains(\"--healthcheck\"))\n{\n    using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(1) };\n    try { return (await client.GetAsync(\"http://localhost:8002/health\")).IsSuccessStatusCode ? 0 : 1; }\n    catch (Exception error) when (error is HttpRequestException or TaskCanceledException) { return 1; }\n}\nif (!args.Contains(\"--serve\"))\n{\n    var version = args.Contains(\"--v2\") ? \"v2\" : \"v1\";\n    IMessage entity = version == \"v1\"\n        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }\n        : new Simulation.V2.Entity { EntityId = \"cs_202\" };\n    ProcessEntity(entity.ToByteArray(), version);\n    return 0;\n}\nvar builder = WebApplication.CreateBuilder(args.Where(arg => arg != \"--serve\").ToArray());\nvar app = builder.Build();\napp.MapGet(\"/health\", () => Results.Json(new { status = \"ok\", runtime = \"csharp\" }));\napp.MapPost(\"/relay\", async (HttpRequest request, HttpResponse response) =>\n{\n    try\n    {\n        using var body = new MemoryStream();\n        await request.Body.CopyToAsync(body);\n        var (entity, fields) = ProcessEntity(body.ToArray(), \"v1\");\n        var trace = JsonSerializer.Deserialize<List<string>>(request.Headers[traceHeader].FirstOrDefault() ?? \"[]\")\n            ?? throw new JsonException(\"Trace must be an array\");\n        trace.Add(\"csharp\");\n        response.Headers[observationsHeader] = JsonSerializer.Serialize(new[] { new { runtime = \"csharp\", fields } });\n        response.Headers[traceHeader] = JsonSerializer.Serialize(trace);\n        response.ContentType = \"application/x-protobuf\";\n        await response.Body.WriteAsync(entity.ToByteArray());\n    }\n    catch (Exception error) when (error is InvalidProtocolBufferException or JsonException)\n    {\n        response.StatusCode = 400;\n        await response.WriteAsJsonAsync(new { error = error.Message });\n    }\n});\napp.Run();\nreturn 0;\n",
+      "positions": [
+        {
+          "start_line": 15,
+          "end_line": 15,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate, member_access_expression"
+        },
+        {
+          "start_line": 38,
+          "end_line": 38,
+          "reason": "Conservative syntax candidate: assignment_expression"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "language": "python",
+      "source_context": "\"\"\"Entity example and HTTP relay using the canonical generated bindings.\"\"\"\nimport argparse\nimport importlib\nimport json\nimport os\nfrom pathlib import Path\nimport sys\nimport urllib.request\nfrom http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\nfrom socketserver import TCPServer\nfrom google.protobuf.message import DecodeError\n\nsys.path.insert(0, str(Path(__file__).resolve().parents[2] / \"generated/python\"))\nOBSERVATIONS = \"X-Schema-Sentinel-Observations\"\nTRACE = \"X-Service-Trace\"\n\n\nclass RelayServer(ThreadingHTTPServer):\n    def server_bind(self):\n        # HTTPServer normally does a reverse DNS lookup, which can delay startup.\n        TCPServer.server_bind(self)\n        self.server_name, self.server_port = self.server_address\n\n\ndef process_entity(raw_bytes: bytes, version: str):\n    if version not in (\"v1\", \"v2\"):\n        raise ValueError(f\"Unsupported schema version: {version}\")\n    entity = importlib.import_module(f\"{version}.entity_pb2\").Entity.FromString(raw_bytes)\n    fields = {\"entity_id\": entity.entity_id}\n    if version == \"v1\":\n        fields[\"name\"] = entity.name\n    print(json.dumps({\"runtime\": \"python\", \"version\": version, \"fields\": fields}, ensure_ascii=True), flush=True)\n    return entity, fields\n\n\nclass Relay(BaseHTTPRequestHandler):\n    def do_GET(self):\n        if self.path != \"/health\":\n            self.send_error(404)\n            return\n        self.send_response(200)\n        self.end_headers()\n        self.wfile.write(b'{\"status\":\"ok\",\"runtime\":\"python\"}')\n\n    def do_POST(self):\n        if self.path != \"/relay\":\n            self.send_error(404)\n            return\n        try:\n            entity, fields = process_entity(self.rfile.read(int(self.headers.get(\"Content-Length\", \"0\"))), \"v1\")\n            observation = {\"runtime\": \"python\", \"fields\": fields}\n            request = urllib.request.Request(\n                os.environ.get(\"TYPESCRIPT_RELAY_URL\", \"http://localhost:8001/relay\"),\n                data=entity.SerializeToString(), method=\"POST\",\n                headers={\"Content-Type\": \"application/x-protobuf\", TRACE: json.dumps([\"python\"])},\n            )\n            with urllib.request.urlopen(request, timeout=5) as downstream:\n                body = downstream.read()\n                observations = [observation] + json.loads(downstream.headers[OBSERVATIONS])\n                trace = downstream.headers[TRACE]\n            self.send_response(200)\n            self.send_header(\"Content-Type\", \"application/x-protobuf\")\n            self.send_header(\"Content-Length\", str(len(body)))\n            self.send_header(OBSERVATIONS, json.dumps(observations, ensure_ascii=True))\n            self.send_header(TRACE, trace)\n            self.end_headers()\n            self.wfile.write(body)\n        except (ValueError, DecodeError) as error:\n            self.send_error(400, str(error))\n        except (OSError, KeyError) as error:\n            self.send_error(502, str(error))\n\n\nif __name__ == \"__main__\":\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"--serve\", action=\"store_true\")\n    parser.add_argument(\"--version\", choices=[\"v1\", \"v2\"], default=\"v1\")\n    args = parser.parse_args()\n    if args.serve:\n        with RelayServer((os.environ.get(\"HOST\", \"0.0.0.0\"), int(os.environ.get(\"PORT\", \"8000\"))), Relay) as server:\n            print(f\"Python listening on {server.server_address[0]}:{server.server_port}\", flush=True)\n            server.serve_forever()\n    else:\n        module = importlib.import_module(f\"{args.version}.entity_pb2\")\n        entity = module.Entity(entity_id=\"py_101\")\n        if args.version == \"v1\":\n            entity.name = \"Sensor A\"\n        process_entity(entity.SerializeToString(), args.version)\n",
+      "positions": [
+        {
+          "start_line": 31,
+          "end_line": 31,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate"
+        },
+        {
+          "start_line": 87,
+          "end_line": 87,
+          "reason": "Conservative syntax candidate: attribute"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "language": "typescript",
+      "source_context": "import { createServer, IncomingMessage } from \"node:http\";\nimport { Entity as EntityV1 } from \"../../generated/ts/v1/entity\";\nimport { Entity as EntityV2 } from \"../../generated/ts/v2/entity\";\n\nconst observationsHeader = \"X-Schema-Sentinel-Observations\";\nconst traceHeader = \"X-Service-Trace\";\n\nexport function processEntity(rawBytes: Uint8Array, version: string) {\n  if (version !== \"v1\" && version !== \"v2\") throw new Error(`Unsupported schema version: ${version}`);\n  const entity = version === \"v1\" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);\n  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n  console.log(JSON.stringify({ runtime: \"typescript\", version, fields }));\n  return { entity, fields };\n}\n\nasync function readBody(request: IncomingMessage): Promise<Buffer> {\n  const chunks: Buffer[] = [];\n  for await (const chunk of request) chunks.push(Buffer.from(chunk));\n  return Buffer.concat(chunks);\n}\n\nif (process.argv.includes(\"--serve\")) {\n  createServer(async (request, response) => {\n    if (request.method === \"GET\" && request.url === \"/health\") {\n      response.writeHead(200, { \"content-type\": \"application/json\" });\n      response.end(JSON.stringify({ status: \"ok\", runtime: \"typescript\" }));\n      return;\n    }\n    if (request.method !== \"POST\" || request.url !== \"/relay\") {\n      response.writeHead(404); response.end(); return;\n    }\n    try {\n      const { entity, fields } = processEntity(await readBody(request), \"v1\");\n      const trace = JSON.parse(String(request.headers[traceHeader.toLowerCase()] ?? \"[]\"));\n      trace.push(\"typescript\");\n      const downstream = await fetch(process.env.CSHARP_RELAY_URL ?? \"http://localhost:8002/relay\", {\n        method: \"POST\",\n        headers: { \"content-type\": \"application/x-protobuf\", [traceHeader]: JSON.stringify(trace) },\n        body: Buffer.from(EntityV1.encode(entity as EntityV1).finish()),\n        signal: AbortSignal.timeout(5000),\n      });\n      if (!downstream.ok) throw new Error(`C# relay returned ${downstream.status}`);\n      const body = Buffer.from(await downstream.arrayBuffer());\n      const observations = [{ runtime: \"typescript\", fields }, ...JSON.parse(downstream.headers.get(observationsHeader) ?? \"null\")];\n      response.writeHead(200, {\n        \"content-type\": \"application/x-protobuf\", \"content-length\": body.length,\n        [observationsHeader]: JSON.stringify(observations).replace(/[\\u007f-\\uffff]/g, c => `\\\\u${c.charCodeAt(0).toString(16).padStart(4, \"0\")}`),\n        [traceHeader]: downstream.headers.get(traceHeader) ?? \"[]\",\n      });\n      response.end(body);\n    } catch (error) {\n      response.writeHead(400, { \"content-type\": \"application/json\" });\n      response.end(JSON.stringify({ error: String(error) }));\n    }\n  }).listen(Number(process.env.PORT ?? \"8001\"), \"0.0.0.0\");\n} else {\n  const version = process.argv.includes(\"--v2\") ? \"v2\" : \"v1\";\n  const bytes = version === \"v1\"\n    ? EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()\n    : EntityV2.encode({ entityId: \"ts_303\" }).finish();\n  processEntity(bytes, version);\n}\n",
+      "positions": [
+        {
+          "start_line": 11,
+          "end_line": 11,
+          "reason": "Conservative syntax candidate: member_expression, pair"
+        },
+        {
+          "start_line": 59,
+          "end_line": 59,
+          "reason": "Conservative syntax candidate: pair"
+        }
+      ]
+    }
+  ]
+}

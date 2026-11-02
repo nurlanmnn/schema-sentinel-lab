@@ -80,3 +80,25 @@ See decisions 0004/0005 for candidate review, token-edit boundaries and dependen
 license records. Generated naming is bounded to the tested snake/camel/Pascal
 conventions; acronym/reserved-word edge cases need separate validation.
 Current live outcomes are recorded separately in `independent-results.md`.
+
+## Role-constrained rename follow-up
+
+Prompt 2.7 is selected explicitly:
+
+```sh
+.venv/bin/python -m patchgen.pipeline --output patchgen/evidence/my-role-rename --generate --strategy syntax_rename_roles
+```
+
+The host gives recognized TypeScript syntax roles one allowed replacement and
+requires all inventory tokens on each edited candidate line. Unsupported roles
+fail closed. Candidate selection is still a model decision, receiver identity is
+unproved, and mixed affected/unaffected tokens on one line are unsupported.
+The observation policy is the narrow explicit convention described in decision
+0006. This is a hybrid proposal strategy, not unconstrained code generation.
+
+To produce the bounded rename proposal without a model, explicitly use
+`--generate --strategy deterministic_rename_roles` in a fresh output directory.
+This proposes every located token using descriptor/role-derived names, records
+that receiver identity is unproved, and runs the same independent validation.
+It reads no reference response and makes zero model requests. Human review is
+required; this cannot be counted as a live model result or a type migration.

@@ -1,0 +1,632 @@
+time=2026-11-01T22:29:05.433-05:00 level=INFO source=routes.go:1919 msg="server config" env="map[HTTPS_PROXY: HTTP_PROXY: LLAMA_ARG_FIT: LLAMA_ARG_FIT_TARGET: NO_PROXY: OLLAMA_CONTEXT_LENGTH:0 OLLAMA_DEBUG:INFO OLLAMA_DEBUG_LOG_REQUESTS:false OLLAMA_EDITOR: OLLAMA_FLASH_ATTENTION:false OLLAMA_GO_TEMPLATE:true OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://127.0.0.1:11434 OLLAMA_IGPU_ENABLE: OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MAX_TRANSFER_STREAMS:4 OLLAMA_MODELS:/Users/nurlanmammadli/.ollama/models OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NO_CLOUD:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false http_proxy: https_proxy: no_proxy:]"
+time=2026-11-01T22:29:05.433-05:00 level=INFO source=routes.go:1921 msg="Ollama cloud disabled: false"
+time=2026-11-01T22:29:05.437-05:00 level=INFO source=images.go:864 msg="total blobs: 14"
+time=2026-11-01T22:29:05.437-05:00 level=INFO source=images.go:871 msg="total unused blobs removed: 0"
+time=2026-11-01T22:29:05.438-05:00 level=INFO source=routes.go:1981 msg="Listening on 127.0.0.1:11434 (version 0.30.8)"
+time=2026-11-01T22:29:05.442-05:00 level=INFO source=runner.go:60 msg="discovering available GPUs..."
+time=2026-11-01T22:29:05.448-05:00 level=INFO source=model_list_cache.go:111 msg="model list cache hydration complete" models=3 failures=0 elapsed=9.548167ms
+time=2026-11-01T22:29:05.583-05:00 level=INFO source=types.go:32 msg="inference compute" id=0 filter_id=0 library=Metal compute=0.0 name=MTL0 description="Apple M4" libdirs="" driver=0.0 pci_id="" type=iGPU total="11.8 GiB" available="11.8 GiB"
+time=2026-11-01T22:29:05.583-05:00 level=INFO source=routes.go:2031 msg="vram-based default context" total_vram="11.8 GiB" default_num_ctx=4096
+time=2026-11-01T22:29:05.618-05:00 level=INFO source=model_recommendations.go:177 msg="model recommendations cache sleep scheduled" wait=3h51m6.468181635s consecutive_failures=0
+[GIN] 2026/11/01 - 22:29:07 | 200 |    1.072791ms |       127.0.0.1 | GET      "/api/tags"
+[GIN] 2026/11/01 - 22:29:07 | 200 |   90.314125ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2026/11/01 - 22:29:07 | 200 |     423.125µs |       127.0.0.1 | GET      "/api/version"
+[GIN] 2026/11/01 - 22:29:20 | 200 |     840.625µs |       127.0.0.1 | GET      "/api/tags"
+[GIN] 2026/11/01 - 22:29:20 | 200 |     717.666µs |       127.0.0.1 | POST     "/api/show"
+[GIN] 2026/11/01 - 22:29:20 | 200 |          10µs |       127.0.0.1 | GET      "/api/version"
+[GIN] 2026/11/01 - 22:29:20 | 200 |     293.625µs |       127.0.0.1 | GET      "/api/ps"
+time=2026-11-01T22:29:20.593-05:00 level=INFO source=sched.go:1148 msg="disabling mmap for llama-server load by default" model=/Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574 reason=metal_partial_offload
+time=2026-11-01T22:29:20.593-05:00 level=INFO source=server.go:109 msg="using llama-server for model" model=/Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574
+time=2026-11-01T22:29:20.594-05:00 level=INFO source=llama_server.go:403 msg="starting llama-server" cmd="/Applications/Ollama.app/Contents/Resources/llama-server --model /Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574 --port 64746 --host 127.0.0.1 --no-webui --offline -c 16384 -np 1 --log-verbosity 4 --no-log-prefix --no-log-timestamps --no-jinja --chat-template chatml --mmproj /Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574 --no-mmap --flash-attn auto -b 512 -ub 512"
+time=2026-11-01T22:29:20.595-05:00 level=INFO source=sched.go:613 msg="system memory" total="16.0 GiB" free="2.8 GiB" free_swap="0 B"
+time=2026-11-01T22:29:20.596-05:00 level=INFO source=sched.go:620 msg="gpu memory" id=0 library=Metal available="11.3 GiB" free="11.8 GiB" minimum="512.0 MiB" overhead="0 B"
+time=2026-11-01T22:29:20.596-05:00 level=INFO source=llama_server.go:886 msg="loading model via llama-server" model=/Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574
+time=2026-11-01T22:29:20.596-05:00 level=INFO source=llama_server.go:1131 msg="waiting for llama-server to start responding"
+time=2026-11-01T22:29:20.596-05:00 level=INFO source=llama_server.go:1186 msg="waiting for llama-server to become available" status="llm server not responding"
+common_params_print_info: build 1 (6f3a9f3de) with AppleClang 21.0.0.21000099 for Darwin arm64
+log_info: verbosity = 4 (adjust with the `-lv N` CLI arg)
+device_info:
+  - MTL0    : Apple M4 (12124 MiB, 12123 MiB free)
+  - BLAS    : Accelerate (0 MiB, 0 MiB free)
+  - CPU     : Apple M4 (16384 MiB, 16384 MiB free)
+system_info: n_threads = 4 (n_threads_batch = 4) / 10 | MTL : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | LLAMAFILE = 1 | ACCELERATE = 1 | REPACK = 1 | 
+srv          init: using 9 threads for HTTP server
+srv          init: The UI is disabled
+srv          init: Use --ui/--no-ui (or deprecated --webui/--no-webui) to enable/disable
+srv         start: binding port with default address family
+srv  llama_server: loading model
+srv    load_model: loading model '/Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574'
+handle_mistral3_clip: detected Ollama-format mistral3 GGUF used as mmproj; translating
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M4
+ggml_metal_init: picking default device: Apple M4
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+compat tensor transform: op=F16->F32 promote tensor=v.patch_embd.weight bytes=2408448 duration_ms=1.643 total_ops=1 total_bytes=2408448 total_ms=1.643
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.0.attn_k.weight bytes=2097152 duration_ms=1.956 total_ops=2 total_bytes=4505600 total_ms=3.600
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.0.attn_q.weight bytes=2097152 duration_ms=1.233 total_ops=3 total_bytes=6602752 total_ms=4.832
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.1.attn_k.weight bytes=2097152 duration_ms=0.439 total_ops=4 total_bytes=8699904 total_ms=5.271
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.1.attn_q.weight bytes=2097152 duration_ms=1.098 total_ops=5 total_bytes=10797056 total_ms=6.369
+time=2026-11-01T22:29:20.849-05:00 level=INFO source=llama_server.go:1186 msg="waiting for llama-server to become available" status="llm server loading model"
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.2.attn_k.weight bytes=2097152 duration_ms=2.463 total_ops=6 total_bytes=12894208 total_ms=8.832
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.2.attn_q.weight bytes=2097152 duration_ms=1.055 total_ops=7 total_bytes=14991360 total_ms=9.887
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.3.attn_k.weight bytes=2097152 duration_ms=1.310 total_ops=8 total_bytes=17088512 total_ms=11.197
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.3.attn_q.weight bytes=2097152 duration_ms=1.371 total_ops=9 total_bytes=19185664 total_ms=12.568
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.4.attn_k.weight bytes=2097152 duration_ms=0.586 total_ops=10 total_bytes=21282816 total_ms=13.155
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.4.attn_q.weight bytes=2097152 duration_ms=1.073 total_ops=11 total_bytes=23379968 total_ms=14.228
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.5.attn_k.weight bytes=2097152 duration_ms=0.363 total_ops=12 total_bytes=25477120 total_ms=14.591
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.5.attn_q.weight bytes=2097152 duration_ms=1.167 total_ops=13 total_bytes=27574272 total_ms=15.758
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.6.attn_k.weight bytes=2097152 duration_ms=0.369 total_ops=14 total_bytes=29671424 total_ms=16.126
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.6.attn_q.weight bytes=2097152 duration_ms=1.048 total_ops=15 total_bytes=31768576 total_ms=17.174
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.7.attn_k.weight bytes=2097152 duration_ms=0.539 total_ops=16 total_bytes=33865728 total_ms=17.713
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.7.attn_q.weight bytes=2097152 duration_ms=1.141 total_ops=17 total_bytes=35962880 total_ms=18.854
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.8.attn_k.weight bytes=2097152 duration_ms=0.438 total_ops=18 total_bytes=38060032 total_ms=19.292
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.8.attn_q.weight bytes=2097152 duration_ms=25.360 total_ops=19 total_bytes=40157184 total_ms=44.652
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.9.attn_k.weight bytes=2097152 duration_ms=0.430 total_ops=20 total_bytes=42254336 total_ms=45.082
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.9.attn_q.weight bytes=2097152 duration_ms=1.091 total_ops=21 total_bytes=44351488 total_ms=46.174
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.10.attn_k.weight bytes=2097152 duration_ms=0.383 total_ops=22 total_bytes=46448640 total_ms=46.556
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.10.attn_q.weight bytes=2097152 duration_ms=1.158 total_ops=23 total_bytes=48545792 total_ms=47.715
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.11.attn_k.weight bytes=2097152 duration_ms=0.382 total_ops=24 total_bytes=50642944 total_ms=48.097
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.11.attn_q.weight bytes=2097152 duration_ms=1.305 total_ops=25 total_bytes=52740096 total_ms=49.402
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.12.attn_k.weight bytes=2097152 duration_ms=0.431 total_ops=26 total_bytes=54837248 total_ms=49.832
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.12.attn_q.weight bytes=2097152 duration_ms=1.135 total_ops=27 total_bytes=56934400 total_ms=50.968
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.13.attn_k.weight bytes=2097152 duration_ms=0.589 total_ops=28 total_bytes=59031552 total_ms=51.557
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.13.attn_q.weight bytes=2097152 duration_ms=1.359 total_ops=29 total_bytes=61128704 total_ms=52.916
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.14.attn_k.weight bytes=2097152 duration_ms=0.494 total_ops=30 total_bytes=63225856 total_ms=53.410
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.14.attn_q.weight bytes=2097152 duration_ms=1.268 total_ops=31 total_bytes=65323008 total_ms=54.678
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.15.attn_k.weight bytes=2097152 duration_ms=0.359 total_ops=32 total_bytes=67420160 total_ms=55.036
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.15.attn_q.weight bytes=2097152 duration_ms=1.035 total_ops=33 total_bytes=69517312 total_ms=56.071
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.16.attn_k.weight bytes=2097152 duration_ms=0.352 total_ops=34 total_bytes=71614464 total_ms=56.424
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.16.attn_q.weight bytes=2097152 duration_ms=1.176 total_ops=35 total_bytes=73711616 total_ms=57.599
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.17.attn_k.weight bytes=2097152 duration_ms=0.392 total_ops=36 total_bytes=75808768 total_ms=57.991
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.17.attn_q.weight bytes=2097152 duration_ms=1.230 total_ops=37 total_bytes=77905920 total_ms=59.221
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.18.attn_k.weight bytes=2097152 duration_ms=0.571 total_ops=38 total_bytes=80003072 total_ms=59.793
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.18.attn_q.weight bytes=2097152 duration_ms=1.152 total_ops=39 total_bytes=82100224 total_ms=60.945
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.19.attn_k.weight bytes=2097152 duration_ms=0.364 total_ops=40 total_bytes=84197376 total_ms=61.309
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.19.attn_q.weight bytes=2097152 duration_ms=1.115 total_ops=41 total_bytes=86294528 total_ms=62.424
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.20.attn_k.weight bytes=2097152 duration_ms=0.374 total_ops=42 total_bytes=88391680 total_ms=62.798
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.20.attn_q.weight bytes=2097152 duration_ms=1.079 total_ops=43 total_bytes=90488832 total_ms=63.877
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.21.attn_k.weight bytes=2097152 duration_ms=0.459 total_ops=44 total_bytes=92585984 total_ms=64.335
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.21.attn_q.weight bytes=2097152 duration_ms=1.353 total_ops=45 total_bytes=94683136 total_ms=65.689
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.22.attn_k.weight bytes=2097152 duration_ms=0.606 total_ops=46 total_bytes=96780288 total_ms=66.294
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.22.attn_q.weight bytes=2097152 duration_ms=1.177 total_ops=47 total_bytes=98877440 total_ms=67.472
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.23.attn_k.weight bytes=2097152 duration_ms=0.451 total_ops=48 total_bytes=100974592 total_ms=67.923
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.23.attn_q.weight bytes=2097152 duration_ms=1.202 total_ops=49 total_bytes=103071744 total_ms=69.125
+compat tensor transform: op=img_break zero-fill tensor=v.token_embd.img_break bytes=16384 duration_ms=0.003 total_ops=50 total_bytes=103088128 total_ms=69.128
+ggml_metal_free: deallocating
+srv    load_model: [mtmd] estimated worst-case memory usage of mmproj is 848.22 MiB
+common_init_result: fitting params to device memory ...
+common_init_result: (for bugs during this step try to reproduce them with -fit off, or provide --verbose logs if the bug only occurs with -fit on)
+common_params_fit_impl: getting device memory data for initial parameters:
+handle_mistral3: detected Ollama-format mistral3 GGUF; applying compatibility fixes
+[GIN] 2026/11/01 - 22:29:21 | 200 |      52.083µs |       127.0.0.1 | GET      "/api/ps"
+common_memory_breakdown_print: | memory breakdown [MiB] | total    free    self   model   context   compute    unaccounted |
+common_memory_breakdown_print: |   - MTL0 (Apple M4)    | 12124 = 12123 + (6953 =  4661 +    2176 +     116) +       -6952 |
+common_memory_breakdown_print: |   - Host               |                   352 =   288 +       0 +      64                |
+common_params_fit_impl: projected to use 6953 MiB of device memory vs. 12123 MiB of free device memory
+common_params_fit_impl: will leave 5170 >= 1869 MiB of free device memory, no changes needed
+common_fit_params: successfully fit params to free device memory
+common_fit_params: fitting params to free memory took 0.17 seconds
+handle_mistral3: detected Ollama-format mistral3 GGUF; applying compatibility fixes
+llama_model_loader: loaded meta data with 55 key-value pairs and 309 tensors from /Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574 (version GGUF V3 (latest))
+llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+llama_model_loader: - kv   0:                       general.architecture str              = mistral3
+llama_model_loader: - kv   1:                          general.file_type u32              = 15
+llama_model_loader: - kv   2:                    general.parameter_count u64              = 8918026240
+llama_model_loader: - kv   3:               general.quantization_version u32              = 2
+llama_model_loader: - kv   4:              mistral3.attention.head_count u32              = 32
+llama_model_loader: - kv   5:           mistral3.attention.head_count_kv u32              = 8
+llama_model_loader: - kv   6:              mistral3.attention.key_length u32              = 128
+llama_model_loader: - kv   7:  mistral3.attention.layer_norm_rms_epsilon f32              = 0.000010
+llama_model_loader: - kv   8:            mistral3.attention.value_length u32              = 128
+llama_model_loader: - kv   9:                       mistral3.block_count u32              = 34
+llama_model_loader: - kv  10:                    mistral3.context_length u32              = 262144
+llama_model_loader: - kv  11:                  mistral3.embedding_length u32              = 4096
+llama_model_loader: - kv  12:               mistral3.feed_forward_length u32              = 14336
+llama_model_loader: - kv  13:                 mistral3.image_token_index u32              = 10
+llama_model_loader: - kv  14:                 mistral3.mm.projector_bias bool             = false
+llama_model_loader: - kv  15:           mistral3.mm.projector_hidden_act str              = gelu
+llama_model_loader: - kv  16:              mistral3.rope.dimension_count u32              = 128
+llama_model_loader: - kv  17:                    mistral3.rope.freq_base f32              = 1000000.000000
+llama_model_loader: - kv  18:            mistral3.rope.scaling.beta_fast f32              = 32.000000
+llama_model_loader: - kv  19:            mistral3.rope.scaling.beta_slow f32              = 1.000000
+llama_model_loader: - kv  20:               mistral3.rope.scaling.factor f32              = 16.000000
+llama_model_loader: - kv  21:               mistral3.rope.scaling.mscale f32              = 1.000000
+llama_model_loader: - kv  22:       mistral3.rope.scaling.mscale_all_dim f32              = 1.000000
+llama_model_loader: - kv  23: mistral3.rope.scaling.original_context_length u32              = 16384
+llama_model_loader: - kv  24:                 mistral3.rope.scaling.type str              = yarn
+llama_model_loader: - kv  25:                 mistral3.rope.scaling_beta f32              = 0.100000
+llama_model_loader: - kv  26:                mistral3.spatial_merge_size u32              = 2
+llama_model_loader: - kv  27:       mistral3.vision.attention.head_count u32              = 16
+llama_model_loader: - kv  28:       mistral3.vision.attention.key_length u32              = 64
+llama_model_loader: - kv  29:                mistral3.vision.block_count u32              = 24
+llama_model_loader: - kv  30:           mistral3.vision.embedding_length u32              = 1024
+llama_model_loader: - kv  31:        mistral3.vision.feed_forward_length u32              = 4096
+llama_model_loader: - kv  32:                 mistral3.vision.image_size u32              = 1540
+llama_model_loader: - kv  33:               mistral3.vision.num_channels u32              = 3
+llama_model_loader: - kv  34:                 mistral3.vision.patch_size u32              = 14
+llama_model_loader: - kv  35:             mistral3.vision.rope.freq_base f32              = 10000.000000
+llama_model_loader: - kv  36:                        mistral3.vocab_size u32              = 131072
+llama_model_loader: - kv  37:               tokenizer.ggml.add_bos_token bool             = true
+llama_model_loader: - kv  38:               tokenizer.ggml.add_eos_token bool             = false
+llama_model_loader: - kv  39:           tokenizer.ggml.add_padding_token bool             = false
+llama_model_loader: - kv  40:           tokenizer.ggml.add_unknown_token bool             = false
+llama_model_loader: - kv  41:                tokenizer.ggml.bos_token_id u32              = 1
+llama_model_loader: - kv  42:                tokenizer.ggml.eos_token_id u32              = 2
+llama_model_loader: - kv  43:                      tokenizer.ggml.merges arr[str,269443]  = ["Ġ Ġ", "Ġ t", "e r", "i n", "Ġ �...
+llama_model_loader: - kv  44:                       tokenizer.ggml.model str              = gpt2
+llama_model_loader: - kv  45:            tokenizer.ggml.padding_token_id u32              = 11
+llama_model_loader: - kv  46:                      tokenizer.ggml.scores arr[f32,131072]  = [0.000000, 1.000000, 2.000000, 3.0000...
+llama_model_loader: - kv  47:                  tokenizer.ggml.token_type arr[i32,131072]  = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
+llama_model_loader: - kv  48:                      tokenizer.ggml.tokens arr[str,131072]  = ["<unk>", "<s>", "</s>", "[INST]", "[...
+llama_model_loader: - kv  49:            tokenizer.ggml.unknown_token_id u32              = 0
+llama_model_loader: - kv  50:       mistral3.rope.scaling.yarn_beta_fast f32              = 32.000000
+llama_model_loader: - kv  51:       mistral3.rope.scaling.yarn_beta_slow f32              = 1.000000
+llama_model_loader: - kv  52:  mistral3.rope.scaling.yarn_log_multiplier f32              = 1.000000
+llama_model_loader: - kv  53:       mistral3.attention.temperature_scale f32              = 0.100000
+llama_model_loader: - kv  54:                         tokenizer.ggml.pre str              = tekken
+llama_model_loader: - type  f32:   69 tensors
+llama_model_loader: - type q4_K:  206 tensors
+llama_model_loader: - type q6_K:   34 tensors
+print_info: file format = GGUF V3 (latest)
+print_info: file type   = Q4_K - Medium
+print_info: file size   = 4.83 GiB (4.89 BPW) 
+llama_prepare_model_devices: using device MTL0 (Apple M4) (unknown id) - 12123 MiB free
+load: 0 unused tokens
+load: printing all EOG tokens:
+load:   - 2 ('</s>')
+load: special tokens cache size = 1000
+load: token to piece cache size = 0.8498 MB
+print_info: arch                  = mistral3
+print_info: vocab_only            = 0
+print_info: no_alloc              = 0
+print_info: n_ctx_train           = 262144
+print_info: n_embd                = 4096
+print_info: n_embd_inp            = 4096
+print_info: n_layer               = 34
+print_info: n_head                = 32
+print_info: n_head_kv             = 8
+print_info: n_rot                 = 128
+print_info: n_swa                 = 0
+print_info: is_swa_any            = 0
+print_info: n_embd_head_k         = 128
+print_info: n_embd_head_v         = 128
+print_info: n_gqa                 = 4
+print_info: n_embd_k_gqa          = 1024
+print_info: n_embd_v_gqa          = 1024
+print_info: f_norm_eps            = 0.0e+00
+print_info: f_norm_rms_eps        = 1.0e-05
+print_info: f_clamp_kqv           = 0.0e+00
+print_info: f_max_alibi_bias      = 0.0e+00
+print_info: f_logit_scale         = 0.0e+00
+print_info: f_attn_scale          = 0.0e+00
+print_info: f_attn_value_scale    = 0.0000
+print_info: n_ff                  = 14336
+print_info: n_expert              = 0
+print_info: n_expert_used         = 0
+print_info: n_expert_groups       = 0
+print_info: n_group_used          = 0
+print_info: causal attn           = 1
+print_info: pooling type          = -1
+print_info: rope type             = 0
+print_info: rope scaling          = yarn
+print_info: freq_base_train       = 1000000.0
+print_info: freq_scale_train      = 0.0625
+print_info: n_ctx_orig_yarn       = 16384
+print_info: rope_yarn_log_mul     = 1.0000
+print_info: rope_finetuned        = unknown
+print_info: model type            = 8B
+print_info: model params          = 8.49 B
+print_info: general.name          = n/a
+print_info: vocab type            = BPE
+print_info: n_vocab               = 131072
+print_info: n_merges              = 269443
+print_info: BOS token             = 1 '<s>'
+print_info: EOS token             = 2 '</s>'
+print_info: UNK token             = 0 '<unk>'
+print_info: PAD token             = 11 '<pad>'
+print_info: LF token              = 1010 'Ċ'
+print_info: EOG token             = 2 '</s>'
+print_info: max token length      = 150
+load_tensors: loading model tensors, this can take a while... (mmap = false, direct_io = false)
+[GIN] 2026/11/01 - 22:29:22 | 200 |   19.827875ms |       127.0.0.1 | GET      "/api/ps"
+load_tensors: offloading output layer to GPU
+load_tensors: offloading 33 repeating layers to GPU
+load_tensors: offloaded 35/35 layers to GPU
+load_tensors:          CPU model buffer size =   288.00 MiB
+load_tensors:         MTL0 model buffer size =  4661.02 MiB
+...............[GIN] 2026/11/01 - 22:29:23 | 200 |   60.063208ms |       127.0.0.1 | GET      "/api/ps"
+................................[GIN] 2026/11/01 - 22:29:25 | 200 |      50.923ms |       127.0.0.1 | GET      "/api/ps"
+.................................[GIN] 2026/11/01 - 22:29:26 | 200 |   39.324625ms |       127.0.0.1 | GET      "/api/ps"
+........
+common_init_result: added </s> logit bias = -inf
+llama_context: constructing llama_context
+llama_context: setting new yarn_attn_factor = 1.0000 (mscale == 1.0, mscale_all_dim = 1.0)
+llama_context: n_seq_max     = 1
+llama_context: n_ctx         = 16384
+llama_context: n_ctx_seq     = 16384
+llama_context: n_batch       = 512
+llama_context: n_ubatch      = 512
+llama_context: causal_attn   = 1
+llama_context: flash_attn    = auto
+llama_context: kv_unified    = false
+llama_context: freq_base     = 1000000.0
+llama_context: freq_scale    = 0.0625
+llama_context: n_rs_seq      = 0
+llama_context: n_outputs_max = 1
+llama_context: n_ctx_seq (16384) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M4
+ggml_metal_init: picking default device: Apple M4
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+llama_context:        CPU  output buffer size =     0.50 MiB
+llama_kv_cache:       MTL0 KV buffer size =  2176.00 MiB
+time=2026-11-01T22:29:28.055-05:00 level=INFO source=llama_server.go:1186 msg="waiting for llama-server to become available" status="llm server not responding"
+llama_kv_cache: size = 2176.00 MiB ( 16384 cells,  34 layers,  1/1 seqs), K (f16): 1088.00 MiB, V (f16): 1088.00 MiB
+llama_kv_cache: attn_rot_k = 0, n_embd_head_k_all = 128
+llama_kv_cache: attn_rot_v = 0, n_embd_head_k_all = 128
+sched_reserve: reserving ...
+[GIN] 2026/11/01 - 22:29:28 | 200 |   45.607584ms |       127.0.0.1 | GET      "/api/ps"
+sched_reserve: Flash Attention was auto, set to enabled
+sched_reserve: resolving fused Gated Delta Net support:
+sched_reserve: fused Gated Delta Net (autoregressive) enabled
+sched_reserve: fused Gated Delta Net (chunked) enabled
+sched_reserve:       MTL0 compute buffer size =   116.01 MiB
+sched_reserve:        CPU compute buffer size =    32.01 MiB
+sched_reserve: graph nodes  = 1094
+sched_reserve: graph splits = 2
+sched_reserve: reserve took 65.38 ms, sched copies = 1
+common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)
+[GIN] 2026/11/01 - 22:29:29 | 200 |   25.678583ms |       127.0.0.1 | GET      "/api/ps"
+time=2026-11-01T22:29:29.680-05:00 level=INFO source=llama_server.go:1186 msg="waiting for llama-server to become available" status="llm server loading model"
+handle_mistral3_clip: detected Ollama-format mistral3 GGUF used as mmproj; translating
+clip_model_loader: model name:   
+clip_model_loader: description:  
+clip_model_loader: GGUF version: 3
+clip_model_loader: alignment:    32
+clip_model_loader: n_tensors:    531
+clip_model_loader: n_kv:         67
+
+clip_model_loader: has vision encoder
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M4
+ggml_metal_init: picking default device: Apple M4
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+clip_ctx: CLIP using MTL0 backend
+load_hparams: projector:          pixtral
+load_hparams: n_embd:             1024
+load_hparams: n_head:             16
+load_hparams: n_ff:               4096
+load_hparams: n_layer:            24
+load_hparams: ffn_op:             silu
+load_hparams: projection_dim:     4096
+
+--- vision hparams ---
+load_hparams: image_size:         1540
+load_hparams: patch_size:         14
+load_hparams: has_llava_proj:     0
+load_hparams: minicpmv_version:   0
+load_hparams: n_merge:            2
+load_hparams: n_wa_pattern: 0
+load_hparams: image_min_pixels:   6272
+load_hparams: image_max_pixels:   802816
+
+load_hparams: model size:         5736.36 MiB
+load_hparams: metadata size:      0.19 MiB
+compat tensor transform: op=F16->F32 promote tensor=v.patch_embd.weight bytes=2408448 duration_ms=30.682 total_ops=51 total_bytes=105496576 total_ms=99.810
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.0.attn_k.weight bytes=2097152 duration_ms=5.929 total_ops=52 total_bytes=107593728 total_ms=105.739
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.0.attn_q.weight bytes=2097152 duration_ms=3.935 total_ops=53 total_bytes=109690880 total_ms=109.674
+[GIN] 2026/11/01 - 22:29:31 | 200 |   39.567916ms |       127.0.0.1 | GET      "/api/ps"
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.1.attn_k.weight bytes=2097152 duration_ms=0.674 total_ops=54 total_bytes=111788032 total_ms=110.348
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.1.attn_q.weight bytes=2097152 duration_ms=1.774 total_ops=55 total_bytes=113885184 total_ms=112.122
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.2.attn_k.weight bytes=2097152 duration_ms=2.665 total_ops=56 total_bytes=115982336 total_ms=114.788
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.2.attn_q.weight bytes=2097152 duration_ms=5.273 total_ops=57 total_bytes=118079488 total_ms=120.060
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.3.attn_k.weight bytes=2097152 duration_ms=4.155 total_ops=58 total_bytes=120176640 total_ms=124.215
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.3.attn_q.weight bytes=2097152 duration_ms=3.353 total_ops=59 total_bytes=122273792 total_ms=127.568
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.4.attn_k.weight bytes=2097152 duration_ms=0.748 total_ops=60 total_bytes=124370944 total_ms=128.316
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.4.attn_q.weight bytes=2097152 duration_ms=2.621 total_ops=61 total_bytes=126468096 total_ms=130.937
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.5.attn_k.weight bytes=2097152 duration_ms=0.658 total_ops=62 total_bytes=128565248 total_ms=131.595
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.5.attn_q.weight bytes=2097152 duration_ms=3.996 total_ops=63 total_bytes=130662400 total_ms=135.591
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.6.attn_k.weight bytes=2097152 duration_ms=0.660 total_ops=64 total_bytes=132759552 total_ms=136.251
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.6.attn_q.weight bytes=2097152 duration_ms=3.545 total_ops=65 total_bytes=134856704 total_ms=139.796
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.7.attn_k.weight bytes=2097152 duration_ms=0.662 total_ops=66 total_bytes=136953856 total_ms=140.458
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.7.attn_q.weight bytes=2097152 duration_ms=2.012 total_ops=67 total_bytes=139051008 total_ms=142.470
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.8.attn_k.weight bytes=2097152 duration_ms=0.693 total_ops=68 total_bytes=141148160 total_ms=143.163
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.8.attn_q.weight bytes=2097152 duration_ms=4.245 total_ops=69 total_bytes=143245312 total_ms=147.408
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.9.attn_k.weight bytes=2097152 duration_ms=0.742 total_ops=70 total_bytes=145342464 total_ms=148.150
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.9.attn_q.weight bytes=2097152 duration_ms=2.483 total_ops=71 total_bytes=147439616 total_ms=150.633
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.10.attn_k.weight bytes=2097152 duration_ms=14.893 total_ops=72 total_bytes=149536768 total_ms=165.527
+[GIN] 2026/11/01 - 22:29:32 | 200 |   32.360709ms |       127.0.0.1 | GET      "/api/ps"
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.10.attn_q.weight bytes=2097152 duration_ms=9.098 total_ops=73 total_bytes=151633920 total_ms=174.625
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.11.attn_k.weight bytes=2097152 duration_ms=1.207 total_ops=74 total_bytes=153731072 total_ms=175.832
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.11.attn_q.weight bytes=2097152 duration_ms=2.808 total_ops=75 total_bytes=155828224 total_ms=178.640
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.12.attn_k.weight bytes=2097152 duration_ms=3.414 total_ops=76 total_bytes=157925376 total_ms=182.054
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.12.attn_q.weight bytes=2097152 duration_ms=2.548 total_ops=77 total_bytes=160022528 total_ms=184.601
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.13.attn_k.weight bytes=2097152 duration_ms=2.828 total_ops=78 total_bytes=162119680 total_ms=187.430
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.13.attn_q.weight bytes=2097152 duration_ms=4.518 total_ops=79 total_bytes=164216832 total_ms=191.948
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.14.attn_k.weight bytes=2097152 duration_ms=4.949 total_ops=80 total_bytes=166313984 total_ms=196.897
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.14.attn_q.weight bytes=2097152 duration_ms=4.878 total_ops=81 total_bytes=168411136 total_ms=201.775
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.15.attn_k.weight bytes=2097152 duration_ms=2.938 total_ops=82 total_bytes=170508288 total_ms=204.713
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.15.attn_q.weight bytes=2097152 duration_ms=2.527 total_ops=83 total_bytes=172605440 total_ms=207.240
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.16.attn_k.weight bytes=2097152 duration_ms=4.232 total_ops=84 total_bytes=174702592 total_ms=211.472
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.16.attn_q.weight bytes=2097152 duration_ms=3.490 total_ops=85 total_bytes=176799744 total_ms=214.962
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.17.attn_k.weight bytes=2097152 duration_ms=2.435 total_ops=86 total_bytes=178896896 total_ms=217.397
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.17.attn_q.weight bytes=2097152 duration_ms=3.358 total_ops=87 total_bytes=180994048 total_ms=220.755
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.18.attn_k.weight bytes=2097152 duration_ms=3.621 total_ops=88 total_bytes=183091200 total_ms=224.376
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.18.attn_q.weight bytes=2097152 duration_ms=3.825 total_ops=89 total_bytes=185188352 total_ms=228.201
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.19.attn_k.weight bytes=2097152 duration_ms=5.802 total_ops=90 total_bytes=187285504 total_ms=234.003
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.19.attn_q.weight bytes=2097152 duration_ms=3.776 total_ops=91 total_bytes=189382656 total_ms=237.780
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.20.attn_k.weight bytes=2097152 duration_ms=5.207 total_ops=92 total_bytes=191479808 total_ms=242.986
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.20.attn_q.weight bytes=2097152 duration_ms=5.509 total_ops=93 total_bytes=193576960 total_ms=248.495
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.21.attn_k.weight bytes=2097152 duration_ms=0.919 total_ops=94 total_bytes=195674112 total_ms=249.414
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.21.attn_q.weight bytes=2097152 duration_ms=3.311 total_ops=95 total_bytes=197771264 total_ms=252.725
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.22.attn_k.weight bytes=2097152 duration_ms=2.904 total_ops=96 total_bytes=199868416 total_ms=255.629
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.22.attn_q.weight bytes=2097152 duration_ms=2.875 total_ops=97 total_bytes=201965568 total_ms=258.503
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.23.attn_k.weight bytes=2097152 duration_ms=0.900 total_ops=98 total_bytes=204062720 total_ms=259.403
+compat tensor transform: op=vision Q/K LLaMA permute tensor=v.blk.23.attn_q.weight bytes=2097152 duration_ms=2.421 total_ops=99 total_bytes=206159872 total_ms=261.825
+compat tensor transform: op=img_break zero-fill tensor=v.token_embd.img_break bytes=16384 duration_ms=0.010 total_ops=100 total_bytes=206176256 total_ms=261.835
+warmup: warmup with image size = 448 x 448
+reserve_compute_meta:       MTL0 compute buffer size =    58.55 MiB
+reserve_compute_meta:        CPU compute buffer size =     2.30 MiB
+reserve_compute_meta: graph splits = 1, nodes = 845
+warmup: flash attention is enabled
+srv    load_model: loaded multimodal model, '/Users/nurlanmammadli/.ollama/models/blobs/sha256-3ea32f882c990baebcfe6ab5cda2e3167d54ab16d7937c0b9aa3db11aba01574'
+srv    load_model: initializing slots, n_slots = 1
+common_speculative_init: no implementations specified for speculative decoding
+slot   load_model: id  0 | task -1 | new slot, n_ctx = 16384
+srv    load_model: prompt cache is enabled, size limit: 8192 MiB
+srv    load_model: use `--cache-ram 0` to disable the prompt cache
+srv    load_model: for more info see https://github.com/ggml-org/llama.cpp/pull/16391
+srv    load_model: context checkpoints enabled, max = 32, min spacing = 256
+srv          init: --cache-idle-slots requires --kv-unified, disabling
+init: chat template, example_format: '<|im_start|>system
+You are a helpful assistant<|im_end|>
+<|im_start|>user
+Hello<|im_end|>
+<|im_start|>assistant
+Hi there<|im_end|>
+<|im_start|>user
+How are you?<|im_end|>
+<|im_start|>assistant
+'
+srv          init: init: chat template, thinking = 0
+srv  llama_server: model loaded
+srv  llama_server: server is listening on http://127.0.0.1:64746
+srv  update_slots: all slots are idle
+time=2026-11-01T22:29:33.825-05:00 level=INFO source=llama_server.go:1198 msg="llama-server started in 13.22 seconds"
+time=2026-11-01T22:29:33.913-05:00 level=INFO source=images.go:354 msg="template selection" model=registry.ollama.ai/library/ministral-3:8b selected=parser renderer="" parser=ministral go_template="[completion vision tools]" chat_template=null harmony=null renderer_parser="[completion vision tools]"
+time=2026-11-01T22:29:33.917-05:00 level=INFO source=sched.go:729 msg="loaded runners" count=1
+time=2026-11-01T22:29:33.920-05:00 level=INFO source=llama_server.go:1131 msg="waiting for llama-server to start responding"
+time=2026-11-01T22:29:33.922-05:00 level=INFO source=llama_server.go:1198 msg="llama-server started in 13.33 seconds"
+srv  log_server_r: done request: POST /tokenize 127.0.0.1 200
+slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+srv  get_availabl: updating prompt cache
+srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000
+srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 16384 tokens, 8589934592 est)
+srv  get_availabl: prompt cache update took 0.00 ms
+slot launch_slot_: id  0 | task -1 | sampler chain: logits -> penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> ?min-p -> ?xtc -> temp-ext -> dist 
+slot launch_slot_: id  0 | task -1 | sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.100, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 16384
+	top_k = 40, top_p = 0.900, min_p = 0.000, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.000
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+slot update_slots: id  0 | task 0 | new prompt, n_ctx_slot = 16384, n_keep = 4, task.n_tokens = 2084
+slot update_slots: id  0 | task 0 | cached n_tokens = 0, memory_seq_rm [0, end)
+srv  log_server_r: done request: POST /completion 127.0.0.1 200
+[GIN] 2026/11/01 - 22:29:34 | 200 |    4.713791ms |       127.0.0.1 | GET      "/api/ps"
+slot update_slots: id  0 | task 0 | cached n_tokens = 512, memory_seq_rm [512, end)
+[GIN] 2026/11/01 - 22:29:35 | 200 |     111.417µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:36 | 200 |      84.416µs |       127.0.0.1 | GET      "/api/ps"
+slot update_slots: id  0 | task 0 | cached n_tokens = 1024, memory_seq_rm [1024, end)
+[GIN] 2026/11/01 - 22:29:37 | 200 |      71.875µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:38 | 200 |      85.167µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:39 | 200 |       78.75µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | prompt processing, n_tokens =   1536, progress = 0.74, t =   5.66 s / 271.50 tokens per second
+slot update_slots: id  0 | task 0 | cached n_tokens = 1536, memory_seq_rm [1536, end)
+[GIN] 2026/11/01 - 22:29:40 | 200 |     338.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:41 | 200 |      88.708µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:42 | 200 |     120.166µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | prompt processing, n_tokens =   2048, progress = 0.98, t =   8.57 s / 239.09 tokens per second
+slot update_slots: id  0 | task 0 | cached n_tokens = 2048, memory_seq_rm [2048, end)
+slot init_sampler: id  0 | task 0 | init sampler, took 0.33 ms, tokens: text = 2084, total = 2084
+[GIN] 2026/11/01 - 22:29:43 | 200 |       68.25µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:44 | 200 |      79.625µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:45 | 200 |     161.792µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:46 | 200 |     150.959µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:47 | 200 |     132.167µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:48 | 200 |    1.236292ms |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:49 | 200 |     169.375µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:50 | 200 |      83.625µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:51 | 200 |     102.458µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:52 | 200 |     390.209µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:53 | 200 |      66.291µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    100, tg =  13.66 t/s
+[GIN] 2026/11/01 - 22:29:54 | 200 |     245.208µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:55 | 200 |      118.25µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:56 | 200 |     118.458µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    142, tg =  13.70 t/s
+[GIN] 2026/11/01 - 22:29:57 | 200 |      87.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:58 | 200 |     109.083µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:29:59 | 200 |       37.25µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    185, tg =  13.77 t/s
+[GIN] 2026/11/01 - 22:30:00 | 200 |    2.207834ms |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:01 | 200 |     783.792µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:02 | 200 |      70.083µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    228, tg =  13.87 t/s
+[GIN] 2026/11/01 - 22:30:03 | 200 |      38.125µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:04 | 200 |      53.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:05 | 200 |     234.125µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    273, tg =  14.00 t/s
+[GIN] 2026/11/01 - 22:30:06 | 200 |       54.25µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:07 | 200 |      157.75µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:08 | 200 |      81.708µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    317, tg =  14.07 t/s
+[GIN] 2026/11/01 - 22:30:09 | 200 |      69.416µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:10 | 200 |      52.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:11 | 200 |      54.375µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | n_decoded =    362, tg =  14.17 t/s
+[GIN] 2026/11/01 - 22:30:12 | 200 |      53.542µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 0 | prompt eval time =   11942.64 ms /  2084 tokens (    5.73 ms per token,   174.50 tokens per second)
+slot print_timing: id  0 | task 0 |        eval time =   26516.79 ms /   377 tokens (   70.34 ms per token,    14.22 tokens per second)
+slot print_timing: id  0 | task 0 |       total time =   38459.42 ms /  2461 tokens
+slot print_timing: id  0 | task 0 |    graphs reused =          0
+slot      release: id  0 | task 0 | stop processing: n_tokens = 2460, truncated = 0
+srv  update_slots: all slots are idle
+[GIN] 2026/11/01 - 22:30:12 | 200 | 52.057587542s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2026/11/01 - 22:30:12 | 200 |      20.083µs |       127.0.0.1 | GET      "/api/ps"
+srv  log_server_r: done request: POST /tokenize 127.0.0.1 200
+slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.254 (> 0.100 thold), f_keep = 0.235
+srv  get_availabl: updating prompt cache
+srv   prompt_save:  - saving prompt with length 2460, total state size = 326.748 MiB (draft: 0.000 MiB)
+srv          load:  - looking for better prompt, base f_keep = 0.235, sim = 0.254
+srv        update:  - cache state: 1 prompts, 326.748 MiB (limits: 8192.000 MiB, 16384 tokens, 61675 est)
+srv        update:    - prompt 0x8770485b0:    2460 tokens, checkpoints:  0,   326.748 MiB
+srv  get_availabl: prompt cache update took 94.23 ms
+slot launch_slot_: id  0 | task -1 | sampler chain: logits -> penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> ?min-p -> ?xtc -> temp-ext -> dist 
+slot launch_slot_: id  0 | task -1 | sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.100, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 16384
+	top_k = 40, top_p = 0.900, min_p = 0.000, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.000
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+slot launch_slot_: id  0 | task 382 | processing task, is_child = 0
+slot update_slots: id  0 | task 382 | new prompt, n_ctx_slot = 16384, n_keep = 4, task.n_tokens = 2283
+slot update_slots: id  0 | task 382 | cached n_tokens = 579, memory_seq_rm [579, end)
+srv  log_server_r: done request: POST /completion 127.0.0.1 200
+slot update_slots: id  0 | task 382 | cached n_tokens = 1091, memory_seq_rm [1091, end)
+[GIN] 2026/11/01 - 22:30:13 | 200 |      823.75µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:14 | 200 |     108.458µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:15 | 200 |     109.792µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | prompt processing, n_tokens =   1024, progress = 0.70, t =   3.10 s / 330.22 tokens per second
+slot update_slots: id  0 | task 382 | cached n_tokens = 1603, memory_seq_rm [1603, end)
+[GIN] 2026/11/01 - 22:30:16 | 200 |      87.542µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:17 | 200 |        38.5µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:18 | 200 |     103.833µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | prompt processing, n_tokens =   1536, progress = 0.93, t =   6.25 s / 245.84 tokens per second
+slot update_slots: id  0 | task 382 | cached n_tokens = 2115, memory_seq_rm [2115, end)
+slot init_sampler: id  0 | task 382 | init sampler, took 0.35 ms, tokens: text = 2283, total = 2283
+[GIN] 2026/11/01 - 22:30:19 | 200 |       86.25µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:20 | 200 |       39.75µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:21 | 200 |      42.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:22 | 200 |      30.208µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:23 | 200 |     105.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:24 | 200 |     145.958µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:25 | 200 |      69.875µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:26 | 200 |      61.333µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:27 | 200 |     396.416µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:28 | 200 |     267.125µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:29 | 200 |      50.167µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | n_decoded =    100, tg =  16.02 t/s
+[GIN] 2026/11/01 - 22:30:30 | 200 |      49.709µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:31 | 200 |      90.167µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:32 | 200 |      75.791µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | n_decoded =    149, tg =  16.07 t/s
+[GIN] 2026/11/01 - 22:30:33 | 200 |      49.875µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:34 | 200 |      83.375µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:35 | 200 |          85µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | n_decoded =    197, tg =  16.05 t/s
+[GIN] 2026/11/01 - 22:30:36 | 200 |     195.667µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:37 | 200 |     116.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:38 | 200 |      57.791µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | n_decoded =    246, tg =  16.06 t/s
+[GIN] 2026/11/01 - 22:30:39 | 200 |      44.166µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:40 | 200 |     219.166µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:41 | 200 |     136.083µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | n_decoded =    295, tg =  16.07 t/s
+[GIN] 2026/11/01 - 22:30:42 | 200 |      26.125µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 382 | prompt eval time =   10504.43 ms /  1704 tokens (    6.16 ms per token,   162.22 tokens per second)
+slot print_timing: id  0 | task 382 |        eval time =   20258.83 ms /   326 tokens (   62.14 ms per token,    16.09 tokens per second)
+slot print_timing: id  0 | task 382 |       total time =   30763.26 ms /  2030 tokens
+slot print_timing: id  0 | task 382 |    graphs reused =          0
+slot      release: id  0 | task 382 | stop processing: n_tokens = 2608, truncated = 0
+srv  update_slots: all slots are idle
+[GIN] 2026/11/01 - 22:30:43 | 200 | 31.145784792s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2026/11/01 - 22:30:44 | 200 |      83.583µs |       127.0.0.1 | GET      "/api/ps"
+srv  log_server_r: done request: POST /tokenize 127.0.0.1 200
+slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.257 (> 0.100 thold), f_keep = 0.222
+srv  get_availabl: updating prompt cache
+srv   prompt_save:  - saving prompt with length 2608, total state size = 346.406 MiB (draft: 0.000 MiB)
+srv          load:  - looking for better prompt, base f_keep = 0.222, sim = 0.257
+srv        update:  - cache state: 2 prompts, 673.153 MiB (limits: 8192.000 MiB, 16384 tokens, 61675 est)
+srv        update:    - prompt 0x8770485b0:    2460 tokens, checkpoints:  0,   326.748 MiB
+srv        update:    - prompt 0x877048650:    2608 tokens, checkpoints:  0,   346.406 MiB
+srv  get_availabl: prompt cache update took 126.26 ms
+slot launch_slot_: id  0 | task -1 | sampler chain: logits -> penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> ?min-p -> ?xtc -> temp-ext -> dist 
+slot launch_slot_: id  0 | task -1 | sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.100, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 16384
+	top_k = 40, top_p = 0.900, min_p = 0.000, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.000
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+slot launch_slot_: id  0 | task 712 | processing task, is_child = 0
+slot update_slots: id  0 | task 712 | new prompt, n_ctx_slot = 16384, n_keep = 4, task.n_tokens = 2250
+slot update_slots: id  0 | task 712 | cached n_tokens = 579, memory_seq_rm [579, end)
+srv  log_server_r: done request: POST /completion 127.0.0.1 200
+slot update_slots: id  0 | task 712 | cached n_tokens = 1091, memory_seq_rm [1091, end)
+[GIN] 2026/11/01 - 22:30:45 | 200 |        67.5µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:46 | 200 |      95.833µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:47 | 200 |     330.542µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | prompt processing, n_tokens =   1024, progress = 0.71, t =   3.07 s / 333.58 tokens per second
+slot update_slots: id  0 | task 712 | cached n_tokens = 1603, memory_seq_rm [1603, end)
+[GIN] 2026/11/01 - 22:30:48 | 200 |     307.708µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:49 | 200 |      27.583µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:50 | 200 |     340.792µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | prompt processing, n_tokens =   1536, progress = 0.94, t =   6.19 s / 248.31 tokens per second
+slot update_slots: id  0 | task 712 | cached n_tokens = 2115, memory_seq_rm [2115, end)
+slot init_sampler: id  0 | task 712 | init sampler, took 0.45 ms, tokens: text = 2250, total = 2250
+[GIN] 2026/11/01 - 22:30:51 | 200 |     101.958µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:52 | 200 |      35.834µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:53 | 200 |      30.083µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:54 | 200 |     274.292µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:55 | 200 |     101.417µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:56 | 200 |      67.208µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:57 | 200 |        78.5µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:58 | 200 |      47.833µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:30:59 | 200 |      63.708µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:00 | 200 |     128.208µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:01 | 200 |     110.041µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    100, tg =  14.80 t/s
+[GIN] 2026/11/01 - 22:31:02 | 200 |      39.917µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:03 | 200 |     100.041µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:04 | 200 |      73.875µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    144, tg =  14.69 t/s
+[GIN] 2026/11/01 - 22:31:05 | 200 |     515.375µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:06 | 200 |    1.214709ms |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:07 | 200 |      46.834µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    189, tg =  14.71 t/s
+[GIN] 2026/11/01 - 22:31:08 | 200 |      48.792µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:09 | 200 |      39.125µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:10 | 200 |     176.875µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    233, tg =  14.67 t/s
+[GIN] 2026/11/01 - 22:31:11 | 200 |      66.333µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:12 | 200 |      51.542µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:13 | 200 |      36.959µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    279, tg =  14.74 t/s
+[GIN] 2026/11/01 - 22:31:14 | 200 |      38.167µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:15 | 200 |     165.416µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:16 | 200 |     101.708µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    323, tg =  14.70 t/s
+[GIN] 2026/11/01 - 22:31:17 | 200 |     154.458µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:18 | 200 |     204.375µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:19 | 200 |    1.072167ms |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    363, tg =  14.52 t/s
+[GIN] 2026/11/01 - 22:31:20 | 200 |     358.875µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:21 | 200 |     728.833µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:22 | 200 |      78.791µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | n_decoded =    404, tg =  14.43 t/s
+[GIN] 2026/11/01 - 22:31:23 | 200 |      39.125µs |       127.0.0.1 | GET      "/api/ps"
+[GIN] 2026/11/01 - 22:31:24 | 200 |      50.708µs |       127.0.0.1 | GET      "/api/ps"
+slot print_timing: id  0 | task 712 | prompt eval time =   10365.40 ms /  1671 tokens (    6.20 ms per token,   161.21 tokens per second)
+slot print_timing: id  0 | task 712 |        eval time =   30273.08 ms /   438 tokens (   69.12 ms per token,    14.47 tokens per second)
+slot print_timing: id  0 | task 712 |       total time =   40638.48 ms /  2109 tokens
+slot print_timing: id  0 | task 712 |    graphs reused =          0
+slot      release: id  0 | task 712 | stop processing: n_tokens = 2687, truncated = 0
+srv  update_slots: all slots are idle
+[GIN] 2026/11/01 - 22:31:25 | 200 | 41.005228958s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2026/11/01 - 22:33:18 | 200 |   14.233166ms |       127.0.0.1 | HEAD     "/"
+[GIN] 2026/11/01 - 22:33:18 | 200 |   24.889084ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2026/11/01 - 22:33:18 | 200 |   73.438792ms |       127.0.0.1 | POST     "/api/generate"

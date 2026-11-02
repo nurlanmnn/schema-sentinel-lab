@@ -126,7 +126,7 @@ CANDIDATE_SCHEMA['properties']['candidate_reviews'] = {'type':'array','items':{
 
 BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-addition')
 
-STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6'}
+STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6','syntax_rename_roles':'2.7','deterministic_rename_roles':'host-rename/1.0'}
 
 
 class ContractError(ValueError):
@@ -452,8 +452,11 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
         directory = output / 'requests' / f'{index:02d}'
         print(f'Generating {index}/{len(case["affected_files"])}: {file["path"]}',flush=True)
         try:
-            if strategy == 'syntax_rename':
-                from patchgen.rename_tokens import make_prompt, resolve
+            if strategy in ('syntax_rename','syntax_rename_roles'):
+                if strategy == 'syntax_rename_roles':
+                    from patchgen.rename_roles import make_prompt, resolve
+                else:
+                    from patchgen.rename_tokens import make_prompt, resolve
                 messages,tokens = make_prompt(case,file)
                 value = request_model(messages,model,endpoint,directory)
                 save(directory/'token-inventory.json',tokens)
@@ -462,7 +465,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
                 value = request_model(edit_prompt(case,file,strategy),model,endpoint,directory)
             if strategy in ('line_edits','migration_edits','candidate_edits'):
                 updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy == 'candidate_edits' else resolve_lines(file['source_context'],value,file['positions'])
-            elif strategy != 'syntax_rename':
+            elif strategy not in ('syntax_rename','syntax_rename_roles'):
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
             save(directory / 'edit-validation.json',{'status':'passed','path':file['path']})
@@ -565,16 +568,20 @@ def main():
     args = parser.parse_args()
     output = args.output.resolve(); output.mkdir(parents=True,exist_ok=False)
     (output / 'generator-source.py').write_bytes(Path(__file__).read_bytes())
-    if args.strategy == 'syntax_rename':
+    if args.strategy in ('syntax_rename','syntax_rename_roles','deterministic_rename_roles'):
         (output / 'rename-token-source.py').write_bytes(Path(__file__).with_name('rename_tokens.py').read_bytes())
+    if args.strategy in ('syntax_rename_roles','deterministic_rename_roles'):
+        (output / 'rename-role-source.py').write_bytes(Path(__file__).with_name('rename_roles.py').read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
     (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
-    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else 'live_model',
+    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if args.strategy == 'deterministic_rename_roles' else 'live_model'),
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
-    if args.strategy == 'syntax_rename':
+    if args.strategy in ('syntax_rename','syntax_rename_roles','deterministic_rename_roles'):
         report['rename_token_sha256'] = hashlib.sha256(Path(__file__).with_name('rename_tokens.py').read_bytes()).hexdigest()
+    if args.strategy in ('syntax_rename_roles','deterministic_rename_roles'):
+        report['rename_role_sha256'] = hashlib.sha256(Path(__file__).with_name('rename_roles.py').read_bytes()).hexdigest()
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
@@ -592,7 +599,11 @@ def main():
             source = output / 'source'
             report['source_preparation'] = 'explicit snapshot of fixture revision; original checkout untouched'
         verify_source(source,case)
-        proposal = validate_output(json.loads(args.response.read_text())) if args.response else generate(case,args.model,args.endpoint,output,args.strategy)
+        if args.strategy == 'deterministic_rename_roles' and not args.response:
+            from patchgen.rename_roles import propose
+            proposal = propose(case, output)
+        else:
+            proposal = validate_output(json.loads(args.response.read_text())) if args.response else generate(case,args.model,args.endpoint,output,args.strategy)
         save(output / 'proposal.json',proposal)
         (output / 'proposal.patch').write_text(proposal['diff'])
         report['outcome'] = proposal['outcome']

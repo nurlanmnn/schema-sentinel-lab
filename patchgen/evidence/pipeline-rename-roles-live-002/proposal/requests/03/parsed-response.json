@@ -1,0 +1,32 @@
+{
+  "outcome": "patch",
+  "rationale": "The TypeScript runtime must reflect the renamed field from `name` to `displayName` in both observation key and generated property construction, per schema change. The inventory tokens align with the required replacements: canonical observation key (`display_name`) is not directly present in TypeScript but inferred as a mapping to `displayName`; the generated property (`name` \u2192 `displayName`) and construction key (`name` \u2192 `displayName`) are explicitly targeted by inventory tokens 2 and 3. Line 11\u2019s `name` in observation fields is unaffected because it maps to the protobuf field via generated bindings, not directly edited here.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The TypeScript generated bindings (`EntityV1`) handle the protobuf field mapping from `name` (wire) to `displayName` (TypeScript property).",
+    "No manual overrides of `entity.name` exist in the runtime; all access goes through generated bindings.",
+    "The observation key `name` in line 11 is a placeholder for the protobuf field and does not require direct renaming."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 11,
+      "decision": "unaffected",
+      "reason": "The `name` here is a runtime observation key mapping to the generated property, which will be handled by the binding\u2019s renamed field (`displayName`). No direct edit needed."
+    },
+    {
+      "line": 59,
+      "decision": "edit",
+      "reason": "This line encodes an EntityV1 object with `name`; the generated bindings must use `displayName` for consistency. The inventory token (3) targets this construction key."
+    }
+  ],
+  "token_edits": [
+    {
+      "token_id": 2,
+      "replacement": "displayName"
+    },
+    {
+      "token_id": 3,
+      "replacement": "displayName"
+    }
+  ]
+}

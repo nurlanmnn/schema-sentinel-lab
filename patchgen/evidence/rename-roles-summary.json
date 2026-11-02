@@ -1,0 +1,39 @@
+{
+  "scope": "bounded pinned rename; deterministic success separate from live failure",
+  "tests_passed": 66,
+  "attempts": [
+    {
+      "evidence": "pipeline-rename-roles-live-001",
+      "status": "rejected",
+      "mode": "host_launch_failure",
+      "strategy": "syntax_rename_roles",
+      "error": "[Errno 2] No such file or directory: '/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-rename-roles-live-001/proposal/report.json'",
+      "seconds": null
+    },
+    {
+      "evidence": "pipeline-rename-roles-live-002",
+      "status": "failed",
+      "mode": "live_model",
+      "strategy": "syntax_rename_roles",
+      "error": "file proposal rejected: runtimes/python/main.py: edited candidate line requires all rename tokens; mixed roles unsupported; runtimes/typescript/main.ts: candidate decision/edit coverage mismatch",
+      "seconds": 124.95292633306235
+    },
+    {
+      "evidence": "pipeline-rename-deterministic-001",
+      "status": "failed",
+      "mode": "deterministic_proposal",
+      "strategy": "deterministic_rename_roles",
+      "error": "[Errno 2] No such file or directory: '/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-rename-deterministic-001/proposal/deterministic/01/token-inventory.json'",
+      "seconds": 0.13010175002273172
+    },
+    {
+      "evidence": "pipeline-rename-deterministic-002",
+      "status": "validation_passed",
+      "mode": "deterministic_proposal",
+      "strategy": "deterministic_rename_roles",
+      "error": null,
+      "seconds": 14.533163707936183
+    }
+  ],
+  "human_approval_required": true
+}

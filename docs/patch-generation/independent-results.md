@@ -63,3 +63,40 @@ were read-only verified unchanged. No team push/merge, deployment, CI run, publi
 release, collaborator invitation or human acceptance is implied. Active enum
 consumers, semantic/receiver resolution, a realistic twenty-case benchmark,
 manual baseline, pub/sub integration and review UI remain future work.
+
+## Role-constrained rename continuation — 1 November 2026
+
+A bounded rename proposal now passes the independent pipeline without replaying
+an answer: `pipeline-rename-deterministic-002` detects the schema rename, locates
+6/6 known sites with no extras, derives syntax-token replacements from descriptors
+and recognized roles, then passes the existing validation. This is deterministic
+proposal construction with zero model requests, **not a live model success**.
+Receiver identity remains unproved and every candidate is proposed for rename;
+this result applies to the pinned small testbed, not arbitrary programs.
+
+| Evidence directory | Mode | Actual result |
+| --- | --- | --- |
+| pipeline-rename-roles-live-001 | prompt 2.7 launch | Host NameError before inference; raw traceback retained |
+| pipeline-rename-roles-live-002 | live prompt 2.7 | Rejected Python missing observation-key token and TypeScript candidate review/edit mismatch; no runtime validation |
+| pipeline-rename-deterministic-001 | deterministic proposal | Host evidence-directory creation error; no runtime validation |
+| pipeline-rename-deterministic-002 | deterministic proposal | Validation passed; no model or reference-response use |
+
+The launch and directory errors were corrected in host code and new directories
+were used; no saved response was changed. The stricter live gate prevents the
+omitted Python observation key from reaching compilation, where the earlier 2.6
+attempt had not detected it. C# passed the 2.7 mechanical check; the complete live
+proposal still failed. No automatic feedback repair or fallback was used.
+
+The deterministic result passes Buf regeneration, TypeScript/.NET builds,
+11 existing unit tests, four original three-service round trips, four independent
+v1 payloads, six standalone v1/v2 samples, Python v2 value checks and invalid-version
+rejection. The same pinned evaluator-owned test migration is applied separately;
+this is not generated test migration. See its `proposal/validated.patch` for the
+complete human-review bundle, including bindings and trusted test changes.
+
+The current suite passes **66 tests** (`rename-roles-tests.log`), including negative
+role/completeness tests, production request/assembly wiring with a mocked service,
+and deterministic proposal isolation from model calls/caller-added answer fields.
+These are software tests, not additional realistic benchmark cases. Role constraints
+and all-token coverage are recorded in decision 0006. Type migration, active enum
+consumers, twenty cases, human baseline, pub/sub, CI and a review UI remain open.

@@ -19,9 +19,9 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits")
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
                           files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
-                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py')})
+                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py','rename_roles.py')})
     save(output/'implementation.json',implementation)
-    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py'):
+    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py','rename_roles.py'):
         (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
     revision=require(case,'source_revision',str,'request')
     if not re.fullmatch(r'[0-9a-f]{40}',revision):
@@ -67,7 +67,9 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits")
         with (output/'generation.log').open('w') as log:
             process = subprocess.run(args,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT)
         report['proposal_exit_code'] = process.returncode
-        report['proposal_report'] = json.loads((output/'proposal/report.json').read_text())
+        proposal_report = output/'proposal/report.json'
+        report['proposal_report'] = (json.loads(proposal_report.read_text()) if proposal_report.exists() else
+                                     dict(status='failed', error='generator exited without report; see generation.log'))
         report['status'] = report['proposal_report']['status']
     save(output/'report.json',report)
     return report
@@ -78,7 +80,7 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
-    parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename','syntax_rename_roles','deterministic_rename_roles'),default='candidate_edits')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
