@@ -30,3 +30,13 @@ Next: pin this baseline, compare int32 -> int64, locate known source sites, draf
 bounded TS/C# producer edits, and require exact runtime evidence plus portable
 human review. A coordinated consumer rollout is required before producers emit
 out-of-int32 values; same wire type alone does not establish mixed-version safety.
+
+The first width proposal (`pipeline-inventory-width-001`, pinned to 104d35d)
+failed compilation because generated TypeScript imports `long`, whose declaration
+was outside normal module resolution. The baseline now explicitly pins the
+already installed transitive package `long` 5.3.2 and maps it in tsconfig, just as
+it maps protobufjs. The installed package declares Apache-2.0; its full license
+is retained at `docs/licenses/runtime/long-LICENSE`. It is compatible with the
+MIT project when its license/notice obligations are retained. No new version or
+network install was needed. Initial failure evidence remains unchanged; the
+width fixture will pin the corrected baseline before acceptance.

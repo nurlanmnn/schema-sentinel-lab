@@ -8,6 +8,7 @@
     "start": "node dist/runtimes/typescript/main.js"
   },
   "dependencies": {
+    "long": "5.3.2",
     "protobufjs": "7.6.6"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@
     "target": "ES2022", "module": "CommonJS", "moduleResolution": "Node",
     "rootDir": "../..", "outDir": "dist", "strict": true,
     "esModuleInterop": true, "skipLibCheck": true,
-    "baseUrl": ".", "paths": { "protobufjs/*": ["node_modules/protobufjs/*"] }
+    "baseUrl": ".", "paths": { "protobufjs/*": ["node_modules/protobufjs/*"], "long": ["node_modules/long"] }
   },
   "include": ["main.ts", "../../generated/ts/**/*.ts"]
 }
