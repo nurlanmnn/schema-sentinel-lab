@@ -88,6 +88,16 @@ class BrokerTests(unittest.TestCase):
                 self.broker.dispatch('/ack', {'subscriber': 'a', 'message_id': 1, 'fields': fields})
             self.assertEqual(before, self.broker.state())
 
+    def test_migration_expectations_are_explicit_and_independent_of_wire_bytes(self):
+        original = samples()
+        for mode, key in [('rename', 'display_name'), ('removal', None), ('utf8', 'name')]:
+            migrated = samples(mode)
+            self.assertEqual([x['payload'] for x in migrated], [x['payload'] for x in original])
+            for item in migrated[:4]:
+                self.assertEqual(set(item['fields']), {'entity_id', key} if key else {'entity_id'})
+        with self.assertRaises(ValueError):
+            samples('unknown')
+
     def test_independent_wire_encoder_known_bytes(self):
         self.assertEqual(wire_string(1, 'A') + wire_string(2, 'B'), bytes.fromhex('0a0141120142'))
         self.assertEqual(wire_string(1, ''), b'')

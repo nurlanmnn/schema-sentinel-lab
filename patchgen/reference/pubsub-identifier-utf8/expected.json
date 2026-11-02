@@ -1,0 +1,31 @@
+{
+  "source_revision": "a65e45f9639c5e56873f382262197237feef5250",
+  "change_id": "pubsub-identifier-utf8",
+  "category": "field_type_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/main.py",
+      "lines": [
+        31,
+        115
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "lines": [
+        11,
+        82
+      ]
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "lines": [
+        21,
+        68
+      ]
+    }
+  ],
+  "independent": true,
+  "review_method": "explicit source inspection of constructor/observation sites at pubsub baseline; not measured human review",
+  "relationship": "same Entity schema mutation as historical case; new transport baseline, not new domain change"
+}

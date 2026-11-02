@@ -136,3 +136,12 @@ and dedicated empty Python guards, and requires reserved field number/name.
 Unknown roles, side-effectful values and unresolved candidates reject. It makes
 zero model calls, reads no reference response, and uses the existing independent
 removal validator/test migration. See decision 0009 and the demo's `--case removal`.
+
+## Pub/sub validation baseline
+
+The demo also supports `--case pubsub-rename`, `--case pubsub-removal` and
+`--case pubsub-utf8`. These pin the same schema mutations to the actual subscriber
+baseline and require independent fan-out validation in addition to the relay
+checks. Evaluator-owned semantic expectations and full pub/sub evidence are
+included in new review bundles. These are transport extensions of the same
+three cases; see decision 0013 for exact scope and retained failures.

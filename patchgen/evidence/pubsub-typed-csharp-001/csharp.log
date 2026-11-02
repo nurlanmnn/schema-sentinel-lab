@@ -1,0 +1,14 @@
+{"runtime":"csharp","version":"v1","fields":{"entity_id":"","name":""}}
+{"runtime":"csharp","version":"v1","fields":{"entity_id":"pubsub-001","name":"Sensor A"}}
+Unhandled exception. System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.Net.Http.HttpIOException: The response ended prematurely. (ResponseEnded)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>g__Post|4>d.MoveNext() in /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/csharp/main.cs:line 37
+--- End of stack trace from previous location ---
+   at Program.<Main>$(String[] args) in /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/csharp/main.cs:line 45
+   at Program.<Main>(String[] args)

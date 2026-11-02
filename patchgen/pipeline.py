@@ -9,7 +9,7 @@ from pathlib import Path
 from patchgen.detector import detect
 from patchgen.locator import locate
 from patchgen.adapter import adapt, coverage
-from patchgen.generator import command, save, ContractError, require, safe_path
+from patchgen.generator import command, save, ContractError, require, safe_path, VALIDATION_PROFILES
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -71,7 +71,7 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits")
     if generate or response:
         args = [sys.executable,'-m','patchgen.generator','--source',str(source),'--fixture',str(output/'input.json'),
                 '--output',str(output/'proposal'),'--strategy',strategy,'--validate']
-        if profile_name in ('entity-name-removal','entity-name-rename'):
+        if profile_name in VALIDATION_PROFILES:
             args += ['--validation-profile',profile_name]
         if response:
             args += ['--response',str(response.resolve())]

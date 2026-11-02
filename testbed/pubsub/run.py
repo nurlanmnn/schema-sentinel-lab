@@ -33,9 +33,15 @@ def wire_string(number, text):
     return bytes([number * 8 + 2]) + bytes(length) + raw
 
 
-def samples():
+CASES = ('baseline', 'rename', 'removal', 'utf8')
+
+
+def samples(case='baseline'):
+    if case not in CASES:
+        raise ValueError('Unknown pubsub validation case')
+    name_field = 'display_name' if case == 'rename' else 'name'
     return [{'topic': 'entity.' + version, 'payload': wire_string(1, entity_id) + (wire_string(2, name) if version == 'v1' else b''),
-             'fields': {'entity_id': entity_id, **({'name': name} if version == 'v1' else {})}}
+             'fields': {'entity_id': entity_id, **({name_field: name} if version == 'v1' and case != 'removal' else {})}}
             for version in ('v1', 'v2') for entity_id, name in TEXT_CASES]
 
 
@@ -66,13 +72,15 @@ def validate(state, published):
             raise RuntimeError('Publication identity/fan-out mismatch')
 
 
-def execute(root, output):
+def execute(root, output, case='baseline'):
+    if case not in CASES:
+        raise RuntimeError('Unknown pubsub validation case')
     root, output = root.resolve(), output.resolve()
     if output.exists() or root == output or root.is_relative_to(output):
         raise RuntimeError('Use a new output directory that does not contain the runtime checkout')
     output.mkdir(parents=True)
     started = time.monotonic()
-    report = {'status': 'failed', 'mode': 'actual_local_pubsub', 'runtime_root': str(root),
+    report = {'status': 'failed', 'mode': 'actual_local_pubsub', 'case': case, 'runtime_root': str(root),
               'timing_scope': 'local publish-to-ack including polling, HTTP and decode; not schema propagation or human review',
               'human_approval_required': True, 'generated_patch_approval': False}
     processes, logs = [], []
@@ -117,7 +125,7 @@ def execute(root, output):
 
         wait_for(lambda state: len(state['subscribers']) == 3, 'three subscriptions')
         # Publish the entire sequence without waiting for any consumer ack.
-        for sample in samples():
+        for sample in samples(case):
             publication = request(url, '/publish', {'topic': sample['topic'], 'payload': base64.b64encode(sample['payload']).decode()})
             published.append({'message_id': publication['message_id'], 'topic': sample['topic'], 'fields': sample['fields'],
                               'sha256': hashlib.sha256(sample['payload']).hexdigest(), 'bytes': len(sample['payload'])})
@@ -154,11 +162,12 @@ def execute(root, output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--case', choices=CASES, default='baseline', help='independent semantic expectations; never inferred from runtime observations')
     parser.add_argument('--root', type=Path, default=ROOT, help='built runtime checkout (default: this checkout)')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     try:
-        return execute(args.root, args.output)
+        return execute(args.root, args.output, args.case)
     except (OSError, RuntimeError) as error:
         print(str(error), file=sys.stderr)
         return 1

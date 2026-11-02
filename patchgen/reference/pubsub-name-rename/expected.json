@@ -1,0 +1,31 @@
+{
+  "source_revision": "a65e45f9639c5e56873f382262197237feef5250",
+  "change_id": "pubsub-name-rename",
+  "category": "field_renamed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/main.py",
+      "lines": [
+        33,
+        117
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "lines": [
+        11,
+        81
+      ]
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "lines": [
+        15,
+        67
+      ]
+    }
+  ],
+  "independent": true,
+  "review_method": "explicit source inspection of constructor/observation sites at pubsub baseline; not measured human review",
+  "relationship": "same Entity schema mutation as historical case; new transport baseline, not new domain change"
+}

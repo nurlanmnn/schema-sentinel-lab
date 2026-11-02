@@ -13,6 +13,9 @@ CASES = {
     'removal': ('entity-name-removal', 'deterministic_remove_name_v1'),
     'rename': ('entity-name-rename', 'deterministic_rename_roles'),
     'utf8': ('v2-identifier-bytes', 'deterministic_utf8_v2'),
+    'pubsub-removal': ('pubsub-name-removal', 'deterministic_remove_name_v1'),
+    'pubsub-rename': ('pubsub-name-rename', 'deterministic_rename_roles'),
+    'pubsub-utf8': ('pubsub-identifier-utf8', 'deterministic_utf8_v2'),
 }
 
 
@@ -89,6 +92,11 @@ def execute(case, output):
             pipeline = json.loads((output / 'run/report.json').read_text())
             if pipeline['status'] != 'validation_passed' or not (output / 'review/index.html').is_file():
                 raise RuntimeError('Demo did not produce a validated proposal and review bundle.')
+            if case.startswith('pubsub-'):
+                pubsub = pipeline.get('proposal_report', {}).get('pubsub_validation', {})
+                if pubsub.get('status') != 'passed' or pubsub.get('decoded_deliveries') != 24:
+                    raise RuntimeError('Pubsub demo lacks passing independent fan-out evidence.')
+                report['pubsub_validation'] = {key: pubsub[key] for key in ('status', 'case', 'publication_cases', 'decoded_deliveries', 'topics', 'runtimes')}
             report['status'] = 'validation_passed'
     except (OSError, RuntimeError, subprocess.SubprocessError) as error:
         report['error'] = str(error)

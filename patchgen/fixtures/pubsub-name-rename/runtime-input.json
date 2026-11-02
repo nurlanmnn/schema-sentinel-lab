@@ -1,0 +1,11 @@
+{
+  "source_revision": "a65e45f9639c5e56873f382262197237feef5250",
+  "change": {
+    "id": "pubsub-name-rename",
+    "category": "field_renamed",
+    "schema_path": "proto/v1/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string display_name = 2;\n}\n"
+  },
+  "intended_behavior": "Rename v1 Entity.name to display_name on the same wire field 2. Preserve every value, including empty/Unicode/escaped text, and entity_id. Runtime observation key becomes display_name. v2 is unchanged. Regenerate bindings; Python display_name, TypeScript displayName, C# DisplayName. Do not edit test sources. All three subscribers must independently decode both schema-version topics. Pub/sub is in-memory and local."
+}

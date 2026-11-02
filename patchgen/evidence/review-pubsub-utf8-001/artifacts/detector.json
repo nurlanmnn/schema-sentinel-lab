@@ -1,0 +1,31 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.0",
+  "status": "complete",
+  "source_revision": "a65e45f9639c5e56873f382262197237feef5250",
+  "old_schema_sha256": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+  "new_schema_sha256": "781968fc26ca15247f50e86e94cec788a3b76a6f35ff145ca51897e3453c1c36",
+  "old_descriptor_sha256": "24d323abc4e3a50f487a0c12fd288b968291f6ec1849fcb9b2f034e3961eaf3e",
+  "new_descriptor_sha256": "4056a0e2022f3ca1de50b037d07616077a905f491a1964f83492c0de0e50c119",
+  "events": [
+    {
+      "category": "field_type_changed",
+      "old_type": 9,
+      "new_type": 12,
+      "message": "simulation.v2.Entity",
+      "field_number": 1,
+      "old_name": "entity_id",
+      "new_name": "entity_id"
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "pubsub-identifier-utf8",
+    "category": "field_type_changed",
+    "schema_path": "proto/v2/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v2;\n\nmessage Entity {\n  string entity_id = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v2;\n\nmessage Entity {\n  bytes entity_id = 1;\n}\n"
+  },
+  "intended_behavior": "Change ONLY v2 Entity.entity_id from string to bytes. Text identifiers use UTF-8 encode on construction and UTF-8 decode for observations. v1 string identifiers and all v1 relay behavior remain unchanged. Preserve the existing standalone sample identifiers in each runtime. For valid UTF-8, empty/Unicode/escaped text must round trip identically. Arbitrary non-UTF-8 bytes and mixed-version interoperability are outside this case; do not invent conversions. The output observation key remains entity_id with a string value. Keep version selection explicit. Never change tests or generated bindings. All three subscribers must independently decode both schema-version topics. Pub/sub is in-memory and local."
+}

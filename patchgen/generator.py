@@ -490,13 +490,29 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
         rationale=rationale,confidence=confidence,assumptions=assumptions))
 
 
+# Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
+VALIDATION_PROFILES = {
+    'entity-name-removal': ('entity-name-removal', None),
+    'entity-name-rename': ('entity-name-rename', None),
+    'pubsub-name-removal': ('entity-name-removal', 'removal'),
+    'pubsub-name-rename': ('entity-name-rename', 'rename'),
+    'pubsub-identifier-utf8': ('v2-identifier-bytes', 'utf8'),
+}
+PUBSUB_ARTIFACTS = ('report.json', 'expected.json', 'broker-state.json', 'python.log', 'typescript.log', 'csharp.log')
+
+
 def load_validation_profile(case, name):
-    if name not in ('entity-name-removal','entity-name-rename'):
+    if name not in VALIDATION_PROFILES:
         raise ContractError('unknown trusted validation profile')
     directory = Path(__file__).parent / 'reference' / name
     profile = json.loads((directory / 'validation-profile.json').read_text())
     patch = (directory / 'validation-tests.patch').read_text()
-    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py']
+    oracle_case, pubsub_case = VALIDATION_PROFILES[name]
+    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case != 'v2-identifier-bytes' else []
+    if not pubsub_case and ('pubsub_case' in profile or 'oracle_case' in profile):
+        raise ContractError('historical profile cannot select a different oracle or transport')
+    if pubsub_case and (profile.get('pubsub_case') != pubsub_case or profile.get('oracle_case') != oracle_case):
+        raise ContractError('trusted pubsub profile has wrong semantic/oracle selection')
     if (profile.get('profile_version') != '1.0' or profile.get('allowed_test_paths') != allowed
             or profile.get('source_revision') != case['source_revision']
             or profile.get('change_id') != case['change']['id']
@@ -506,7 +522,10 @@ def load_validation_profile(case, name):
     if any(not file['path'].startswith('runtimes/') for file in case['affected_files']):
         raise ContractError('trusted test profile requires a runtime-only model input')
     # Even a changed profile may only update these two evaluator-owned test files.
-    check_patch(patch,{'affected_files':[{'path':p} for p in allowed], 'change':{'schema_path':allowed[0]}})
+    if allowed:
+        check_patch(patch,{'affected_files':[{'path':p} for p in allowed], 'change':{'schema_path':allowed[0]}})
+    elif patch:
+        raise ContractError('UTF-8 pubsub profile cannot modify tests')
     return profile,patch
 
 
@@ -527,8 +546,9 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
             save(output / 'validation-profile.json',profile)
             test_patch = output / 'validation-tests.patch'
             test_patch.write_text(test_diff)
-            command(['git','apply','--check',str(test_patch)],workspace,log)
-            command(['git','apply',str(test_patch)],workspace,log)
+            if test_diff:
+                command(['git','apply','--check',str(test_patch)],workspace,log)
+                command(['git','apply',str(test_patch)],workspace,log)
         for file in case['affected_files']:
             if file['language'] == 'python':
                 changed = (workspace / file['path']).read_text()
@@ -545,10 +565,20 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
             command(['buf','generate'],workspace,log)
             command([sys.executable,'run_local.py'],workspace,log,timeout=600)
             python = workspace / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
-            if case['change']['id'] in BENCHMARK_CASES:
-                command([str(python), str(output / 'benchmark-oracle-source.py'), str(workspace),case['change']['id']], workspace,log)
+            oracle_case = validation_profile[0].get('oracle_case', case['change']['id']) if validation_profile else case['change']['id']
+            if oracle_case in BENCHMARK_CASES:
+                command([str(python), str(output / 'benchmark-oracle-source.py'), str(workspace),oracle_case], workspace,log)
             else:
                 command([str(python), str(Path(__file__).with_name('oracle.py')), str(workspace)], workspace,log)
+            if validation_profile and validation_profile[0].get('pubsub_case'):
+                command([str(python), '-m', 'testbed.pubsub.run', '--root', str(workspace),
+                         '--case', validation_profile[0]['pubsub_case'], '--output', str(output / 'pubsub')],
+                        output / 'pubsub-harness', log, timeout=120)
+                result = json.loads((output / 'pubsub/report.json').read_text())
+                if (result.get('status') != 'passed' or result.get('case') != validation_profile[0]['pubsub_case']
+                        or result.get('runtime_revision') != case['source_revision']
+                        or result.get('decoded_deliveries') != 24 or not result.get('children_stopped') or not result.get('broker_stopped')):
+                    raise ContractError('pubsub validation did not retain complete passing evidence')
         (output / 'validated.patch').write_text(command(['git','diff','--no-ext-diff'],workspace))
     return str(workspace)
 
@@ -561,7 +591,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--model',default='ministral-3:8b')
     parser.add_argument('--strategy',choices=tuple(STRATEGY_VERSIONS),default='line_edits')
-    parser.add_argument('--validation-profile',choices=('entity-name-removal','entity-name-rename'),help='explicit independent test migration; never sent to the model')
+    parser.add_argument('--validation-profile',choices=tuple(VALIDATION_PROFILES),help='explicit independent test migration; never sent to the model')
     parser.add_argument('--endpoint',default='http://127.0.0.1:11434')
     parser.add_argument('--response',type=Path,help='offline test replay; never counted as live generation')
     parser.add_argument('--validate',action='store_true',help='run regeneration, builds, unit tests and independent oracle')
@@ -599,6 +629,14 @@ def main():
         validation_profile = load_validation_profile(case,args.validation_profile) if args.validation_profile else None
         if validation_profile:
             report['validation_profile'] = validation_profile[0]
+            if validation_profile[0].get('pubsub_case'):
+                harness = output / 'pubsub-harness/testbed/pubsub'
+                harness.mkdir(parents=True)
+                report['pubsub_harness_sha256'] = {}
+                for name in ('run.py', 'broker.py', 'topics.json'):
+                    raw = (Path(__file__).resolve().parents[1] / 'testbed/pubsub' / name).read_bytes()
+                    (harness / name).write_bytes(raw)
+                    report['pubsub_harness_sha256'][name] = hashlib.sha256(raw).hexdigest()
             report['generation_scope'] = 'runtime code only; schema copied from input; tests supplied independently'
         source = args.source.resolve()
         if args.prepare_source:
@@ -624,6 +662,8 @@ def main():
         if proposal['outcome'] == 'patch':
             report['workspace'] = apply_and_validate(source,case,proposal,output,args.validate,validation_profile)
             report['status'] = 'validation_passed' if args.validate else 'applied_unvalidated'
+            if args.validate and validation_profile and validation_profile[0].get('pubsub_case'):
+                report['pubsub_validation'] = json.loads((output / 'pubsub/report.json').read_text())
         else:
             report['status'] = proposal['outcome']
     except (OSError, ValueError, KeyError, SyntaxError, subprocess.SubprocessError) as error:

@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import shutil
 import unittest
-from patchgen.review import export, verify, sha
+from patchgen.review import export, verify, sha, PUBSUB_REVIEW_ARTIFACTS
 from patchgen.generator import ContractError
 
 
@@ -39,6 +39,41 @@ class ReviewTests(unittest.TestCase):
         self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
         self.assertTrue((self.bundle/'review.js').is_file())
         self.assertIn('No decision recorded.',(self.bundle/'index.html').read_text())
+
+    def pubsub_run(self):
+        self.report['validation_profile'] = {'pubsub_case': 'rename'}
+        result = dict(status='passed', case='rename', runtime_revision='a'*40,
+                      decoded_deliveries=24, children_stopped=True, broker_stopped=True)
+        self.report['pubsub_validation'] = result
+        self.report['pubsub_harness_sha256'] = {name: sha(b'TEST ONLY') for name in ('run.py', 'broker.py', 'topics.json')}
+        self.write_run()
+        for name in PUBSUB_REVIEW_ARTIFACTS:
+            path = self.run / name; path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('TEST ONLY')
+        (self.run / 'proposal/pubsub/report.json').write_text(json.dumps(result))
+
+    def test_pubsub_export_requires_and_hashes_evaluator_evidence(self):
+        self.pubsub_run()
+        missing = self.run / 'proposal/pubsub/typescript.log'; missing.unlink()
+        with self.assertRaisesRegex(ContractError, 'complete evidence'):
+            export(self.run, self.bundle)
+        missing.write_text('TEST ONLY')
+        manifest = export(self.run, self.bundle)
+        self.assertTrue(set(PUBSUB_REVIEW_ARTIFACTS) <= manifest['artifacts'].keys())
+        self.assertEqual(verify(self.bundle, self.decision())['status'], 'verified')
+        (self.bundle/'artifacts/proposal/pubsub/expected.json').write_text('tampered')
+        with self.assertRaisesRegex(ContractError, 'artifact changed'):
+            verify(self.bundle, self.decision())
+
+    def test_pubsub_evaluator_identity_and_result_must_match(self):
+        self.pubsub_run()
+        (self.run/'proposal/pubsub/report.json').write_text('{}')
+        with self.assertRaisesRegex(ContractError, 'inconsistent'):
+            export(self.run, self.bundle)
+        self.pubsub_run()
+        (self.run/'proposal/pubsub-harness/testbed/pubsub/run.py').write_text('changed')
+        with self.assertRaisesRegex(ContractError, 'source hash mismatch'):
+            export(self.run, self.bundle)
 
     def test_changed_patch_rejected(self):
         export(self.run,self.bundle);decision=self.decision()

@@ -40,6 +40,20 @@ and verify the record. No automatic approval, patch application to the working
 checkout, merge or deployment follows.
 
 This is three bounded deterministic policies on one small testbed, not a live
-LLM success, a twenty-case benchmark, general semantic migration, pub/sub
-integration or a measured human baseline. Versions and implementation revision
+LLM success, a twenty-case benchmark, general semantic migration or a measured
+human baseline. The three historical cases above validate the relay transport. Versions and implementation revision
 are retained in the demo report; pipeline snapshots retain actual source hashes.
+
+## Include pub/sub in proposal validation
+
+```sh
+python3.13 run_demo.py --case pubsub-utf8 --output patchgen/evidence/my-pubsub-demo
+```
+
+`--case pubsub-rename` and `--case pubsub-removal` select the other two bounded
+policies. These source-bound fixtures include actual subscriber modes. They run
+the existing gates plus eight publications and 24 independent decoder
+acknowledgements across v1/v2 topics on a local in-memory broker. The review
+bundle includes the pub/sub observations and evaluator source snapshot.
+These repeat the same Entity changes on a new transport baseline, not new domain
+benchmark cases. See [decision 0013](../decisions/0013-pubsub-proposal-validation.md).

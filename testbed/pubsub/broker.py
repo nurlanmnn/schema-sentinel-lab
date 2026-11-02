@@ -93,6 +93,7 @@ class Handler(BaseHTTPRequestHandler):
         raw = json.dumps(data, ensure_ascii=True).encode()
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
+        self.send_header('Connection', 'close')
         self.send_header('Content-Length', str(len(raw)))
         self.end_headers()
         self.wfile.write(raw)

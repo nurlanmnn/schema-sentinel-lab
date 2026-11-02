@@ -1,0 +1,141 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.1",
+  "source_revision": "da98c2ac80f5ab65705f54b59de8fa77b24ef52b",
+  "change_id": "pubsub-name-rename",
+  "old_schema_sha256": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+  "status": "partial",
+  "files": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "language": "csharp",
+      "source_sha256": "684b969df01d1aba2dd6bcba42bd395e640e663927be2cdae9486d0761f3eff9",
+      "positions": [
+        {
+          "start_line": 15,
+          "end_line": 15,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate, member_access_expression",
+          "resolution": "resolved"
+        },
+        {
+          "start_line": 66,
+          "end_line": 66,
+          "reason": "Conservative syntax candidate: assignment_expression",
+          "resolution": "resolved"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "language": "python",
+      "source_sha256": "db2d3f5f58b509875d0ab99ea33dbc92a4a2a139bee663ffd7706e980ece8611",
+      "positions": [
+        {
+          "start_line": 33,
+          "end_line": 33,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate",
+          "resolution": "resolved"
+        },
+        {
+          "start_line": 117,
+          "end_line": 117,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "resolved"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "language": "typescript",
+      "source_sha256": "69edaf721533dcd1fa76ea84a97529ecd9ccc909097c15535e7379623cf574f2",
+      "positions": [
+        {
+          "start_line": 11,
+          "end_line": 11,
+          "reason": "Conservative syntax candidate: member_expression, pair",
+          "resolution": "resolved"
+        },
+        {
+          "start_line": 81,
+          "end_line": 81,
+          "reason": "Conservative syntax candidate: pair",
+          "resolution": "resolved"
+        }
+      ]
+    }
+  ],
+  "scanned": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "source_sha256": "684b969df01d1aba2dd6bcba42bd395e640e663927be2cdae9486d0761f3eff9",
+      "language": "csharp"
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "source_sha256": "db2d3f5f58b509875d0ab99ea33dbc92a4a2a139bee663ffd7706e980ece8611",
+      "language": "python"
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "source_sha256": "69edaf721533dcd1fa76ea84a97529ecd9ccc909097c15535e7379623cf574f2",
+      "language": "typescript"
+    }
+  ],
+  "issues": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "parse_error": false,
+      "warnings": [
+        {
+          "line": 46,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 48,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 48,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 49,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 49,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 51,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 51,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 51,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 51,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 52,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 52,
+          "reason": "reflection requires review"
+        },
+        {
+          "line": 52,
+          "reason": "reflection requires review"
+        }
+      ]
+    }
+  ],
+  "resolution_scope": "resolved syntax candidates, receiver types unproved; conservative cross-version matches"
+}

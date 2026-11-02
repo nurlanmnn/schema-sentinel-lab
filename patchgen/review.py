@@ -6,12 +6,15 @@ import json
 from pathlib import Path
 import re
 import shutil
-from patchgen.generator import ContractError
+from patchgen.generator import ContractError, PUBSUB_ARTIFACTS
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
              'proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
+PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
+    'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
+ARTIFACTS += PUBSUB_REVIEW_ARTIFACTS
 ASSETS = Path(__file__).with_name('review_assets')
 
 
@@ -27,6 +30,27 @@ def artifact_path(root, name):
     if path.is_symlink() or root.resolve() not in path.resolve().parents:
         raise ContractError('review artifact escapes bundle')
     return path
+
+
+def check_pubsub_evidence(root, report, available=None):
+    """Passing pub/sub claims require the complete retained evaluator evidence."""
+    mode = report.get('validation_profile', {}).get('pubsub_case')
+    if not mode or report.get('status') != 'validation_passed':
+        return
+    if available is not None and not set(PUBSUB_REVIEW_ARTIFACTS) <= set(available):
+        raise ContractError('passing pubsub review requires complete evidence')
+    for name in PUBSUB_REVIEW_ARTIFACTS:
+        if not artifact_path(root, name).is_file():
+            raise ContractError('passing pubsub review requires complete evidence')
+    result = json.loads(artifact_path(root, 'proposal/pubsub/report.json').read_text())
+    if (result != report.get('pubsub_validation') or result.get('status') != 'passed' or result.get('case') != mode
+            or result.get('runtime_revision') != report.get('source_revision') or result.get('decoded_deliveries') != 24
+            or not result.get('children_stopped') or not result.get('broker_stopped')):
+        raise ContractError('passing pubsub review has inconsistent validation evidence')
+    for name in ('run.py', 'broker.py', 'topics.json'):
+        actual = sha(artifact_path(root, 'proposal/pubsub-harness/testbed/pubsub/' + name).read_bytes())
+        if actual != report.get('pubsub_harness_sha256', {}).get(name):
+            raise ContractError('pubsub evaluator source hash mismatch')
 
 
 def export(run, output):
@@ -46,6 +70,7 @@ def export(run, output):
     passing = report_name == 'proposal/report.json' and report.get('status') == 'validation_passed'
     if passing and (not (run/'proposal/validated.patch').is_file() or not (run/'proposal/validated.patch').stat().st_size):
         raise ContractError('passing review requires the complete validated patch')
+    check_pubsub_evidence(run, report)
     output.mkdir(parents=True,exist_ok=False)
     artifacts={}
     for name in ARTIFACTS:
@@ -121,6 +146,7 @@ def verify(bundle, decision):
     case=json.loads((bundle/'artifacts'/case_name).read_text())
     if report.get('source_revision')!=manifest['source_revision'] or case.get('source_revision')!=manifest['source_revision'] or case['change']['id']!=manifest['change_id']:
         raise ContractError('review metadata mismatch')
+    check_pubsub_evidence(bundle/'artifacts', report, artifacts)
     if record['decision']=='approve' and (report_name != 'proposal/report.json' or not manifest.get('approval_eligible') or report.get('status')!='validation_passed'
                                          or 'proposal/validated.patch' not in artifacts):
         raise ContractError('approval requires passing validation and complete patch')

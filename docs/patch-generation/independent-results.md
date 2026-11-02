@@ -253,3 +253,21 @@ transfer-mode failure remains in `pubsub-local-001`. Nineteen testbed unit check
 currently exercises the unchanged schema baseline; existing pinned generated
 proposals have not yet been validated through pub/sub. Transport samples are not
 new realistic schema-change benchmark cases. No human decision is inferred.
+
+## Proposal pub/sub validation (2 November 2026)
+
+The three new pub/sub source-bound fixtures repeat the original bounded schema
+mutations at a65e45f. `pipeline-pubsub-rename-002`, `pipeline-pubsub-removal-001`
+and `pipeline-pubsub-utf8-001` pass Buf/builds, testbed unit checks, relay tests,
+independent oracles and eight pub/sub inputs / 24 observations each. Exact known
+line recall is 6/6 each with no extras for rename/removal and three conservative
+v1 extras for UTF-8. This does not increase the number of distinct realistic
+schema-change cases. No new live model result or human acceptance is claimed.
+New complete review bundles are `review-pubsub-{rename,removal,utf8}-001`.
+`demo-pubsub-utf8-001` passes the one-command launcher including review export.
+
+The first rename analysis at da98c2a rejected C# generic JSON property access as
+reflection. Typed broker-envelope records remove that source ambiguity without
+weakening the locator. A transient premature-response failure remains in
+`pubsub-typed-csharp-001`; `002` and five repeats pass, with explicit close headers
+in the repeated runs. Cause is not established and no recovery guarantee follows.

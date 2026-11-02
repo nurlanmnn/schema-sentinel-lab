@@ -52,5 +52,30 @@ class ValidationProfileTests(unittest.TestCase):
         with self.assertRaisesRegex(ContractError,'runtime-only'):
             load_validation_profile(expanded,'entity-name-removal')
 
+    def test_pubsub_profiles_are_bound_to_source_schema_and_semantic_policy(self):
+        for name, mode in [('pubsub-name-rename', 'rename'), ('pubsub-name-removal', 'removal'), ('pubsub-identifier-utf8', 'utf8')]:
+            fixture = json.loads((ROOT / 'patchgen/fixtures' / name / 'runtime-input.json').read_text())
+            fixture['affected_files'] = CASE['affected_files']
+            profile, diff = load_validation_profile(fixture, name)
+            self.assertEqual(profile['pubsub_case'], mode)
+            self.assertFalse(profile['model_editable'])
+            self.assertEqual(bool(diff), mode != 'utf8')
+            fixture['source_revision'] = 'f' * 40
+            with self.assertRaises(ContractError):
+                load_validation_profile(fixture, name)
+
+    def test_pubsub_semantic_selector_cannot_be_changed_by_profile(self):
+        fixture = json.loads((ROOT / 'patchgen/fixtures/pubsub-name-rename/runtime-input.json').read_text())
+        fixture['affected_files'] = CASE['affected_files']
+        original = Path.read_text
+        def changed(file, *args, **kwargs):
+            result = original(file, *args, **kwargs)
+            if file.name == 'validation-profile.json' and file.parent.name == 'pubsub-name-rename':
+                profile = json.loads(result); profile['pubsub_case'] = 'baseline'
+                return json.dumps(profile)
+            return result
+        with patch.object(Path, 'read_text', changed), self.assertRaisesRegex(ContractError, 'semantic/oracle'):
+            load_validation_profile(fixture, 'pubsub-name-rename')
+
 
 if __name__=='__main__':unittest.main()
