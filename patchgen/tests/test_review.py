@@ -3,6 +3,7 @@ import copy
 import json
 from pathlib import Path
 import tempfile
+import shutil
 import unittest
 from patchgen.review import export, verify, sha
 from patchgen.generator import ContractError
@@ -96,3 +97,21 @@ class ReviewTests(unittest.TestCase):
     def test_stale_report_revision_rejected(self):
         self.report['source_revision']='b'*40;self.write_run()
         with self.assertRaisesRegex(ContractError,'revision mismatch'):export(self.run,self.bundle)
+
+    def test_blocked_analysis_can_only_be_rejected(self):
+        shutil.rmtree(self.run/'proposal')
+        (self.run/'input.json').rename(self.run/'request.json')
+        self.report.update(status='rejected',mode='analysis_rejected',strategy='not_run',validation='not_run')
+        (self.run/'report.json').write_text(json.dumps(self.report))
+        manifest=export(self.run,self.bundle)
+        self.assertFalse(manifest['approval_eligible'])
+        self.assertEqual(manifest['input_artifact'],'request.json')
+        self.assertEqual(manifest['report_artifact'],'report.json')
+        self.assertEqual(verify(self.bundle,self.decision('reject'))['decision'],'reject')
+        with self.assertRaisesRegex(ContractError,'approval requires'):
+            verify(self.bundle,self.decision())
+
+    def test_no_proposal_cannot_claim_validation_passed(self):
+        shutil.rmtree(self.run/'proposal')
+        with self.assertRaisesRegex(ContractError,'rejected analysis'):
+            export(self.run,self.bundle)

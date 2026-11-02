@@ -1,5 +1,11 @@
 # Local patch review
 
+Analysis rejected at the detector, locator or adapter gate can also be exported
+after source identity and analysis records are retained. Such a review shows
+`analysis_rejected`, includes the minimal request and blocking report, and permits
+rejection only. Generation and validation remain `not_run`. Early malformed
+requests or descriptor-build failures may terminate before review export.
+
 Run the bounded type migration and export a portable review in one command:
 
 ```sh

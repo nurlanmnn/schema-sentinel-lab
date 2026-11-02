@@ -11,6 +11,10 @@ required for pinned Python packages, npm/NuGet dependencies and the pinned Buf
 remote generators in `buf.gen.yaml`. Ports **8000–8002** must be free. It uses
 no model, Ollama service, API key or paid inference.
 
+An existing `.venv` must also use Python 3.13. The launcher records and checks
+that interpreter before installing packages; it leaves an incompatible existing
+environment untouched and reports the reason.
+
 From the clone root, run:
 
 ```sh

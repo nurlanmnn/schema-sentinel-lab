@@ -219,3 +219,17 @@ identity, common generated spellings, predicates/switches, warnings and adapter
 rejection. The four non-enum complete locator scenarios still cover the earlier
 36 known lines. The extra enum inventory is reported separately, rather than
 using a combined number to imply broader complete support.
+
+## Reviewable analysis rejection — 2 November 2026
+
+`pipeline-enum-review-blocked-001` detects the pinned unused enum addition,
+retains partial locator evidence, records rejection at the locator gate and
+exports `review-enum-blocked-001`. Generation and validation are explicitly
+`not_run`; no model was requested and no proposal was constructed. Approval is
+disabled. The review exporter/verifier now accepts allowlisted request/pipeline
+report artifacts for this path while preserving the passing-proposal gate.
+
+The software suite passes 103 tests (`blocked-review-tests-001.log`), including
+real descriptor rejection through review export, rejection-only synthetic decision
+verification, and rejection of a passing claim without a proposal. No real human
+decision has been recorded. See decision 0011.

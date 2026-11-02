@@ -1,0 +1,10 @@
+{
+  "source_revision": "d573c55e0d157f6b8c909df81b189aadd9040c1b",
+  "change": {
+    "id": "unused-enum-addition",
+    "schema_path": "proto/v1/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n\nenum Status {\n  STATUS_UNSPECIFIED = 0;\n  STATUS_ACTIVE = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n\nenum Status {\n  STATUS_UNSPECIFIED = 0;\n  STATUS_ACTIVE = 1;\n  STATUS_SUSPENDED = 2;\n}\n"
+  },
+  "intended_behavior": "Add Status.STATUS_SUSPENDED = 2. Status is a top-level unused enum: no Entity field refers to it and none of the supplied runtimes consumes it. Inspect the supplied candidate source files and return no_change if runtime edits are unnecessary. Preserve all Entity behavior. The host still installs the new schema and regenerates bindings. Do not force a runtime edit. The candidate positions are inspection anchors, not confirmed required edits."
+}

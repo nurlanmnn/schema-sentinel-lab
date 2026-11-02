@@ -77,6 +77,10 @@ def execute(case, output):
             report['bootstrap_python'] = sys.version
             if not python.exists():
                 run([sys.executable, '-m', 'venv', ROOT / '.venv'])
+            environment_version = subprocess.check_output([str(python), '--version'], cwd=ROOT, text=True).strip()
+            report['analysis_python'] = environment_version
+            if not environment_version.startswith('Python 3.13.'):
+                raise RuntimeError('Existing .venv must use Python 3.13; choose a fresh clone or recreate that environment before running.')
             run([python, '-m', 'pip', 'install', '-r', ROOT / 'patchgen/pipeline-requirements.txt'])
             run([python, '-m', 'patchgen.pipeline', '--fixture',
                  ROOT / 'patchgen/fixtures' / CASES[case][0] / 'runtime-input.json',

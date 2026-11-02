@@ -8,7 +8,7 @@ import re
 import shutil
 from patchgen.generator import ContractError
 
-ARTIFACTS = ('input.json','report.json','provenance.json','detector.json','locator.json',
+ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
              'proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
@@ -33,13 +33,17 @@ def export(run, output):
     run, output = run.resolve(), output.resolve()
     if output == run or run in output.parents:
         raise ContractError('review output must be outside the source evidence directory')
-    case = json.loads((run/'input.json').read_text())
-    report = json.loads((run/'proposal/report.json').read_text())
+    case_name = 'input.json' if (run/'input.json').exists() else 'request.json'
+    report_name = 'proposal/report.json' if (run/'proposal/report.json').exists() else 'report.json'
+    case = json.loads(artifact_path(run,case_name).read_text())
+    report = json.loads(artifact_path(run,report_name).read_text())
+    if report_name == 'report.json' and report.get('status') != 'rejected':
+        raise ContractError('review without a proposal requires a rejected analysis report')
     if report.get('source_revision') != case.get('source_revision'):
         raise ContractError('review source revision mismatch')
     if not re.fullmatch(r'[0-9a-f]{40}',case.get('source_revision','')):
         raise ContractError('review requires exact source revision')
-    passing = report.get('status') == 'validation_passed'
+    passing = report_name == 'proposal/report.json' and report.get('status') == 'validation_passed'
     if passing and (not (run/'proposal/validated.patch').is_file() or not (run/'proposal/validated.patch').stat().st_size):
         raise ContractError('passing review requires the complete validated patch')
     output.mkdir(parents=True,exist_ok=False)
@@ -53,6 +57,7 @@ def export(run, output):
             raw=destination.read_bytes()
             artifacts[name]=dict(sha256=sha(raw),bytes=len(raw))
     manifest=dict(review_version='1.0',change_id=case['change']['id'],source_revision=case['source_revision'],
+                  input_artifact=case_name,report_artifact=report_name,
                   validation_status=report['status'],mode=report.get('mode','unknown'),strategy=report.get('strategy','unknown'),
                   approval_eligible=passing,human_approval_required=True,artifacts=artifacts,
                   limitations=['Validation applies to the retained testbed and checks only.',
@@ -101,18 +106,22 @@ def verify(bundle, decision):
         if record.get(key)!=manifest.get(key):
             raise ContractError('decision '+key+' mismatch')
     artifacts=manifest.get('artifacts')
-    required={'input.json','proposal/report.json','report.json'}
+    case_name=manifest.get('input_artifact','input.json')
+    report_name=manifest.get('report_artifact','proposal/report.json')
+    if case_name not in ('input.json','request.json') or report_name not in ('report.json','proposal/report.json'):
+        raise ContractError('unknown review input/report artifact')
+    required={case_name,report_name,'report.json'}
     if not isinstance(artifacts,dict) or not required <= artifacts.keys():
         raise ContractError('review manifest missing required artifacts')
     for name,metadata in artifacts.items():
         content=artifact_path(bundle/'artifacts',name).read_bytes()
         if metadata.get('sha256')!=sha(content) or metadata.get('bytes')!=len(content):
             raise ContractError('review artifact changed: '+name)
-    report=json.loads((bundle/'artifacts/proposal/report.json').read_text())
-    case=json.loads((bundle/'artifacts/input.json').read_text())
+    report=json.loads((bundle/'artifacts'/report_name).read_text())
+    case=json.loads((bundle/'artifacts'/case_name).read_text())
     if report.get('source_revision')!=manifest['source_revision'] or case.get('source_revision')!=manifest['source_revision'] or case['change']['id']!=manifest['change_id']:
         raise ContractError('review metadata mismatch')
-    if record['decision']=='approve' and (not manifest.get('approval_eligible') or report.get('status')!='validation_passed'
+    if record['decision']=='approve' and (report_name != 'proposal/report.json' or not manifest.get('approval_eligible') or report.get('status')!='validation_passed'
                                          or 'proposal/validated.patch' not in artifacts):
         raise ContractError('approval requires passing validation and complete patch')
     return dict(status='verified',decision=record['decision'],reviewer=record['reviewer'],manifest_sha256=sha(raw),

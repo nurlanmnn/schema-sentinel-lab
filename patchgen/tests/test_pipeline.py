@@ -110,6 +110,31 @@ class LocatorTests(unittest.TestCase):
 
 
 class PinnedIntegrationTests(unittest.TestCase):
+    def test_rejected_detector_retains_reviewable_report_without_generation(self):
+        import tempfile
+        import subprocess
+        from patchgen.pipeline import run
+        from patchgen.review import export
+        case=json.loads((ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json').read_text())
+        case['change']['id']='test-only-semantic-change'
+        case['change']['new_schema']=case['change']['old_schema']+'\n// Changed meaning, no wire event.\n'
+        case['intended_behavior']='TEST ONLY: a semantic meaning change without a supported structural event.'
+        with tempfile.TemporaryDirectory() as tmp:
+            output=Path(tmp)/'run'
+            try:
+                report=run(case,output,generate=True,strategy='deterministic_rename_roles')
+                self.assertEqual(report['status'],'rejected')
+                self.assertEqual(report['rejected_stage'],'detector')
+                self.assertEqual(report['generation'],'not_run')
+                self.assertFalse((output/'proposal').exists())
+                self.assertFalse((output/'input.json').exists())
+                self.assertNotIn('affected_files',json.loads((output/'request.json').read_text()))
+                manifest=export(output,Path(tmp)/'review')
+                self.assertFalse(manifest['approval_eligible'])
+            finally:
+                if (output/'source').exists():
+                    subprocess.run(['git','worktree','remove','--force',str(output/'source')],cwd=ROOT,check=True,capture_output=True)
+
     def test_three_real_schema_pairs_and_runtime_inventories(self):
         import tempfile
         import subprocess

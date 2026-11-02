@@ -35,7 +35,7 @@ class DemoTests(unittest.TestCase):
 
     def test_install_failure_retains_report_and_log_without_pipeline(self):
         with tempfile.TemporaryDirectory() as tmp, patch('run_demo.preflight', return_value={'source_revision': 'a'*40}), \
-             patch('run_demo.subprocess.check_output', return_value='test'), \
+             patch('run_demo.subprocess.check_output', return_value='Python 3.13.7'), \
              patch('run_demo.subprocess.run', side_effect=OSError('installer unavailable')):
             output = Path(tmp) / 'new'
             self.assertEqual(run_demo.execute('utf8', output), 1)
@@ -44,6 +44,15 @@ class DemoTests(unittest.TestCase):
             self.assertIn('installer unavailable', report['error'])
             self.assertTrue((output / 'demo.log').exists())
             self.assertFalse((output / 'run').exists())
+
+    def test_existing_incompatible_environment_is_rejected_before_install(self):
+        with tempfile.TemporaryDirectory() as tmp, patch('run_demo.preflight', return_value={'source_revision': 'a'*40}), \
+             patch('run_demo.subprocess.check_output', return_value='Python 3.10.0'), \
+             patch('run_demo.subprocess.run') as run:
+            output = Path(tmp) / 'new'
+            self.assertEqual(run_demo.execute('utf8', output), 1)
+            run.assert_not_called()
+            self.assertIn('Existing .venv', json.loads((output/'demo-report.json').read_text())['error'])
 
 
 if __name__ == '__main__':

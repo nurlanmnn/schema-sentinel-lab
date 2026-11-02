@@ -37,6 +37,9 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits")
     old = command(['git','show',case['source_revision']+':'+change['schema_path']],ROOT)
     if old != change['old_schema']:
         raise ContractError('old schema does not match exact source revision')
+    save(output/'request.json', dict(source_revision=revision,
+        change={key:change[key] for key in ('id','schema_path','old_schema','new_schema')},
+        intended_behavior=case['intended_behavior']))
     detector = detect(old,change['new_schema'],change['schema_path'],case['source_revision'],change['id'],case['intended_behavior'])
     save(output/'detector.json',detector)
     locator = locate(source,detector)
@@ -52,11 +55,19 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits")
         metrics = coverage(truth,locator)
         metrics['classification_correct'] = detector['change']['category'] == truth.get('category', 'field_removed' if profile_name == 'entity-name-removal' else None)
         save(output/'measurement.json',metrics)
-    generated, provenance = adapt(source,detector,locator)
-    save(output/'input.json',generated)
-    save(output/'provenance.json',provenance)
     report = dict(status='adapted',implementation=implementation,measurement=metrics,human_approval_required=True,
                   source_revision=case['source_revision'],scope='runtime syntax candidates; no receiver-type or semantic completeness proof')
+    try:
+        generated, provenance = adapt(source,detector,locator)
+    except ContractError as error:
+        report.update(status='rejected',mode='analysis_rejected',strategy='not_run',error=str(error),
+                      generation='not_run',validation='not_run',
+                      rejected_stage='detector' if detector['status'] != 'complete' else
+                                     'locator' if locator['status'] != 'complete' else 'adapter')
+        save(output/'report.json',report)
+        return report
+    save(output/'input.json',generated)
+    save(output/'provenance.json',provenance)
     if generate or response:
         args = [sys.executable,'-m','patchgen.generator','--source',str(source),'--fixture',str(output/'input.json'),
                 '--output',str(output/'proposal'),'--strategy',strategy,'--validate']
@@ -95,7 +106,7 @@ def main():
             from patchgen.review import export
             export(args.output,args.review_output)
         print(json.dumps(report,indent=2))
-        return int(report['status']=='failed')
+        return int(report['status'] in ('failed','rejected'))
     except (ValueError,OSError,KeyError,subprocess.SubprocessError) as error:
         if args.output.exists() and not isinstance(error,FileExistsError):
             save(args.output/'error.json',dict(status='rejected',error=str(error)))

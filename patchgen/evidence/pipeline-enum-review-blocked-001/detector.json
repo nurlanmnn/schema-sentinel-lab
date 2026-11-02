@@ -1,0 +1,28 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.0",
+  "status": "complete",
+  "source_revision": "d573c55e0d157f6b8c909df81b189aadd9040c1b",
+  "old_schema_sha256": "8ecdcc7f727404bcd7cce66f3ec07ff401f87b92a0e7cd285216da0b8c122765",
+  "new_schema_sha256": "effe170a1feb9ea91f0a6493339136d9219b3836e9b076b199071eefada3eab5",
+  "old_descriptor_sha256": "ffa6d813de2038bd926b108e498b4b409201a28443fbf8b6ebe1a221f83dfdfd",
+  "new_descriptor_sha256": "60b597e0ee2db21fbf98901f846840b9774394849f30496c61a89f760eff02b7",
+  "events": [
+    {
+      "category": "enum_value_added",
+      "enum": "simulation.v1.Status",
+      "value": "STATUS_SUSPENDED",
+      "number": 2
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "unused-enum-addition",
+    "category": "enum_value_added",
+    "schema_path": "proto/v1/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n\nenum Status {\n  STATUS_UNSPECIFIED = 0;\n  STATUS_ACTIVE = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n\nenum Status {\n  STATUS_UNSPECIFIED = 0;\n  STATUS_ACTIVE = 1;\n  STATUS_SUSPENDED = 2;\n}\n"
+  },
+  "intended_behavior": "Add Status.STATUS_SUSPENDED = 2. Status is a top-level unused enum: no Entity field refers to it and none of the supplied runtimes consumes it. Inspect the supplied candidate source files and return no_change if runtime edits are unnecessary. Preserve all Entity behavior. The host still installs the new schema and regenerates bindings. Do not force a runtime edit. The candidate positions are inspection anchors, not confirmed required edits."
+}
