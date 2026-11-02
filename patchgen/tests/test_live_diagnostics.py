@@ -26,6 +26,12 @@ class DiagnosticTests(unittest.TestCase):
             self.assertEqual(result['contract_results'],dict(passed=0,failed=6,unknown=0))
             self.assertEqual({r['outcome'] for r in result['rows']},{'file_contract_or_generation_rejected'})
             self.assertIn('bad review',(Path(tmp)/'analysis/analysis.md').read_text())
+            records[0].update(requests=[dict(request='01',edit_validation=dict(status='passed'))],
+                              error="expected an indented block after 'if' statement on line 32 (main.py, line 33)")
+            (root/'summary.json').write_text(json.dumps(summary))
+            syntax=analyze(root,Path(tmp)/'syntax-analysis')
+            self.assertEqual(syntax['rows'][0]['outcome'],'python_syntax')
+            self.assertEqual(syntax['rows'][0]['failure_evidence']['python_syntax'],records[0]['error'])
             summary['results'].append(records[0])
             (root/'summary.json').write_text(json.dumps(summary))
             with self.assertRaises(ValueError):analyze(root,Path(tmp)/'duplicate-analysis')

@@ -70,6 +70,9 @@ def analyze(source,output):
             reason='file_contract_or_generation_rejected'
         elif record['status'] in ('needs_clarification','no_change'):
             reason=record['status']
+        elif re.search(r'\([^,\n]*\.py, line \d+\)',record.get('error') or ''):
+            # ast.parse failures are retained as SyntaxError strings before build logs.
+            reason='python_syntax'
         elif (root/'telemetry/report.json').is_file() and read(root/'telemetry/report.json').get('status')!='passed':
             reason='independent_telemetry_semantics'
         elif (root/'pubsub/report.json').is_file() and read(root/'pubsub/report.json').get('status')!='passed':
@@ -83,6 +86,7 @@ def analyze(source,output):
         rows.append(dict(case=name,outcome=reason,validated=record['generated_patch_validated'],model_requests=record['model_requests'],
                          generation_seconds=record['generation_seconds'],workflow_seconds=record['workflow_seconds'],error=record.get('error'),
                          requests=request_details(root,requests),failure_evidence=failure_evidence(root)))
+        if reason=='python_syntax':rows[-1]['failure_evidence']['python_syntax']=record['error']
     model_paths=[source/r['case']/'run/proposal/model.json' for r in summary['results']]
     if not all(path.is_file() for path in model_paths):
         raise ValueError('suite is missing per-case model identity evidence')
@@ -122,6 +126,7 @@ def analyze(source,output):
                  request['load_seconds'],request['prompt_eval_seconds'],request['eval_seconds'],request['output_tokens']))+' |')
     for row in rows:
         diagnostics=row['failure_evidence'].get('compiler_diagnostics',[])
+        if row['failure_evidence'].get('python_syntax'):diagnostics=diagnostics+[row['failure_evidence']['python_syntax']]
         errors=[request for request in row['requests'] if request['error']]
         if diagnostics or errors:
             lines+=['',f"## {row['case']} rejection evidence",'']
