@@ -202,3 +202,20 @@ outcomes matching does not mean all cases are supported migrations.
 object format to SHA-1 and disabling automatic line-ending conversion during
 staging. The final corpus suite checkpoint is 96 passing software tests
 (`corpus-tests-001.log`), with seed reconstruction rechecked separately.
+
+## Active enum candidate evidence — 2 November 2026
+
+Locator 1.1 records descriptor-derived enum/value/field candidates while retaining
+partial status and blocking the adapter. The inventory BACKORDERED scenario now
+recovers all nine authored enum consumer lines with two conservative import-line
+extras. It identifies construction, observations and a stock-state predicate by
+syntax; it does not prove their intended behavior, alias resolution or exhaustive
+coverage. No enum proposal, runtime validation or acceptance is counted.
+
+`domain-enum-candidates-001` records the initial candidate implementation;
+`domain-enum-candidates-002` records the versioned final implementation. The suite
+passes 100 software tests (`enum-candidate-tests-001.log`), including nested enum
+identity, common generated spellings, predicates/switches, warnings and adapter
+rejection. The four non-enum complete locator scenarios still cover the earlier
+36 known lines. The extra enum inventory is reported separately, rather than
+using a combined number to imply broader complete support.

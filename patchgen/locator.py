@@ -51,18 +51,70 @@ def scan(text, language, field):
                  resolution='resolved') for line,kinds in sorted(lines.items())], warnings, tree.root_node.has_error
 
 
+def enum_symbols(detector):
+    """Descriptor-derived names only; no receiver resolution or exhaustiveness proof."""
+    from patchgen.detector import descriptor
+    file, _ = descriptor(detector['change']['old_schema'], detector['change']['schema_path'])
+    target = detector['events'][0]['enum']
+    declarations = {file.package + '.' + e.name: e for e in file.enum_type}
+    fields = []
+    def visit(messages, prefix):
+        for message in messages:
+            full = prefix + '.' + message.name
+            declarations.update({full + '.' + e.name: e for e in message.enum_type})
+            fields.extend(dict(message=full, name=f.name, number=f.number)
+                          for f in message.field if f.type == 14 and f.type_name == '.' + target)
+            visit(message.nested_type, full)
+    visit(file.message_type, file.package)
+    if target not in declarations:
+        raise ValueError('old enum descriptor identity missing')
+    enum = declarations[target]
+    # Include common generated spellings and unqualified value names. These
+    # remain conservative string identities, not imported-symbol resolution.
+    symbols = {enum.name, *(f['name'] for f in fields)}
+    for value in enum.value:
+        symbols.add(value.name)
+        lower = value.name.lower()
+        symbols.update(names(lower))
+        # Some generators strip a matching enum-name prefix from value names.
+        prefix = re.sub(r'(?<!^)(?=[A-Z])', '_', enum.name).lower() + '_'
+        if lower.startswith(prefix):
+            symbols.update(names(lower[len(prefix):]))
+    return dict(enum=target, fields=fields, symbols=sorted(symbols), status='candidate_only',
+                limitations=['No alias, receiver, numeric dispatch, exhaustiveness or default-case proof.',
+                             'All enum additions remain partial and blocked from generation.'])
+
+
+def scan_enum(text, language, symbols):
+    lines, warnings, error = {}, [], False
+    for symbol in symbols:
+        found, issues, failed = scan(text, language, symbol)
+        error |= failed
+        for issue in issues:
+            if issue not in warnings:
+                warnings.append(issue)
+        for position in found:
+            lines.setdefault(position['start_line'], set()).add(symbol)
+    return [dict(start_line=line, end_line=line,
+                 reason='Enum syntax candidate; matched symbols: ' + ', '.join(sorted(found)),
+                 resolution='resolved') for line, found in sorted(lines.items())], warnings, error
+
+
 def locate(repo, detector):
     revision = detector['source_revision']
     paths = command(['git','ls-tree','-r','--name-only',revision,'--','runtimes/'],repo).splitlines()
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.0',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.1',
                   source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='resolved syntax candidates, receiver types unproved; conservative cross-version matches')
     if detector['status'] != 'complete':
         record['issues'].append('detector incomplete'); return record
     event = detector['events'][0]
+    enum = None
     if 'old_name' not in event:
-        record['issues'].append('enum consumer analysis unsupported'); return record
+        enum = enum_symbols(detector)
+        record['enum_analysis'] = enum
+        record['issues'].append('enum candidates only; consumer behavior/exhaustiveness analysis unsupported')
     for path in paths:
         suffix = Path(path).suffix
         if suffix not in LANGUAGES:
@@ -71,7 +123,8 @@ def locate(repo, detector):
             continue
         language = LANGUAGES[suffix]
         text = command(['git','show',revision+':'+path],repo)
-        positions, warnings, error = scan(text,language,event['old_name'])
+        positions, warnings, error = (scan_enum(text,language,enum['symbols']) if enum else
+                                      scan(text,language,event['old_name']))
         record['scanned'].append(dict(path=path, source_sha256=digest(text), language=language))
         if error or warnings:
             record['issues'].append(dict(path=path,parse_error=error,warnings=warnings))

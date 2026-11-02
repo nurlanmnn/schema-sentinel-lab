@@ -18,19 +18,21 @@ class CorpusTests(unittest.TestCase):
             self.assertEqual(summary['generated_validated_migrations'], 0)
             self.assertFalse(any('error' in r for r in summary['records']))
             measured = [r['measurement'] for r in summary['records'] if r['measurement']]
-            self.assertEqual(sum(m['expected_sites'] for m in measured), 36)
-            self.assertEqual(sum(m['matched_sites'] for m in measured), 36)
-            self.assertFalse(any(m['extra'] or m['missed'] for m in measured))
+            self.assertEqual(sum(m['expected_sites'] for m in measured), 45)
+            self.assertEqual(sum(m['matched_sites'] for m in measured), 45)
+            self.assertFalse(any(m['missed'] for m in measured))
+            self.assertEqual(sum(len(m['extra']) for m in measured), 2)
             rejected = next(r for r in summary['records'] if r['id'] == 'inventory-state-backorder')
             self.assertEqual(rejected['locator_status'], 'partial')
+            self.assertFalse((Path(tmp)/'run/inventory-state-backorder/input.json').exists())
 
     def test_scoring_failure_cannot_keep_matching_status(self):
         with tempfile.TemporaryDirectory() as tmp, patch('patchgen.corpus.coverage', side_effect=KeyError('broken scorer')):
             summary = corpus.run(Path(tmp) / 'run')
             failed = [r for r in summary['records'] if 'error' in r]
-            self.assertEqual(len(failed), 4)
+            self.assertEqual(len(failed), 5)
             self.assertTrue(all(not r['expectation_match'] for r in failed))
-            self.assertEqual(summary['expectation_matches'], 4)
+            self.assertEqual(summary['expectation_matches'], 3)
 
     def test_seed_revision_is_reconstructible(self):
         with tempfile.TemporaryDirectory() as tmp:

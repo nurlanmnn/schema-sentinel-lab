@@ -1,0 +1,80 @@
+{
+  "contract_version": "1.0",
+  "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+  "change": {
+    "id": "orders-remove-currency",
+    "category": "field_removed",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.orders;\nmessage Order {\n  string order_id = 1;\n  int64 amount_cents = 2;\n  string currency = 3;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.orders;\nmessage Order {\n  string order_id = 1;\n  int64 amount_cents = 2;\n  reserved 3;\n  reserved \"currency\";\n}\n"
+  },
+  "intended_behavior": "Adopt a USD-only ledger: remove currency construction/observations and replace is_usd with explicit ledger policy. Preserve amount_cents and order_id; reserve currency number/name.",
+  "affected_files": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "language": "csharp",
+      "source_context": "using Demo.Orders;\nclass OrderReader {\n    static Order Sample() => new Order { OrderId = \"O-1\", AmountCents = 1250, Currency = \"USD\" };\n    static object Observe(Order order) => new { amount_cents = order.AmountCents, currency = order.Currency };\n    static bool IsUsd(Order order) => order.Currency == \"USD\";\n}\n",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: assignment_expression"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: anonymous_object_creation_expression, member_access_expression"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: member_access_expression"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "language": "python",
+      "source_context": "from generated.orders_pb2 import Order\n\ndef sample():\n    return Order(order_id=\"O-1\", amount_cents=1250, currency=\"USD\")\ndef observe(order):\n    return {\"amount_cents\": order.amount_cents, \"currency\": order.currency}\ndef is_usd(order):\n    return order.currency == \"USD\"\n",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: keyword_argument"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: attribute"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "language": "typescript",
+      "source_context": "import { Order } from \"./generated/orders\";\nexport const sample = () => Order.create({ orderId: \"O-1\", amountCents: 1250, currency: \"USD\" });\nexport const observe = (order: Order) => ({ amount_cents: order.amountCents, currency: order.currency });\nexport const isUsd = (order: Order) => order.currency === \"USD\";\n",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: pair"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression, pair"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression"
+        }
+      ]
+    }
+  ]
+}

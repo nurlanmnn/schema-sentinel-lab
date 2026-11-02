@@ -79,6 +79,11 @@ works structurally, but enum consumer location is explicitly unsupported and
 adapter rejection is expected. Imported/multi-file schema resolution is outside
 this single-file build and fails when dependencies are unavailable.
 
+Locator 1.1 now retains enum type/value/field syntax candidates and warnings
+before rejecting. This supports inspection of active enum predicates, but overall
+enum status stays partial: receiver/alias identity, numeric dispatch and enum
+behavior are unproved. See decision 0010; no enum generation is enabled.
+
 See decisions 0004/0005 for candidate review, token-edit boundaries and dependency
 license records. Generated naming is bounded to the tested snake/camel/Pascal
 conventions; acronym/reserved-word edge cases need separate validation.

@@ -138,7 +138,46 @@
       "expected_category": "enum_value_added",
       "behavior": "Add active BACKORDERED stock state; observations report it, but can_fulfill must remain false for this state.",
       "new_schema_file": "inventory-state-backorder.proto",
-      "ground_truth": null
+      "ground_truth": {
+        "method": "manual inventory of enum field construction, observations and active stock-state predicate; imports are conservative extras",
+        "runtime_sites": [
+          {
+            "path": "runtimes/python/consumer.py",
+            "lines": [
+              4,
+              6,
+              8
+            ]
+          },
+          {
+            "path": "runtimes/typescript/consumer.ts",
+            "lines": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "path": "runtimes/csharp/consumer.cs",
+            "lines": [
+              3,
+              4,
+              5
+            ]
+          }
+        ]
+      },
+      "expected_locator_status": "partial",
+      "expected_extras": [
+        {
+          "path": "runtimes/python/consumer.py",
+          "line": 1
+        },
+        {
+          "path": "runtimes/typescript/consumer.ts",
+          "line": 1
+        }
+      ]
     },
     {
       "id": "orders-remove-currency",

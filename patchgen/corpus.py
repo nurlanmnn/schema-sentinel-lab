@@ -67,13 +67,14 @@ def run(output):
             # Consult authored expectations only AFTER production output is retained.
             truth = case['ground_truth']
             record['measurement'] = coverage(truth, located) if truth else None
-            expected_locator = 'complete' if truth else 'partial'
+            expected_locator = case.get('expected_locator_status', 'complete' if truth else 'partial')
             expectation_match = (record['detector_status'] == case['expected_status']
                 and record['category'] == case['expected_category']
                 and record['locator_status'] == expected_locator)
             if truth:
                 measured = record['measurement']
-                expectation_match &= not measured['missed'] and not measured['extra']
+                expected_extras = case.get('expected_extras', [])
+                expectation_match &= (not measured['missed'] and measured['extra'] == expected_extras)
             record['expectation_match'] = bool(expectation_match)
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
             record['expectation_match'] = False

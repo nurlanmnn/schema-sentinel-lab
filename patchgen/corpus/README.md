@@ -23,7 +23,7 @@ and exact source bytes; source/content hashes are retained in production records
 | Speed units m/s to km/h | partial, no structural event | blocked | Scale values and threshold; semantics are not inferred |
 | Stock quantity int32 to int64 | field_type_changed | 9 known lines | Exact large integers, including TypeScript representation |
 | Label list to scalar | partial | blocked | Cardinality and first-label policy |
-| Add active BACKORDERED enum value | enum_value_added | partial, unsupported | Analyze active state predicates and enum consumers |
+| Add active BACKORDERED enum value | enum_value_added | 9 candidate lines + 2 import extras; partial | Resolve aliases, active predicates and enum behavior before generation |
 | Remove order currency | field_removed | 9 known lines | Explicit USD-only policy and predicate migration |
 | Amount gains optional presence | partial | blocked | Preserve absence versus explicit zero |
 
@@ -31,6 +31,10 @@ The supported locator rows contain 36 known lines across four scenarios and
 three domains. Two scenarios use the same telemetry sites. Recovery of these
 lines is a small authored-fixture result, not general impact completeness.
 Receiver identity and indirect uses remain outside the locator's proof.
+
+The active enum scenario now has its own nine-line inventory. Its partial scan
+recovers those lines and reports Python/TypeScript imports as two conservative
+extras. It remains blocked from the adapter and adds zero validated migrations.
 
 Run from the Lab root after installing `patchgen/pipeline-requirements.txt`:
 
