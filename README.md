@@ -163,3 +163,15 @@ required for the wire-type change.
 `--case telemetry-units` applies an explicitly supplied m/s-to-km/h policy to
 producers, observations and thresholds. The structural detector does not infer
 units. All three telemetry demos leave human review pending.
+
+Run all six distinct authored migrations sequentially with:
+
+```sh
+python3.13 run_benchmark.py --local-codegen --output patchgen/evidence/NEW-suite
+```
+
+The suite retains every case and reports structural classification, candidate-site
+recall, runtime validation and prepared-demo timing. See
+[decision 0018](docs/decisions/0018-six-migration-suite.md) for prerequisites,
+denominators and limits. These deterministic cases do not establish live model
+performance or meet the twenty-case benchmark target.

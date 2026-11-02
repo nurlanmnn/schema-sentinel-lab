@@ -1,0 +1,52 @@
+{
+  "path": "runtimes/typescript/telemetry.ts",
+  "edits": [
+    {
+      "start": 507,
+      "end": 515,
+      "before": "speedMps",
+      "after": "speedKph",
+      "role": "field_rename"
+    },
+    {
+      "start": 595,
+      "end": 604,
+      "before": "speed_mps",
+      "after": "speed_kph",
+      "role": "field_rename"
+    },
+    {
+      "start": 613,
+      "end": 621,
+      "before": "speedMps",
+      "after": "speedKph",
+      "role": "field_rename"
+    },
+    {
+      "start": 663,
+      "end": 671,
+      "before": "speedMps",
+      "after": "speedKph",
+      "role": "field_rename"
+    },
+    {
+      "start": 517,
+      "end": 530,
+      "before": "request.speed",
+      "after": "request.speed * 3.6",
+      "role": "producer_mps_to_kph"
+    },
+    {
+      "start": 674,
+      "end": 678,
+      "before": "30.0",
+      "after": "108.0",
+      "role": "threshold_mps_to_kph"
+    }
+  ],
+  "candidate_lines": [
+    9,
+    10,
+    11
+  ]
+}
