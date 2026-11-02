@@ -25,6 +25,34 @@ static (IMessage Entity, Dictionary<string, string> Fields) ProcessEntity(byte[]
     return (entity, fields);
 }
 
+if (args.Contains("--subscribe"))
+{
+    var broker = Environment.GetEnvironmentVariable("PUBSUB_URL") ?? "";
+    if (!System.Text.RegularExpressions.Regex.IsMatch(broker, @"^http://127\.0\.0\.1:\d+$"))
+        throw new ArgumentException("PUBSUB_URL must be a loopback HTTP port");
+    using var client = new HttpClient { BaseAddress = new Uri(broker), Timeout = TimeSpan.FromSeconds(5) };
+    async Task<JsonElement> Post(string path, object data)
+    {
+        using var content = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
+        using var response = await client.PostAsync(path, content);
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException($"Broker returned {response.StatusCode}: {await response.Content.ReadAsStringAsync()}");
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        return document.RootElement.Clone();
+    }
+    await Post("/subscribe", new { subscriber = "csharp", runtime = "csharp", topics = new[] { "entity.v1", "entity.v2" } });
+    while (true)
+    {
+        var delivery = (await Post("/poll", new { subscriber = "csharp" })).GetProperty("delivery");
+        if (delivery.ValueKind == JsonValueKind.Null) { await Task.Delay(50); continue; }
+        var version = delivery.GetProperty("version").GetString() ?? "";
+        if (delivery.GetProperty("topic").GetString() != "entity." + version)
+            throw new ArgumentException("Topic/version mismatch");
+        var (_, fields) = ProcessEntity(Convert.FromBase64String(delivery.GetProperty("payload").GetString() ?? ""), version);
+        await Post("/ack", new { subscriber = "csharp", message_id = delivery.GetProperty("message_id").GetInt32(), fields });
+    }
+}
+
 if (args.Contains("--healthcheck"))
 {
     using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(1) };

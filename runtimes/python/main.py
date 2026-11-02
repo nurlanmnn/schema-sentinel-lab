@@ -1,5 +1,7 @@
 """Entity example and HTTP relay using the canonical generated bindings."""
 import argparse
+import base64
+import time
 import importlib
 import json
 import os
@@ -71,12 +73,40 @@ class Relay(BaseHTTPRequestHandler):
             self.send_error(502, str(error))
 
 
+def subscribe():
+    """Decode queued topic messages; an ack contains this runtime's fields."""
+    broker = os.environ['PUBSUB_URL']
+    if not broker.startswith('http://127.0.0.1:') or not broker.rsplit(':', 1)[-1].isdigit():
+        raise ValueError('PUBSUB_URL must be a loopback HTTP port')
+    subscriber = 'python'
+
+    def post(path, data):
+        request = urllib.request.Request(broker + path, data=json.dumps(data).encode(),
+                                         headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(request, timeout=5) as response:
+            return json.load(response)
+
+    post('/subscribe', {'subscriber': subscriber, 'runtime': 'python', 'topics': ['entity.v1', 'entity.v2']})
+    while True:
+        delivery = post('/poll', {'subscriber': subscriber})['delivery']
+        if delivery is None:
+            time.sleep(0.05)
+            continue
+        if delivery['topic'] != 'entity.' + delivery['version']:
+            raise ValueError('Topic/version mismatch')
+        _, fields = process_entity(base64.b64decode(delivery['payload'], validate=True), delivery['version'])
+        post('/ack', {'subscriber': subscriber, 'message_id': delivery['message_id'], 'fields': fields})
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--serve", action="store_true")
+    parser.add_argument("--subscribe", action="store_true")
     parser.add_argument("--version", choices=["v1", "v2"], default="v1")
     args = parser.parse_args()
-    if args.serve:
+    if args.subscribe:
+        subscribe()
+    elif args.serve:
         with RelayServer((os.environ.get("HOST", "0.0.0.0"), int(os.environ.get("PORT", "8000"))), Relay) as server:
             print(f"Python listening on {server.server_address[0]}:{server.server_port}", flush=True)
             server.serve_forever()

@@ -1,0 +1,87 @@
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+
+> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CsharpApp -> /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/csharp/bin/Release/net8.0/CsharpApp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.40
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m unittest discover -s testbed/tests -p test_*.py -v
+test_final_payload_change_fails (test_evidence.EvidenceTests.test_final_payload_change_fails) ... ok
+test_intermediate_misdecode_fails_even_when_final_payload_matches (test_evidence.EvidenceTests.test_intermediate_misdecode_fails_even_when_final_payload_matches) ... ok
+test_matching_decoders (test_evidence.EvidenceTests.test_matching_decoders) ... ok
+test_missing_runtime_fails (test_evidence.EvidenceTests.test_missing_runtime_fails) ... ok
+test_trace_fails_separately (test_evidence.EvidenceTests.test_trace_fails_separately) ... ok
+test_cleanup_stops_a_running_child_process (test_local_runner.LocalRunnerTests.test_cleanup_stops_a_running_child_process) ... ok
+test_macos_and_linux_use_the_bin_interpreter (test_local_runner.LocalRunnerTests.test_macos_and_linux_use_the_bin_interpreter) ... ok
+test_missing_tools_fail_before_installation (test_local_runner.LocalRunnerTests.test_missing_tools_fail_before_installation) ... ok
+test_occupied_port_does_not_start_or_stop_other_programs (test_local_runner.LocalRunnerTests.test_occupied_port_does_not_start_or_stop_other_programs) ... ok
+test_python_server_starts_without_reverse_dns (test_local_runner.LocalRunnerTests.test_python_server_starts_without_reverse_dns) ... ok
+test_windows_uses_the_scripts_interpreter (test_local_runner.LocalRunnerTests.test_windows_uses_the_scripts_interpreter) ... ok
+test_bad_requests_and_capacity (test_pubsub.BrokerTests.test_bad_requests_and_capacity) ... ok
+test_fanout_isolation_independent_fifo_and_poll_redelivery (test_pubsub.BrokerTests.test_fanout_isolation_independent_fifo_and_poll_redelivery) ... ok
+test_independent_wire_encoder_known_bytes (test_pubsub.BrokerTests.test_independent_wire_encoder_known_bytes) ... ok
+test_invalid_ack_does_not_mutate_and_duplicate_rejects (test_pubsub.BrokerTests.test_invalid_ack_does_not_mutate_and_duplicate_rejects) ... ok
+test_no_history_replay (test_pubsub.BrokerTests.test_no_history_replay) ... ok
+test_observation_shape_rejected_before_queue_mutation (test_pubsub.BrokerTests.test_observation_shape_rejected_before_queue_mutation) ... ok
+test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject (test_pubsub.EvidenceTests.test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject) ... ok
+test_real_http_malformed_routes_types_and_success (test_pubsub.HttpBrokerTests.test_real_http_malformed_routes_types_and_success) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.520s
+
+OK
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m testbed.pubsub.run --output patchgen/evidence/pubsub-launcher-001
+{
+  "status": "passed",
+  "mode": "actual_local_pubsub",
+  "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab",
+  "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+  "human_approval_required": true,
+  "generated_patch_approval": false,
+  "runtime_revision": "7951e9949d68a9416378dd7bb35336fa9ee4b880",
+  "runtime_git_status": [
+    " M docs/patch-generation/independent-results.md",
+    " M run_local.py",
+    " M runtimes/csharp/main.cs",
+    " M runtimes/python/main.py",
+    " M runtimes/typescript/main.ts",
+    " M testbed/README.md"
+  ],
+  "tools": {
+    "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "node": "v24.10.0",
+    "dotnet": "8.0.426"
+  },
+  "runtime_source_sha256": {
+    "runtimes/python/main.py": "db2d3f5f58b509875d0ab99ea33dbc92a4a2a139bee663ffd7706e980ece8611",
+    "runtimes/typescript/main.ts": "69edaf721533dcd1fa76ea84a97529ecd9ccc909097c15535e7379623cf574f2",
+    "runtimes/csharp/main.cs": "684b969df01d1aba2dd6bcba42bd395e640e663927be2cdae9486d0761f3eff9",
+    "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+    "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+  },
+  "harness_source_sha256": {
+    "testbed/pubsub/run.py": "541dcc03d681b74fe920a8d455589eaabbf76198c7a1f870778cf1ce56838d62",
+    "testbed/pubsub/broker.py": "d6f7fa54d8bb4e53f4658e88df2c0e17ca99691627d6b0ae4e30660dc01c5ee4",
+    "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+  },
+  "publication_cases": 8,
+  "decoded_deliveries": 24,
+  "topics": 2,
+  "runtimes": 3,
+  "elapsed_seconds": 0.7434144170256332,
+  "children_stopped": true,
+  "broker_stopped": true
+}

@@ -19,7 +19,29 @@ async function readBody(request: IncomingMessage): Promise<Buffer> {
   return Buffer.concat(chunks);
 }
 
-if (process.argv.includes("--serve")) {
+async function subscribe(): Promise<void> {
+  const broker = process.env.PUBSUB_URL ?? "";
+  if (!/^http:\/\/127\.0\.0\.1:\d+$/.test(broker)) throw new Error("PUBSUB_URL must be a loopback HTTP port");
+  async function post(path: string, data: unknown) {
+    const response = await fetch(broker + path, { method: "POST",
+      headers: { "content-type": "application/json" }, body: JSON.stringify(data),
+      signal: AbortSignal.timeout(5000) });
+    if (!response.ok) throw new Error(`Broker returned ${response.status}: ${await response.text()}`);
+    return response.json();
+  }
+  await post("/subscribe", { subscriber: "typescript", runtime: "typescript", topics: ["entity.v1", "entity.v2"] });
+  while (true) {
+    const { delivery } = await post("/poll", { subscriber: "typescript" });
+    if (delivery === null) { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
+    if (delivery.topic !== "entity." + delivery.version) throw new Error("Topic/version mismatch");
+    const { fields } = processEntity(Buffer.from(delivery.payload, "base64"), delivery.version);
+    await post("/ack", { subscriber: "typescript", message_id: delivery.message_id, fields });
+  }
+}
+
+if (process.argv.includes("--subscribe")) {
+  subscribe().catch(error => { console.error(error); process.exitCode = 1; });
+} else if (process.argv.includes("--serve")) {
   createServer(async (request, response) => {
     if (request.method === "GET" && request.url === "/health") {
       response.writeHead(200, { "content-type": "application/json" });

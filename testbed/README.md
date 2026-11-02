@@ -81,3 +81,28 @@ docker compose -f testbed/compose.yaml --profile test down --remove-orphans
 
 The second command removes the test containers. On macOS and Linux,
 `make test-docker` runs both steps automatically.
+
+## Local pub/sub fan-out (independent Lab)
+
+After `python3 run_local.py setup`, run:
+
+```sh
+python3 run_local.py pubsub --output patchgen/evidence/my-new-pubsub-run
+```
+
+Use a new output directory each time. This builds TypeScript/C#, runs testbed
+unit checks, starts an in-memory broker on a random loopback port, starts three
+subscriber processes, and publishes eight independent wire-encoded protobuf
+inputs to the two topics in `pubsub/topics.json`. It checks every runtime's
+acknowledgement fields, delivery order and recipient inventory, and then stops
+all children and the broker. It uses no model or external broker dependency.
+
+`report.json`, `expected.json`, `broker-state.json` and each runtime's log retain
+hashes, observations, timing scope and cleanup outcomes. An already built checkout
+can run `.venv/bin/python -m testbed.pubsub.run --output NEW-DIRECTORY` directly.
+
+This is separate from the HTTP relay and the older pinned patch-validation
+fixtures. The broker is local, bounded and volatile; no durable delivery,
+exactly-once processing, authentication or network-failure recovery is claimed.
+See [decision 0012](../docs/decisions/0012-local-pubsub.md) for the HTTP contract.
+The samples are not additional schema-change cases or a human baseline.

@@ -242,3 +242,14 @@ fetched to `13cd17c` and its one-command removal demo passed at
 All three bounded policies have now been exercised from that full remote clone
 at the revisions listed in its reproducibility summary. Human acceptance remains
 pending; no background server or model service was required by these demos.
+
+## Local pub/sub testbed follow-up (2 November 2026)
+
+Decision 0012 adds actual in-memory fan-out to independent subscriber processes
+in Python, TypeScript and C#. `pubsub-local-002` passes eight publications across
+v1/v2 topics with 24 matching decoder acknowledgements. The initial C# HTTP
+transfer-mode failure remains in `pubsub-local-001`. Nineteen testbed unit checks,
+104 patch-generation checks and four original relay roundtrips pass. This path
+currently exercises the unchanged schema baseline; existing pinned generated
+proposals have not yet been validated through pub/sub. Transport samples are not
+new realistic schema-change benchmark cases. No human decision is inferred.

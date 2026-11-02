@@ -57,9 +57,14 @@ def build(tools):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", nargs="?", default="all", choices=("all", "setup", "test", "start"),
-                        help="all: setup and test (default); setup: install dependencies; test: build and test; start: build and keep services running")
+    parser.add_argument("command", nargs="?", default="all", choices=("all", "setup", "test", "start", "pubsub"),
+                        help="all: setup and test (default); setup: install dependencies; test: build and test; start: build and keep services running; pubsub: build and check fan-out")
+    parser.add_argument("--output", type=Path, help="new pubsub evidence directory (required for pubsub)")
     args = parser.parse_args()
+    if args.command == "pubsub" and args.output is None:
+        parser.error("pubsub requires --output NEW-DIRECTORY")
+    if args.command != "pubsub" and args.output is not None:
+        parser.error("--output is supported only for pubsub")
     try:
         tools = check_tools()
         if args.command in ("all", "setup"):
@@ -71,6 +76,9 @@ def main():
         python = str(venv_python())
         if args.command != "start":
             run([python, "-m", "unittest", "discover", "-s", "testbed/tests", "-p", "test_*.py", "-v"])
+        if args.command == "pubsub":
+            run([python, "-m", "testbed.pubsub.run", "--output", args.output])
+            return 0
         command = [python, "testbed/scripts/run-local.py"]
         if args.command == "start":
             command.append("--serve")
