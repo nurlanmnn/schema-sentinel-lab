@@ -1,0 +1,152 @@
+[
+  {
+    "package": "@protobufjs/aspromise",
+    "version": "1.1.2",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_aspromise-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/base64",
+    "version": "1.1.2",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_base64-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/codegen",
+    "version": "2.0.5",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_codegen-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/eventemitter",
+    "version": "1.1.1",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_eventemitter-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/fetch",
+    "version": "1.1.1",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_fetch-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/float",
+    "version": "1.0.2",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_float-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/path",
+    "version": "1.1.2",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_path-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/pool",
+    "version": "1.1.0",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_pool-LICENSE"
+    ]
+  },
+  {
+    "package": "@protobufjs/utf8",
+    "version": "1.1.2",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/@protobufjs_utf8-LICENSE"
+    ]
+  },
+  {
+    "package": "@types/node",
+    "version": "26.6.6",
+    "declared_license": "MIT",
+    "license_files": [
+      "docs/licenses/codegen/@types_node-LICENSE"
+    ]
+  },
+  {
+    "package": "case-anything",
+    "version": "2.1.13",
+    "declared_license": "MIT",
+    "license_files": [
+      "docs/licenses/codegen/case-anything-LICENSE"
+    ]
+  },
+  {
+    "package": "detect-libc",
+    "version": "1.0.3",
+    "declared_license": "Apache-2.0",
+    "license_files": [
+      "docs/licenses/codegen/detect-libc-LICENSE"
+    ]
+  },
+  {
+    "package": "dprint-node",
+    "version": "1.0.8",
+    "declared_license": "MIT",
+    "license_files": [
+      "docs/licenses/codegen/dprint-node-LICENSE"
+    ]
+  },
+  {
+    "package": "long",
+    "version": "5.3.2",
+    "declared_license": "Apache-2.0",
+    "license_files": [
+      "docs/licenses/codegen/long-LICENSE"
+    ]
+  },
+  {
+    "package": "protobufjs",
+    "version": "7.6.6",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "docs/licenses/codegen/protobufjs-LICENSE"
+    ]
+  },
+  {
+    "package": "ts-poet",
+    "version": "6.12.0",
+    "declared_license": "Apache-2.0",
+    "license_files": [
+      "docs/licenses/codegen/ts-poet-LICENSE.txt"
+    ]
+  },
+  {
+    "package": "ts-proto",
+    "version": "1.165.0",
+    "declared_license": "ISC",
+    "license_files": [
+      "docs/licenses/codegen/ts-proto-LICENSE"
+    ]
+  },
+  {
+    "package": "ts-proto-descriptors",
+    "version": "1.15.0",
+    "declared_license": "ISC",
+    "license_files": []
+  },
+  {
+    "package": "undici-types",
+    "version": "8.9.0",
+    "declared_license": "MIT",
+    "license_files": [
+      "docs/licenses/codegen/undici-types-LICENSE"
+    ]
+  }
+]

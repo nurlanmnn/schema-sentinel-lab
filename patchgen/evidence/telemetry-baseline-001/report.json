@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "case": "baseline",
+  "runtime_revision": "0671d35e6d258e88043878a09df1db30d1afd197",
+  "runtime_cases": 24,
+  "model_requests": 0,
+  "scope": "eight authored float32 cases; not arbitrary wire or units safety"
+}

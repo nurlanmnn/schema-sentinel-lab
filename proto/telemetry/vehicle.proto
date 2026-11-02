@@ -1,0 +1,7 @@
+syntax = "proto3";
+package simulation.telemetry;
+message VehicleTelemetry {
+  string vehicle_id = 1;
+  // Ground speed in meters per second.
+  float speed_mps = 2;
+}

@@ -11,3 +11,6 @@ testbed/artifacts/
 # Retain compact patch-generation evidence, not nested checkouts and installed dependencies.
 patchgen/evidence/**/workspace/
 patchgen/evidence/**/source/
+
+# Pinned local code-generation executables and installed packages.
+.tools/

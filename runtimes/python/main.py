@@ -102,9 +102,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--serve", action="store_true")
     parser.add_argument("--subscribe", action="store_true")
+    parser.add_argument("--telemetry", action="store_true")
     parser.add_argument("--version", choices=["v1", "v2"], default="v1")
     args = parser.parse_args()
-    if args.subscribe:
+    if args.telemetry:
+        from telemetry_runtime import run
+        run()
+    elif args.subscribe:
         subscribe()
     elif args.serve:
         with RelayServer((os.environ.get("HOST", "0.0.0.0"), int(os.environ.get("PORT", "8000"))), Relay) as server:

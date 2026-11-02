@@ -54,6 +54,11 @@ if (args.Contains("--subscribe"))
     }
 }
 
+if (args.Contains("--telemetry"))
+{
+    TelemetryRuntime.Run();
+    return 0;
+}
 if (args.Contains("--healthcheck"))
 {
     using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(1) };
