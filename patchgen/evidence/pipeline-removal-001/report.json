@@ -1,0 +1,7 @@
+{
+  "status": "adapted",
+  "measurement": null,
+  "human_approval_required": true,
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof"
+}

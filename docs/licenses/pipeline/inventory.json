@@ -1,0 +1,42 @@
+[
+  {
+    "package": "protobuf",
+    "version": "6.33.5",
+    "license": "3-Clause BSD License",
+    "files": [
+      "docs/licenses/pipeline/protobuf-LICENSE"
+    ]
+  },
+  {
+    "package": "tree-sitter",
+    "version": "0.25.2",
+    "license": null,
+    "files": [
+      "docs/licenses/pipeline/tree-sitter-LICENSE"
+    ]
+  },
+  {
+    "package": "tree-sitter-python",
+    "version": "0.25.0",
+    "license": "MIT",
+    "files": [
+      "docs/licenses/pipeline/tree-sitter-python-LICENSE"
+    ]
+  },
+  {
+    "package": "tree-sitter-typescript",
+    "version": "0.23.2",
+    "license": "MIT",
+    "files": [
+      "docs/licenses/pipeline/tree-sitter-typescript-LICENSE"
+    ]
+  },
+  {
+    "package": "tree-sitter-c-sharp",
+    "version": "0.23.1",
+    "license": "MIT",
+    "files": [
+      "docs/licenses/pipeline/tree-sitter-c-sharp-LICENSE"
+    ]
+  }
+]

@@ -1,3 +1,7 @@
+Independent Lab continuation: [descriptor/locator pipeline](independent-pipeline.md)
+and [current measurements](independent-results.md). The historical results below
+remain intact; the independent path adds measured runtime candidate production.
+
 # Local patch-generation example
 
 The working path generates runtime edits only and validates them against a

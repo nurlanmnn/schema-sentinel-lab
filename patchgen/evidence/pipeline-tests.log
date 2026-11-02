@@ -1,0 +1,17 @@
+entity-name-rename: failed
+v2-identifier-bytes: validation_passed
+unused-enum-addition: validation_passed
+Generating 1/5: runtimes/python/main.py
+Generating 2/5: runtimes/typescript/main.ts
+Generating 3/5: runtimes/csharp/main.cs
+Generating 4/5: testbed/tests/e2e_test.py
+Generating 5/5: testbed/tests/test_evidence.py
+Generating 1/5: runtimes/python/main.py
+Generating 2/5: runtimes/typescript/main.ts
+Generating 3/5: runtimes/csharp/main.cs
+Generating 4/5: testbed/tests/e2e_test.py
+Generating 5/5: testbed/tests/test_evidence.py
+----------------------------------------------------------------------
+Ran 55 tests in 4.177s
+
+OK

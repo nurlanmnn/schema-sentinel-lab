@@ -112,9 +112,21 @@ LINE_SCHEMA['properties']['edits'] = {'type':'array','items':{
 MIGRATION_SYSTEM = LINE_SYSTEM.replace(
     'After binding regeneration, removed fields/properties DO NOT EXIST. Delete their reads and assignments\ncompletely. Setting a removed property to empty string or null is still INVALID. Do not invent a new field\nor rename the removed field to an alias. Constructors and dictionaries may contain only retained fields.\nPreserve retained field values and existing version branches unless a branch only handles the removed\nfield; delete an otherwise empty obsolete branch. Address ALL relevant sites in this file, not just one.',
     'Follow the supplied category and intended_behavior: removals delete obsolete uses; renames migrate\nreads and construction; type changes use only the explicitly defined conversion. Keep version-specific\nbehavior separate. Do not guess missing semantics: return needs_clarification. Candidate inspection\nanchors for an unaffected additive change may return no_change without edits. Only patch outcomes must\ncover every supplied position. Preserve unrelated values and behavior. Address all necessary sites.')
+CANDIDATE_SYSTEM = MIGRATION_SYSTEM.replace(
+    'Every supplied impact position must be covered by an edit range. Each edit range must touch a supplied\nimpact position.',
+    'Positions are conservative syntax CANDIDATES, possibly belonging to an unchanged version or unrelated type.\nReview each candidate line exactly once in candidate_reviews: line, decision (edit or unaffected), reason.\nOnly candidates marked edit must be covered by edits. Every edit must touch a candidate marked edit.\nDo not modify unaffected candidates. Explain version/type evidence for each unaffected decision.').replace(
+    'Only patch outcomes must\ncover every supplied position.', 'Patch outcomes cover every candidate marked edit.') + "\nKeep original indentation. TextEncoder and TextDecoder require new instances in TypeScript."
+CANDIDATE_SCHEMA = {**LINE_SCHEMA, 'properties':dict(LINE_SCHEMA['properties']),
+                    'required':LINE_SCHEMA['required'] + ['candidate_reviews']}
+CANDIDATE_SCHEMA['properties']['candidate_reviews'] = {'type':'array','items':{
+    'type':'object','additionalProperties':False,
+    'properties':{'line':{'type':'integer'},'decision':{'type':'string','enum':['edit','unaffected']},
+                  'reason':{'type':'string','minLength':1}},'required':['line','decision','reason']}}
+
+
 BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-addition')
 
-STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4'}
+STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5'}
 
 
 class ContractError(ValueError):
@@ -193,13 +205,13 @@ def edit_prompt(case, file, strategy='exact_edits'):
     # Reuse the input allowlist so reference/caller metadata never enters a request.
     payload = json.loads(prompt(case)[1]['content'])
     payload['affected_files'] = [file_context(file)]
-    payload['response_schema'] = {'exact_edits':EDIT_SCHEMA,'file_content':FILE_SCHEMA,'line_edits':LINE_SCHEMA,'migration_edits':LINE_SCHEMA}[strategy]
+    payload['response_schema'] = {'exact_edits':EDIT_SCHEMA,'file_content':FILE_SCHEMA,'line_edits':LINE_SCHEMA,'migration_edits':LINE_SCHEMA,'candidate_edits':CANDIDATE_SCHEMA}[strategy]
     payload['prompt_version'] = STRATEGY_VERSIONS[strategy]
-    if strategy in ('line_edits','migration_edits'):
+    if strategy in ('line_edits','migration_edits','candidate_edits'):
         context = payload['affected_files'][0]
         context['source_lines'] = [{'line':i,'text':line} for i,line in enumerate(context.pop('source_context').splitlines(),1)]
-    system = {'exact_edits':EDIT_SYSTEM,'file_content':FILE_SYSTEM,'line_edits':LINE_SYSTEM,'migration_edits':MIGRATION_SYSTEM}[strategy]
-    if strategy in ('line_edits','migration_edits') and file['path'].startswith('testbed/tests/'):
+    system = {'exact_edits':EDIT_SYSTEM,'file_content':FILE_SYSTEM,'line_edits':LINE_SYSTEM,'migration_edits':MIGRATION_SYSTEM,'candidate_edits':CANDIDATE_SYSTEM}[strategy]
+    if strategy in ('line_edits','migration_edits','candidate_edits') and file['path'].startswith('testbed/tests/'):
         system += TEST_GUIDANCE
     return [{'role':'system','content':system},
             {'role':'user','content':json.dumps(payload,indent=2)}]
@@ -236,6 +248,33 @@ def resolve_lines(source, value, positions=None):
     for start,end,replacement in reversed(spans):
         lines[start:end] = [replacement] if replacement else []
     return ''.join(lines)
+
+
+def resolve_candidates(source, value, positions):
+    expected = {line for p in positions for line in range(p['start_line'],p['end_line']+1)}
+    reviews = require(value,'candidate_reviews',list,'file_response')
+    seen, required, unaffected = set(), set(), set()
+    if value.get('outcome') == 'needs_clarification':
+        return resolve_lines(source,value)
+    for review in reviews:
+        line = review.get('line')
+        if type(line) is not int or line not in expected or line in seen:
+            raise ContractError('invalid/duplicate candidate review line')
+        seen.add(line)
+        require(review,'reason',str,'candidate_review')
+        decision = review.get('decision')
+        if decision not in ('edit','unaffected'):
+            raise ContractError('unknown candidate decision')
+        (required if decision=='edit' else unaffected).add(line)
+    if seen != expected:
+        raise ContractError('missing candidate reviews')
+    edits = require(value,'edits',list,'file_response')
+    covered = {line for e in edits for line in range(e['start_line'],e['end_line']+1)}
+    if not required <= covered or covered & unaffected:
+        raise ContractError('candidate decision/edit coverage mismatch')
+    if any(not required.intersection(range(e['start_line'],e['end_line']+1)) for e in edits):
+        raise ContractError('edit does not touch an edit candidate')
+    return resolve_lines(source,value,[dict(start_line=l,end_line=l) for l in sorted(required)])
 
 
 def resolve_file(source, value):
@@ -410,8 +449,8 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
         print(f'Generating {index}/{len(case["affected_files"])}: {file["path"]}',flush=True)
         try:
             value = request_model(edit_prompt(case,file,strategy),model,endpoint,directory)
-            if strategy in ('line_edits','migration_edits'):
-                updated = resolve_lines(file['source_context'],value,file['positions'])
+            if strategy in ('line_edits','migration_edits','candidate_edits'):
+                updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy == 'candidate_edits' else resolve_lines(file['source_context'],value,file['positions'])
             else:
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
