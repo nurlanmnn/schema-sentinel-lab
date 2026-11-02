@@ -64,3 +64,13 @@ The first control attempts lacked required git diff headers and the second had a
 mistaken doubled TypeScript replacement; all those invalid control artifacts are
 retained as failures, not counted as semantic negative-control evidence.
 Final suites at this checkpoint: 114 patchgen tests and 23 testbed tests pass.
+
+## Input boundary for precision work
+
+The next baseline makes JSON input precision explicit: C# request.Speed is double
+and the float32 sample constructor explicitly narrows with `(float)request.Speed`.
+Existing eight-case behavior remains unchanged (24 checks pass in
+`telemetry-double-input-baseline-001`). This enables an independently testable
+float32-to-float64 migration without silently narrowing JSON input first. It is
+baseline infrastructure, not a successful precision migration by itself. The
+already pinned rename fixture and retained results remain unchanged.
