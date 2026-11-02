@@ -7,6 +7,12 @@ review-only patch generator. See [measured results](docs/patch-generation/indepe
 for the bounded scope and retained failures. Human approval is required for every
 proposed patch. The inherited testbed instructions follow.
 
+The [live model evaluation](docs/live-model-evaluation-2026-11-02.md) records
+0/6 validated proposals for both Ministral 3 3B and 8B with prompt 2.5, and
+0/6 for 8B with prompt 2.8. A bounded rename-feedback probe also failed.
+Successful deterministic demos are separate evidence. See the
+[model reassessment](docs/model-shortlist-2026-11-02.md) for the next comparisons.
+
 For the complete independent proposal/validation/review path, see the
 [one-command demo](docs/patch-generation/demo.md):
 

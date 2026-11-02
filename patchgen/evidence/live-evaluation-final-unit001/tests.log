@@ -1,0 +1,242 @@
+test_fixture_roundtrip_and_reference_coverage (test_adapter.AdapterTests.test_fixture_roundtrip_and_reference_coverage) ... ok
+test_general_migration_prompt_retains_removal_replay (test_adapter.AdapterTests.test_general_migration_prompt_retains_removal_replay) ... ok
+test_provenance_and_reference_not_in_model_prompt (test_adapter.AdapterTests.test_provenance_and_reference_not_in_model_prompt) ... ok
+test_stale_missing_ambiguous_and_unsafe_inputs_rejected (test_adapter.AdapterTests.test_stale_missing_ambiguous_and_unsafe_inputs_rejected) ... ok
+test_exact_blocks_are_host_resolved_and_all_candidates_required (test_anchor_edits.AnchorTests.test_exact_blocks_are_host_resolved_and_all_candidates_required) ... ok
+test_partial_line_and_ambiguous_and_overlapping_blocks_rejected (test_anchor_edits.AnchorTests.test_partial_line_and_ambiguous_and_overlapping_blocks_rejected) ... ok
+test_prompt_excludes_reference_answers_and_line_numbers (test_anchor_edits.AnchorTests.test_prompt_excludes_reference_answers_and_line_numbers) ... ok
+test_unknown_and_unaffected_candidates_cannot_be_edited (test_anchor_edits.AnchorTests.test_unknown_and_unaffected_candidates_cannot_be_edited) ... ok
+test_case_failure_does_not_skip_remaining_cases (test_benchmark.BenchmarkTests.test_case_failure_does_not_skip_remaining_cases) ... entity-name-rename: failed
+v2-identifier-bytes: validation_passed
+unused-enum-addition: validation_passed
+ok
+test_current_required_sites_match_independent_inventory (test_benchmark.BenchmarkTests.test_current_required_sites_match_independent_inventory) ... ok
+test_exact_enum_seed_recreated_without_changing_head (test_benchmark.BenchmarkTests.test_exact_enum_seed_recreated_without_changing_head) ... ok
+test_rename_profile_pins_schema_and_excludes_tests_from_prompts (test_benchmark.BenchmarkTests.test_rename_profile_pins_schema_and_excludes_tests_from_prompts) ... ok
+test_authored_scenarios_have_expected_boundaries (test_corpus.CorpusTests.test_authored_scenarios_have_expected_boundaries) ... ok
+test_scoring_failure_cannot_keep_matching_status (test_corpus.CorpusTests.test_scoring_failure_cannot_keep_matching_status) ... ok
+test_seed_revision_is_reconstructible (test_corpus.CorpusTests.test_seed_revision_is_reconstructible) ... ok
+test_existing_incompatible_environment_is_rejected_before_install (test_demo.DemoTests.test_existing_incompatible_environment_is_rejected_before_install) ... ok
+test_existing_output_rejected_without_preflight (test_demo.DemoTests.test_existing_output_rejected_without_preflight) ... ok
+test_install_failure_retains_report_and_log_without_pipeline (test_demo.DemoTests.test_install_failure_retains_report_and_log_without_pipeline) ... ok
+test_missing_pinned_history_is_actionable (test_demo.DemoTests.test_missing_pinned_history_is_actionable) ... ok
+test_occupied_port_rejected_before_mutation (test_demo.DemoTests.test_occupied_port_rejected_before_mutation) ... ok
+test_clarification_in_one_file_prevents_a_partial_patch (test_edits.EditTests.test_clarification_in_one_file_prevents_a_partial_patch) ... {
+  "status": "failed",
+  "case": "utf8",
+  "source_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "mode": "deterministic_proposal",
+  "model_requests": 0,
+  "human_approval_required": true,
+  "timing_scope": "bootstrap plus local pipeline; not propagation or human review time",
+  "implementation_revision": "Python 3.10.0",
+  "tools": {
+    "git": "Python 3.10.0",
+    "buf": "Python 3.10.0",
+    "node": "Python 3.10.0",
+    "npm": "Python 3.10.0",
+    "dotnet": "Python 3.10.0"
+  },
+  "bootstrap_python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "analysis_python": "Python 3.10.0",
+  "error": "Existing .venv must use Python 3.13; choose a fresh clone or recreate that environment before running.",
+  "elapsed_seconds": 0.0001092500751838088
+}
+Details: /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmpykkcfw7a/new/demo.log
+{
+  "status": "failed",
+  "case": "utf8",
+  "source_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "mode": "deterministic_proposal",
+  "model_requests": 0,
+  "human_approval_required": true,
+  "timing_scope": "bootstrap plus local pipeline; not propagation or human review time",
+  "implementation_revision": "Python 3.13.7",
+  "tools": {
+    "git": "Python 3.13.7",
+    "buf": "Python 3.13.7",
+    "node": "Python 3.13.7",
+    "npm": "Python 3.13.7",
+    "dotnet": "Python 3.13.7"
+  },
+  "bootstrap_python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "analysis_python": "Python 3.13.7",
+  "error": "installer unavailable",
+  "elapsed_seconds": 0.00012541702017188072
+}
+Details: /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmpn79kt4hs/new/demo.log
+Generating 1/5: runtimes/python/main.py
+Generating 2/5: runtimes/typescript/main.ts
+Generating 3/5: runtimes/csharp/main.cs
+Generating 4/5: testbed/tests/e2e_test.py
+Generating 5/5: testbed/tests/test_evidence.py
+ok
+test_diff_handles_missing_final_newline_and_applies_exactly (test_edits.EditTests.test_diff_handles_missing_final_newline_and_applies_exactly) ... ok
+test_exact_deletion_and_replacement (test_edits.EditTests.test_exact_deletion_and_replacement) ... ok
+test_no_change_and_clarification_never_contain_edits (test_edits.EditTests.test_no_change_and_clarification_never_contain_edits) ... ok
+test_one_file_prompt_excludes_other_files_and_reference_metadata (test_edits.EditTests.test_one_file_prompt_excludes_other_files_and_reference_metadata) ... ok
+test_original_anchors_not_newly_inserted_text (test_edits.EditTests.test_original_anchors_not_newly_inserted_text) ... ok
+test_reject_missing_ambiguous_overlapping_and_noop_anchors (test_edits.EditTests.test_reject_missing_ambiguous_overlapping_and_noop_anchors) ... ok
+test_rejected_file_stops_assembly_without_retry_or_partial_application (test_edits.EditTests.test_rejected_file_stops_assembly_without_retry_or_partial_application) ... Generating 1/5: runtimes/python/main.py
+Generating 2/5: runtimes/typescript/main.ts
+Generating 3/5: runtimes/csharp/main.cs
+Generating 4/5: testbed/tests/e2e_test.py
+Generating 5/5: testbed/tests/test_evidence.py
+ok
+test_file_outcomes_reject_empty_or_unchanged_patches (test_edits.FileContentTests.test_file_outcomes_reject_empty_or_unchanged_patches) ... ok
+test_file_prompt_excludes_reference_metadata (test_edits.FileContentTests.test_file_prompt_excludes_reference_metadata) ... ok
+test_missing_sites_and_unrelated_ranges_fail (test_edits.ImpactCoverageTests.test_missing_sites_and_unrelated_ranges_fail) ... ok
+test_range_may_include_branch_context_around_an_impact (test_edits.ImpactCoverageTests.test_range_may_include_branch_context_around_an_impact) ... ok
+test_weakened_evidence_validator_is_rejected (test_edits.IndependentOracleTests.test_weakened_evidence_validator_is_rejected) ... ok
+test_line_outcomes_never_apply_partial_changes (test_edits.LineEditTests.test_line_outcomes_never_apply_partial_changes) ... ok
+test_line_prompt_has_exact_source_and_no_test_guidance_for_runtime (test_edits.LineEditTests.test_line_prompt_has_exact_source_and_no_test_guidance_for_runtime) ... ok
+test_original_line_numbers_allow_adjacent_edits_and_deletions (test_edits.LineEditTests.test_original_line_numbers_allow_adjacent_edits_and_deletions) ... ok
+test_overlaps_out_of_bounds_noninteger_and_partial_lines_fail (test_edits.LineEditTests.test_overlaps_out_of_bounds_noninteger_and_partial_lines_fail) ... ok
+test_active_candidates_keep_adapter_closed (test_enum_candidates.EnumCandidateTests.test_active_candidates_keep_adapter_closed) ... ok
+test_constant_predicates_switch_and_numeric_field_access (test_enum_candidates.EnumCandidateTests.test_constant_predicates_switch_and_numeric_field_access) ... ok
+test_nested_enum_fields_and_generated_names (test_enum_candidates.EnumCandidateTests.test_nested_enum_fields_and_generated_names) ... ok
+test_parse_and_dynamic_warnings_retained (test_enum_candidates.EnumCandidateTests.test_parse_and_dynamic_warnings_retained) ... ok
+test_builder_retains_actual_rejection_and_does_not_read_reference_files (test_feedback_blocks.FeedbackTests.test_builder_retains_actual_rejection_and_does_not_read_reference_files) ... ok
+test_feedback_identity_and_file_scope_cannot_drift (test_feedback_blocks.FeedbackTests.test_feedback_identity_and_file_scope_cannot_drift) ... ok
+test_probe_cannot_exceed_fixed_attempt_bound (test_feedback_blocks.FeedbackTests.test_probe_cannot_exceed_fixed_attempt_bound) ... ok
+test_prompt_uses_original_source_and_only_diagnostics_for_this_file (test_feedback_blocks.FeedbackTests.test_prompt_uses_original_source_and_only_diagnostics_for_this_file) ... ok
+test_all_required_input_fields (test_generator.GeneratorTests.test_all_required_input_fields) ... ok
+test_bad_paths_and_generated_files (test_generator.GeneratorTests.test_bad_paths_and_generated_files) ... ok
+test_cli_outcomes_and_missing_input_keep_reports (test_generator.GeneratorTests.test_cli_outcomes_and_missing_input_keep_reports) ... ok
+test_explicit_source_preparation_does_not_change_caller_head (test_generator.GeneratorTests.test_explicit_source_preparation_does_not_change_caller_head) ... ok
+test_outcomes (test_generator.GeneratorTests.test_outcomes) ... ok
+test_positions_and_revision (test_generator.GeneratorTests.test_positions_and_revision) ... ok
+test_reference_excluded (test_generator.GeneratorTests.test_reference_excluded) ... ok
+test_stale_source_and_malformed_patch_in_isolation (test_generator.GeneratorTests.test_stale_source_and_malformed_patch_in_isolation) ... ok
+test_review_rejects_missing_policy_and_changed_runtime_evidence (test_inventory_width.InventoryReviewTests.test_review_rejects_missing_policy_and_changed_runtime_evidence) ... ok
+test_exact_constructor_changes_and_preserved_observations (test_inventory_width.InventoryWidthTests.test_exact_constructor_changes_and_preserved_observations) ... ok
+test_number_input_or_observation_rejected (test_inventory_width.InventoryWidthTests.test_number_input_or_observation_rejected) ... ok
+test_predicate_observation_and_binding_drift_rejected (test_inventory_width.InventoryWidthTests.test_predicate_observation_and_binding_drift_rejected) ... ok
+test_unknown_policy_type_cardinality_and_optional_rejected (test_inventory_width.InventoryWidthTests.test_unknown_policy_type_cardinality_and_optional_rejected) ... ok
+test_changed_inputs_and_weakened_gate_cannot_be_called_model_comparison (test_live_comparison.ComparisonTests.test_changed_inputs_and_weakened_gate_cannot_be_called_model_comparison) ... ok
+test_same_prompt_label_does_not_hide_changed_messages (test_live_comparison.ComparisonTests.test_same_prompt_label_does_not_hide_changed_messages) ... ok
+test_separates_model_prompt_and_confounded_changes (test_live_comparison.ComparisonTests.test_separates_model_prompt_and_confounded_changes) ... ok
+test_compiler_and_oracle_failures_retain_evidence (test_live_diagnostics.DiagnosticTests.test_compiler_and_oracle_failures_retain_evidence) ... ok
+test_completed_analysis_keeps_rejections_and_fixed_denominator (test_live_diagnostics.DiagnosticTests.test_completed_analysis_keeps_rejections_and_fixed_denominator) ... ok
+test_missing_or_zero_counters_do_not_invent_speed (test_live_diagnostics.DiagnosticTests.test_missing_or_zero_counters_do_not_invent_speed) ... ok
+test_timing_separates_loading_and_decode_and_ignores_nested_archive (test_live_diagnostics.DiagnosticTests.test_timing_separates_loading_and_decode_and_ignores_nested_archive) ... ok
+test_analysis_refuses_incomplete_or_deterministic_runs (test_live_suite.LiveSuiteTests.test_analysis_refuses_incomplete_or_deterministic_runs) ... ok
+test_deterministic_pass_never_counts_as_model_success (test_live_suite.LiveSuiteTests.test_deterministic_pass_never_counts_as_model_success) ... ok
+test_failed_contract_retains_actual_requests_and_generation_time (test_live_suite.LiveSuiteTests.test_failed_contract_retains_actual_requests_and_generation_time) ... ok
+test_missing_report_is_failed_not_a_success (test_live_suite.LiveSuiteTests.test_missing_report_is_failed_not_a_success) ... ok
+test_cloud_remote_and_excluded_models_stop_without_api_calls (test_model_preflight.ModelPreflightTests.test_cloud_remote_and_excluded_models_stop_without_api_calls) ... ok
+test_supported_but_missing_14b_stops_before_inference (test_model_preflight.ModelPreflightTests.test_supported_but_missing_14b_stops_before_inference) ... ok
+test_cannot_edit_unaffected_candidate (test_pipeline.CandidateTests.test_cannot_edit_unaffected_candidate) ... ok
+test_malformed_candidate_edit_has_contract_error (test_pipeline.CandidateTests.test_malformed_candidate_edit_has_contract_error) ... ok
+test_prompt_version_and_no_answer_leak (test_pipeline.CandidateTests.test_prompt_version_and_no_answer_leak) ... ok
+test_unaffected_candidate_is_preserved (test_pipeline.CandidateTests.test_unaffected_candidate_is_preserved) ... ok
+test_comment_only_semantics_not_claimed (test_pipeline.DetectorTests.test_comment_only_semantics_not_claimed) ... ok
+test_enum_addition (test_pipeline.DetectorTests.test_enum_addition) ... ok
+test_enum_value_metadata_not_silently_accepted (test_pipeline.DetectorTests.test_enum_value_metadata_not_silently_accepted) ... ok
+test_file_metadata_is_not_silently_accepted (test_pipeline.DetectorTests.test_file_metadata_is_not_silently_accepted) ... ok
+test_identity_mismatch_rejected (test_pipeline.DetectorTests.test_identity_mismatch_rejected) ... ok
+test_json_name_only_is_unsupported (test_pipeline.DetectorTests.test_json_name_only_is_unsupported) ... ok
+test_multiple_events_not_exportable (test_pipeline.DetectorTests.test_multiple_events_not_exportable) ... ok
+test_nested_message (test_pipeline.DetectorTests.test_nested_message) ... ok
+test_removal (test_pipeline.DetectorTests.test_removal) ... ok
+test_type_change (test_pipeline.DetectorTests.test_type_change) ... ok
+test_unsupported_cardinality_and_addition (test_pipeline.DetectorTests.test_unsupported_cardinality_and_addition) ... ok
+test_wire_identity_rename (test_pipeline.DetectorTests.test_wire_identity_rename) ... ok
+test_literal_and_dynamic_reflection (test_pipeline.LocatorTests.test_literal_and_dynamic_reflection) ... ok
+test_parse_failure (test_pipeline.LocatorTests.test_parse_failure) ... ok
+test_reads_writes_construction_casts_naming (test_pipeline.LocatorTests.test_reads_writes_construction_casts_naming) ... ok
+test_rejected_detector_retains_reviewable_report_without_generation (test_pipeline.PinnedIntegrationTests.test_rejected_detector_retains_reviewable_report_without_generation) ... ok
+test_three_real_schema_pairs_and_runtime_inventories (test_pipeline.PinnedIntegrationTests.test_three_real_schema_pairs_and_runtime_inventories) ... ok
+test_all_three_languages_preserve_structure (test_pipeline.RenameTokenTests.test_all_three_languages_preserve_structure) ... ok
+test_nonrename_is_rejected (test_pipeline.RenameTokenTests.test_nonrename_is_rejected) ... ok
+test_changed_binding_and_observation_rejected (test_remove_name.RemovalTests.test_changed_binding_and_observation_rejected) ... ok
+test_no_model_or_reference_use (test_remove_name.RemovalTests.test_no_model_or_reference_use) ... ok
+test_python_guard_with_other_work_is_not_deleted (test_remove_name.RemovalTests.test_python_guard_with_other_work_is_not_deleted) ... ok
+test_reservation_and_field_shape_required (test_remove_name.RemovalTests.test_reservation_and_field_shape_required) ... ok
+test_side_effectful_constructors_not_silently_deleted (test_remove_name.RemovalTests.test_side_effectful_constructors_not_silently_deleted) ... ok
+test_supported_removal_preserves_retained_fields_and_v2 (test_remove_name.RemovalTests.test_supported_removal_preserves_retained_fields_and_v2) ... ok
+test_unknown_candidate_and_unlisted_token_rejected (test_remove_name.RemovalTests.test_unknown_candidate_and_unlisted_token_rejected) ... ok
+test_deterministic_proposal_uses_no_model_or_reference_fields (test_rename_roles.RoleRenameTests.test_deterministic_proposal_uses_no_model_or_reference_fields) ... ok
+test_generator_request_and_assembly_without_service (test_rename_roles.RoleRenameTests.test_generator_request_and_assembly_without_service) ... Generating 1/3: runtimes/python/main.py
+Generating 2/3: runtimes/typescript/main.ts
+Generating 3/3: runtimes/csharp/main.cs
+ok
+test_missing_python_observation_key_rejected (test_rename_roles.RoleRenameTests.test_missing_python_observation_key_rejected) ... ok
+test_names_follow_syntax_roles (test_rename_roles.RoleRenameTests.test_names_follow_syntax_roles) ... ok
+test_requires_explicit_observation_policy (test_rename_roles.RoleRenameTests.test_requires_explicit_observation_policy) ... ok
+test_unaffected_line_keeps_every_token (test_rename_roles.RoleRenameTests.test_unaffected_line_keeps_every_token) ... ok
+test_unrecognized_ts_object_role_rejected (test_rename_roles.RoleRenameTests.test_unrecognized_ts_object_role_rejected) ... ok
+test_blocked_analysis_can_only_be_rejected (test_review.ReviewTests.test_blocked_analysis_can_only_be_rejected) ... ok
+test_cannot_override_failed_report_eligibility (test_review.ReviewTests.test_cannot_override_failed_report_eligibility) ... ok
+test_changed_manifest_rejected (test_review.ReviewTests.test_changed_manifest_rejected) ... ok
+test_changed_patch_rejected (test_review.ReviewTests.test_changed_patch_rejected) ... ok
+test_failed_proposal_allows_rejection_only (test_review.ReviewTests.test_failed_proposal_allows_rejection_only) ... ok
+test_injected_content_is_data (test_review.ReviewTests.test_injected_content_is_data) ... ok
+test_local_codegen_requires_matching_source_and_toolchain (test_review.ReviewTests.test_local_codegen_requires_matching_source_and_toolchain) ... ok
+test_missing_complete_patch_rejected (test_review.ReviewTests.test_missing_complete_patch_rejected) ... ok
+test_no_overwriting_or_nested_output (test_review.ReviewTests.test_no_overwriting_or_nested_output) ... ok
+test_no_proposal_cannot_claim_validation_passed (test_review.ReviewTests.test_no_proposal_cannot_claim_validation_passed) ... ok
+test_portable_export_and_synthetic_decision (test_review.ReviewTests.test_portable_export_and_synthetic_decision) ... ok
+test_precision_policy_snapshot_cannot_be_missing_or_changed (test_review.ReviewTests.test_precision_policy_snapshot_cannot_be_missing_or_changed) ... ok
+test_pubsub_evaluator_identity_and_result_must_match (test_review.ReviewTests.test_pubsub_evaluator_identity_and_result_must_match) ... ok
+test_pubsub_export_requires_and_hashes_evaluator_evidence (test_review.ReviewTests.test_pubsub_export_requires_and_hashes_evaluator_evidence) ... ok
+test_required_acknowledgement_and_reason (test_review.ReviewTests.test_required_acknowledgement_and_reason) ... ok
+test_required_negative_control_cannot_be_missing_or_claim_successful_decode (test_review.ReviewTests.test_required_negative_control_cannot_be_missing_or_claim_successful_decode) ... ok
+test_stale_report_revision_rejected (test_review.ReviewTests.test_stale_report_revision_rejected) ... ok
+test_telemetry_requires_full_evidence_and_checks_runtime_results (test_review.ReviewTests.test_telemetry_requires_full_evidence_and_checks_runtime_results) ... ok
+test_traversal_and_symlink_rejected (test_review.ReviewTests.test_traversal_and_symlink_rejected) ... ok
+test_units_policy_requires_its_own_snapshot_and_shared_shape_validator (test_review.ReviewTests.test_units_policy_requires_its_own_snapshot_and_shared_shape_validator) ... ok
+test_child_launch_failure_does_not_skip_remaining_cases (test_suite.SuiteTests.test_child_launch_failure_does_not_skip_remaining_cases) ... pubsub-rename: failed
+pubsub-removal: failed
+pubsub-utf8: failed
+telemetry-rename: failed
+telemetry-precision: failed
+telemetry-units: failed
+inventory-width: failed
+ok
+test_conflicting_embedded_truth_identity_is_rejected (test_suite.SuiteTests.test_conflicting_embedded_truth_identity_is_rejected) ... ok
+test_existing_output_is_never_overwritten (test_suite.SuiteTests.test_existing_output_is_never_overwritten) ... ok
+test_incompatible_ground_truth_count_is_unavailable (test_suite.SuiteTests.test_incompatible_ground_truth_count_is_unavailable) ... ok
+test_manifest_counts_distinct_migrations_only (test_suite.SuiteTests.test_manifest_counts_distinct_migrations_only) ... ok
+test_missing_report_keeps_failed_case_in_denominators (test_suite.SuiteTests.test_missing_report_keeps_failed_case_in_denominators) ... ok
+test_pass_label_alone_cannot_count_as_validated_proposal (test_suite.SuiteTests.test_pass_label_alone_cannot_count_as_validated_proposal) ... ok
+test_readable_partial_run_keeps_pending_cases_visible (test_suite.SuiteTests.test_readable_partial_run_keeps_pending_cases_visible) ... ok
+test_profile_cannot_select_baseline_or_another_oracle (test_telemetry_pipeline.TelemetryPipelineTests.test_profile_cannot_select_baseline_or_another_oracle) ... ok
+test_profile_pins_schema_and_source_without_test_edits (test_telemetry_pipeline.TelemetryPipelineTests.test_profile_pins_schema_and_source_without_test_edits) ... ok
+test_snake_observation_key_and_camel_generated_property (test_telemetry_pipeline.TelemetryPipelineTests.test_snake_observation_key_and_camel_generated_property) ... ok
+test_converts_construction_keys_predicates_and_exact_json_float (test_telemetry_units.UnitsTests.test_converts_construction_keys_predicates_and_exact_json_float) ... ok
+test_each_explicit_semantic_decision_required (test_telemetry_units.UnitsTests.test_each_explicit_semantic_decision_required) ... ok
+test_independent_expected_values_quantize_wire_and_preserve_decisions (test_telemetry_units.UnitsTests.test_independent_expected_values_quantize_wire_and_preserve_decisions) ... ok
+test_unknown_source_shape_rejected (test_telemetry_units.UnitsTests.test_unknown_source_shape_rejected) ... ok
+test_precision_cases_distinguish_rounding_and_threshold (test_type_precision.PrecisionTests.test_precision_cases_distinguish_rounding_and_threshold) ... ok
+test_supported_direct_bindings_and_only_narrowing_cast_changed (test_type_precision.PrecisionTests.test_supported_direct_bindings_and_only_narrowing_cast_changed) ... ok
+test_unknown_threshold_binding_or_input_precision_rejected (test_type_precision.PrecisionTests.test_unknown_threshold_binding_or_input_precision_rejected) ... ok
+test_wrong_units_cardinality_and_other_types_rejected (test_type_precision.PrecisionTests.test_wrong_units_cardinality_and_other_types_rejected) ... ok
+test_no_reference_or_model_use (test_type_utf8.Utf8Tests.test_no_reference_or_model_use) ... ok
+test_supported_descriptor_and_roles (test_type_utf8.Utf8Tests.test_supported_descriptor_and_roles) ... ok
+test_unknown_candidate_rejected (test_type_utf8.Utf8Tests.test_unknown_candidate_rejected) ... ok
+test_unsupported_bindings_rejected (test_type_utf8.Utf8Tests.test_unsupported_bindings_rejected) ... ok
+test_wrong_semantics_rejected (test_type_utf8.Utf8Tests.test_wrong_semantics_rejected) ... ok
+test_changed_source_schema_or_test_patch_is_rejected (test_validation_profile.ValidationProfileTests.test_changed_source_schema_or_test_patch_is_rejected) ... ok
+test_model_cannot_edit_evaluator_owned_tests (test_validation_profile.ValidationProfileTests.test_model_cannot_edit_evaluator_owned_tests) ... ok
+test_model_prompts_do_not_contain_test_sources_or_profile_answers (test_validation_profile.ValidationProfileTests.test_model_prompts_do_not_contain_test_sources_or_profile_answers) ... ok
+test_profile_is_pinned_and_only_migrates_test_files (test_validation_profile.ValidationProfileTests.test_profile_is_pinned_and_only_migrates_test_files) ... ok
+test_pubsub_profiles_are_bound_to_source_schema_and_semantic_policy (test_validation_profile.ValidationProfileTests.test_pubsub_profiles_are_bound_to_source_schema_and_semantic_policy) ... ok
+test_pubsub_semantic_selector_cannot_be_changed_by_profile (test_validation_profile.ValidationProfileTests.test_pubsub_semantic_selector_cannot_be_changed_by_profile) ... ok
+
+----------------------------------------------------------------------
+Ran 158 tests in 9.933s
+
+OK
+{
+  "distinct_migration_cases": 7,
+  "validation_passed": 0,
+  "validation_rate": 0.0,
+  "classification_correct": 0,
+  "classification_accuracy": 0.0,
+  "impact_measurements_available": 0,
+  "expected_sites": 54,
+  "matched_sites": 0,
+  "impact_recall": 0.0,
+  "extra_sites": 0
+}

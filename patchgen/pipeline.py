@@ -9,7 +9,7 @@ from pathlib import Path
 from patchgen.detector import detect
 from patchgen.locator import locate
 from patchgen.adapter import adapt, coverage
-from patchgen.generator import command, save, ContractError, require, safe_path, VALIDATION_PROFILES
+from patchgen.generator import command, save, ContractError, require, safe_path, VALIDATION_PROFILES, LOCAL_MODELS
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -95,7 +95,7 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
-    parser.add_argument('--model',choices=('ministral-3:3b','ministral-3:8b'),default='ministral-3:8b',help='installed local model only')
+    parser.add_argument('--model',choices=LOCAL_MODELS,default='ministral-3:8b',help='installed local model only; does not download models')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
     parser.add_argument('--strategy',choices=('deterministic_inventory_width','candidate_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')

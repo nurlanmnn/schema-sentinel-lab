@@ -1,0 +1,45 @@
+{
+  "comparison_kind": "model_comparison",
+  "issues": [],
+  "left_model_digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+  "right_model_digest": "f04aa1c738f64e13c625b82ae92504fc0260fa6723b509ed1ece0fa188179b1d",
+  "left_prompt": "2.5",
+  "right_prompt": "2.5",
+  "rows": [
+    {
+      "case": "pubsub-rename",
+      "left_validated": false,
+      "right_validated": false
+    },
+    {
+      "case": "pubsub-removal",
+      "left_validated": false,
+      "right_validated": false
+    },
+    {
+      "case": "pubsub-utf8",
+      "left_validated": false,
+      "right_validated": false
+    },
+    {
+      "case": "telemetry-rename",
+      "left_validated": false,
+      "right_validated": false
+    },
+    {
+      "case": "telemetry-precision",
+      "left_validated": false,
+      "right_validated": false
+    },
+    {
+      "case": "telemetry-units",
+      "left_validated": false,
+      "right_validated": false
+    }
+  ],
+  "source_summary_sha256": [
+    "33ca5fba051a83eba691367c722be121f8ecdabce40363c957080b5c704b1309",
+    "08a8d56078792007c6bc09659923fc431a68c1bf5d57799de4e8f1e7a7ab5287"
+  ],
+  "scope": "six in-sample authored cases, one trial per configuration; no general ranking or human acceptance"
+}

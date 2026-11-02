@@ -1,0 +1,49 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = decoded.EntityId };"
+      ]
+    },
+    {
+      "start_line": 67,
+      "end_line": 67,
+      "replacement_lines": []
+    }
+  ],
+  "rationale": "Removed obsolete `Name` field references in both construction and read operations for v1 schema. Line 15: Updated dictionary assignment to exclude the removed `name` field. Line 67: Deleted literal assignment of `Name` since it no longer exists in the schema.",
+  "confidence": 0.98,
+  "assumptions": [
+    "The `decoded.Name` property is obsolete and should not be included in the output dictionary for v1 schema processing."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "Directly references the removed field `Name` in a v1 construction context. Must remove this use to comply with schema change."
+    },
+    {
+      "line": 67,
+      "decision": "edit",
+      "reason": "Constructs an Entity object with the obsolete `Name` field, which should be deleted for consistency with the new schema."
+    },
+    {
+      "line": 14,
+      "decision": "unaffected",
+      "reason": "This is a direct assignment to `entity = decoded`, not a read or construction of the removed field. No change needed here."
+    },
+    {
+      "line": 21,
+      "decision": "unaffected",
+      "reason": "v2 schema already omits `name` entirely, so this line is unaffected by the removal."
+    },
+    {
+      "line": 66,
+      "decision": "unaffected",
+      "reason": "Conditional logic for constructing a new Entity object; only the specific literal assignment (line 67) needs editing."
+    }
+  ]
+}

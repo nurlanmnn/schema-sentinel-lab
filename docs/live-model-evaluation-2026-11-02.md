@@ -42,7 +42,31 @@ first request's Ollama load counter was about 14.27 seconds; subsequent load
 counters were about 0.13–0.19 seconds. These are recorded serving counters, not a
 controlled cold/warm benchmark or operational propagation measurement.
 
-## Next experiments
+## Paired results and next steps
+
+The installed 3B comparison also completed: **0/6 validated proposals from 18
+live requests**, with 11/18 file contracts passing. Every case was blocked by a
+file contract rejection, so runtime behavior is unestablished for those proposals.
+The exact model digest is
+`f04aa1c738f64e13c625b82ae92504fc0260fa6723b509ed1ece0fa188179b1d`.
+The paired audit compared all request payloads excluding only the model name,
+the generation inputs, inference options and captured validation gates. It found
+no mismatch and classified this as a model comparison:
+`patchgen/evidence/live-3b-8b-comparison001/`.
+
+| Configuration | Validated proposals | File contracts passed | Actual requests | Generation minutes | Maximum sampled model allocation (GB) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Ministral 3 8B / prompt 2.5 | 0/6 | 13/18 | 18 | 14.1 | 7.35 |
+| Ministral 3 3B / prompt 2.5 | 0/6 | 11/18 | 18 | 5.6 | 4.19 |
+| Ministral 3 8B / prompt 2.8 | 0/6 | 16/18 | 18 | 12.7 | Not aggregated here |
+
+GB uses decimal bytes. Allocation is the maximum observed Ollama sample for the
+requested model, not whole-host memory or a guaranteed peak. The resource analyses
+are `patchgen/evidence/live-six-ministral8b-analysis002/` and
+`patchgen/evidence/live-six-ministral3b-analysis001/`. Earlier analyses are retained.
+The 3B model was faster and smaller on this prepared host, but neither model
+validated a migration under this fixed protocol. This is one trial on six
+authored development cases, not a general model ranking.
 
 Prompt 2.8 (`candidate_blocks`) is a separate in-sample development experiment
 using the same 8B digest and six inputs. It requires fixed candidate IDs through
@@ -69,6 +93,14 @@ Raw evidence is in `patchgen/evidence/live-six-ministral8b-blocks001/` and analy
 in `patchgen/evidence/live-six-ministral8b-blocks-analysis001/`. A separate bounded
 feedback probe on the selected failed rename case is described in decision 0023;
 it has a different protocol and is not included in either one-shot rate.
+
+The rename feedback probe completed both allowed rounds and **did not validate
+a proposal**. It made six feedback requests, nine including the original
+source-block attempt. Round 1 failed TypeScript compilation with old/accessor
+naming errors. Round 2 was rejected because the Python replacement omitted the
+contract's final newline. Its raw evidence and separate summary are in
+`patchgen/evidence/live-rename-feedback001/`. This does not establish that all
+possible feedback protocols fail, and it does not add a six-case denominator.
 
 Model choice remains unresolved. [Mistral's official documentation](https://docs.mistral.ai/models/ministral-3-14b-25-12)
 identifies Ministral 3 14B under Apache-2.0. The

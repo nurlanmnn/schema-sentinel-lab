@@ -27,6 +27,15 @@ def request_details(root, requests):
         row['output_tokens']=counts.get('eval_count')
         row['output_tokens_per_second']=(row['output_tokens']/row['eval_seconds']
             if row['output_tokens'] is not None and row['eval_seconds'] else None)
+        request_path=directory/'request.json'
+        measurement_path=directory/'request-measurement.json'
+        model=read(request_path).get('model') if request_path.is_file() else None
+        measurement=read(measurement_path) if measurement_path.is_file() else {}
+        allocations=[entry for sample in measurement.get('memory_samples',[]) for entry in sample.get('models',[])
+                     if model and model in (entry.get('name'),entry.get('model'))]
+        for key in ('size','size_vram'):
+            values=[entry[key] for entry in allocations if isinstance(entry.get(key),(int,float))]
+            row['max_sampled_model_'+key+'_bytes']=max(values,default=None)
         # Confidence is retained for inspection, never used as a validation gate.
         parsed=directory/'parsed-response.json'
         if parsed.is_file():
@@ -103,10 +112,11 @@ def analyze(source,output):
                                       failed=sum(request['contract_status']=='failed' for row in rows for request in row['requests']),
                                       unknown=sum(request['contract_status'] not in ('passed','failed') for row in rows for request in row['requests'])),
                 timing_scope='Ollama load/prompt/eval counters per request; load duration alone does not prove cold versus warm cache state',
+                memory_scope='maximum sampled Ollama allocation for the requested model only; not whole-system RSS or guaranteed peak memory',
                 scope='six small authored cases; one trial per model, no repairs; not general reliability or human acceptance')
     (output/'analysis.json').write_text(json.dumps(result,indent=2)+'\n')
     lines=['# Live model patch evaluation','',f"Model: {result['model']} (`{result['model_digest']}`).",
-           f"Validated proposals: {result['validated_model_patches']}/{len(CASES)}. Human approval pending.",'',
+           f"Validated proposals: {result['validated_model_patches']}/{len(CASES)}. This analysis records no human approval.",'',
            '| Migration | Outcome | Model requests | Generation seconds | Pipeline seconds |',
            '| --- | --- | ---: | ---: | ---: |']
     for row in rows:

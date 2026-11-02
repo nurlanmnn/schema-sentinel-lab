@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
-from patchgen.generator import OPTIONS, STRATEGY_VERSIONS
+from patchgen.generator import LOCAL_MODELS, OPTIONS, STRATEGY_VERSIONS
 from run_benchmark import manifest
 from run_demo import check_output
 
@@ -84,7 +84,7 @@ def execute(output,model,strategy='candidate_edits'):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--model',choices=('ministral-3:3b','ministral-3:8b'),default='ministral-3:8b')
+    parser.add_argument('--model',choices=LOCAL_MODELS,default='ministral-3:8b')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_blocks'),default='candidate_edits')
     args=parser.parse_args()
     return execute(args.output,args.model,args.strategy)

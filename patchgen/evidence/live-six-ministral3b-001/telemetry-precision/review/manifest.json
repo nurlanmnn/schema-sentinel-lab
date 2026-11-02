@@ -1,0 +1,63 @@
+{
+  "review_version": "1.0",
+  "change_id": "telemetry-speed-precision",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "failed",
+  "mode": "live_model",
+  "strategy": "candidate_edits",
+  "approval_eligible": false,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "62739652351762ccd981942dd0a1ee104a07d5bade7d9d32e10c18ecb4ceb899",
+      "bytes": 5637
+    },
+    "request.json": {
+      "sha256": "60b84e534e8b04b34525f458e1b719b9f937ab939a3230992b12d951a62e3624",
+      "bytes": 1029
+    },
+    "report.json": {
+      "sha256": "fb03b65326593abfd251d51784582f3f2c14f9fea26d6887617d07894d472198",
+      "bytes": 3172
+    },
+    "provenance.json": {
+      "sha256": "c81d100139c1a8329164fad73f962fac64d4de5f1cd6926cd8b9d006b09deb0b",
+      "bytes": 507
+    },
+    "detector.json": {
+      "sha256": "f23808f41ca0b6bdb102ad6c62ceda1ec15b5108ad5e145e2f064df464be1f5d",
+      "bytes": 1920
+    },
+    "locator.json": {
+      "sha256": "1f105c6a960cb3d14a2dacbcffd8178139b0fb020a5d71ba533da0aaeab07636",
+      "bytes": 3876
+    },
+    "measurement.json": {
+      "sha256": "a573b72f31d06d3991b7f856915447b5c06663add1379cab368f5ebd6e962bbe",
+      "bytes": 130
+    },
+    "implementation.json": {
+      "sha256": "a4c3bbc6764d8646a0abca00bcdbce92271d69442b3d45f6fb1de8373cb82236",
+      "bytes": 1154
+    },
+    "proposal/report.json": {
+      "sha256": "f01e0ac0cfcb82d181fb368440fc30f9d1cc6039e519c0e1d3fdea3a16236361",
+      "bytes": 1488
+    },
+    "proposal/telemetry-oracle-source.py": {
+      "sha256": "d511be5794713e99547840c48a6e3e30c29e8bb0dabaf4e2354b7cfb1b2deac1",
+      "bytes": 5463
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "case": "pubsub-rename",
+    "profile": "pubsub-name-rename",
+    "strategy": "deterministic_rename_roles",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "structural_category": "field_renamed",
+    "expected_sites": 6,
+    "fixture_sha256": "a82d8d92bb372748ede3691863bbb18f8fc077aa6cc166e98b6059d194829676",
+    "ground_truth_sha256": "18fd09f2d69421c225206f76bfb72d3a69ca0a4de2445e61cf14ed4f83fc7050"
+  },
+  {
+    "case": "pubsub-removal",
+    "profile": "pubsub-name-removal",
+    "strategy": "deterministic_remove_name_v1",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "structural_category": "field_removed",
+    "expected_sites": 6,
+    "fixture_sha256": "5996278459b5fddc46e2b7db7dfe60cb99f3ede38679640689fab56e7e071dca",
+    "ground_truth_sha256": "dddd866d9349ba152be325f8332dd0b401ef17fbfbe361594a1118105d8ac57c"
+  },
+  {
+    "case": "pubsub-utf8",
+    "profile": "pubsub-identifier-utf8",
+    "strategy": "deterministic_utf8_v2",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "structural_category": "field_type_changed",
+    "expected_sites": 6,
+    "fixture_sha256": "1cdc79aa42b507a295b7a39836140a9036beca75620de1632bda41d9dbb3c56a",
+    "ground_truth_sha256": "fec60f120724237c8c127e3d9ea0967d959729b442c6e4da460e30c7d9520c0c"
+  },
+  {
+    "case": "telemetry-rename",
+    "profile": "telemetry-speed-rename",
+    "strategy": "deterministic_rename_roles",
+    "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "structural_category": "field_renamed",
+    "expected_sites": 9,
+    "fixture_sha256": "830e18cda220fe1f8570cdb6a2412bffd6d021d743c96cef10243032e4bcda12",
+    "ground_truth_sha256": "2dc6b989cc603737193f6af9d865808bda3a80667029b16fae58843954ed8330"
+  },
+  {
+    "case": "telemetry-precision",
+    "profile": "telemetry-speed-precision",
+    "strategy": "deterministic_telemetry_precision",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "structural_category": "field_type_changed",
+    "expected_sites": 9,
+    "fixture_sha256": "60b84e534e8b04b34525f458e1b719b9f937ab939a3230992b12d951a62e3624",
+    "ground_truth_sha256": "b4053dadd6e71b9ee2619c5aaf15273650be5dfb7f0e725e9e9df1715348ed93"
+  },
+  {
+    "case": "telemetry-units",
+    "profile": "telemetry-speed-units",
+    "strategy": "deterministic_telemetry_units",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "structural_category": "field_renamed",
+    "expected_sites": 9,
+    "fixture_sha256": "e47e84c03a38e07317625752859d8b353d25f0cb313c7f8a574c0e592975b1b0",
+    "ground_truth_sha256": "0e5ea2cb11e0faf84d8e54803053362c3469b29ff9a2784d849ecfdc981fd554"
+  }
+]

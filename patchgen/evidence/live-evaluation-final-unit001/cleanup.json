@@ -1,0 +1,26 @@
+{
+  "model_unload_reason": "unload",
+  "remaining_model_allocations": [
+    {
+      "name": "ministral-3:3b",
+      "model": "ministral-3:3b",
+      "size": 4185590332,
+      "digest": "f04aa1c738f64e13c625b82ae92504fc0260fa6723b509ed1ece0fa188179b1d",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "mistral3",
+        "families": [
+          "mistral3"
+        ],
+        "parameter_size": "3.8B",
+        "quantization_level": "Q4_K_M"
+      },
+      "expires_at": "2026-11-02T17:36:20.09265-05:00",
+      "size_vram": 4185590332,
+      "context_length": 16384
+    }
+  ],
+  "runtime_listeners": "",
+  "lsof_exit_code": 1
+}

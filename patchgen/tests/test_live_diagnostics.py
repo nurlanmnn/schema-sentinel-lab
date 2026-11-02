@@ -47,6 +47,10 @@ class DiagnosticTests(unittest.TestCase):
             (nested/'parsed-response.json').write_text('{broken archived data')
             request=root/'requests/01';request.mkdir(parents=True)
             (request/'parsed-response.json').write_text(json.dumps({'confidence':0.99,'outcome':'patch'}))
+            (request/'request.json').write_text(json.dumps({'model':'requested-local'}))
+            (request/'request-measurement.json').write_text(json.dumps({'memory_samples':[
+                {'models':[{'name':'requested-local','size':100,'size_vram':80},{'name':'unrelated','size':9999,'size_vram':9999}]},
+                {'models':[{'model':'requested-local','size':200,'size_vram':150}]}]}))
             result=request_details(root,[{'request':'01','edit_validation':{'status':'failed','error':'missing site'},
                 'serving_counts':{'load_duration':2_000_000_000,'eval_duration':4_000_000_000,'eval_count':40}}])
             self.assertEqual(len(result),1)
@@ -55,12 +59,15 @@ class DiagnosticTests(unittest.TestCase):
             self.assertEqual(result[0]['contract_status'],'failed')
             self.assertEqual(result[0]['confidence'],0.99)
             self.assertIsNone(result[0]['prompt_eval_seconds'])
+            self.assertEqual(result[0]['max_sampled_model_size_bytes'],200)
+            self.assertEqual(result[0]['max_sampled_model_size_vram_bytes'],150)
 
     def test_missing_or_zero_counters_do_not_invent_speed(self):
         with tempfile.TemporaryDirectory() as tmp:
             result=request_details(Path(tmp),[{'request':'01','serving_counts':{'eval_count':4,'eval_duration':0}}])
             self.assertIsNone(result[0]['output_tokens_per_second'])
             self.assertIsNone(result[0]['load_seconds'])
+            self.assertIsNone(result[0]['max_sampled_model_size_bytes'])
 
     def test_compiler_and_oracle_failures_retain_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:

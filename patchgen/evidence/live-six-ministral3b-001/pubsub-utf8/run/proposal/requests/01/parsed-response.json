@@ -1,0 +1,44 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 18,
+      "end_line": 20,
+      "replacement_lines": [
+        "        var decoded = Simulation.V2.Entity.Parser.ParseFrom(rawBytes);",
+        "        entity = decoded;",
+        "        fields = new() { [\"entity_id\"] = Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) }"
+      ]
+    },
+    {
+      "start_line": 67,
+      "end_line": 68,
+      "replacement_lines": [
+        "        : new Simulation.V2.Entity { EntityId = Encoding.UTF8.GetBytes(\"cs_202\"), Name = \"Sensor B\" }"
+      ]
+    }
+  ],
+  "rationale": "The change requires UTF-8 encoding/decoding for `entity_id` in v2. The decoder must decode bytes to a UTF-8 string, and the encoder must encode a UTF-8 string to bytes. Lines 18\u201320 replace direct access to `EntityId` with explicit UTF-8 decoding. Line 67\u201368 updates the construction of a v2 entity by encoding the string identifier as UTF-8 bytes.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The `Encoding.UTF8` instance is available in C# for this runtime",
+    "UTF-8 encoded strings round-trip correctly for valid identifiers"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "unaffected",
+      "reason": "No direct string/bytes access; uses `EntityId` property, which is unchanged."
+    },
+    {
+      "line": 21,
+      "decision": "edit",
+      "reason": "Directly accesses `decoded.EntityId`, must decode bytes to UTF-8 string for field output."
+    },
+    {
+      "line": 67,
+      "decision": "edit",
+      "reason": "String literal `"
+    }
+  ]
+}
