@@ -1,6 +1,6 @@
 {
   "profile_version": "1.0",
-  "source_revision": "a65e45f9639c5e56873f382262197237feef5250",
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
   "change_id": "pubsub-name-rename",
   "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
   "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
@@ -11,5 +11,6 @@
   "model_editable": false,
   "origin": "independent evaluator expectations; excluded from generation",
   "oracle_case": "entity-name-rename",
-  "pubsub_case": "rename"
+  "pubsub_case": "rename",
+  "pubsub_negative_control": "truncated_v1_decoder_logs"
 }

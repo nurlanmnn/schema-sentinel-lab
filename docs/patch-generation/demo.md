@@ -57,3 +57,9 @@ acknowledgements across v1/v2 topics on a local in-memory broker. The review
 bundle includes the pub/sub observations and evaluator source snapshot.
 These repeat the same Entity changes on a new transport baseline, not new domain
 benchmark cases. See [decision 0013](../decisions/0013-pubsub-proposal-validation.md).
+
+The active pub/sub cases also require a truncated-v1 negative control: every
+subscriber must reject before acknowledgement and leave its message pending.
+The review includes failure logs and cleanup evidence. This negative control is
+not counted among valid deliveries or distinct schema-change cases. Earlier
+retained reviews keep their older source revision and validation scope.

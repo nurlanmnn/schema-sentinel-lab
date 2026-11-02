@@ -1,0 +1,8 @@
+RangeError: index out of range: 2 + 5 > 3
+    at indexOutOfRange (/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/typescript/node_modules/protobufjs/src/reader.js:13:12)
+    at Reader.read_bytes [as bytes] (/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/typescript/node_modules/protobufjs/src/reader.js:330:15)
+    at Reader.read_string [as string] (/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/typescript/node_modules/protobufjs/src/reader.js:350:22)
+    at Object.decode (/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/typescript/dist/generated/ts/v1/entity.js:64:47)
+    at processEntity (/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/typescript/dist/runtimes/typescript/main.js:14:55)
+    at subscribe (/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/typescript/dist/runtimes/typescript/main.js:46:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

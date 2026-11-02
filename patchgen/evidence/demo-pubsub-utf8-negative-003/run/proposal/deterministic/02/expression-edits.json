@@ -1,0 +1,35 @@
+{
+  "path": "runtimes/python/main.py",
+  "edits": [
+    {
+      "start_byte": 1050,
+      "end_byte": 1066,
+      "before": "entity.entity_id",
+      "after": "(entity.entity_id.decode(\"utf-8\") if version == \"v2\" else entity.entity_id)",
+      "role": "shared_observation_v2_decode",
+      "line": 31
+    },
+    {
+      "start_byte": 4939,
+      "end_byte": 4947,
+      "before": "\"py_101\"",
+      "after": "(\"py_101\".encode(\"utf-8\") if args.version == \"v2\" else \"py_101\")",
+      "role": "standalone_v2_encode",
+      "line": 115
+    }
+  ],
+  "candidate_decisions": {
+    "31": [
+      {
+        "role": "shared_observation_v2_decode",
+        "changed": true
+      }
+    ],
+    "115": [
+      {
+        "role": "standalone_v2_encode",
+        "changed": true
+      }
+    ]
+  }
+}

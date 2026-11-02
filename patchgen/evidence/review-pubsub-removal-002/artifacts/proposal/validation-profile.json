@@ -1,0 +1,16 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "change_id": "pubsub-name-removal",
+  "new_schema_sha256": "16704bf1cafa25c444eaf22b67de84bd965c842439c1b27d66b9aaef2f695128",
+  "test_patch_sha256": "ff9017e8b036fea0b2cb97ba36d7f2abb12117c7dfe1b88f6e54c8910b8c41fa",
+  "allowed_test_paths": [
+    "testbed/tests/e2e_test.py",
+    "testbed/tests/test_evidence.py"
+  ],
+  "model_editable": false,
+  "origin": "independent evaluator expectations; excluded from generation",
+  "oracle_case": "entity-name-removal",
+  "pubsub_case": "removal",
+  "pubsub_negative_control": "truncated_v1"
+}

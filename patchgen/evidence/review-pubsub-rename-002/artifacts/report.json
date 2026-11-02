@@ -1,0 +1,165 @@
+{
+  "status": "validation_passed",
+  "implementation": {
+    "revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "files": {
+      "detector.py": "abed5121c265741632e39e9ac693099d97a9f91d36b332d5e97a55fd06f9f201",
+      "locator.py": "74459f3101db5e330c31fc315ddb72a3ae5fcfffd36f2860951c918b5457c8ac",
+      "pipeline.py": "d3a418bd483a64bed8fb5606a0281d8abeb375649caa6f1b3af62093769cf7fe",
+      "adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9",
+      "generator.py": "af002bc27c1063970fcdc6fdc695f9ffe491bee5cc1e6d5ca7df5f338eb8f9b0",
+      "rename_tokens.py": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+      "rename_roles.py": "baf426c540bc140f7b6325dc9d6d9172419c6d848dedfde5cf20b25ad778efbb",
+      "type_utf8.py": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+      "remove_name.py": "1265821f708cb54b0460f01cd1939105bc64a4222acf992c1c0ebba8f45198e8"
+    }
+  },
+  "measurement": {
+    "expected_sites": 6,
+    "matched_sites": 6,
+    "recall": 1.0,
+    "missed": [],
+    "extra": [],
+    "classification_correct": true
+  },
+  "human_approval_required": true,
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof",
+  "proposal_exit_code": 0,
+  "proposal_report": {
+    "status": "validation_passed",
+    "human_approval_required": true,
+    "mode": "deterministic_proposal",
+    "prompt_version": "host-rename/1.0",
+    "strategy": "deterministic_rename_roles",
+    "generator_sha256": "af002bc27c1063970fcdc6fdc695f9ffe491bee5cc1e6d5ca7df5f338eb8f9b0",
+    "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "rename_token_sha256": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+    "rename_role_sha256": "baf426c540bc140f7b6325dc9d6d9172419c6d848dedfde5cf20b25ad778efbb",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "validation_profile": {
+      "profile_version": "1.0",
+      "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "change_id": "pubsub-name-rename",
+      "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+      "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
+      "allowed_test_paths": [
+        "testbed/tests/e2e_test.py",
+        "testbed/tests/test_evidence.py"
+      ],
+      "model_editable": false,
+      "origin": "independent evaluator expectations; excluded from generation",
+      "oracle_case": "entity-name-rename",
+      "pubsub_case": "rename",
+      "pubsub_negative_control": "truncated_v1"
+    },
+    "pubsub_harness_sha256": {
+      "run.py": "5ef1d8f185291c26c7d189be55f589bfb2a14bec29820bcd47d7c8ca459765bb",
+      "broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+      "topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+    },
+    "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+    "outcome": "patch",
+    "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-pubsub-rename-003/proposal/workspace",
+    "pubsub_validation": {
+      "status": "passed",
+      "mode": "actual_local_pubsub",
+      "case": "rename",
+      "scenario": "valid",
+      "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-pubsub-rename-003/proposal/workspace",
+      "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+      "human_approval_required": true,
+      "generated_patch_approval": false,
+      "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "runtime_git_status": [
+        " M generated/csharp/V1/Entity.cs",
+        " M generated/python/v1/entity_pb2.py",
+        " M generated/ts/v1/entity.ts",
+        " M proto/v1/entity.proto",
+        " M runtimes/csharp/main.cs",
+        " M runtimes/python/main.py",
+        " M runtimes/typescript/main.ts",
+        " M testbed/tests/e2e_test.py",
+        " M testbed/tests/test_evidence.py"
+      ],
+      "tools": {
+        "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+        "node": "v24.10.0",
+        "dotnet": "8.0.426"
+      },
+      "runtime_source_sha256": {
+        "runtimes/python/main.py": "74202229a8ef534def81bb2005294ff742732280e2165c0ae2664ff9527c07a0",
+        "runtimes/typescript/main.ts": "7b553ffe1c6508b25ffcfc4a0f117fcbc141b071dacca3439704830899a56751",
+        "runtimes/csharp/main.cs": "d1c85dc894b64906a0c1c7676289cb706356804f08e252313c6aa7df133cfc93",
+        "proto/v1/entity.proto": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+        "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+      },
+      "harness_source_sha256": {
+        "testbed/pubsub/run.py": "5ef1d8f185291c26c7d189be55f589bfb2a14bec29820bcd47d7c8ca459765bb",
+        "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+        "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+      },
+      "publication_cases": 8,
+      "decoded_deliveries": 24,
+      "topics": 2,
+      "runtimes": 3,
+      "elapsed_seconds": 0.9468460410134867,
+      "children_stopped": true,
+      "broker_stopped": true
+    },
+    "pubsub_negative_control": {
+      "status": "expected_rejection_observed",
+      "mode": "actual_local_pubsub",
+      "case": "rename",
+      "scenario": "malformed",
+      "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-pubsub-rename-003/proposal/workspace",
+      "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+      "human_approval_required": true,
+      "generated_patch_approval": false,
+      "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "runtime_git_status": [
+        " M generated/csharp/V1/Entity.cs",
+        " M generated/python/v1/entity_pb2.py",
+        " M generated/ts/v1/entity.ts",
+        " M proto/v1/entity.proto",
+        " M runtimes/csharp/main.cs",
+        " M runtimes/python/main.py",
+        " M runtimes/typescript/main.ts",
+        " M testbed/tests/e2e_test.py",
+        " M testbed/tests/test_evidence.py"
+      ],
+      "tools": {
+        "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+        "node": "v24.10.0",
+        "dotnet": "8.0.426"
+      },
+      "runtime_source_sha256": {
+        "runtimes/python/main.py": "74202229a8ef534def81bb2005294ff742732280e2165c0ae2664ff9527c07a0",
+        "runtimes/typescript/main.ts": "7b553ffe1c6508b25ffcfc4a0f117fcbc141b071dacca3439704830899a56751",
+        "runtimes/csharp/main.cs": "d1c85dc894b64906a0c1c7676289cb706356804f08e252313c6aa7df133cfc93",
+        "proto/v1/entity.proto": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+        "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+      },
+      "harness_source_sha256": {
+        "testbed/pubsub/run.py": "5ef1d8f185291c26c7d189be55f589bfb2a14bec29820bcd47d7c8ca459765bb",
+        "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+        "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+      },
+      "publication_cases": 1,
+      "decoded_deliveries": 0,
+      "subscriber_exit_codes": {
+        "python": 1,
+        "typescript": 1,
+        "csharp": -6
+      },
+      "negative_control": true,
+      "meaning": "all three actual processes rejected truncated protobuf; not successful delivery or migration",
+      "elapsed_seconds": 0.8645985419861972,
+      "children_stopped": true,
+      "broker_stopped": true
+    },
+    "workflow_elapsed_seconds": 9.024142042035237,
+    "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+  }
+}

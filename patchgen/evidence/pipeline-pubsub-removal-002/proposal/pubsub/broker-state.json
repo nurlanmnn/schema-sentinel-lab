@@ -1,0 +1,380 @@
+{
+  "topics": {
+    "entity.v1": {
+      "version": "v1",
+      "message": "simulation.v1.Entity",
+      "schema_path": "proto/v1/entity.proto"
+    },
+    "entity.v2": {
+      "version": "v2",
+      "message": "simulation.v2.Entity",
+      "schema_path": "proto/v2/entity.proto"
+    }
+  },
+  "subscribers": {
+    "python": {
+      "runtime": "python",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    },
+    "typescript": {
+      "runtime": "typescript",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    },
+    "csharp": {
+      "runtime": "csharp",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    }
+  },
+  "publications": [
+    {
+      "message_id": 1,
+      "topic": "entity.v1",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "published_monotonic": 610077.745116375
+    },
+    {
+      "message_id": 2,
+      "topic": "entity.v1",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "e9d31503b72cbce33f218af726f2a3093cb565b1499c6f009f8f0b3e1f84ef54",
+      "bytes": 22,
+      "published_monotonic": 610077.745862875
+    },
+    {
+      "message_id": 3,
+      "topic": "entity.v1",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "ad612399d77063856e041edb4552a015f0d60139ddae2fb2c996b9492ce1323c",
+      "bytes": 36,
+      "published_monotonic": 610077.746379666
+    },
+    {
+      "message_id": 4,
+      "topic": "entity.v1",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "adba6c9821bada5de921f120c919d8808c754f44fc18b81c0489b89484a0afe7",
+      "bytes": 28,
+      "published_monotonic": 610077.74677125
+    },
+    {
+      "message_id": 5,
+      "topic": "entity.v2",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "published_monotonic": 610077.747142416
+    },
+    {
+      "message_id": 6,
+      "topic": "entity.v2",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "7695d87918e9b2bd9375cc4c130ef61705c4eae296b1d5c7080c6a36807baf62",
+      "bytes": 12,
+      "published_monotonic": 610077.747837458
+    },
+    {
+      "message_id": 7,
+      "topic": "entity.v2",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "bfc064480cfe30eecc7b23d066604235acee49fbbe4a2ced8ee6362a15dc2962",
+      "bytes": 17,
+      "published_monotonic": 610077.74866725
+    },
+    {
+      "message_id": 8,
+      "topic": "entity.v2",
+      "recipients": [
+        "python",
+        "typescript",
+        "csharp"
+      ],
+      "sha256": "29966dd9cc39f1bec07bce4f8073a560e13ceddec5bd70a662adacc3c72bfbf8",
+      "bytes": 12,
+      "published_monotonic": 610077.749202833
+    }
+  ],
+  "acknowledgements": [
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.01089312497060746
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 2,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.012101750005967915
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 3,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.012413666932843626
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 4,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.012736415956169367
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 5,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.013203042093664408
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 6,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.013255832949653268
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 7,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.01322270801756531
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 8,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.013479249901138246
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.04254166595637798
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 2,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.04407800000626594
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 3,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.046206792001612484
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 4,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.04792499996256083
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 5,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.04913687508087605
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 6,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.04981925000902265
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 7,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.05033608293160796
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 8,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.05142145790159702
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.055652166018262506
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 2,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.055938250035978854
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 3,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.056565791950561106
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 4,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.05737029097508639
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 5,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.05849208403378725
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 6,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.058936874964274466
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 7,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.05924016598146409
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 8,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.06021216697990894
+    }
+  ]
+}

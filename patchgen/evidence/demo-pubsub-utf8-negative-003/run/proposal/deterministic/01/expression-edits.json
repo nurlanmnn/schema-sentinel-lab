@@ -1,0 +1,47 @@
+{
+  "path": "runtimes/csharp/main.cs",
+  "edits": [
+    {
+      "start_byte": 726,
+      "end_byte": 742,
+      "before": "decoded.EntityId",
+      "after": "decoded.EntityId.ToStringUtf8()",
+      "role": "v2_observation_decode",
+      "line": 21
+    },
+    {
+      "start_byte": 3256,
+      "end_byte": 3264,
+      "before": "\"cs_202\"",
+      "after": "Google.Protobuf.ByteString.CopyFromUtf8(\"cs_202\")",
+      "role": "v2_construction_encode",
+      "line": 68
+    }
+  ],
+  "candidate_decisions": {
+    "15": [
+      {
+        "role": "v1_observation_preserved",
+        "changed": false
+      }
+    ],
+    "21": [
+      {
+        "role": "v2_observation_decode",
+        "changed": true
+      }
+    ],
+    "67": [
+      {
+        "role": "v1_construction_preserved",
+        "changed": false
+      }
+    ],
+    "68": [
+      {
+        "role": "v2_construction_encode",
+        "changed": true
+      }
+    ]
+  }
+}

@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import shutil
 import unittest
-from patchgen.review import export, verify, sha, PUBSUB_REVIEW_ARTIFACTS
+from patchgen.review import export, verify, sha, PUBSUB_REVIEW_ARTIFACTS, PUBSUB_NEGATIVE_ARTIFACTS
 from patchgen.generator import ContractError
 
 
@@ -73,6 +73,41 @@ class ReviewTests(unittest.TestCase):
         self.pubsub_run()
         (self.run/'proposal/pubsub-harness/testbed/pubsub/run.py').write_text('changed')
         with self.assertRaisesRegex(ContractError, 'source hash mismatch'):
+            export(self.run, self.bundle)
+
+    def test_required_negative_control_cannot_be_missing_or_claim_successful_decode(self):
+        self.pubsub_run()
+        self.report['validation_profile']['pubsub_negative_control'] = 'truncated_v1_decoder_logs'
+        self.write_run()
+        with self.assertRaisesRegex(ContractError, 'negative-control evidence'):
+            export(self.run, self.bundle)
+        result = dict(status='expected_rejection_observed', scenario='malformed', case='rename', runtime_revision='a'*40,
+                      decoded_deliveries=0, children_stopped=True, broker_stopped=True,
+                      subscriber_exit_codes={'python': 1, 'typescript': 1, 'csharp': -6},
+                      decoder_failures={'python': True, 'typescript': True, 'csharp': True})
+        self.report['pubsub_negative_control'] = result; self.write_run()
+        for name in PUBSUB_NEGATIVE_ARTIFACTS:
+            path = self.run / name; path.parent.mkdir(parents=True, exist_ok=True); path.write_text('TEST ONLY')
+        (self.run/'proposal/pubsub-malformed/report.json').write_text(json.dumps(result))
+        manifest = export(self.run, self.bundle)
+        self.assertTrue(set(PUBSUB_NEGATIVE_ARTIFACTS) <= manifest['artifacts'].keys())
+        self.assertEqual(verify(self.bundle, self.decision())['status'], 'verified')
+        shutil.rmtree(self.bundle)
+        result.pop('decoder_failures')
+        self.report['pubsub_negative_control'] = result; self.write_run()
+        (self.run/'proposal/pubsub-malformed/report.json').write_text(json.dumps(result))
+        with self.assertRaisesRegex(ContractError, 'inconsistent negative-control'):
+            export(self.run, self.bundle)
+        # Earlier v1 snapshots claimed exits/queues only, and retain that scope.
+        self.report['validation_profile']['pubsub_negative_control'] = 'truncated_v1'
+        self.write_run()
+        export(self.run, self.bundle)
+        self.assertEqual(verify(self.bundle, self.decision())['status'], 'verified')
+        shutil.rmtree(self.bundle)
+        result['subscriber_exit_codes']['typescript'] = 0
+        self.report['pubsub_negative_control'] = result; self.write_run()
+        (self.run/'proposal/pubsub-malformed/report.json').write_text(json.dumps(result))
+        with self.assertRaisesRegex(ContractError, 'inconsistent negative-control'):
             export(self.run, self.bundle)
 
     def test_changed_patch_rejected(self):

@@ -271,3 +271,19 @@ reflection. Typed broker-envelope records remove that source ambiguity without
 weakening the locator. A transient premature-response failure remains in
 `pubsub-typed-csharp-001`; `002` and five repeats pass, with explicit close headers
 in the repeated runs. Cause is not established and no recovery guarantee follows.
+
+## Truncated-payload boundary (2 November 2026)
+
+The actual negative control found that TypeScript's Buffer decoder acknowledged
+a truncated string while Python/C# rejected it (`pubsub-malformed-001`, failed).
+The processor now selects the existing library's bounds-checked plain-array
+reader. `pubsub-malformed-002` records all three decoder failures, no ack and
+stopped processes; valid fan-out still passes. This is a narrow framing fix,
+not arbitrary malformed-wire/UTF-8 safety or broker recovery.
+
+The active pub/sub fixtures pin 6ead28a. `pipeline-pubsub-rename-004`,
+`pipeline-pubsub-removal-003` and `demo-pubsub-utf8-negative-003` require both
+24 valid decoded deliveries and the actual truncated-v1 negative control,
+including decoder-error log signatures. New review bundles retain both sets of
+evidence. This adds no distinct schema-change benchmark cases, no live model
+success and no human acceptance. See decision 0014 for earlier retained failures.

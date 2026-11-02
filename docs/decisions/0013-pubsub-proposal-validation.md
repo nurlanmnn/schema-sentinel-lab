@@ -5,7 +5,8 @@ Status: independently validated in the Lab; real human review pending
 
 Keep the original historical fixtures unchanged. Add three explicitly named
 `pubsub-name-rename`, `pubsub-name-removal` and `pubsub-identifier-utf8` fixtures,
-pinned to the typed-envelope pub/sub baseline a65e45f. These repeat the same three
+initially pinned to the typed-envelope pub/sub baseline a65e45f. Decision 0014
+updates the active fixtures to the bounds-checked TypeScript baseline 6ead28a. These repeat the same three
 Entity schema mutations on a transport-capable baseline; they are not three new
 domain changes or evidence of a twenty-case benchmark.
 

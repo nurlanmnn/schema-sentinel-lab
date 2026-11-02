@@ -16,6 +16,9 @@ python3.13 run_demo.py --output patchgen/evidence/my-demo
 
 Install the prerequisites listed in that guide first. This bounded deterministic
 demo makes zero model calls and leaves human approval pending.
+Use `--case pubsub-utf8` (also `pubsub-rename` or `pubsub-removal`) to add
+three-runtime fan-out and a truncated-payload negative control. For the standalone
+pub/sub testbed, see [testbed development](testbed/README.md).
 
 
 UCF Senior Design project for testing schema changes across Python, TypeScript,

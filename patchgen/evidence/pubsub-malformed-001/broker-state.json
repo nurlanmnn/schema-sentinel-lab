@@ -1,0 +1,71 @@
+{
+  "topics": {
+    "entity.v1": {
+      "version": "v1",
+      "message": "simulation.v1.Entity",
+      "schema_path": "proto/v1/entity.proto"
+    },
+    "entity.v2": {
+      "version": "v2",
+      "message": "simulation.v2.Entity",
+      "schema_path": "proto/v2/entity.proto"
+    }
+  },
+  "subscribers": {
+    "python": {
+      "runtime": "python",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": [
+        1
+      ]
+    },
+    "csharp": {
+      "runtime": "csharp",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": [
+        1
+      ]
+    },
+    "typescript": {
+      "runtime": "typescript",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    }
+  },
+  "publications": [
+    {
+      "message_id": 1,
+      "topic": "entity.v1",
+      "recipients": [
+        "python",
+        "csharp",
+        "typescript"
+      ],
+      "sha256": "bb41b3df1cc868005284347ff83750091f65717b47ad43eae8c0be59f49d87a4",
+      "bytes": 3,
+      "published_monotonic": 609948.883449333
+    }
+  ],
+  "acknowledgements": [
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "a",
+        "name": ""
+      },
+      "publish_to_ack_seconds": 0.0220852920319885
+    }
+  ]
+}

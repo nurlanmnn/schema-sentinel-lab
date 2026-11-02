@@ -14,7 +14,8 @@ ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detect
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
-ARTIFACTS += PUBSUB_REVIEW_ARTIFACTS
+PUBSUB_NEGATIVE_ARTIFACTS = tuple('proposal/pubsub-malformed/' + name for name in PUBSUB_ARTIFACTS)
+ARTIFACTS += PUBSUB_REVIEW_ARTIFACTS + PUBSUB_NEGATIVE_ARTIFACTS
 ASSETS = Path(__file__).with_name('review_assets')
 
 
@@ -51,6 +52,23 @@ def check_pubsub_evidence(root, report, available=None):
         actual = sha(artifact_path(root, 'proposal/pubsub-harness/testbed/pubsub/' + name).read_bytes())
         if actual != report.get('pubsub_harness_sha256', {}).get(name):
             raise ContractError('pubsub evaluator source hash mismatch')
+    if report.get('validation_profile', {}).get('pubsub_negative_control'):
+        if available is not None and not set(PUBSUB_NEGATIVE_ARTIFACTS) <= set(available):
+            raise ContractError('pubsub review requires negative-control evidence')
+        for name in PUBSUB_NEGATIVE_ARTIFACTS:
+            if not artifact_path(root, name).is_file():
+                raise ContractError('pubsub review requires negative-control evidence')
+        rejected = json.loads(artifact_path(root, 'proposal/pubsub-malformed/report.json').read_text())
+        codes = rejected.get('subscriber_exit_codes', {})
+        decoder_failures = rejected.get('decoder_failures', {})
+        if (rejected != report.get('pubsub_negative_control') or rejected.get('status') != 'expected_rejection_observed'
+                or rejected.get('scenario') != 'malformed' or rejected.get('case') != mode
+                or rejected.get('runtime_revision') != report.get('source_revision') or rejected.get('decoded_deliveries') != 0
+                or not rejected.get('children_stopped') or not rejected.get('broker_stopped')
+                or (report['validation_profile']['pubsub_negative_control'] == 'truncated_v1_decoder_logs'
+                    and (set(decoder_failures) != {'python', 'typescript', 'csharp'} or any(value is not True for value in decoder_failures.values())))
+                or set(codes) != {'python', 'typescript', 'csharp'} or any(type(code) is not int or code == 0 for code in codes.values())):
+            raise ContractError('pubsub review has inconsistent negative-control evidence')
 
 
 def export(run, output):

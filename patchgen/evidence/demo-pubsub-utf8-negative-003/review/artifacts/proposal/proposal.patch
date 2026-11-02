@@ -1,0 +1,72 @@
+diff --git a/proto/v2/entity.proto b/proto/v2/entity.proto
+--- a/proto/v2/entity.proto
++++ b/proto/v2/entity.proto
+@@ -3,5 +3,5 @@
+ package simulation.v2;
+ 
+ message Entity {
+-  string entity_id = 1;
++  bytes entity_id = 1;
+ }
+diff --git a/runtimes/csharp/main.cs b/runtimes/csharp/main.cs
+--- a/runtimes/csharp/main.cs
++++ b/runtimes/csharp/main.cs
+@@ -18,7 +18,7 @@
+     {
+         var decoded = Simulation.V2.Entity.Parser.ParseFrom(rawBytes);
+         entity = decoded;
+-        fields = new() { ["entity_id"] = decoded.EntityId };
++        fields = new() { ["entity_id"] = decoded.EntityId.ToStringUtf8() };
+     }
+     else throw new ArgumentException($"Unsupported version: {version}");
+     Console.WriteLine(JsonSerializer.Serialize(new { runtime = "csharp", version, fields }));
+@@ -65,7 +65,7 @@
+     var version = args.Contains("--v2") ? "v2" : "v1";
+     IMessage entity = version == "v1"
+         ? new Simulation.V1.Entity { EntityId = "cs_202", Name = "Sensor B" }
+-        : new Simulation.V2.Entity { EntityId = "cs_202" };
++        : new Simulation.V2.Entity { EntityId = Google.Protobuf.ByteString.CopyFromUtf8("cs_202") };
+     ProcessEntity(entity.ToByteArray(), version);
+     return 0;
+ }
+diff --git a/runtimes/python/main.py b/runtimes/python/main.py
+--- a/runtimes/python/main.py
++++ b/runtimes/python/main.py
+@@ -28,7 +28,7 @@
+     if version not in ("v1", "v2"):
+         raise ValueError(f"Unsupported schema version: {version}")
+     entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+-    fields = {"entity_id": entity.entity_id}
++    fields = {"entity_id": (entity.entity_id.decode("utf-8") if version == "v2" else entity.entity_id)}
+     if version == "v1":
+         fields["name"] = entity.name
+     print(json.dumps({"runtime": "python", "version": version, "fields": fields}, ensure_ascii=True), flush=True)
+@@ -112,7 +112,7 @@
+             server.serve_forever()
+     else:
+         module = importlib.import_module(f"{args.version}.entity_pb2")
+-        entity = module.Entity(entity_id="py_101")
++        entity = module.Entity(entity_id=("py_101".encode("utf-8") if args.version == "v2" else "py_101"))
+         if args.version == "v1":
+             entity.name = "Sensor A"
+         process_entity(entity.SerializeToString(), args.version)
+diff --git a/runtimes/typescript/main.ts b/runtimes/typescript/main.ts
+--- a/runtimes/typescript/main.ts
++++ b/runtimes/typescript/main.ts
+@@ -10,7 +10,7 @@
+   // Plain Uint8Array selects the bounds-checked Reader rather than BufferReader.string clamping.
+   rawBytes = new Uint8Array(rawBytes);
+   const entity = version === "v1" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);
+-  const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
++  const fields = { entity_id: (version === "v2" ? new TextDecoder("utf-8", { fatal: true }).decode((entity as EntityV2).entityId) : (entity as EntityV1).entityId), ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
+   console.log(JSON.stringify({ runtime: "typescript", version, fields }));
+   return { entity, fields };
+ }
+@@ -81,6 +81,6 @@
+   const version = process.argv.includes("--v2") ? "v2" : "v1";
+   const bytes = version === "v1"
+     ? EntityV1.encode({ entityId: "ts_303", name: "Sensor C" }).finish()
+-    : EntityV2.encode({ entityId: "ts_303" }).finish();
++    : EntityV2.encode({ entityId: new TextEncoder().encode("ts_303") }).finish();
+   processEntity(bytes, version);
+ }

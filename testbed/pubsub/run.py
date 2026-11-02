@@ -72,7 +72,26 @@ def validate(state, published):
             raise RuntimeError('Publication identity/fan-out mismatch')
 
 
-def execute(root, output, case='baseline'):
+def validate_malformed(state, message_id, exit_codes, decoder_failures):
+    """A process-level negative control, never counted as successful delivery."""
+    if set(exit_codes) != set(RUNTIMES) or any(code is None or code == 0 for code in exit_codes.values()):
+        raise RuntimeError('Malformed payload did not fail in every subscriber')
+    if set(decoder_failures) != set(RUNTIMES) or any(value is not True for value in decoder_failures.values()):
+        raise RuntimeError('Malformed probe lacks decoder-error evidence in each subscriber log')
+    if state['acknowledgements'] or len(state['publications']) != 1:
+        raise RuntimeError('Malformed payload was acknowledged or publication inventory differs')
+    if set(state['subscribers']) != set(RUNTIMES):
+        raise RuntimeError('Malformed probe lacks all subscriber processes')
+    if state['publications'][0]['message_id'] != message_id or sorted(state['publications'][0]['recipients']) != sorted(RUNTIMES):
+        raise RuntimeError('Malformed probe fan-out mismatch')
+    for name in RUNTIMES:
+        if state['subscribers'][name]['pending'] != [message_id]:
+            raise RuntimeError('Malformed payload did not remain pending for ' + name)
+
+
+def execute(root, output, case='baseline', scenario='valid'):
+    if scenario not in ('valid', 'malformed'):
+        raise RuntimeError('Unknown pubsub validation scenario')
     if case not in CASES:
         raise RuntimeError('Unknown pubsub validation case')
     root, output = root.resolve(), output.resolve()
@@ -80,7 +99,7 @@ def execute(root, output, case='baseline'):
         raise RuntimeError('Use a new output directory that does not contain the runtime checkout')
     output.mkdir(parents=True)
     started = time.monotonic()
-    report = {'status': 'failed', 'mode': 'actual_local_pubsub', 'case': case, 'runtime_root': str(root),
+    report = {'status': 'failed', 'mode': 'actual_local_pubsub', 'case': case, 'scenario': scenario, 'runtime_root': str(root),
               'timing_scope': 'local publish-to-ack including polling, HTTP and decode; not schema propagation or human review',
               'human_approval_required': True, 'generated_patch_approval': False}
     processes, logs = [], []
@@ -124,16 +143,39 @@ def execute(root, output, case='baseline'):
                 time.sleep(0.05)
 
         wait_for(lambda state: len(state['subscribers']) == 3, 'three subscriptions')
-        # Publish the entire sequence without waiting for any consumer ack.
-        for sample in samples(case):
-            publication = request(url, '/publish', {'topic': sample['topic'], 'payload': base64.b64encode(sample['payload']).decode()})
-            published.append({'message_id': publication['message_id'], 'topic': sample['topic'], 'fields': sample['fields'],
-                              'sha256': hashlib.sha256(sample['payload']).hexdigest(), 'bytes': len(sample['payload'])})
-        (output / 'expected.json').write_text(json.dumps(published, indent=2, ensure_ascii=True) + '\n')
-        state = wait_for(lambda state: len(state['acknowledgements']) == len(published) * 3, 'all independent decoder acknowledgements')
-        validate(state, published)
-        report.update(status='passed', publication_cases=len(published), decoded_deliveries=len(state['acknowledgements']),
-                      topics=2, runtimes=3)
+        if scenario == 'malformed':
+            # Length-delimited field claims five bytes but contains only one.
+            raw = bytes.fromhex('0a0561')
+            publication = request(url, '/publish', {'topic': 'entity.v1', 'payload': base64.b64encode(raw).decode()})
+            (output / 'expected.json').write_text(json.dumps({'expectation': 'every subscriber fails before acknowledgement',
+                'payload_hex': raw.hex(), 'sha256': hashlib.sha256(raw).hexdigest(), 'message_id': publication['message_id']}, indent=2) + '\n')
+            deadline = time.monotonic() + 15
+            while any(process.poll() is None for process in processes):
+                if time.monotonic() > deadline:
+                    raise RuntimeError('Malformed-payload subscriber exit timeout')
+                time.sleep(0.05)
+            codes = {name: process.returncode for name, process in zip(RUNTIMES, processes, strict=True)}
+            state = request(url, '/state')
+            signatures = {'python': ('google.protobuf.message.DecodeError:',),
+                          'typescript': ('RangeError: index out of range:', 'Reader.read_string'),
+                          'csharp': ('Google.Protobuf.InvalidProtocolBufferException:',)}
+            decoder_failures = {name: all(token in (output / (name + '.log')).read_text(errors='replace') for token in tokens)
+                                for name, tokens in signatures.items()}
+            validate_malformed(state, publication['message_id'], codes, decoder_failures)
+            report.update(status='expected_rejection_observed', publication_cases=1, decoded_deliveries=0,
+                          subscriber_exit_codes=codes, decoder_failures=decoder_failures, negative_control=True,
+                          meaning='all three actual processes rejected truncated protobuf; not successful delivery or migration')
+        else:
+            # Publish the entire sequence without waiting for any consumer ack.
+            for sample in samples(case):
+                publication = request(url, '/publish', {'topic': sample['topic'], 'payload': base64.b64encode(sample['payload']).decode()})
+                published.append({'message_id': publication['message_id'], 'topic': sample['topic'], 'fields': sample['fields'],
+                                  'sha256': hashlib.sha256(sample['payload']).hexdigest(), 'bytes': len(sample['payload'])})
+            (output / 'expected.json').write_text(json.dumps(published, indent=2, ensure_ascii=True) + '\n')
+            state = wait_for(lambda state: len(state['acknowledgements']) == len(published) * 3, 'all independent decoder acknowledgements')
+            validate(state, published)
+            report.update(status='passed', publication_cases=len(published), decoded_deliveries=len(state['acknowledgements']),
+                          topics=2, runtimes=3)
     except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
         report['error'] = str(error)
     finally:
@@ -157,17 +199,18 @@ def execute(root, output, case='baseline'):
         report['broker_stopped'] = not thread.is_alive()
         (output / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2))
-    return int(report['status'] != 'passed')
+    return int(report['status'] != ('passed' if scenario == 'valid' else 'expected_rejection_observed'))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--scenario', choices=('valid', 'malformed'), default='valid', help='malformed is a process-level negative control, not migration success')
     parser.add_argument('--case', choices=CASES, default='baseline', help='independent semantic expectations; never inferred from runtime observations')
     parser.add_argument('--root', type=Path, default=ROOT, help='built runtime checkout (default: this checkout)')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     try:
-        return execute(args.root, args.output, args.case)
+        return execute(args.root, args.output, args.case, args.scenario)
     except (OSError, RuntimeError) as error:
         print(str(error), file=sys.stderr)
         return 1

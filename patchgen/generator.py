@@ -511,7 +511,8 @@ def load_validation_profile(case, name):
     allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case != 'v2-identifier-bytes' else []
     if not pubsub_case and ('pubsub_case' in profile or 'oracle_case' in profile):
         raise ContractError('historical profile cannot select a different oracle or transport')
-    if pubsub_case and (profile.get('pubsub_case') != pubsub_case or profile.get('oracle_case') != oracle_case):
+    if pubsub_case and (profile.get('pubsub_case') != pubsub_case or profile.get('oracle_case') != oracle_case
+                        or profile.get('pubsub_negative_control') != 'truncated_v1_decoder_logs'):
         raise ContractError('trusted pubsub profile has wrong semantic/oracle selection')
     if (profile.get('profile_version') != '1.0' or profile.get('allowed_test_paths') != allowed
             or profile.get('source_revision') != case['source_revision']
@@ -579,6 +580,15 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
                         or result.get('runtime_revision') != case['source_revision']
                         or result.get('decoded_deliveries') != 24 or not result.get('children_stopped') or not result.get('broker_stopped')):
                     raise ContractError('pubsub validation did not retain complete passing evidence')
+                command([str(python), '-m', 'testbed.pubsub.run', '--root', str(workspace),
+                         '--case', validation_profile[0]['pubsub_case'], '--scenario', 'malformed',
+                         '--output', str(output / 'pubsub-malformed')], output / 'pubsub-harness', log, timeout=60)
+                rejected = json.loads((output / 'pubsub-malformed/report.json').read_text())
+                if (rejected.get('status') != 'expected_rejection_observed' or rejected.get('decoded_deliveries') != 0
+                        or rejected.get('runtime_revision') != case['source_revision']
+                        or rejected.get('decoder_failures') != dict(python=True, typescript=True, csharp=True)
+                        or not rejected.get('children_stopped') or not rejected.get('broker_stopped')):
+                    raise ContractError('pubsub malformed-payload negative control did not reject safely')
         (output / 'validated.patch').write_text(command(['git','diff','--no-ext-diff'],workspace))
     return str(workspace)
 
@@ -664,6 +674,7 @@ def main():
             report['status'] = 'validation_passed' if args.validate else 'applied_unvalidated'
             if args.validate and validation_profile and validation_profile[0].get('pubsub_case'):
                 report['pubsub_validation'] = json.loads((output / 'pubsub/report.json').read_text())
+                report['pubsub_negative_control'] = json.loads((output / 'pubsub-malformed/report.json').read_text())
         else:
             report['status'] = proposal['outcome']
     except (OSError, ValueError, KeyError, SyntaxError, subprocess.SubprocessError) as error:

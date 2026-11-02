@@ -106,3 +106,17 @@ fixtures. The broker is local, bounded and volatile; no durable delivery,
 exactly-once processing, authentication or network-failure recovery is claimed.
 See [decision 0012](../docs/decisions/0012-local-pubsub.md) for the HTTP contract.
 The samples are not additional schema-change cases or a human baseline.
+
+To exercise the truncated-payload failure boundary against built runtimes:
+
+```sh
+.venv/bin/python -m testbed.pubsub.run --scenario malformed --output patchgen/evidence/my-new-negative-control
+node testbed/pubsub/check-decoder.cjs
+```
+
+The first command requires all three processes to exit with protobuf decoder
+errors, no acknowledgement and one retained pending message per subscriber.
+Its success status is `expected_rejection_observed`, not `passed` delivery.
+The second checks Buffer/plain-array handling in the TypeScript processor for
+both versions. This covers truncated length-delimited fields only, not all
+malformed protobuf or fault recovery. See decision 0014.

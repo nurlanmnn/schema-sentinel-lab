@@ -10,7 +10,7 @@ import urllib.request
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from testbed.pubsub.broker import Broker, create_server
-from testbed.pubsub.run import samples, validate, wire_string
+from testbed.pubsub.run import samples, validate, validate_malformed, wire_string
 
 
 class BrokerTests(unittest.TestCase):
@@ -128,6 +128,27 @@ class HttpBrokerTests(unittest.TestCase):
 
 
 class EvidenceTests(unittest.TestCase):
+    def test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads(self):
+        names = ['python', 'typescript', 'csharp']
+        state = {'publications': [{'message_id': 1, 'recipients': names}], 'acknowledgements': [],
+                 'subscribers': {name: {'pending': [1]} for name in names}}
+        codes = {name: 1 for name in names}
+        errors = {name: True for name in names}
+        validate_malformed(state, 1, codes, errors)
+        for code in (None, 0):
+            wrong = dict(codes); wrong['typescript'] = code
+            with self.assertRaises(RuntimeError):
+                validate_malformed(state, 1, wrong, errors)
+        with self.assertRaisesRegex(RuntimeError, 'decoder-error evidence'):
+            validate_malformed(state, 1, codes, dict(errors, typescript=False))
+        mutations = [lambda s: s['acknowledgements'].append({'subscriber': 'python'}),
+                     lambda s: s['subscribers']['python'].update(pending=[]),
+                     lambda s: s['publications'][0].update(recipients=['python'])]
+        for mutate in mutations:
+            wrong = copy.deepcopy(state); mutate(wrong)
+            with self.assertRaises(RuntimeError):
+                validate_malformed(wrong, 1, codes, errors)
+
     def test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject(self):
         published = [{'message_id': i, 'topic': 'entity.v1', 'fields': {'entity_id': str(i)}, 'sha256': str(i), 'bytes': 1} for i in (1, 2)]
         runtimes = ['python', 'typescript', 'csharp']
