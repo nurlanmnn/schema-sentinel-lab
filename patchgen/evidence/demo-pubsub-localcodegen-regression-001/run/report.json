@@ -1,0 +1,190 @@
+{
+  "status": "validation_passed",
+  "implementation": {
+    "revision": "e3a947e92f89617278708e1cc4227b806763c434",
+    "files": {
+      "detector.py": "abed5121c265741632e39e9ac693099d97a9f91d36b332d5e97a55fd06f9f201",
+      "locator.py": "74459f3101db5e330c31fc315ddb72a3ae5fcfffd36f2860951c918b5457c8ac",
+      "pipeline.py": "4bff4976209ff8797481a17888c52e6442d4b0a8a9de868321f06771a7833223",
+      "adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9",
+      "generator.py": "6b9c75583f1bed0dc8b86fab3032ee3399306f95feb9bf80c757090aeb29b21e",
+      "rename_tokens.py": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+      "rename_roles.py": "d62c278f024be46d4d8f7542073981ff11a7ca7d0e92b4cb4bac7bc528654fa1",
+      "type_utf8.py": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+      "remove_name.py": "1265821f708cb54b0460f01cd1939105bc64a4222acf992c1c0ebba8f45198e8",
+      "type_precision.py": "e954e8a1c1803f8f449c0e3439a34f23366ac8912c9d4ccb68938b8039f5d636",
+      "telemetry_units.py": "76e4a2f753fc6f023e5b40d0c2c9a4085f383cdc5381b9d2f53a6cdde3c5dc41"
+    }
+  },
+  "measurement": {
+    "expected_sites": 6,
+    "matched_sites": 6,
+    "recall": 1.0,
+    "missed": [],
+    "extra": [
+      {
+        "path": "runtimes/csharp/main.cs",
+        "line": 15
+      },
+      {
+        "path": "runtimes/csharp/main.cs",
+        "line": 67
+      },
+      {
+        "path": "runtimes/typescript/main.ts",
+        "line": 83
+      }
+    ],
+    "classification_correct": true
+  },
+  "human_approval_required": true,
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof",
+  "proposal_exit_code": 0,
+  "proposal_report": {
+    "status": "validation_passed",
+    "human_approval_required": true,
+    "mode": "deterministic_proposal",
+    "prompt_version": "host-utf8/1.0",
+    "strategy": "deterministic_utf8_v2",
+    "generator_sha256": "6b9c75583f1bed0dc8b86fab3032ee3399306f95feb9bf80c757090aeb29b21e",
+    "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "type_utf8_sha256": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "codegen": "local_pinned",
+    "local_codegen_sha256": "30361cb781d82b30bf605266b77682f9c33dfb7262782ed55800f9b905b611ae",
+    "validation_profile": {
+      "profile_version": "1.0",
+      "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "change_id": "pubsub-identifier-utf8",
+      "new_schema_sha256": "781968fc26ca15247f50e86e94cec788a3b76a6f35ff145ca51897e3453c1c36",
+      "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allowed_test_paths": [],
+      "model_editable": false,
+      "origin": "independent evaluator expectations; excluded from generation",
+      "oracle_case": "v2-identifier-bytes",
+      "pubsub_case": "utf8",
+      "pubsub_negative_control": "truncated_v1_decoder_logs"
+    },
+    "pubsub_harness_sha256": {
+      "run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+      "broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+      "topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+    },
+    "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+    "outcome": "patch",
+    "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/demo-pubsub-localcodegen-regression-001/run/proposal/workspace",
+    "local_codegen_toolchain": {
+      "protoc_version": "libprotoc 25.1",
+      "ts_proto_version": "1.165.0",
+      "buf_version": "1.75.0",
+      "sha256": {
+        "protoc": "b6ed65c0d20a9ab88ec6995644f747d557cb9a087eab0152fef5367c34645dc3",
+        "ts-proto-plugin": "29b7513e6485545b535ba9f7a3f2d746336e39b456262bc1a6b1e65ac61d43ea",
+        "ts-proto-build": "0ba82c2d4fccaeead72f4a64a7701adc3a6fe1111d6feb5d2e689fdf87753ada",
+        "package-lock.json": "86df52e5c6979a52dcd6a57b82c79637d33dc69af0fec8dda9704d253a80c7b1"
+      }
+    },
+    "pubsub_validation": {
+      "status": "passed",
+      "mode": "actual_local_pubsub",
+      "case": "utf8",
+      "scenario": "valid",
+      "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/demo-pubsub-localcodegen-regression-001/run/proposal/workspace",
+      "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+      "human_approval_required": true,
+      "generated_patch_approval": false,
+      "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "runtime_git_status": [
+        " M generated/csharp/V2/Entity.cs",
+        " M generated/python/v2/entity_pb2.py",
+        " M generated/ts/v2/entity.ts",
+        " M proto/v2/entity.proto",
+        " M runtimes/csharp/main.cs",
+        " M runtimes/python/main.py",
+        " M runtimes/typescript/main.ts"
+      ],
+      "tools": {
+        "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+        "node": "v24.10.0",
+        "dotnet": "8.0.426"
+      },
+      "runtime_source_sha256": {
+        "runtimes/python/main.py": "7e5c4f59411aef164b8c29448d0aa18675ed4118b93ea17a65c65d6c734319ae",
+        "runtimes/typescript/main.ts": "3587027980cd9699c50567e36acbe83f8e012f12bdcafdbdf5bf6d5b9ee91b15",
+        "runtimes/csharp/main.cs": "6a3dce09843f40838d02893d181d8a241fbc65189834c56a1842fe916a2a0d19",
+        "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+        "proto/v2/entity.proto": "781968fc26ca15247f50e86e94cec788a3b76a6f35ff145ca51897e3453c1c36"
+      },
+      "harness_source_sha256": {
+        "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+        "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+        "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+      },
+      "publication_cases": 8,
+      "decoded_deliveries": 24,
+      "topics": 2,
+      "runtimes": 3,
+      "elapsed_seconds": 0.8031806249637157,
+      "children_stopped": true,
+      "broker_stopped": true
+    },
+    "pubsub_negative_control": {
+      "status": "expected_rejection_observed",
+      "mode": "actual_local_pubsub",
+      "case": "utf8",
+      "scenario": "malformed",
+      "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/demo-pubsub-localcodegen-regression-001/run/proposal/workspace",
+      "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+      "human_approval_required": true,
+      "generated_patch_approval": false,
+      "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "runtime_git_status": [
+        " M generated/csharp/V2/Entity.cs",
+        " M generated/python/v2/entity_pb2.py",
+        " M generated/ts/v2/entity.ts",
+        " M proto/v2/entity.proto",
+        " M runtimes/csharp/main.cs",
+        " M runtimes/python/main.py",
+        " M runtimes/typescript/main.ts"
+      ],
+      "tools": {
+        "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+        "node": "v24.10.0",
+        "dotnet": "8.0.426"
+      },
+      "runtime_source_sha256": {
+        "runtimes/python/main.py": "7e5c4f59411aef164b8c29448d0aa18675ed4118b93ea17a65c65d6c734319ae",
+        "runtimes/typescript/main.ts": "3587027980cd9699c50567e36acbe83f8e012f12bdcafdbdf5bf6d5b9ee91b15",
+        "runtimes/csharp/main.cs": "6a3dce09843f40838d02893d181d8a241fbc65189834c56a1842fe916a2a0d19",
+        "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+        "proto/v2/entity.proto": "781968fc26ca15247f50e86e94cec788a3b76a6f35ff145ca51897e3453c1c36"
+      },
+      "harness_source_sha256": {
+        "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+        "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+        "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+      },
+      "publication_cases": 1,
+      "decoded_deliveries": 0,
+      "subscriber_exit_codes": {
+        "python": 1,
+        "typescript": 1,
+        "csharp": -6
+      },
+      "decoder_failures": {
+        "python": true,
+        "typescript": true,
+        "csharp": true
+      },
+      "negative_control": true,
+      "meaning": "all three actual processes rejected truncated protobuf; not successful delivery or migration",
+      "elapsed_seconds": 0.8673599170288071,
+      "children_stopped": true,
+      "broker_stopped": true
+    },
+    "workflow_elapsed_seconds": 9.243044791044667,
+    "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+  }
+}

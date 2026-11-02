@@ -54,7 +54,7 @@ BINDINGS = {
 }
 
 
-def transform(file):
+def inspect_shapes(file):
     language = file['language']
     if language not in SHAPES:
         raise ContractError('unsupported precision language')
@@ -78,6 +78,13 @@ def transform(file):
         if not any(n.start_point.row+1==line and n.type in (
                 'assignment','return_statement','lexical_declaration','local_declaration_statement') for n in nodes):
             raise ContractError('precision candidate must be executable syntax')
+    return raw, nodes, candidates
+
+
+def transform(file):
+    raw, nodes, candidates = inspect_shapes(file)
+    text = lambda n: raw[n.start_byte:n.end_byte].decode()
+    language = file['language']
     edits = []
     if language == 'csharp':
         casts = [n for n in nodes if n.type=='cast_expression' and text(n)=='(float)request.Speed']

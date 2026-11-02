@@ -160,3 +160,6 @@ renamed observations and a speed threshold in all three languages. See
 `--case telemetry-precision` exercises float32-to-float64 serialization and
 near-threshold precision across 33 runtime/case checks, with coordinated rollout
 required for the wire-type change.
+`--case telemetry-units` applies an explicitly supplied m/s-to-km/h policy to
+producers, observations and thresholds. The structural detector does not infer
+units. All three telemetry demos leave human review pending.

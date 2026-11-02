@@ -58,3 +58,8 @@ hash, case count, expected cases, actual process exit codes and decoded outputs.
 A compile-only success with the wrong speed threshold is ineligible. Explicit
 local generation retains its source and pinned toolchain record in the manifest.
 No automated run supplies a real human decision.
+
+The telemetry precision and units strategies also require their policy-source
+snapshots. Units additionally retains the shared direct-shape validator. A
+passing units report must match the independently scaled float32 cases and
+original speeding decisions; rounded C# JSON observations are rejected.

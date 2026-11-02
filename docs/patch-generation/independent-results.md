@@ -331,3 +331,26 @@ offline replay. `telemetry-precision-narrowing-negative-001` retains C#'s float 
 it compiles and passes Entity checks but fails producer-byte verification on the
 first precision-sensitive case. Approval is disabled. `demo-telemetry-precision-001`
 passes the launcher and review export. Final suites: 119 patchgen, 23 testbed tests.
+
+### Explicit telemetry units (2026-11-02)
+
+`pipeline-telemetry-units-002` validates the supplied m/s -> km/h conversion across
+24 runtime/case checks, with 9/9 authored syntax impact lines and no extras.
+Producers scale by 3.6, observations use speed_kph, and the strict threshold moves
+to >108.0. Structural rename detection does not infer units; the conversion policy
+must be explicitly supplied. Initial run 001 retained a real C# float32 JSON-value
+mismatch; the corrected proposal promotes decoded float32 exactly for JSON output.
+This also exposes the earlier baseline's limit to exactly representable examples.
+
+`telemetry-units-reference-001` passes offline answer validation. The stale
+predicate in `telemetry-units-threshold-negative-001` compiles but fails independent
+behavior checks; approval is disabled. `demo-telemetry-units-001` passes. These are
+finite cases with coordinated rollout required, not arbitrary rounding/mixed-unit
+safety. Decision 0017 records details. This adds a third distinct buildable
+telemetry migration; the historical parser-only corpus and twenty-case gap remain.
+
+Shared-path regression after units work: `demo-pubsub-localcodegen-regression-001`
+passes the existing UTF-8 pub/sub proposal, 24 valid deliveries and actual
+truncated-decoder rejection with the explicit local codegen path.
+`demo-telemetry-rename-regression-001` passes the earlier rename with the current
+host evaluator. Final suites: 124 patchgen tests, 23 testbed tests.

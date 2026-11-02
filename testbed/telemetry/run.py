@@ -26,18 +26,19 @@ def requests(case="baseline"):
     result = []
     for vehicle, speed in values:
         encoded = vehicle.encode('utf8')
+        wire_speed = speed * 3.6 if case == 'units' else speed
         wire = (b'\x0a' + bytes([len(encoded)]) + encoded if encoded else b'')
-        if speed:
-            wire += (b'\x11' + struct.pack('<d', speed) if case == 'precision' else b'\x15' + struct.pack('<f', speed))
+        if wire_speed:
+            wire += (b'\x11' + struct.pack('<d', wire_speed) if case == 'precision' else b'\x15' + struct.pack('<f', wire_speed))
         result.append(dict(vehicle_id=vehicle, speed=speed, payload=base64.b64encode(wire).decode()))
     return result
 
 
 def expected(case):
-    if case not in ('baseline', 'rename', 'precision'):
+    if case not in ('baseline', 'rename', 'precision', 'units'):
         raise ValueError('unknown telemetry oracle case')
-    key = 'ground_speed_mps' if case == 'rename' else 'speed_mps'
-    return [dict(fields=dict(vehicle_id=r['vehicle_id'], **{key:r['speed']}),
+    key = {'rename':'ground_speed_mps','units':'speed_kph'}.get(case,'speed_mps')
+    return [dict(fields=dict(vehicle_id=r['vehicle_id'], **{key:struct.unpack('<f',struct.pack('<f',r['speed']*3.6))[0] if case=='units' else r['speed']}),
                  speeding=r['speed'] > 30, constructed_payload=r['payload']) for r in requests(case)]
 
 
@@ -92,7 +93,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,default=ROOT)
     parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--case',choices=('baseline','rename','precision'),default='baseline')
+    parser.add_argument('--case',choices=('baseline','rename','precision','units'),default='baseline')
     args = parser.parse_args()
     report = run(args.root,args.output,args.case)
     print(json.dumps(report,indent=2))

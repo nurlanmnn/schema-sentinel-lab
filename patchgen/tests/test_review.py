@@ -87,6 +87,17 @@ class ReviewTests(unittest.TestCase):
         source.write_bytes(b'TEST ONLY');export(self.run,self.bundle)
         self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
 
+    def test_units_policy_requires_its_own_snapshot_and_shared_shape_validator(self):
+        self.report['strategy']='deterministic_telemetry_units'
+        self.report['type_precision_sha256']=sha(b'TEST SHAPES')
+        self.report['telemetry_units_sha256']=sha(b'TEST UNITS');self.write_run()
+        (self.run/'proposal/type-precision-source.py').write_bytes(b'TEST SHAPES')
+        with self.assertRaisesRegex(ContractError,'complete host evidence'):export(self.run,self.bundle)
+        source=self.run/'proposal/telemetry-units-source.py';source.write_bytes(b'CHANGED')
+        with self.assertRaisesRegex(ContractError,'units policy source hash mismatch'):export(self.run,self.bundle)
+        source.write_bytes(b'TEST UNITS');export(self.run,self.bundle)
+        self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
+
     def pubsub_run(self):
         self.report['validation_profile'] = {'pubsub_case': 'rename'}
         result = dict(status='passed', case='rename', runtime_revision='a'*40,

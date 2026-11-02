@@ -137,3 +137,10 @@ Eight cases per runtime check exact wire construction, float values, canonical
 observation keys and strict >30 m/s behavior. The evaluator imports no generated
 bindings. `run_demo.py --case telemetry-rename` validates a proposed rename
 against a host-owned copy of that evaluator and exports review evidence.
+
+The host telemetry evaluator also supports `--case precision` (eleven fixed64
+inputs) and `--case units` (eight scaled float32 inputs). Use these against the
+corresponding proposal workspace through `run_demo.py`; the baseline source stays
+float32 meters/second. The units oracle checks exact decoded float32 numbers,
+which requires C# to promote float32 to double before JSON output. See decisions
+0016/0017; no arbitrary rounding or mixed-version guarantee is established.

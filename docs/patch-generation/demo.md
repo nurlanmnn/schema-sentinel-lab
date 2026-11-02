@@ -96,3 +96,17 @@ producer's float32 cast. Eleven cases per runtime include values float32 cannot
 preserve. Producer bytes, observations and >30 m/s results must all match the
 independent oracle. The wire-type change requires coordinated rollout;
 mixed-version behavior is outside scope. See decision 0016.
+
+### Explicit telemetry units
+
+```sh
+python3.13 run_demo.py --case telemetry-units --local-codegen --output patchgen/evidence/NEW-UNITS-DEMO
+```
+
+The request supplies m/s -> km/h factor 3.6, the >108.0 threshold, speed_kph keys
+and an exact decoded-float JSON policy. The structural detector does not infer
+unit meaning. The bounded policy changes adopted producer/predicate expressions
+and observation names, then validates eight cases in each real runtime. C#
+observations promote decoded float32 to double for exact numeric JSON output.
+The finite cases do not prove arbitrary rounding-boundary or mixed-unit safety.
+See decision 0017. All reviews remain pending a real human decision.

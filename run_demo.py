@@ -10,6 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'telemetry-units': ('telemetry-speed-units', 'deterministic_telemetry_units'),
     'telemetry-precision': ('telemetry-speed-precision', 'deterministic_telemetry_precision'),
     'telemetry-rename': ('telemetry-speed-rename', 'deterministic_rename_roles'),
     'removal': ('entity-name-removal', 'deterministic_remove_name_v1'),
