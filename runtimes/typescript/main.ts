@@ -7,6 +7,8 @@ const traceHeader = "X-Service-Trace";
 
 export function processEntity(rawBytes: Uint8Array, version: string) {
   if (version !== "v1" && version !== "v2") throw new Error(`Unsupported schema version: ${version}`);
+  // Plain Uint8Array selects the bounds-checked Reader rather than BufferReader.string clamping.
+  rawBytes = new Uint8Array(rawBytes);
   const entity = version === "v1" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);
   const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
   console.log(JSON.stringify({ runtime: "typescript", version, fields }));
