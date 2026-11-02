@@ -7,18 +7,20 @@ from pathlib import Path
 import re
 import shutil
 from patchgen.generator import ContractError, PUBSUB_ARTIFACTS
+from testbed.inventory.run import ARTIFACTS as INVENTORY_FILES, check_results as inventory_check, expected as inventory_expected, requests as inventory_requests
 from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, check_results, expected, requests
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
-             'proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py',
+             'proposal/inventory-width-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
 PUBSUB_NEGATIVE_ARTIFACTS = tuple('proposal/pubsub-malformed/' + name for name in PUBSUB_ARTIFACTS)
 TELEMETRY_ARTIFACTS = tuple('proposal/telemetry/'+name for name in TELEMETRY_FILES) + ('proposal/telemetry-oracle-source.py',)
 LOCAL_CODEGEN_ARTIFACTS = ('proposal/local-codegen-source.py', 'proposal/local-codegen-toolchain.json')
-ARTIFACTS += PUBSUB_REVIEW_ARTIFACTS + PUBSUB_NEGATIVE_ARTIFACTS + TELEMETRY_ARTIFACTS + LOCAL_CODEGEN_ARTIFACTS
+INVENTORY_ARTIFACTS = tuple('proposal/inventory/'+name for name in INVENTORY_FILES) + ('proposal/inventory-oracle-source.py',)
+ARTIFACTS += INVENTORY_ARTIFACTS + PUBSUB_REVIEW_ARTIFACTS + PUBSUB_NEGATIVE_ARTIFACTS + TELEMETRY_ARTIFACTS + LOCAL_CODEGEN_ARTIFACTS
 ASSETS = Path(__file__).with_name('review_assets')
 
 
@@ -82,6 +84,10 @@ def check_host_evidence(root, report, available=None):
             raise ContractError('passing review requires complete host evidence')
         if any(not artifact_path(root,name).is_file() for name in names):
             raise ContractError('passing review requires complete host evidence')
+    if report.get('strategy') == 'deterministic_inventory_width':
+        required(('proposal/inventory-width-source.py',))
+        if sha(artifact_path(root,'proposal/inventory-width-source.py').read_bytes()) != report.get('inventory_width_sha256'):
+            raise ContractError('inventory width policy source hash mismatch')
     if report.get('strategy') in ('deterministic_telemetry_precision','deterministic_telemetry_units'):
         required(('proposal/type-precision-source.py',))
         if sha(artifact_path(root,'proposal/type-precision-source.py').read_bytes()) != report.get('type_precision_sha256'):
@@ -97,6 +103,27 @@ def check_host_evidence(root, report, available=None):
                 or tools != report.get('local_codegen_toolchain') or tools.get('protoc_version') != 'libprotoc 25.1'
                 or tools.get('ts_proto_version') != '1.165.0'):
             raise ContractError('local codegen evidence mismatch')
+    if report.get('validation_profile',{}).get('inventory_case'):
+        required(INVENTORY_ARTIFACTS)
+        if report['validation_profile']['inventory_case'] != 'width':
+            raise ContractError('unknown inventory review mode')
+        result = json.loads(artifact_path(root,'proposal/inventory/report.json').read_text())
+        if (result != report.get('inventory_validation') or result.get('status') != 'passed'
+                or result.get('case') != 'width' or result.get('runtime_cases') != 48
+                or result.get('runtime_revision') != report.get('source_revision')
+                or sha(artifact_path(root,'proposal/inventory-oracle-source.py').read_bytes()) != report.get('inventory_oracle_sha256')):
+            raise ContractError('inventory review has inconsistent validation evidence')
+        retained = json.loads(artifact_path(root,'proposal/inventory/expected.json').read_text())
+        if retained != dict(requests=inventory_requests('width'),results=inventory_expected('width')):
+            raise ContractError('inventory review has inconsistent expected cases')
+        for runtime in ('python','typescript','csharp'):
+            record = json.loads(artifact_path(root,'proposal/inventory/'+runtime+'.json').read_text())
+            try:
+                if type(record.get('exit_code')) is not int or record['exit_code'] != 0:
+                    raise ValueError('runtime did not exit successfully')
+                inventory_check(json.loads(record['stdout']),inventory_expected('width'))
+            except (KeyError,ValueError) as error:
+                raise ContractError('inventory runtime evidence mismatch') from error
     if report.get('validation_profile',{}).get('telemetry_case'):
         required(TELEMETRY_ARTIFACTS)
         mode = report['validation_profile']['telemetry_case']

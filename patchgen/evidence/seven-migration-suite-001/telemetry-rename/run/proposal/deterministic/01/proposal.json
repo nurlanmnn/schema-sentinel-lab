@@ -1,0 +1,43 @@
+{
+  "outcome": "patch",
+  "token_edits": [
+    {
+      "token_id": 1,
+      "replacement": "GroundSpeedMps"
+    },
+    {
+      "token_id": 2,
+      "replacement": "\"ground_speed_mps\""
+    },
+    {
+      "token_id": 3,
+      "replacement": "GroundSpeedMps"
+    },
+    {
+      "token_id": 4,
+      "replacement": "GroundSpeedMps"
+    }
+  ],
+  "candidate_reviews": [
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Explicit deterministic all-candidate rename policy; receiver identity unproved"
+    },
+    {
+      "line": 13,
+      "decision": "edit",
+      "reason": "Explicit deterministic all-candidate rename policy; receiver identity unproved"
+    },
+    {
+      "line": 14,
+      "decision": "edit",
+      "reason": "Explicit deterministic all-candidate rename policy; receiver identity unproved"
+    }
+  ],
+  "rationale": "Descriptor-derived syntax-token rename proposal",
+  "confidence": 0,
+  "assumptions": [
+    "All located candidates refer to the renamed field; validate and review this assumption."
+  ]
+}

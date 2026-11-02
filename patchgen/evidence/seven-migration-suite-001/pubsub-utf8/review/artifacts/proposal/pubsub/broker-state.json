@@ -1,0 +1,392 @@
+{
+  "topics": {
+    "entity.v1": {
+      "version": "v1",
+      "message": "simulation.v1.Entity",
+      "schema_path": "proto/v1/entity.proto"
+    },
+    "entity.v2": {
+      "version": "v2",
+      "message": "simulation.v2.Entity",
+      "schema_path": "proto/v2/entity.proto"
+    }
+  },
+  "subscribers": {
+    "typescript": {
+      "runtime": "typescript",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    },
+    "python": {
+      "runtime": "python",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    },
+    "csharp": {
+      "runtime": "csharp",
+      "topics": [
+        "entity.v1",
+        "entity.v2"
+      ],
+      "pending": []
+    }
+  },
+  "publications": [
+    {
+      "message_id": 1,
+      "topic": "entity.v1",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "published_monotonic": 614022.204141625
+    },
+    {
+      "message_id": 2,
+      "topic": "entity.v1",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "e9d31503b72cbce33f218af726f2a3093cb565b1499c6f009f8f0b3e1f84ef54",
+      "bytes": 22,
+      "published_monotonic": 614022.204669
+    },
+    {
+      "message_id": 3,
+      "topic": "entity.v1",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "ad612399d77063856e041edb4552a015f0d60139ddae2fb2c996b9492ce1323c",
+      "bytes": 36,
+      "published_monotonic": 614022.20518225
+    },
+    {
+      "message_id": 4,
+      "topic": "entity.v1",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "adba6c9821bada5de921f120c919d8808c754f44fc18b81c0489b89484a0afe7",
+      "bytes": 28,
+      "published_monotonic": 614022.205654083
+    },
+    {
+      "message_id": 5,
+      "topic": "entity.v2",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "published_monotonic": 614022.206188791
+    },
+    {
+      "message_id": 6,
+      "topic": "entity.v2",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "7695d87918e9b2bd9375cc4c130ef61705c4eae296b1d5c7080c6a36807baf62",
+      "bytes": 12,
+      "published_monotonic": 614022.206675291
+    },
+    {
+      "message_id": 7,
+      "topic": "entity.v2",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "bfc064480cfe30eecc7b23d066604235acee49fbbe4a2ced8ee6362a15dc2962",
+      "bytes": 17,
+      "published_monotonic": 614022.207123083
+    },
+    {
+      "message_id": 8,
+      "topic": "entity.v2",
+      "recipients": [
+        "typescript",
+        "python",
+        "csharp"
+      ],
+      "sha256": "29966dd9cc39f1bec07bce4f8073a560e13ceddec5bd70a662adacc3c72bfbf8",
+      "bytes": 12,
+      "published_monotonic": 614022.207558333
+    }
+  ],
+  "acknowledgements": [
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "",
+        "name": ""
+      },
+      "publish_to_ack_seconds": 0.022495666053146124
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 2,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "pubsub-001",
+        "name": "Sensor A"
+      },
+      "publish_to_ack_seconds": 0.023535915999673307
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 3,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80",
+        "name": "Caf\u00e9 / \u0394 / \ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.023821083013899624
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 4,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "quotes \"\n\\",
+        "name": "line\nbreak \" \\"
+      },
+      "publish_to_ack_seconds": 0.024117207969538867
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 5,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.02462999999988824
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 6,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.025053625111468136
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 7,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.025347375078126788
+    },
+    {
+      "subscriber": "csharp",
+      "runtime": "csharp",
+      "message_id": 8,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.025598250096663833
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "",
+        "name": ""
+      },
+      "publish_to_ack_seconds": 0.05086020799353719
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 2,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "pubsub-001",
+        "name": "Sensor A"
+      },
+      "publish_to_ack_seconds": 0.05271170800551772
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 3,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80",
+        "name": "Caf\u00e9 / \u0394 / \ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.05438308301381767
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 4,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "quotes \"\n\\",
+        "name": "line\nbreak \" \\"
+      },
+      "publish_to_ack_seconds": 0.056011749897152185
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 5,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.057112041977234185
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 6,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.05823833402246237
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 1,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "",
+        "name": ""
+      },
+      "publish_to_ack_seconds": 0.0622917499858886
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 7,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.06042866699863225
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 2,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "pubsub-001",
+        "name": "Sensor A"
+      },
+      "publish_to_ack_seconds": 0.06433850002940744
+    },
+    {
+      "subscriber": "typescript",
+      "runtime": "typescript",
+      "message_id": 8,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.06284666701685637
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 3,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80",
+        "name": "Caf\u00e9 / \u0394 / \ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.06640362495090812
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 4,
+      "topic": "entity.v1",
+      "fields": {
+        "entity_id": "quotes \"\n\\",
+        "name": "line\nbreak \" \\"
+      },
+      "publish_to_ack_seconds": 0.06768162490334362
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 5,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": ""
+      },
+      "publish_to_ack_seconds": 0.06866412505041808
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 6,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "pubsub-001"
+      },
+      "publish_to_ack_seconds": 0.06927533401176333
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 7,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "entity-\u96ea-\ud83d\ude80"
+      },
+      "publish_to_ack_seconds": 0.07001920801121742
+    },
+    {
+      "subscriber": "python",
+      "runtime": "python",
+      "message_id": 8,
+      "topic": "entity.v2",
+      "fields": {
+        "entity_id": "quotes \"\n\\"
+      },
+      "publish_to_ack_seconds": 0.07080666709225625
+    }
+  ]
+}

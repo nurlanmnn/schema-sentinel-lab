@@ -10,9 +10,9 @@ import run_benchmark as suite
 class SuiteTests(unittest.TestCase):
     def test_manifest_counts_distinct_migrations_only(self):
         entries = suite.manifest()
-        self.assertEqual(len(entries), 6)
-        self.assertEqual(len({e['profile'] for e in entries}), 6)
-        self.assertEqual(sum(e['expected_sites'] for e in entries), 45)
+        self.assertEqual(len(entries), 7)
+        self.assertEqual(len({e['profile'] for e in entries}), 7)
+        self.assertEqual(sum(e['expected_sites'] for e in entries), 54)
 
     def test_missing_report_keeps_failed_case_in_denominators(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -54,14 +54,14 @@ class SuiteTests(unittest.TestCase):
             output = Path(tmp) / 'new'
             self.assertEqual(suite.execute(output), 1)
             report = json.loads((output / 'summary.json').read_text())
-            self.assertEqual(child.call_count, 6)
+            self.assertEqual(child.call_count, 7)
             self.assertEqual(report['status'], 'completed')
-            self.assertEqual(report['metrics']['distinct_migration_cases'], 6)
-            self.assertEqual(report['metrics']['expected_sites'], 45)
+            self.assertEqual(report['metrics']['distinct_migration_cases'], 7)
+            self.assertEqual(report['metrics']['expected_sites'], 54)
             self.assertEqual(report['metrics']['validation_passed'], 0)
-            self.assertEqual(len(list(output.glob('*.log'))), 6)
+            self.assertEqual(len(list(output.glob('*.log'))), 7)
             summary = (output / 'summary.md').read_text()
-            self.assertEqual(summary.count('| failed |'), 6)
+            self.assertEqual(summary.count('| failed |'), 7)
             self.assertNotIn('](pubsub-rename/review/index.html)', summary)
 
     def test_conflicting_embedded_truth_identity_is_rejected(self):
@@ -78,9 +78,9 @@ class SuiteTests(unittest.TestCase):
     def test_readable_partial_run_keeps_pending_cases_visible(self):
         report = {'status': 'running', 'results': []}
         text = suite.render_summary(report, suite.manifest())
-        self.assertEqual(text.count('| pending |'), 12)
+        self.assertEqual(text.count('| pending |'), 14)
         self.assertEqual(text.count('unmeasured/6'), 3)
-        self.assertEqual(text.count('unmeasured/9'), 3)
+        self.assertEqual(text.count('unmeasured/9'), 4)
 
     def test_existing_output_is_never_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:

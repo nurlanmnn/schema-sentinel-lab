@@ -1,0 +1,7 @@
+{
+  "strategy": "deterministic_rename_roles",
+  "model_requests": 0,
+  "automatic_repairs": 0,
+  "schema_origin": "supplied new_schema, copied by host",
+  "policy": "propose every located token; receiver identity unproved"
+}

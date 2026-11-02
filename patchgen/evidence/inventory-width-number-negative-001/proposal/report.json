@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "offline_replay",
+  "prompt_version": "host-inventory-width/1.0",
+  "strategy": "deterministic_inventory_width",
+  "generator_sha256": "b2c9f01b96d84137f6e6daf3827c6b30113c5203de6c27740ff0fcb5fe0500d9",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "inventory_width_sha256": "d320c993c7875821ba0fc8250c56b8bb9773ef260245694ce21031d6169380d3",
+  "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
+    "change_id": "inventory-quantity-width",
+    "new_schema_sha256": "d868049b9de1b1ef2015ca13170ed7872ffd57251e82847ca014f026766df774",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "inventory_case": "width"
+  },
+  "inventory_oracle_sha256": "983664bb4d3aec9cdcb0b50f23bae2bd53ec5cd2508c8bb836116b5484e89775",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (1): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/inventory-width-number-negative-001/proposal/workspace/.venv/bin/python: 9b9de1b1ef2015ca13170ed7872ffd57251e82847ca014f026766df774\",\n    \"proto/telemetry/vehicle.proto\": \"e3bd750f620e4d2ff57e6d206386f6e1bd3a7708bd6d624326dcba04c924bb2f\",\n    \"generated/ts/v1/entity.ts\": \"95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792\",\n    \"generated/ts/v2/entity.ts\": \"fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93\",\n    \"generated/ts/inventory/item.ts\": \"79e2f9971c414ae4f9de3cf824eb0d5acffb90c4990927b293ff31d297caee22\",\n    \"generated/ts/telemetry/vehicle.ts\": \"6527a4988789febc00deaf9e6a7a5aebf6d70c443443cc557bcaad3091a3405d\",\n    \"generated/csharp/V1/Entity.cs\": \"20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24\",\n    \"generated/csharp/V2/Entity.cs\": \"cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5\",\n    \"generated/csharp/Inventory/Item.cs\": \"bbfcc6a02bf17f2cbf8f8bd298af33450172d43b58d3eaeb6554eb12283380da\",\n    \"generated/csharp/Telemetry/Vehicle.cs\": \"2b855ff4b1130ed6ced2403a7b808b08befcb9560b3078c23634901f8342bf8b\",\n    \"generated/python/v1/entity_pb2.py\": \"d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc\",\n    \"generated/python/v2/entity_pb2.py\": \"ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972\",\n    \"generated/python/inventory/item_pb2.py\": \"a071c45f9662cd44bb97422c2a7769848251c4ca4488c2ec978865da488ab4c5\",\n    \"generated/python/telemetry/vehicle_pb2.py\": \"50deb6e5788bfab14527e305468126d19729564babb6ca34e68afbba07c95294\",\n    \"buf.gen.yaml\": \"8f1c89802f2dc0ed00501c3381f14c25a4dcb3eb78fc3042b2b694db71eecefe\"\n  },\n  \"runtime_cases\": 16,\n  \"model_requests\": 0,\n  \"scope\": \"authored valid canonical decimal inputs and signed integer wire cases; not arbitrary input or mixed-version safety\",\n  \"error\": \"inventory integer/wire/predicate mismatch at case 12\"\n}\n",
+  "workflow_elapsed_seconds": 8.104536916944198,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

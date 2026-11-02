@@ -1,0 +1,17 @@
+{
+  "path": "runtimes/csharp/Inventory.cs",
+  "candidate_lines": [
+    13,
+    14,
+    15,
+    20
+  ],
+  "edits": [
+    {
+      "start_byte": 612,
+      "end_byte": 669,
+      "before": "int.Parse(request.Quantity, CultureInfo.InvariantCulture)",
+      "after": "long.Parse(request.Quantity, CultureInfo.InvariantCulture)"
+    }
+  ]
+}

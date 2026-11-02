@@ -14,14 +14,14 @@ from patchgen.generator import command, save, ContractError, require, safe_path,
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(case, output, generate=False, response=None, strategy="candidate_edits", local_codegen=False):
+def run(case, output, generate=False, response=None, strategy="candidate_edits", local_codegen=False, model="ministral-3:8b"):
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
                           files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
-                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py')})
+                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py')})
     save(output/'implementation.json',implementation)
-    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py'):
+    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py'):
         (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
     revision=require(case,'source_revision',str,'request')
     if not re.fullmatch(r'[0-9a-f]{40}',revision):
@@ -70,7 +70,7 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits",
     save(output/'provenance.json',provenance)
     if generate or response:
         args = [sys.executable,'-m','patchgen.generator','--source',str(source),'--fixture',str(output/'input.json'),
-                '--output',str(output/'proposal'),'--strategy',strategy,'--validate']
+                '--output',str(output/'proposal'),'--strategy',strategy,'--model',model,'--validate']
         if local_codegen:
             args += ['--local-codegen']
         if profile_name in VALIDATION_PROFILES:
@@ -93,9 +93,10 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
+    parser.add_argument('--model',choices=('ministral-3:3b','ministral-3:8b'),default='ministral-3:8b',help='installed local model only')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
-    parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('deterministic_inventory_width','candidate_edits','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
@@ -104,7 +105,7 @@ def main():
         if args.review_output and (args.review_output.exists() or args.review_output.resolve() == args.output.resolve()
                                    or args.output.resolve() in args.review_output.resolve().parents):
             raise ContractError('review output must be new and outside pipeline output')
-        report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response,args.strategy,args.local_codegen)
+        report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response,args.strategy,args.local_codegen,args.model)
         if args.review_output:
             from patchgen.review import export
             export(args.output,args.review_output)

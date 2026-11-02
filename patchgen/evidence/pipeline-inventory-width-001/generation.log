@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "deterministic_proposal",
+  "prompt_version": "host-inventory-width/1.0",
+  "strategy": "deterministic_inventory_width",
+  "generator_sha256": "b2c9f01b96d84137f6e6daf3827c6b30113c5203de6c27740ff0fcb5fe0500d9",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "inventory_width_sha256": "d320c993c7875821ba0fc8250c56b8bb9773ef260245694ce21031d6169380d3",
+  "source_revision": "104d35d384a310c97da493add7c0249e7474c31f",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "104d35d384a310c97da493add7c0249e7474c31f",
+    "change_id": "inventory-quantity-width",
+    "new_schema_sha256": "d868049b9de1b1ef2015ca13170ed7872ffd57251e82847ca014f026766df774",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "inventory_case": "width"
+  },
+  "inventory_oracle_sha256": "983664bb4d3aec9cdcb0b50f23bae2bd53ec5cd2508c8bb836116b5484e89775",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: hon 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python\" -m venv \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-inventory-width-001/proposal/workspace/.venv\"\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-inventory-width-001/proposal/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.3\n[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-inventory-width-001/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 681ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-inventory-width-001/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 572 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\n../../generated/ts/inventory/item.ts(3,23): error TS2307: Cannot find module 'long' or its corresponding type declarations.\n\nCommand failed (exit 2). See the output above.\n",
+  "workflow_elapsed_seconds": 5.6183062919881195,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

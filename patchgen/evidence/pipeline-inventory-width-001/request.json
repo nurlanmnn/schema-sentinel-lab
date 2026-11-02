@@ -1,0 +1,10 @@
+{
+  "source_revision": "104d35d384a310c97da493add7c0249e7474c31f",
+  "change": {
+    "id": "inventory-quantity-width",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int64 quantity = 2;\n}\n"
+  },
+  "intended_behavior": "Preserve exact signed int64 quantities as canonical decimal strings in JSON; ts-proto forceLong=string; preserve strict >0 stock predicate. Widen signed field 2. Valid canonical decimal input strings only; generated code must not use JS number for int64. Consumers migrate before out-of-int32 producers. Entity and telemetry unchanged; no test edits."
+}

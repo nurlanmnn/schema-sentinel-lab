@@ -164,7 +164,7 @@ required for the wire-type change.
 producers, observations and thresholds. The structural detector does not infer
 units. All three telemetry demos leave human review pending.
 
-Run all six distinct authored migrations sequentially with:
+Run the distinct authored migrations sequentially with:
 
 ```sh
 python3.13 run_benchmark.py --local-codegen --output patchgen/evidence/NEW-suite
@@ -175,3 +175,9 @@ recall, runtime validation and prepared-demo timing. See
 [decision 0018](docs/decisions/0018-six-migration-suite.md) for prerequisites,
 denominators and limits. These deterministic cases do not establish live model
 performance or meet the twenty-case benchmark target.
+
+`run_demo.py --case inventory-width --local-codegen` validates exact signed int64
+stock quantities across the three runtimes, including values above JavaScript's
+safe-integer range. The suite now includes seven distinct migrations. See
+[decision 0020](docs/decisions/0020-inventory-integer-width-migration.md).
+Live LLM evaluation and model reassessment are the next priority.

@@ -1,0 +1,6 @@
+{
+  "strategy": "deterministic_inventory_width",
+  "model_requests": 0,
+  "automatic_repairs": 0,
+  "policy": "Preserve exact signed int64 quantities as canonical decimal strings in JSON; ts-proto forceLong=string; preserve strict >0 stock predicate"
+}

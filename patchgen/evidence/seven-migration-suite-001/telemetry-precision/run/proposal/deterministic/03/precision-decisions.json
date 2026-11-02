@@ -1,0 +1,10 @@
+{
+  "path": "runtimes/typescript/telemetry.ts",
+  "candidate_lines": [
+    9,
+    10,
+    11
+  ],
+  "edits": [],
+  "policy": "Python float and TS number already binary64; C# generated property widens; remove explicit narrowing cast"
+}

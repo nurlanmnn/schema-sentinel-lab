@@ -126,7 +126,7 @@ CANDIDATE_SCHEMA['properties']['candidate_reviews'] = {'type':'array','items':{
 
 BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-addition')
 
-STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6','syntax_rename_roles':'2.7','deterministic_rename_roles':'host-rename/1.0','deterministic_telemetry_units':'host-units/1.0','deterministic_telemetry_precision':'host-precision/1.0','deterministic_utf8_v2':'host-utf8/1.0','deterministic_remove_name_v1':'host-remove/1.0'}
+STRATEGY_VERSIONS = {'deterministic_inventory_width':'host-inventory-width/1.0','exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6','syntax_rename_roles':'2.7','deterministic_rename_roles':'host-rename/1.0','deterministic_telemetry_units':'host-units/1.0','deterministic_telemetry_precision':'host-precision/1.0','deterministic_utf8_v2':'host-utf8/1.0','deterministic_remove_name_v1':'host-remove/1.0'}
 
 
 class ContractError(ValueError):
@@ -492,6 +492,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 # Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
 VALIDATION_PROFILES = {
+    'inventory-quantity-width': ('inventory-quantity-width', None),
     'telemetry-speed-units': ('telemetry-speed-units', None),
     'telemetry-speed-precision': ('telemetry-speed-precision', None),
     'telemetry-speed-rename': ('telemetry-speed-rename', None),
@@ -511,7 +512,9 @@ def load_validation_profile(case, name):
     profile = json.loads((directory / 'validation-profile.json').read_text())
     patch = (directory / 'validation-tests.patch').read_text()
     oracle_case, pubsub_case = VALIDATION_PROFILES[name]
-    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case not in ('v2-identifier-bytes','telemetry-speed-rename','telemetry-speed-precision','telemetry-speed-units') else []
+    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case not in ('inventory-quantity-width','v2-identifier-bytes','telemetry-speed-rename','telemetry-speed-precision','telemetry-speed-units') else []
+    if profile.get('inventory_case') != ('width' if name == 'inventory-quantity-width' else None):
+        raise ContractError('trusted profile has wrong inventory selection')
     if (profile.get('telemetry_case') != ({'telemetry-speed-rename':'rename','telemetry-speed-precision':'precision','telemetry-speed-units':'units'}.get(name))):
         raise ContractError('trusted profile has wrong telemetry selection')
     if not pubsub_case and ('pubsub_case' in profile or 'oracle_case' in profile):
@@ -577,7 +580,14 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
             command([sys.executable,'run_local.py'],workspace,log,timeout=600)
             python = workspace / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
             oracle_case = validation_profile[0].get('oracle_case', case['change']['id']) if validation_profile else case['change']['id']
-            if validation_profile and validation_profile[0].get('telemetry_case'):
+            if validation_profile and validation_profile[0].get('inventory_case'):
+                command([str(python), str(output/'inventory-oracle-source.py'), '--root', str(workspace),
+                         '--case', 'width', '--output', str(output/'inventory')], workspace,log)
+                result = json.loads((output/'inventory/report.json').read_text())
+                if (result.get('status') != 'passed' or result.get('runtime_cases') != 48
+                        or result.get('runtime_revision') != case['source_revision']):
+                    raise ContractError('inventory validation did not retain passing evidence')
+            elif validation_profile and validation_profile[0].get('telemetry_case'):
                 command([str(python), str(output/'telemetry-oracle-source.py'), '--root', str(workspace),
                          '--case', validation_profile[0]['telemetry_case'], '--output', str(output/'telemetry')], workspace,log)
                 result = json.loads((output/'telemetry/report.json').read_text())
@@ -630,6 +640,8 @@ def main():
         (output / 'rename-token-source.py').write_bytes(Path(__file__).with_name('rename_tokens.py').read_bytes())
     if args.strategy in ('syntax_rename_roles','deterministic_rename_roles'):
         (output / 'rename-role-source.py').write_bytes(Path(__file__).with_name('rename_roles.py').read_bytes())
+    if args.strategy == 'deterministic_inventory_width':
+        (output/'inventory-width-source.py').write_bytes(Path(__file__).with_name('inventory_width.py').read_bytes())
     if args.strategy == 'deterministic_telemetry_units':
         (output/'telemetry-units-source.py').write_bytes(Path(__file__).with_name('telemetry_units.py').read_bytes())
         (output/'type-precision-source.py').write_bytes(Path(__file__).with_name('type_precision.py').read_bytes())
@@ -641,7 +653,7 @@ def main():
         (output / 'remove-name-source.py').write_bytes(Path(__file__).with_name('remove_name.py').read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
     (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
-    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units') else 'live_model'),
+    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if args.strategy in ('deterministic_inventory_width','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units') else 'live_model'),
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
@@ -658,6 +670,8 @@ def main():
         report['type_utf8_sha256'] = hashlib.sha256(Path(__file__).with_name('type_utf8.py').read_bytes()).hexdigest()
     if args.strategy == 'deterministic_remove_name_v1':
         report['remove_name_sha256'] = hashlib.sha256(Path(__file__).with_name('remove_name.py').read_bytes()).hexdigest()
+    if args.strategy == 'deterministic_inventory_width':
+        report['inventory_width_sha256'] = hashlib.sha256(Path(__file__).with_name('inventory_width.py').read_bytes()).hexdigest()
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
@@ -672,6 +686,10 @@ def main():
         validation_profile = load_validation_profile(case,args.validation_profile) if args.validation_profile else None
         if validation_profile:
             report['validation_profile'] = validation_profile[0]
+            if validation_profile[0].get('inventory_case'):
+                raw = (Path(__file__).resolve().parents[1]/'testbed/inventory/run.py').read_bytes()
+                (output/'inventory-oracle-source.py').write_bytes(raw)
+                report['inventory_oracle_sha256'] = hashlib.sha256(raw).hexdigest()
             if validation_profile[0].get('telemetry_case'):
                 raw = (Path(__file__).resolve().parents[1]/'testbed/telemetry/run.py').read_bytes()
                 (output/'telemetry-oracle-source.py').write_bytes(raw)
@@ -692,7 +710,10 @@ def main():
             source = output / 'source'
             report['source_preparation'] = 'explicit snapshot of fixture revision; original checkout untouched'
         verify_source(source,case)
-        if args.strategy == 'deterministic_telemetry_units' and not args.response:
+        if args.strategy == 'deterministic_inventory_width' and not args.response:
+            from patchgen.inventory_width import propose
+            proposal = propose(case, output)
+        elif args.strategy == 'deterministic_telemetry_units' and not args.response:
             from patchgen.telemetry_units import propose
             proposal = propose(case, output)
         elif args.strategy == 'deterministic_telemetry_precision' and not args.response:
@@ -717,6 +738,8 @@ def main():
             report['status'] = 'validation_passed' if args.validate else 'applied_unvalidated'
             if args.validate and args.local_codegen:
                 report['local_codegen_toolchain'] = json.loads((output/'local-codegen-toolchain.json').read_text())
+            if args.validate and validation_profile and validation_profile[0].get('inventory_case'):
+                report['inventory_validation'] = json.loads((output/'inventory/report.json').read_text())
             if args.validate and validation_profile and validation_profile[0].get('telemetry_case'):
                 report['telemetry_validation'] = json.loads((output/'telemetry/report.json').read_text())
             if args.validate and validation_profile and validation_profile[0].get('pubsub_case'):

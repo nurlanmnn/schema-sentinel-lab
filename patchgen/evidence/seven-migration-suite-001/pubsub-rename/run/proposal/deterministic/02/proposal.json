@@ -1,0 +1,34 @@
+{
+  "outcome": "patch",
+  "token_edits": [
+    {
+      "token_id": 1,
+      "replacement": "\"display_name\""
+    },
+    {
+      "token_id": 2,
+      "replacement": "display_name"
+    },
+    {
+      "token_id": 3,
+      "replacement": "display_name"
+    }
+  ],
+  "candidate_reviews": [
+    {
+      "line": 33,
+      "decision": "edit",
+      "reason": "Explicit deterministic all-candidate rename policy; receiver identity unproved"
+    },
+    {
+      "line": 117,
+      "decision": "edit",
+      "reason": "Explicit deterministic all-candidate rename policy; receiver identity unproved"
+    }
+  ],
+  "rationale": "Descriptor-derived syntax-token rename proposal",
+  "confidence": 0,
+  "assumptions": [
+    "All located candidates refer to the renamed field; validate and review this assumption."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "path": "runtimes/python/inventory_runtime.py",
+  "candidate_lines": [
+    10,
+    11,
+    12
+  ],
+  "edits": []
+}
