@@ -23,11 +23,16 @@ class DiagnosticTests(unittest.TestCase):
             result=analyze(root,Path(tmp)/'analysis')
             self.assertEqual(result['validation_rate'],0)
             self.assertEqual(result['planned_cases'],6)
+            self.assertEqual(result['contract_results'],dict(passed=0,failed=6,unknown=0))
             self.assertEqual({r['outcome'] for r in result['rows']},{'file_contract_or_generation_rejected'})
             self.assertIn('bad review',(Path(tmp)/'analysis/analysis.md').read_text())
             summary['results'].append(records[0])
             (root/'summary.json').write_text(json.dumps(summary))
             with self.assertRaises(ValueError):analyze(root,Path(tmp)/'duplicate-analysis')
+            summary['results'].pop()
+            (root/'summary.json').write_text(json.dumps(summary))
+            (root/CASES[0]/'run/proposal/model.json').unlink()
+            with self.assertRaisesRegex(ValueError,'model identity'):analyze(root,Path(tmp)/'missing-model-analysis')
 
     def test_timing_separates_loading_and_decode_and_ignores_nested_archive(self):
         with tempfile.TemporaryDirectory() as tmp:

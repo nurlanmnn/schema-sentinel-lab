@@ -84,7 +84,9 @@ def analyze(source,output):
                          generation_seconds=record['generation_seconds'],workflow_seconds=record['workflow_seconds'],error=record.get('error'),
                          requests=request_details(root,requests),failure_evidence=failure_evidence(root)))
     model_paths=[source/r['case']/'run/proposal/model.json' for r in summary['results']]
-    models=[read(path) for path in model_paths if path.is_file()]
+    if not all(path.is_file() for path in model_paths):
+        raise ValueError('suite is missing per-case model identity evidence')
+    models=[read(path) for path in model_paths]
     digests={m['tag']['digest'] for m in models}
     if len(digests)!=1:
         raise ValueError('suite did not retain one consistent model digest')
@@ -93,6 +95,9 @@ def analyze(source,output):
                 prompt_version=summary['prompt_version'],source_summary_sha256=hashlib.sha256((source/'summary.json').read_bytes()).hexdigest(),
                 validated_model_patches=sum(r['validated'] for r in rows),planned_cases=len(CASES),
                 validation_rate=sum(r['validated'] for r in rows)/len(CASES),rows=rows,
+                contract_results=dict(passed=sum(request['contract_status']=='passed' for row in rows for request in row['requests']),
+                                      failed=sum(request['contract_status']=='failed' for row in rows for request in row['requests']),
+                                      unknown=sum(request['contract_status'] not in ('passed','failed') for row in rows for request in row['requests'])),
                 timing_scope='Ollama load/prompt/eval counters per request; load duration alone does not prove cold versus warm cache state',
                 scope='six small authored cases; one trial per model, no repairs; not general reliability or human acceptance')
     (output/'analysis.json').write_text(json.dumps(result,indent=2)+'\n')

@@ -1,0 +1,30 @@
+Generating 1/3: runtimes/csharp/Telemetry.cs
+Generating 2/3: runtimes/python/telemetry_runtime.py
+Generating 3/3: runtimes/typescript/telemetry.ts
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "2.5",
+  "strategy": "candidate_edits",
+  "generator_sha256": "b2c9f01b96d84137f6e6daf3827c6b30113c5203de6c27740ff0fcb5fe0500d9",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "change_id": "telemetry-speed-precision",
+    "new_schema_sha256": "947f19d616a50f7dbdb6f439365cbb01e9099b3fecbc840e265cf20a532f6566",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "precision"
+  },
+  "telemetry_oracle_sha256": "d511be5794713e99547840c48a6e3e30c29e8bb0dabaf4e2354b7cfb1b2deac1",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "error": "file proposal rejected: runtimes/typescript/telemetry.ts: overlapping line edit ranges",
+  "workflow_elapsed_seconds": 116.7987142080674,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

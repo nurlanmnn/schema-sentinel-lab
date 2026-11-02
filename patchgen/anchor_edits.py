@@ -41,9 +41,11 @@ def make_prompt(case,file):
     payload['file']={key:file[key] for key in ('path','language','source_context')}
     inventory=candidates(file)
     payload['candidates']=[dict(id=key,source_line=value['text']) for key,value in inventory.items()]
-    payload['response_schema']={**SCHEMA,'properties':{**SCHEMA['properties'],
+    properties={**SCHEMA['properties'],
         'candidate_reviews':{'type':'object','additionalProperties':False,
-                             'properties':{key:REVIEW_SCHEMA for key in inventory},'required':list(inventory)}}}
+                             'properties':{key:REVIEW_SCHEMA for key in inventory},'required':list(inventory)}}
+    payload['response_schema']={**SCHEMA,'properties':{key:properties[key] for key in
+        ('outcome','candidate_reviews','edits','rationale','confidence','assumptions')}}
     payload['prompt_version']=VERSION
     return [{'role':'system','content':SYSTEM},{'role':'user','content':json.dumps(payload,indent=2)}],inventory
 
@@ -74,6 +76,6 @@ def resolve(source,value,inventory,positions):
         if after and not after.endswith('\n'):
             raise ContractError('after must end with a newline')
         start_line=source[:offset].count('\n')+1
-        ranges.append(dict(start_line=start_line,end_line=start_line+len(before.splitlines())-1,
-                           replacement_lines=after.splitlines()))
+        ranges.append(dict(start_line=start_line,end_line=start_line+before.count('\n')+int(not before.endswith('\n'))-1,
+                           replacement_lines=after[:-1].split('\n') if after else []))
     return resolve_candidates(source,{**value,'edits':ranges,'candidate_reviews':converted},positions)

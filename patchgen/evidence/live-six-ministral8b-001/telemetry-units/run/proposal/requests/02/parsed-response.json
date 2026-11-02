@@ -1,0 +1,50 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 10,
+      "end_line": 10,
+      "replacement_lines": [
+        "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)"
+      ]
+    },
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}"
+      ]
+    },
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,"
+      ]
+    }
+  ],
+  "rationale": "The schema change renames the field from `speed_mps` to `speed_kph`, requiring updates in three places: (1) the construction of a new `VehicleTelemetry` instance must scale input speed by 3.6 to convert m/s to km/h, (2) the extracted field name and value must reflect the new schema (`speed_kph`), and (3) the speeding threshold must be updated from >30.0 m/s (>108 km/h). The runtime observation key remains `speed_kph` as per intended_behavior.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The input request['speed'] is in meters per second and must be scaled to kilometers per hour (3.6 factor) before serialization.",
+    "The protobuf field `speed_kph` is a float32, so the conversion preserves precision as required by intended_behavior.",
+    "No other logic depends on the old units or threshold; only the specified sites need adjustment."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": "The `VehicleTelemetry` construction uses the obsolete field name (`speed_mps`) and literal value. Must update to use `speed_kph` with scaling."
+    },
+    {
+      "line": 11,
+      "decision": "edit",
+      "reason": "Field extraction references the old schema (`speed_mps`). Must rename to `speed_kph` for consistency."
+    },
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "The speeding threshold (30.0 m/s) is obsolete; must convert to >108 km/h and use the new field name (`speed_kph`)."
+    }
+  ]
+}

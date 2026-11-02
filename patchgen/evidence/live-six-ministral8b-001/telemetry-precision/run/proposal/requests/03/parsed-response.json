@@ -1,0 +1,43 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 9,
+      "end_line": 10,
+      "replacement_lines": [
+        "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: Number(request.speed) }).finish();"
+      ]
+    },
+    {
+      "start_line": 10,
+      "end_line": 11,
+      "replacement_lines": [
+        "    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };",
+        ""
+      ]
+    }
+  ],
+  "rationale": "The protobuf schema change from float32 to double (float64) requires explicit handling of numeric precision in TypeScript/JavaScript. The original code uses `request.speed` directly as a number, which may lose precision if it was originally a float32 value. Explicitly converting the input speed to a Number ensures full precision is preserved during serialization. No changes are needed for the protobuf-generated types or the protobuf wire format handling since TypeScript's `number` type already maps to binary64 (float64) in protobuf, matching the new schema.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The input `request.speed` is a numeric value that may have been serialized as float32 in previous versions but should now be treated as float64 for precision consistency with the protobuf schema change.",
+    "No other numeric fields in this file require explicit type conversion beyond what TypeScript's implicit number handling provides."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 9,
+      "decision": "edit",
+      "reason": "The `speed` field is now expected to be a float64 (double) in the protobuf schema. Explicit conversion ensures precision is preserved during serialization, as TypeScript's implicit number handling may not guarantee full binary64 precision for all inputs."
+    },
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": "The `speed_mps` field in the protobuf message is now a double (float64). While TypeScript's `number` type maps to float64 by default, explicitly converting the input ensures no precision loss during serialization. The line was split to maintain clarity and avoid unnecessary changes."
+    },
+    {
+      "line": 11,
+      "decision": "unaffected",
+      "reason": "The protobuf-generated `speedMps` property in TypeScript is already a number type, which maps to float64 (double) in the protobuf schema. No explicit conversion is needed here as the protobuf runtime handles the binary encoding correctly."
+    }
+  ]
+}
