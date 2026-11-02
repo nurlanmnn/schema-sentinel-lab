@@ -1,0 +1,198 @@
+{
+  "status": "completed",
+  "protocol": "bounded_validation_feedback",
+  "case": "pubsub-rename",
+  "model": "ministral-3:8b",
+  "model_digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+  "max_feedback_rounds": 2,
+  "initial_model_requests": 3,
+  "attempts": [
+    {
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 149.92989345802926,
+      "model_requests": 3,
+      "generation_seconds": 142.233137958101,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-rename-feedback001/attempt-01/run/proposal/workspace/.venv\"\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-rename-feedback001/attempt-01/run/proposal/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.3\n[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-rename-feedback001/attempt-01/run/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 584ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-rename-feedback001/attempt-01/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 110 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\nmain.ts(13,108): error TS2339: Property 'name' does not exist on type 'Entity'.\nmain.ts(83,45): error TS2561: Object literal may only specify known properties, but 'display_name' does not exist in type 'Entity'. Did you mean to write 'displayName'?\n\nCommand failed (exit 2). See the output above.\n",
+      "mode": "live_model_feedback",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 50.69528437498957,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "198631f16cc37d84c4ad50cf7c474beb55598357fd30efef7c63486ca7f10b1a",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 3329,
+            "eval_count": 548,
+            "total_duration": 50681716833,
+            "load_duration": 140593500,
+            "prompt_eval_duration": 16805431000,
+            "eval_duration": 33550974000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/main.py"
+          },
+          "measurement": {
+            "elapsed_seconds": 41.20811141701415,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "ae4b49360fae00e40261ef07ae172c971862edf6654cd9e059584329794cc0b8",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 3209,
+            "eval_count": 443,
+            "total_duration": 41202971125,
+            "load_duration": 153743875,
+            "prompt_eval_duration": 14329916000,
+            "eval_duration": 26516584000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 50.329742166097276,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "a680301679bf5e72189d3591de928ac83ef587c71707eff4d20a3c5744bccea1",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 3319,
+            "eval_count": 581,
+            "total_duration": 50323688500,
+            "load_duration": 141664959,
+            "prompt_eval_duration": 15099761000,
+            "eval_duration": 34863561000
+          }
+        }
+      ],
+      "round": 1,
+      "validated_feedback_proposal": false
+    },
+    {
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 117.49724020797294,
+      "model_requests": 3,
+      "generation_seconds": 116.2649079170078,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/python/main.py: after must end with a newline",
+      "mode": "live_model_feedback",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 44.35532316600438,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "866e6da4403ec74278395b91269ac0e95f3733bc3f97795eb07d5997b8f016f9",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 3387,
+            "eval_count": 635,
+            "total_duration": 44350657417,
+            "load_duration": 162380250,
+            "prompt_eval_duration": 3756302000,
+            "eval_duration": 39818970000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/python/main.py",
+            "error": "after must end with a newline"
+          },
+          "measurement": {
+            "elapsed_seconds": 30.84703283396084,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "012d72a5ea2a152b18e44c7f69a0e102a7a3d0e3b664593ab0ecc5ba9d43eb84",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 3302,
+            "eval_count": 449,
+            "total_duration": 30842796875,
+            "load_duration": 140068292,
+            "prompt_eval_duration": 3066888000,
+            "eval_duration": 26882685000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 41.06255191704258,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "efe4629fcea3c7802a73559d9a6199d492f829b57487928e1224d6e8471fa7a9",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 3487,
+            "eval_count": 608,
+            "total_duration": 41058566666,
+            "load_duration": 120236125,
+            "prompt_eval_duration": 3892970000,
+            "eval_duration": 36730379000
+          }
+        }
+      ],
+      "round": 2,
+      "validated_feedback_proposal": false
+    }
+  ],
+  "validated_feedback_proposal": false,
+  "human_approval_required": true,
+  "source_summary_sha256": "b19240263b6df4b6d656659c457d1ed7077103c0d62031d4e4782c853aa1fd4d",
+  "scope": "one selected failed development case; not a six-case validation rate, held-out result or model comparison",
+  "feedback_model_requests": 6,
+  "total_model_requests_including_initial": 9
+}

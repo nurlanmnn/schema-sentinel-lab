@@ -1,0 +1,73 @@
+{
+  "status": "failed",
+  "implementation": {
+    "revision": "f56dab15cb3c7e1e8a122da7351cdbdc962bb542",
+    "files": {
+      "detector.py": "abed5121c265741632e39e9ac693099d97a9f91d36b332d5e97a55fd06f9f201",
+      "locator.py": "74459f3101db5e330c31fc315ddb72a3ae5fcfffd36f2860951c918b5457c8ac",
+      "pipeline.py": "9f4f0fbc417def2e5805156c2d27617495aaa9179dc299ef55e0879493b5d3b1",
+      "adapter.py": "ac60e873718fc9bdec5a4cff1fec3b43162588e9aca2cccc01746f967dc629b9",
+      "generator.py": "5e1b90160758ae91b32259a264421d24650544c9b57ac8aa31d392e3a933bd33",
+      "rename_tokens.py": "3766e43b4948f0576565e7c79d0a319f4dc185d2e582e8a3b867609c68123813",
+      "rename_roles.py": "d62c278f024be46d4d8f7542073981ff11a7ca7d0e92b4cb4bac7bc528654fa1",
+      "type_utf8.py": "3915c6f54f685eae286ac021b313b13722957dff94325430547cc682e93b19e4",
+      "remove_name.py": "1265821f708cb54b0460f01cd1939105bc64a4222acf992c1c0ebba8f45198e8",
+      "type_precision.py": "e954e8a1c1803f8f449c0e3439a34f23366ac8912c9d4ccb68938b8039f5d636",
+      "telemetry_units.py": "76e4a2f753fc6f023e5b40d0c2c9a4085f383cdc5381b9d2f53a6cdde3c5dc41",
+      "inventory_width.py": "d320c993c7875821ba0fc8250c56b8bb9773ef260245694ce21031d6169380d3"
+    }
+  },
+  "measurement": {
+    "expected_sites": 6,
+    "matched_sites": 6,
+    "recall": 1.0,
+    "missed": [],
+    "extra": [],
+    "classification_correct": true
+  },
+  "human_approval_required": true,
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof",
+  "proposal_exit_code": 1,
+  "proposal_report": {
+    "status": "failed",
+    "human_approval_required": true,
+    "mode": "live_model_feedback",
+    "prompt_version": "2.9-feedback",
+    "strategy": "candidate_feedback_blocks",
+    "generator_sha256": "5e1b90160758ae91b32259a264421d24650544c9b57ac8aa31d392e3a933bd33",
+    "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "anchor_edits_sha256": "90f00d3126f5ac7741f538ad30a75e4b52c55f05b8bd2971cfb9ba6d95813c02",
+    "feedback_blocks_sha256": "6f4473c78a54872076fbf68a7efadea59b8d7929d84d3b09b1ea46afb47c78c3",
+    "feedback_sha256": "79e9b8e8d2a0e2d9ba1bd493fe3207c9e2dd53f65e62710356189760bf5d9b19",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "codegen": "local_pinned",
+    "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+    "validation_profile": {
+      "profile_version": "1.0",
+      "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "change_id": "pubsub-name-rename",
+      "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+      "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
+      "allowed_test_paths": [
+        "testbed/tests/e2e_test.py",
+        "testbed/tests/test_evidence.py"
+      ],
+      "model_editable": false,
+      "origin": "independent evaluator expectations; excluded from generation",
+      "oracle_case": "entity-name-rename",
+      "pubsub_case": "rename",
+      "pubsub_negative_control": "truncated_v1_decoder_logs"
+    },
+    "pubsub_harness_sha256": {
+      "run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+      "broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+      "topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+    },
+    "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+    "error": "file proposal rejected: runtimes/python/main.py: after must end with a newline",
+    "workflow_elapsed_seconds": 116.36956941708922,
+    "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+  }
+}

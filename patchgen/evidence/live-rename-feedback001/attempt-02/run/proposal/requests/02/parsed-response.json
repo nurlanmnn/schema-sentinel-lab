@@ -1,0 +1,29 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field name in the output dictionary must match the renamed wire field `display_name` as per intended_behavior. The code currently uses `entity.name`, which is incorrect for v1 schema after the rename."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The test construction line (`entity.name = \"Sensor A\"`) must be updated to use the new field name `display_name` to ensure consistency with the renamed wire field. The intended_behavior requires preserving all values, including test data."
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields[\"name\"] = entity.name\n",
+      "after": "        fields[\"display_name\"] = entity.display_name"
+    },
+    {
+      "before": "            entity.name = \"Sensor A\"\n",
+      "after": "            entity.display_name = \"Sensor A\""
+    }
+  ],
+  "rationale": "The schema change renames the wire field from `name` to `display_name` in v1. The Python runtime must reflect this change by updating both the output dictionary key and the test construction logic. The edits replace all references to `entity.name` with `entity.display_name`, preserving all other logic (e.g., `entity_id`). This ensures consistency across subscribers (Python, TypeScript, C#, etc.) and aligns with the intended_behavior of preserving every value, including Unicode/escaped text and empty strings. The validation diagnostics in previous_attempt confirm that the generated bindings now expose `display_name` instead of `name`, requiring this update.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated bindings correctly expose `entity.display_name` as a property after schema regeneration, replacing the old `name` field in v1.",
+    "No additional validation or transformation is required beyond key renaming in the output dictionary and test construction."
+  ]
+}

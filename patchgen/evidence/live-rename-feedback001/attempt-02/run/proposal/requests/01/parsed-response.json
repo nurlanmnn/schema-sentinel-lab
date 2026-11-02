@@ -1,0 +1,30 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field name in the dictionary mapping must be updated from `name` to `display_name` to match the new schema's wire field. The intended_behavior explicitly requires preserving every value, including empty/Unicode/escaped text, and observing the renamed key as `display_name`. This is a direct reflection of the schema change."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The test data construction in `--serve` mode uses the old field name (`Name`). Since the bindings are regenerated and the wire field remains at position 2, this must be updated to `DisplayName` (the generated C# accessor for `display_name`) to ensure consistency with the new schema. The intended_behavior requires all subscribers to decode both schema versions correctly, including test data."
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };\n",
+      "after": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"display_name\"] = decoded.DisplayName };\n"
+    },
+    {
+      "before": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }\n",
+      "after": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", DisplayName = \"Sensor B\" }\n"
+    }
+  ],
+  "rationale": "The schema change renames the wire field from `name` to `display_name` in `simulation.v1.Entity`. The runtime must reflect this change by updating all references to the old key (`name`) with the new one (`display_name`). This includes dictionary mappings for observed fields (C001) and test data construction (C002). The generated C# bindings will map the wire field `display_name` (field 2) to a property named `DisplayName`, so all code must use this accessor. The intended_behavior requires preserving every value, including empty/Unicode/escaped text, and observing the renamed key as `display_name`. Test data construction (`C002`) must also align with the new schema to ensure correctness during serialization/deserialization.",
+  "confidence": 1.0,
+  "assumptions": [
+    "The generated C# bindings will correctly map the wire field `display_name` (field 2) to a property named `DisplayName`.",
+    "No additional validation or transformation is required beyond renaming the observed key and test data construction.",
+    "Test data construction (`C002`) must use the new accessor name (`DisplayName`) to ensure consistency with the regenerated bindings."
+  ]
+}

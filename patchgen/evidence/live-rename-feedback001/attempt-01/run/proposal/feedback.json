@@ -1,0 +1,103 @@
+{
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "change_id": "pubsub-name-rename",
+  "files": {
+    "runtimes/csharp/main.cs": {
+      "previous_response": {
+        "outcome": "patch",
+        "candidate_reviews": {
+          "C001": {
+            "decision": "edit",
+            "reason": "The field name in the dictionary mapping must be updated from 'name' to 'display_name' to match the new schema, as per intended_behavior."
+          },
+          "C002": {
+            "decision": "edit",
+            "reason": "The constructor for Simulation.V1.Entity must use 'DisplayName' instead of 'Name' to align with the generated binding names (TypeScript/Protobuf naming conventions) and preserve the value during serialization. The intended_behavior specifies this field is renamed on the wire."
+          }
+        },
+        "edits": [
+          {
+            "before": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };\n",
+            "after": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"display_name\"] = decoded.Name };\n"
+          },
+          {
+            "before": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }\n",
+            "after": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", DisplayName = \"Sensor B\" }\n"
+          }
+        ],
+        "rationale": "The schema change renames the field from 'name' to 'display_name' in the protobuf definition. The runtime must reflect this change by updating all references to the old field name ('name') with the new one ('display_name'). This includes both dictionary key mappings and direct property assignments during entity construction. The generated bindings (e.g., TypeScript `displayName`, C# `DisplayName`) are consistent with the protobuf naming convention, so the code must use the generated property names (`DisplayName` for C#) to maintain compatibility.",
+        "confidence": 1,
+        "assumptions": [
+          "The generated bindings for Simulation.V1.Entity in C# will expose 'DisplayName' as the property name for the renamed field (as per protobuf naming conventions).",
+          "No additional validation or transformation is required beyond renaming the field key in the output dictionary and using the correct property name during construction."
+        ]
+      },
+      "validation_diagnostics": [
+        "main.ts(13,108): error TS2339: Property 'name' does not exist on type 'Entity'.",
+        "main.ts(83,45): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Entity'."
+      ]
+    },
+    "runtimes/python/main.py": {
+      "previous_response": {
+        "outcome": "patch",
+        "candidate_reviews": {
+          "C001": {
+            "decision": "edit",
+            "reason": "The field name in the output dictionary must match the renamed wire field 'display_name' as per intended_behavior. The code currently uses 'name', which is incorrect for v1 schema after the rename."
+          },
+          "C002": {
+            "decision": "unaffected",
+            "reason": "This line constructs a test entity for demonstration purposes, but it does not affect runtime behavior or wire protocol compatibility. The intended_behavior specifies no changes to v2 and only renaming of the field name in v1's output observation key. This is unrelated to the protobuf construction logic."
+          }
+        },
+        "edits": [
+          {
+            "before": "        fields[\"name\"] = entity.name\n",
+            "after": "        fields[\"display_name\"] = entity.display_name\n"
+          }
+        ],
+        "rationale": "The schema change renames the wire field from 'name' to 'display_name' in v1. The Python runtime must reflect this change by updating the output dictionary key used for observation. The edit replaces the incorrect 'name' with 'display_name', preserving all other logic (e.g., entity_id). No changes are needed for v2 or protobuf construction, as the intended_behavior explicitly excludes those cases.",
+        "confidence": 1,
+        "assumptions": [
+          "The generated bindings correctly expose `entity.display_name` as a property after schema regeneration.",
+          "No additional validation or transformation is required beyond key renaming in the output dictionary."
+        ]
+      },
+      "validation_diagnostics": [
+        "main.ts(13,108): error TS2339: Property 'name' does not exist on type 'Entity'.",
+        "main.ts(83,45): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Entity'."
+      ]
+    },
+    "runtimes/typescript/main.ts": {
+      "previous_response": {
+        "outcome": "patch",
+        "candidate_reviews": {
+          "C001": {
+            "decision": "edit",
+            "reason": "The field name in the `fields` object must be updated from 'name' to 'display_name' to match the new schema. This is a direct mapping of the renamed protobuf field."
+          },
+          "C002": {
+            "decision": "unaffected",
+            "reason": "This candidate constructs a hardcoded test payload for `EntityV1` but does not reflect the runtime behavior or generated bindings. The schema change is about wire compatibility and runtime decoding, not static test data generation."
+          }
+        },
+        "edits": [
+          {
+            "before": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n",
+            "after": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { display_name: (entity as EntityV1).name } : {}) };\n"
+          }
+        ],
+        "rationale": "The `fields` object in the TypeScript runtime must map the renamed protobuf field (`display_name`) instead of the old field name (`name`). This ensures consistency with the new schema while preserving all values (including empty/Unicode/escaped text) as required. The edit is minimal and only affects the key used for observation output, not the underlying logic or data integrity.",
+        "confidence": 1,
+        "assumptions": [
+          "The generated TypeScript bindings (`EntityV1`) retain the original field name `name` in their type/interface until regeneration. The runtime must use the new wire field name (`display_name`) for observation keys, regardless of internal binding naming.",
+          "No additional logic is required to handle backward compatibility during decoding; the protobuf decoder handles schema versioning independently."
+        ]
+      },
+      "validation_diagnostics": [
+        "main.ts(13,108): error TS2339: Property 'name' does not exist on type 'Entity'.",
+        "main.ts(83,45): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Entity'."
+      ]
+    }
+  }
+}

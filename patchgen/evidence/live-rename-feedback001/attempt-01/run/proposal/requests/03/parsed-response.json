@@ -1,0 +1,29 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field name in the `fields` object must be updated from `name` to `display_name` to match the new schema's runtime observation key. The generated TypeScript bindings (`EntityV1`) still expose the old field name internally, but the output key must reflect the new wire field name for consistency with the intended behavior."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The hardcoded test payload constructs an `EntityV1` instance using the old field name (`name`). While this is a static test case, it must align with the new schema's wire field semantics to avoid confusion during testing. The generated bindings will still use `name`, but the test data should reflect the renamed field for clarity and correctness."
+    }
+  },
+  "edits": [
+    {
+      "before": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n",
+      "after": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { display_name: (entity as EntityV1).name } : {}) };\n"
+    },
+    {
+      "before": "    ? EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()\n",
+      "after": "    ? EntityV1.encode({ entityId: \"ts_303\", display_name: \"Sensor C\" }).finish()\n"
+    }
+  ],
+  "rationale": "The migration requires updating all references to the renamed field (`name` \u2192 `display_name`) in both runtime observation output and test payloads. The generated TypeScript bindings for `EntityV1` retain the internal field name until regeneration, but the wire field is now named `display_name`. This edit ensures consistency across all code paths where the field is observed or constructed, preserving Unicode/escaped text and empty values as required. The changes are minimal and only affect the output key and test data construction.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated TypeScript bindings (`EntityV1`) still expose `name` internally but decode from wire field `display_name`. The runtime must use `display_name` for observation keys to match the new schema's wire semantics.",
+    "Test payloads should reflect the renamed field for clarity, even if the generated bindings retain backward compatibility during encoding/decoding."
+  ]
+}
