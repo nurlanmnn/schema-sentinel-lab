@@ -47,6 +47,12 @@ class DetectorTests(unittest.TestCase):
         self.new.enum_type[0].value.add(name='ACTIVE',number=1)
         self.assertEqual(compare(self.old,self.new)[0][0]['category'],'enum_value_added')
 
+    def test_enum_value_metadata_not_silently_accepted(self):
+        self.old.enum_type.add(name='State').value.add(name='UNKNOWN',number=0)
+        self.new.CopyFrom(self.old)
+        self.new.enum_type[0].value[0].options.deprecated=True
+        self.assertTrue(compare(self.old,self.new)[1])
+
     def test_identity_mismatch_rejected(self):
         for key,value in [('name','other.proto'),('package','simulation.v2')]:
             changed=copy.deepcopy(self.old);setattr(changed,key,value)
@@ -150,12 +156,54 @@ class CandidateTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             resolve_candidates('a\nb\n',value,[dict(start_line=1,end_line=2)])
 
+    def test_malformed_candidate_edit_has_contract_error(self):
+        value=dict(outcome='patch',edits=[dict(start_line='bad',end_line=2,replacement_lines=['changed'])],
+                   rationale='rename',confidence=.5,assumptions=[],candidate_reviews=[])
+        with self.assertRaises(ContractError):
+            resolve_candidates('a\nb\n',value,[dict(start_line=1,end_line=2)])
+
     def test_prompt_version_and_no_answer_leak(self):
         case=json.loads((ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json').read_text())
         case['reference_answer']='SECRET_REFERENCE'
         messages=edit_prompt(case,case['affected_files'][0],'candidate_edits')
         self.assertNotIn('SECRET_REFERENCE',json.dumps(messages))
         self.assertEqual(json.loads(messages[1]['content'])['prompt_version'],'2.5')
+
+
+class RenameTokenTests(unittest.TestCase):
+    def test_all_three_languages_preserve_structure(self):
+        from patchgen.rename_tokens import make_prompt, resolve
+        case=json.loads((ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json').read_text())
+        for file in case['affected_files']:
+            with self.subTest(language=file['language']):
+                prompt,tokens=make_prompt(case,file)
+                edits=[]
+                for token in tokens:
+                    replacement=token['allowed'][0]
+                    if file['language']=='typescript':
+                        replacement='display_name' if token['token_id']==1 else 'displayName'
+                    edits.append(dict(token_id=token['token_id'],replacement=replacement))
+                value=dict(outcome='patch',token_edits=edits,candidate_reviews=[dict(line=p['start_line'],decision='edit',reason='rename target') for p in file['positions']],
+                           rationale='rename',confidence=.5,assumptions=[])
+                updated=resolve(file['source_context'],value,tokens,file['positions'])
+                self.assertEqual(len(updated.splitlines()),len(file['source_context'].splitlines()))
+                for before,after in zip(file['source_context'].splitlines(),updated.splitlines()):
+                    self.assertEqual(len(before)-len(before.lstrip()),len(after)-len(after.lstrip()))
+                if file['language']=='python':
+                    import ast
+                    ast.parse(updated)
+                    self.assertIn('entity.display_name',updated)
+                elif file['language']=='typescript':
+                    self.assertIn('display_name: (entity as EntityV1).displayName',updated)
+                else:
+                    self.assertIn('decoded.DisplayName',updated)
+                value['token_edits'][0]['replacement']='INVALID\nCODE'
+                with self.assertRaises(ContractError):resolve(file['source_context'],value,tokens,file['positions'])
+
+    def test_nonrename_is_rejected(self):
+        from patchgen.rename_tokens import make_prompt
+        case=json.loads((ROOT/'patchgen/fixtures/v2-identifier-bytes/runtime-input.json').read_text())
+        with self.assertRaises(ContractError):make_prompt(case,case['affected_files'][0])
 
 
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,31 @@
+{
+  "outcome": "patch",
+  "rationale": "The field name in the protobuf message was renamed from 'name' to 'display_name', requiring updates in both the dictionary key and the property access in C# code. The token replacements align with the intended behavior: literal string keys and identifier accesses must match the new schema's wire field name. No other lines require changes as they are unaffected by this field rename.",
+  "confidence": 1.0,
+  "assumptions": [
+    "The protobuf message 'Entity' in v1 is the only source of truth for field names, and all references must match its wire field definition ('display_name').",
+    "No other implicit or external dependencies exist that would require additional changes beyond those identified."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "The dictionary key 'name' and property access 'Name' must be updated to 'display_name' and 'DisplayName' respectively, as per the protobuf schema change."
+    },
+    {
+      "line": 38,
+      "decision": "unaffected",
+      "reason": "Line 38 is a conditional assignment for v2, which remains unchanged by this field rename in v1."
+    }
+  ],
+  "token_edits": [
+    {
+      "token_id": 1,
+      "replacement": "\"display_name\""
+    },
+    {
+      "token_id": 2,
+      "replacement": "DisplayName"
+    }
+  ]
+}

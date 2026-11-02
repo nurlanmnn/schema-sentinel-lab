@@ -12,12 +12,26 @@ No additional model is needed if `ministral-3:8b` is already installed.
 python3 -m venv .venv
 .venv/bin/pip install -r patchgen/pipeline-requirements.txt
 .venv/bin/python -m unittest discover -s patchgen/tests -v
-.venv/bin/python -m patchgen.pipeline --output patchgen/evidence/my-pipeline --generate
+.venv/bin/python -m patchgen.pipeline --output patchgen/evidence/my-pipeline
 ```
+
+The command above reliably stops after production records and adapter input.
+To exercise the full validation path with a known-correct proposal:
+
+```sh
+.venv/bin/python -m patchgen.pipeline --output patchgen/evidence/my-reference --response patchgen/reference/entity-name-rename/response.json
+```
+
+This is an offline evaluator replay, not a live model success. Experimental live
+generation adds `--generate --strategy syntax_rename` for prompt 2.6 token editing,
+or `--generate` alone for prompt 2.5 general line edits. Neither new live strategy
+has a passing result; see the retained failures before interpreting the output.
 
 The default case is the pinned v1 name-to-display_name migration. Start
 `ollama serve` first if it is stopped. The output directory must be new. Omit
-`--generate` to stop after detector, locator, measurements and adapter. For the
+`--generate` to stop after detector, locator, measurements and adapter. The optional token strategy uses prompt 2.6: model-selected AST token replacements
+with host-preserved layout. Omit `--strategy syntax_rename` to use the general
+line-edit prompt 2.5. Token editing rejects non-rename cases. For the
 UTF-8 type migration, pass
 `--fixture patchgen/fixtures/v2-identifier-bytes/runtime-input.json`.
 For removal use `patchgen/fixtures/entity-name-removal/runtime-input.json`.
@@ -31,7 +45,7 @@ packages as if they were two versions of one identity.
 Retained outputs include detector/locator records, schema and descriptor hashes,
 all scanned source hashes, candidate reasons, independently computed coverage,
 adapter input/provenance, implementation snapshots, and isolated source checkout.
-Generation adds prompt 2.5, raw model responses, per-candidate decisions,
+Generation adds raw model responses, per-candidate decisions,
 proposal/validation reports and complete review patches. Trusted test migrations
 remain evaluator-owned and excluded from model prompts. The pipeline never reads
 reference answers until after its production scan, solely for measurement.
@@ -56,11 +70,13 @@ parse/dynamic errors. Receiver types, imports, aliases, data flow, templates,
 macros and whole-program semantics are not resolved. Identifier matching can
 produce false positives. Selected literal reflection is located; known dynamic
 reflection/access is flagged. Arbitrary indirect/reflection patterns can escape
-this analysis. Unknown runtime file extensions are not parsed. Generated code,
+this analysis. Known unsupported runtime source extensions make the record partial; other unknown extensions are not parsed. Generated code,
 tests, libraries and code outside runtimes are excluded. Enum change detection
 works structurally, but enum consumer location is explicitly unsupported and
 adapter rejection is expected. Imported/multi-file schema resolution is outside
 this single-file build and fails when dependencies are unavailable.
 
-See decision 0004 for candidate-review rules and dependency license records.
+See decisions 0004/0005 for candidate review, token-edit boundaries and dependency
+license records. Generated naming is bounded to the tested snake/camel/Pascal
+conventions; acronym/reserved-word edge cases need separate validation.
 Current live outcomes are recorded separately in `independent-results.md`.

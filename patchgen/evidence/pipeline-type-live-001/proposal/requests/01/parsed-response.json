@@ -1,0 +1,56 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()), [\"name\"] = decoded.Name };"
+      ]
+    },
+    {
+      "start_line": 21,
+      "end_line": 21,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) };"
+      ]
+    },
+    {
+      "start_line": 38,
+      "end_line": 39,
+      "replacement_lines": [
+        "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }",
+        "        : new Simulation.V2.Entity { EntityId = System.Text.Encoding.UTF8.GetBytes(\"cs_202\") }"
+      ]
+    }
+  ],
+  "rationale": "The schema change requires migrating from string to bytes for `entity_id` in v2. The edits encode/decode UTF-8 strings as specified, preserving the existing behavior for v1 and standalone samples. All candidate lines were affected by the type change: literal-key assignments (lines 15, 21) now require UTF-8 decoding of the byte array to string, and construction (line 39) requires explicit UTF-8 encoding of the string to bytes. The relay logic remains unchanged as it only processes v1 entities.",
+  "confidence": 0.95,
+  "assumptions": [
+    "UTF-8 encoding/decoding is safe for all valid identifiers in this context (no mixed-version interop).",
+    "The protobuf-generated `EntityId` property in C# returns a `ByteString`, which has a `.ToByteArray()` method.",
+    "No other implicit string-to-bytes conversions are needed beyond explicit encoding/decoding."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "v2 `EntityId` is now a bytes field; the dictionary key must decode it to string using UTF-8."
+    },
+    {
+      "line": 21,
+      "decision": "edit",
+      "reason": "Same as line 15: v2 `entity_id` observation requires UTF-8 decoding of the byte array."
+    },
+    {
+      "line": 38,
+      "decision": "unaffected",
+      "reason": "v1 construction logic is unchanged; no type conversion needed."
+    },
+    {
+      "line": 39,
+      "decision": "edit",
+      "reason": "v2 entity construction requires explicit UTF-8 encoding of the string literal to bytes."
+    }
+  ]
+}

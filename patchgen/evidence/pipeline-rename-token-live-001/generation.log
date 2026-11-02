@@ -1,0 +1,32 @@
+Generating 1/3: runtimes/csharp/main.cs
+Generating 2/3: runtimes/python/main.py
+Generating 3/3: runtimes/typescript/main.ts
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "2.6",
+  "strategy": "syntax_rename",
+  "generator_sha256": "00d7007ce565abaf6e4876abd2a7626ec80f2259d6d7f14c3e4488f5d7e4dfab",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "26304c1ed2f4738676a9607e8fe21e17ebd090f0",
+    "change_id": "entity-name-rename",
+    "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+    "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
+    "allowed_test_paths": [
+      "testbed/tests/e2e_test.py",
+      "testbed/tests/test_evidence.py"
+    ],
+    "model_editable": false,
+    "origin": "independent evaluator migration; excluded from prompts"
+  },
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python\" -m venv \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-rename-token-live-001/proposal/workspace/.venv\"\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-rename-token-live-001/proposal/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.2.2\n[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-rename-token-live-001/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 889ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-rename-token-live-001/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 119 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\nmain.ts(59,45): error TS2561: Object literal may only specify known properties, but 'display_name' does not exist in type 'Entity'. Did you mean to write 'displayName'?\n\nCommand failed (exit 2). See the output above.\n",
+  "workflow_elapsed_seconds": 122.1094267910812,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

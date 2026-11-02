@@ -1,0 +1,337 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { display_name: (entity as EntityV1).name } : {}) };"
+      ]
+    },
+    {
+      "start_line": 59,
+      "end_line": 59,
+      "replacement_lines": [
+        "    ? EntityV1.encode({ entityId: \"ts_303\", display_name: \"Sensor C\" }).finish()"
+      ]
+    }
+  ],
+  "rationale": "The field name in the protobuf schema was renamed from `name` to `display_name`. All references to the old field name (`name`) were updated to use the new name (`display_name`). The generated TypeScript bindings will map the wire field correctly, so no additional type conversion is needed. The logic remains unchanged except for the field name updates.",
+  "confidence": 1,
+  "assumptions": [
+    "The generated TypeScript bindings from protobuf correctly handle the renamed field without requiring explicit casting or type changes in the application code.",
+    "No other implicit dependencies on the old field name exist outside of direct references."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 1,
+      "decision": "unaffected",
+      "reason": "Import statements are unaffected; they reference generated bindings which will be regenerated to reflect the schema change."
+    },
+    {
+      "line": 2,
+      "decision": "unaffected",
+      "reason": "Same as line 1. Generated binding import."
+    },
+    {
+      "line": 3,
+      "decision": "unaffected",
+      "reason": "Same as line 1. Generated binding import."
+    },
+    {
+      "line": 4,
+      "decision": "unaffected",
+      "reason": "Empty line, no semantic impact."
+    },
+    {
+      "line": 5,
+      "decision": "unaffected",
+      "reason": "Unrelated constant definition."
+    },
+    {
+      "line": 6,
+      "decision": "unaffected",
+      "reason": "Unrelated constant definition."
+    },
+    {
+      "line": 7,
+      "decision": "unaffected",
+      "reason": "Empty line, no semantic impact."
+    },
+    {
+      "line": 8,
+      "decision": "unaffected",
+      "reason": "Function declaration unaffected by schema change."
+    },
+    {
+      "line": 9,
+      "decision": "unaffected",
+      "reason": "Version check logic is unrelated to field renaming."
+    },
+    {
+      "line": 10,
+      "decision": "unaffected",
+      "reason": "Decoding logic uses generated bindings, unaffected by schema change."
+    },
+    {
+      "line": 11,
+      "decision": "edit",
+      "reason": "Direct reference to the old field name `name` in object spread. Must update to `display_name`."
+    },
+    {
+      "line": 12,
+      "decision": "unaffected",
+      "reason": "Console logging of fields is unaffected; generated bindings will handle the renamed field."
+    },
+    {
+      "line": 13,
+      "decision": "unaffected",
+      "reason": "Return statement uses generated binding properties, unaffected by schema change."
+    },
+    {
+      "line": 14,
+      "decision": "unaffected",
+      "reason": "Function closing brace, no semantic impact."
+    },
+    {
+      "line": 15,
+      "decision": "unaffected",
+      "reason": "Empty line, no semantic impact."
+    },
+    {
+      "line": 16,
+      "decision": "unaffected",
+      "reason": "Function declaration unaffected by schema change."
+    },
+    {
+      "line": 17,
+      "decision": "unaffected",
+      "reason": "Buffer collection logic is unrelated to field renaming."
+    },
+    {
+      "line": 18,
+      "decision": "unaffected",
+      "reason": "Same as line 17. Unrelated logic."
+    },
+    {
+      "line": 19,
+      "decision": "unaffected",
+      "reason": "Buffer concatenation is unrelated to field renaming."
+    },
+    {
+      "line": 20,
+      "decision": "unaffected",
+      "reason": "Function closing brace, no semantic impact."
+    },
+    {
+      "line": 21,
+      "decision": "unaffected",
+      "reason": "Empty line, no semantic impact."
+    },
+    {
+      "line": 22,
+      "decision": "unaffected",
+      "reason": "Conditional block for server mode is unrelated to field renaming."
+    },
+    {
+      "line": 23,
+      "decision": "unaffected",
+      "reason": "HTTP handler function declaration, no semantic impact from schema change."
+    },
+    {
+      "line": 24,
+      "decision": "unaffected",
+      "reason": "Health check logic is unrelated to field renaming."
+    },
+    {
+      "line": 25,
+      "decision": "unaffected",
+      "reason": "Same as line 24. Unrelated logic."
+    },
+    {
+      "line": 26,
+      "decision": "unaffected",
+      "reason": "Same as line 24. Unrelated logic."
+    },
+    {
+      "line": 27,
+      "decision": "unaffected",
+      "reason": "Early return in health check, no semantic impact from schema change."
+    },
+    {
+      "line": 28,
+      "decision": "unaffected",
+      "reason": "Conditional block closing brace, no semantic impact."
+    },
+    {
+      "line": 29,
+      "decision": "unaffected",
+      "reason": "Request validation logic is unrelated to field renaming."
+    },
+    {
+      "line": 30,
+      "decision": "unaffected",
+      "reason": "Same as line 29. Unrelated logic."
+    },
+    {
+      "line": 31,
+      "decision": "unaffected",
+      "reason": "Conditional block closing brace, no semantic impact."
+    },
+    {
+      "line": 32,
+      "decision": "unaffected",
+      "reason": "Try-catch block for error handling is unrelated to field renaming."
+    },
+    {
+      "line": 33,
+      "decision": "unaffected",
+      "reason": "Function call uses generated bindings, unaffected by schema change."
+    },
+    {
+      "line": 34,
+      "decision": "unaffected",
+      "reason": "Trace parsing logic is unrelated to field renaming."
+    },
+    {
+      "line": 35,
+      "decision": "unaffected",
+      "reason": "Same as line 34. Unrelated logic."
+    },
+    {
+      "line": 36,
+      "decision": "unaffected",
+      "reason": "Downstream fetch request setup is unrelated to field renaming."
+    },
+    {
+      "line": 37,
+      "decision": "unaffected",
+      "reason": "Same as line 36. Unrelated logic."
+    },
+    {
+      "line": 38,
+      "decision": "unaffected",
+      "reason": "Headers setup is unrelated to field renaming."
+    },
+    {
+      "line": 39,
+      "decision": "edit",
+      "reason": "Direct use of `EntityV1.encode` with old field name. Must update to `display_name`."
+    },
+    {
+      "line": 40,
+      "decision": "unaffected",
+      "reason": "AbortSignal configuration is unrelated to field renaming."
+    },
+    {
+      "line": 41,
+      "decision": "unaffected",
+      "reason": "Fetch call is unaffected by schema change; generated bindings handle encoding/decoding."
+    },
+    {
+      "line": 42,
+      "decision": "unaffected",
+      "reason": "Error handling logic is unrelated to field renaming."
+    },
+    {
+      "line": 43,
+      "decision": "unaffected",
+      "reason": "Buffer conversion from response is unrelated to field renaming."
+    },
+    {
+      "line": 44,
+      "decision": "unaffected",
+      "reason": "Observations parsing uses fields object, unaffected by schema change."
+    },
+    {
+      "line": 45,
+      "decision": "unaffected",
+      "reason": "Response headers setup is unrelated to field renaming."
+    },
+    {
+      "line": 46,
+      "decision": "unaffected",
+      "reason": "Same as line 45. Unrelated logic."
+    },
+    {
+      "line": 47,
+      "decision": "unaffected",
+      "reason": "Observations header serialization is unaffected by schema change."
+    },
+    {
+      "line": 48,
+      "decision": "unaffected",
+      "reason": "Trace header setup is unrelated to field renaming."
+    },
+    {
+      "line": 49,
+      "decision": "unaffected",
+      "reason": "Response headers finalization is unaffected by schema change."
+    },
+    {
+      "line": 50,
+      "decision": "unaffected",
+      "reason": "Response body sending is unrelated to field renaming."
+    },
+    {
+      "line": 51,
+      "decision": "unaffected",
+      "reason": "Error handling block is unrelated to field renaming."
+    },
+    {
+      "line": 52,
+      "decision": "unaffected",
+      "reason": "Same as line 51. Unrelated logic."
+    },
+    {
+      "line": 53,
+      "decision": "unaffected",
+      "reason": "Error response serialization is unrelated to field renaming."
+    },
+    {
+      "line": 54,
+      "decision": "unaffected",
+      "reason": "Try-catch block closing brace, no semantic impact."
+    },
+    {
+      "line": 55,
+      "decision": "unaffected",
+      "reason": "Server listening setup is unrelated to field renaming."
+    },
+    {
+      "line": 56,
+      "decision": "unaffected",
+      "reason": "Conditional block for non-server mode, no semantic impact from schema change."
+    },
+    {
+      "line": 57,
+      "decision": "unaffected",
+      "reason": "Version selection logic is unrelated to field renaming."
+    },
+    {
+      "line": 58,
+      "decision": "unaffected",
+      "reason": "Conditional block setup, no semantic impact from schema change."
+    },
+    {
+      "line": 59,
+      "decision": "edit",
+      "reason": "Direct use of old field name in `EntityV1.encode` call. Must update to `display_name`."
+    },
+    {
+      "line": 60,
+      "decision": "unaffected",
+      "reason": "Version-specific encoding logic for v2 is unaffected by schema change."
+    },
+    {
+      "line": 61,
+      "decision": "unaffected",
+      "reason": "Function call uses generated bindings, unaffected by schema change."
+    },
+    {
+      "line": 62,
+      "decision": "unaffected",
+      "reason": "Conditional block closing brace, no semantic impact."
+    }
+  ]
+}

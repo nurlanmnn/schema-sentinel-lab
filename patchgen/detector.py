@@ -76,6 +76,16 @@ def compare(old, new):
         b = {(v.number,v.name) for v in bb[name].value}
         if a - b or aa[name].options != bb[name].options:
             unsupported.append(name + ': enum removal/rename/options')
+        import copy
+        for value in a & b:
+            x=next(v for v in aa[name].value if (v.number,v.name)==value)
+            y=next(v for v in bb[name].value if (v.number,v.name)==value)
+            if x != y:
+                unsupported.append(name + ': enum value metadata changed')
+        left,right=copy.deepcopy(aa[name]),copy.deepcopy(bb[name])
+        left.ClearField('value');right.ClearField('value')
+        if left != right:
+            unsupported.append(name + ': enum declaration metadata changed')
         for number, value in sorted(b-a):
             events.append(dict(category='enum_value_added', enum=name, value=value, number=number))
     # Check the remaining descriptor structure so unrelated changes cannot silently

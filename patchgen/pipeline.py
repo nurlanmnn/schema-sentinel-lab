@@ -1,20 +1,36 @@
 """One-command independent descriptor -> syntax candidates -> adapter workflow."""
 import argparse
+import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
 from patchgen.detector import detect
 from patchgen.locator import locate
 from patchgen.adapter import adapt, coverage
-from patchgen.generator import command, save, ContractError
+from patchgen.generator import command, save, ContractError, require, safe_path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(case, output, generate=False, response=None):
+def run(case, output, generate=False, response=None, strategy="candidate_edits"):
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
+    implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
+                          files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
+                                 for name in ('detector.py','locator.py','pipeline.py','adapter.py','generator.py','rename_tokens.py')})
+    save(output/'implementation.json',implementation)
+    for filename in ('detector.py','locator.py','pipeline.py','adapter.py','rename_tokens.py'):
+        (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
+    revision=require(case,'source_revision',str,'request')
+    if not re.fullmatch(r'[0-9a-f]{40}',revision):
+        raise ContractError('request requires exact source commit')
+    change=require(case,'change',dict,'request')
+    for key in ('id','old_schema','new_schema','schema_path'):
+        require(change,key,str,'request.change')
+    safe_path(change['schema_path'])
+    require(case,'intended_behavior',str,'request')
     source = output / 'source'
     command(['git','worktree','add','--detach',str(source),case['source_revision']],ROOT)
     change = case['change']
@@ -39,13 +55,11 @@ def run(case, output, generate=False, response=None):
     generated, provenance = adapt(source,detector,locator)
     save(output/'input.json',generated)
     save(output/'provenance.json',provenance)
-    for filename in ('detector.py','locator.py','pipeline.py','adapter.py'):
-        (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
-    report = dict(status='adapted',measurement=metrics,human_approval_required=True,
+    report = dict(status='adapted',implementation=implementation,measurement=metrics,human_approval_required=True,
                   source_revision=case['source_revision'],scope='runtime syntax candidates; no receiver-type or semantic completeness proof')
     if generate or response:
         args = [sys.executable,'-m','patchgen.generator','--source',str(source),'--fixture',str(output/'input.json'),
-                '--output',str(output/'proposal'),'--strategy','candidate_edits','--validate']
+                '--output',str(output/'proposal'),'--strategy',strategy,'--validate']
         if profile_name in ('entity-name-removal','entity-name-rename'):
             args += ['--validation-profile',profile_name]
         if response:
@@ -64,10 +78,11 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
+    parser.add_argument('--strategy',choices=('candidate_edits','syntax_rename'),default='candidate_edits')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
-        report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response)
+        report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response,args.strategy)
         print(json.dumps(report,indent=2))
         return int(report['status']=='failed')
     except (ValueError,OSError,KeyError,subprocess.SubprocessError) as error:

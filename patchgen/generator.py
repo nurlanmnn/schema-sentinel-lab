@@ -126,7 +126,7 @@ CANDIDATE_SCHEMA['properties']['candidate_reviews'] = {'type':'array','items':{
 
 BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-addition')
 
-STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5'}
+STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6'}
 
 
 class ContractError(ValueError):
@@ -251,12 +251,16 @@ def resolve_lines(source, value, positions=None):
 
 
 def resolve_candidates(source, value, positions):
+    # Validate untrusted edit ranges/types before using them in coverage arithmetic.
+    resolve_lines(source,value)
     expected = {line for p in positions for line in range(p['start_line'],p['end_line']+1)}
     reviews = require(value,'candidate_reviews',list,'file_response')
     seen, required, unaffected = set(), set(), set()
     if value.get('outcome') == 'needs_clarification':
         return resolve_lines(source,value)
     for review in reviews:
+        if not isinstance(review,dict):
+            raise ContractError('candidate review must be an object')
         line = review.get('line')
         if type(line) is not int or line not in expected or line in seen:
             raise ContractError('invalid/duplicate candidate review line')
@@ -448,10 +452,17 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
         directory = output / 'requests' / f'{index:02d}'
         print(f'Generating {index}/{len(case["affected_files"])}: {file["path"]}',flush=True)
         try:
-            value = request_model(edit_prompt(case,file,strategy),model,endpoint,directory)
+            if strategy == 'syntax_rename':
+                from patchgen.rename_tokens import make_prompt, resolve
+                messages,tokens = make_prompt(case,file)
+                value = request_model(messages,model,endpoint,directory)
+                save(directory/'token-inventory.json',tokens)
+                updated = resolve(file['source_context'],value,tokens,file['positions'])
+            else:
+                value = request_model(edit_prompt(case,file,strategy),model,endpoint,directory)
             if strategy in ('line_edits','migration_edits','candidate_edits'):
                 updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy == 'candidate_edits' else resolve_lines(file['source_context'],value,file['positions'])
-            else:
+            elif strategy != 'syntax_rename':
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
             save(directory / 'edit-validation.json',{'status':'passed','path':file['path']})
@@ -554,12 +565,16 @@ def main():
     args = parser.parse_args()
     output = args.output.resolve(); output.mkdir(parents=True,exist_ok=False)
     (output / 'generator-source.py').write_bytes(Path(__file__).read_bytes())
+    if args.strategy == 'syntax_rename':
+        (output / 'rename-token-source.py').write_bytes(Path(__file__).with_name('rename_tokens.py').read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
     (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
     report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else 'live_model',
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
+    if args.strategy == 'syntax_rename':
+        report['rename_token_sha256'] = hashlib.sha256(Path(__file__).with_name('rename_tokens.py').read_bytes()).hexdigest()
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))

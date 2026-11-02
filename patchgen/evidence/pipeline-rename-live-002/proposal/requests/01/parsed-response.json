@@ -1,0 +1,37 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"display_name\"] = decoded.DisplayName };"
+      ]
+    },
+    {
+      "start_line": 38,
+      "end_line": 38,
+      "replacement_lines": [
+        "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", DisplayName = \"Sensor B\" }"
+      ]
+    }
+  ],
+  "rationale": "The schema change renames the field from `name` to `display_name` in the protobuf definition. The C# code must update all references to the old field name (`Name`) to the new field name (`DisplayName`). This includes both reading the field during deserialization (line 15) and constructing a new entity with the field value (line 38). No other lines in the file reference `Name` or `display_name`, so they remain unaffected.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The protobuf binding generator correctly maps `display_name` to a C# property named `DisplayName`.",
+    "No additional logic depends on the old field name (`name`) beyond direct access in the code."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "Direct reference to the protobuf field `Name` must be updated to `DisplayName` per schema change. The dictionary key and field access are both affected."
+    },
+    {
+      "line": 38,
+      "decision": "edit",
+      "reason": "Entity construction uses the old field name (`Name`). Must update to `DisplayName` to match the new schema."
+    }
+  ]
+}

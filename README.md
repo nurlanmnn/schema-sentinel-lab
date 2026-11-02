@@ -1,4 +1,12 @@
-# Schema Sentinel
+# Schema Sentinel Lab
+
+Independent personal working checkout, retaining the project's inherited history.
+The new [descriptor and runtime impact pipeline](docs/patch-generation/independent-pipeline.md)
+compares matching schema identities, scans Python/TypeScript/C#, and feeds the
+review-only patch generator. See [measured results](docs/patch-generation/independent-results.md)
+for the bounded scope and retained failures. Human approval is required for every
+proposed patch. The inherited testbed instructions follow.
+
 
 UCF Senior Design project for testing schema changes across Python, TypeScript,
 and C#. The testbed sends one Protobuf `Entity` through all three services and

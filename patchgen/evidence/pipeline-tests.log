@@ -12,6 +12,6 @@ Generating 3/5: runtimes/csharp/main.cs
 Generating 4/5: testbed/tests/e2e_test.py
 Generating 5/5: testbed/tests/test_evidence.py
 ----------------------------------------------------------------------
-Ran 55 tests in 4.177s
+Ran 59 tests in 5.528s
 
 OK

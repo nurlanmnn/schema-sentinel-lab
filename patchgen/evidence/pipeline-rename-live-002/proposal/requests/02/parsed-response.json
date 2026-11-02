@@ -1,0 +1,36 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 30,
+      "end_line": 31,
+      "replacement_lines": [
+        "    fields[\"display_name\"] = entity.name"
+      ]
+    },
+    {
+      "start_line": 86,
+      "end_line": 87,
+      "replacement_lines": [
+        "            entity.display_name = \"Sensor A\""
+      ]
+    }
+  ],
+  "rationale": "The schema change renames the field from `name` to `display_name` in the protobuf definition. The Python code must update all references to this field accordingly. Line 31 (original) was a conditional assignment of `entity.name` to a dictionary key, which now maps to `display_name`. Similarly, line 87 (original) sets the value of the entity's name field during construction; it must be updated to use `display_name` instead. Both edits preserve the original behavior and data integrity while aligning with the new schema.",
+  "confidence": 1.0,
+  "assumptions": [
+    "The generated Python bindings will correctly expose `entity.display_name` as a property after regeneration, matching the protobuf schema change."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 31,
+      "decision": "edit",
+      "reason": "Direct reference to the renamed field in the protobuf schema. The dictionary key and assignment must reflect the new field name `display_name`."
+    },
+    {
+      "line": 87,
+      "decision": "edit",
+      "reason": "Explicit assignment of the entity's name field during construction. Must update to use the renamed field `display_name` for consistency with the schema."
+    }
+  ]
+}

@@ -66,6 +66,8 @@ def locate(repo, detector):
     for path in paths:
         suffix = Path(path).suffix
         if suffix not in LANGUAGES:
+            if suffix in ('.tsx','.jsx','.js','.mjs','.java','.cpp','.cc','.h','.rs','.go'):
+                record['issues'].append(dict(path=path,reason='unsupported runtime source language'))
             continue
         language = LANGUAGES[suffix]
         text = command(['git','show',revision+':'+path],repo)

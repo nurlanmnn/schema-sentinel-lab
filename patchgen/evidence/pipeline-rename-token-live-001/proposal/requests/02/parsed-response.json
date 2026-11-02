@@ -1,0 +1,31 @@
+{
+  "outcome": "patch",
+  "rationale": "The field name 'name' in the Python runtime must be updated to 'display_name' to match the protobuf schema change and preserve all values as specified. The affected lines are explicitly marked for review, and the tokens correspond directly to the intended changes: literal string key in dictionary construction (line 31) and identifier usage (lines 31 and 87).",
+  "confidence": 0.95,
+  "assumptions": [
+    "The protobuf schema change is fully reflected in the generated bindings, so no additional logic or type changes are required beyond renaming.",
+    "The observation key 'name' in the runtime output must be replaced with 'display_name' to match the intended behavior."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 31,
+      "decision": "edit",
+      "reason": "Literal string key 'name' in dictionary construction (`fields[\"name\"]`) must be updated to 'display_name' to reflect the schema change and preserve all values."
+    },
+    {
+      "line": 87,
+      "decision": "edit",
+      "reason": "Identifier `name` used in assignment (`entity.name = \"Sensor A\"`) must be updated to `display_name` to match the protobuf field rename."
+    }
+  ],
+  "token_edits": [
+    {
+      "token_id": 2,
+      "replacement": "display_name"
+    },
+    {
+      "token_id": 3,
+      "replacement": "display_name"
+    }
+  ]
+}
