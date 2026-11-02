@@ -1,0 +1,149 @@
+{
+  "requests": [
+    {
+      "vehicle_id": "stopped",
+      "speed": 0.0,
+      "payload": "CgdzdG9wcGVk"
+    },
+    {
+      "vehicle_id": "below",
+      "speed": 29.5,
+      "payload": "CgViZWxvdxEAAAAAAIA9QA=="
+    },
+    {
+      "vehicle_id": "boundary",
+      "speed": 30.0,
+      "payload": "Cghib3VuZGFyeREAAAAAAAA+QA=="
+    },
+    {
+      "vehicle_id": "above",
+      "speed": 30.5,
+      "payload": "CgVhYm92ZREAAAAAAIA+QA=="
+    },
+    {
+      "vehicle_id": "reverse",
+      "speed": -1.0,
+      "payload": "CgdyZXZlcnNlEQAAAAAAAPC/"
+    },
+    {
+      "vehicle_id": "\u8eca-\u03b1",
+      "speed": 12.5,
+      "payload": "Cgbou4otzrERAAAAAAAAKUA="
+    },
+    {
+      "vehicle_id": "",
+      "speed": 4.0,
+      "payload": "EQAAAAAAABBA"
+    },
+    {
+      "vehicle_id": "fast",
+      "speed": 256.0,
+      "payload": "CgRmYXN0EQAAAAAAAHBA"
+    },
+    {
+      "vehicle_id": "fraction-above",
+      "speed": 30.0000001,
+      "payload": "Cg5mcmFjdGlvbi1hYm92ZREqf60BAAA+QA=="
+    },
+    {
+      "vehicle_id": "fraction-below",
+      "speed": 29.9999999,
+      "payload": "Cg5mcmFjdGlvbi1iZWxvdxHWgFL+//89QA=="
+    },
+    {
+      "vehicle_id": "wide",
+      "speed": 16777217.25,
+      "payload": "CgR3aWRlEQAAABQAAHBB"
+    }
+  ],
+  "results": [
+    {
+      "fields": {
+        "vehicle_id": "stopped",
+        "ground_speed_mps": 0.0
+      },
+      "speeding": false,
+      "constructed_payload": "CgdzdG9wcGVk"
+    },
+    {
+      "fields": {
+        "vehicle_id": "below",
+        "ground_speed_mps": 29.5
+      },
+      "speeding": false,
+      "constructed_payload": "CgViZWxvdxEAAAAAAIA9QA=="
+    },
+    {
+      "fields": {
+        "vehicle_id": "boundary",
+        "ground_speed_mps": 30.0
+      },
+      "speeding": false,
+      "constructed_payload": "Cghib3VuZGFyeREAAAAAAAA+QA=="
+    },
+    {
+      "fields": {
+        "vehicle_id": "above",
+        "ground_speed_mps": 30.5
+      },
+      "speeding": true,
+      "constructed_payload": "CgVhYm92ZREAAAAAAIA+QA=="
+    },
+    {
+      "fields": {
+        "vehicle_id": "reverse",
+        "ground_speed_mps": -1.0
+      },
+      "speeding": false,
+      "constructed_payload": "CgdyZXZlcnNlEQAAAAAAAPC/"
+    },
+    {
+      "fields": {
+        "vehicle_id": "\u8eca-\u03b1",
+        "ground_speed_mps": 12.5
+      },
+      "speeding": false,
+      "constructed_payload": "Cgbou4otzrERAAAAAAAAKUA="
+    },
+    {
+      "fields": {
+        "vehicle_id": "",
+        "ground_speed_mps": 4.0
+      },
+      "speeding": false,
+      "constructed_payload": "EQAAAAAAABBA"
+    },
+    {
+      "fields": {
+        "vehicle_id": "fast",
+        "ground_speed_mps": 256.0
+      },
+      "speeding": true,
+      "constructed_payload": "CgRmYXN0EQAAAAAAAHBA"
+    },
+    {
+      "fields": {
+        "vehicle_id": "fraction-above",
+        "ground_speed_mps": 30.0000001
+      },
+      "speeding": true,
+      "constructed_payload": "Cg5mcmFjdGlvbi1hYm92ZREqf60BAAA+QA=="
+    },
+    {
+      "fields": {
+        "vehicle_id": "fraction-below",
+        "ground_speed_mps": 29.9999999
+      },
+      "speeding": false,
+      "constructed_payload": "Cg5mcmFjdGlvbi1iZWxvdxHWgFL+//89QA=="
+    },
+    {
+      "fields": {
+        "vehicle_id": "wide",
+        "ground_speed_mps": 16777217.25
+      },
+      "speeding": true,
+      "constructed_payload": "CgR3aWRlEQAAABQAAHBB"
+    }
+  ]
+}

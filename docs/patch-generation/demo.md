@@ -84,3 +84,15 @@ validated patch. Passing only makes it eligible for human review.
 Omitting it keeps the existing remote Buf path. The local path does not install
 tools or silently retry a failed remote run. This is one distinct buildable
 migration, not twenty cases, a new LLM success, or telemetry pub/sub coverage.
+
+### Telemetry float64 precision
+
+```sh
+python3.13 run_demo.py --case telemetry-precision --local-codegen --output patchgen/evidence/NEW-PRECISION-DEMO
+```
+
+This distinct migration widens wire field 2 to double and removes the adopted C#
+producer's float32 cast. Eleven cases per runtime include values float32 cannot
+preserve. Producer bytes, observations and >30 m/s results must all match the
+independent oracle. The wire-type change requires coordinated rollout;
+mixed-version behavior is outside scope. See decision 0016.

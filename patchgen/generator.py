@@ -126,7 +126,7 @@ CANDIDATE_SCHEMA['properties']['candidate_reviews'] = {'type':'array','items':{
 
 BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-addition')
 
-STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6','syntax_rename_roles':'2.7','deterministic_rename_roles':'host-rename/1.0','deterministic_utf8_v2':'host-utf8/1.0','deterministic_remove_name_v1':'host-remove/1.0'}
+STRATEGY_VERSIONS = {'exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6','syntax_rename_roles':'2.7','deterministic_rename_roles':'host-rename/1.0','deterministic_telemetry_precision':'host-precision/1.0','deterministic_utf8_v2':'host-utf8/1.0','deterministic_remove_name_v1':'host-remove/1.0'}
 
 
 class ContractError(ValueError):
@@ -492,6 +492,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 # Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
 VALIDATION_PROFILES = {
+    'telemetry-speed-precision': ('telemetry-speed-precision', None),
     'telemetry-speed-rename': ('telemetry-speed-rename', None),
     'entity-name-removal': ('entity-name-removal', None),
     'entity-name-rename': ('entity-name-rename', None),
@@ -509,8 +510,8 @@ def load_validation_profile(case, name):
     profile = json.loads((directory / 'validation-profile.json').read_text())
     patch = (directory / 'validation-tests.patch').read_text()
     oracle_case, pubsub_case = VALIDATION_PROFILES[name]
-    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case not in ('v2-identifier-bytes','telemetry-speed-rename') else []
-    if (profile.get('telemetry_case') != ('rename' if name == 'telemetry-speed-rename' else None)):
+    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case not in ('v2-identifier-bytes','telemetry-speed-rename','telemetry-speed-precision') else []
+    if (profile.get('telemetry_case') != ({'telemetry-speed-rename':'rename','telemetry-speed-precision':'precision'}.get(name))):
         raise ContractError('trusted profile has wrong telemetry selection')
     if not pubsub_case and ('pubsub_case' in profile or 'oracle_case' in profile):
         raise ContractError('historical profile cannot select a different oracle or transport')
@@ -577,9 +578,9 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
             oracle_case = validation_profile[0].get('oracle_case', case['change']['id']) if validation_profile else case['change']['id']
             if validation_profile and validation_profile[0].get('telemetry_case'):
                 command([str(python), str(output/'telemetry-oracle-source.py'), '--root', str(workspace),
-                         '--case', 'rename', '--output', str(output/'telemetry')], workspace,log)
+                         '--case', validation_profile[0]['telemetry_case'], '--output', str(output/'telemetry')], workspace,log)
                 result = json.loads((output/'telemetry/report.json').read_text())
-                if (result.get('status') != 'passed' or result.get('runtime_cases') != 24
+                if (result.get('status') != 'passed' or result.get('runtime_cases') != (33 if validation_profile[0]['telemetry_case']=='precision' else 24)
                         or result.get('runtime_revision') != case['source_revision']):
                     raise ContractError('telemetry validation did not retain passing evidence')
             elif oracle_case in BENCHMARK_CASES:
@@ -628,13 +629,15 @@ def main():
         (output / 'rename-token-source.py').write_bytes(Path(__file__).with_name('rename_tokens.py').read_bytes())
     if args.strategy in ('syntax_rename_roles','deterministic_rename_roles'):
         (output / 'rename-role-source.py').write_bytes(Path(__file__).with_name('rename_roles.py').read_bytes())
+    if args.strategy == 'deterministic_telemetry_precision':
+        (output/'type-precision-source.py').write_bytes(Path(__file__).with_name('type_precision.py').read_bytes())
     if args.strategy == 'deterministic_utf8_v2':
         (output / 'type-utf8-source.py').write_bytes(Path(__file__).with_name('type_utf8.py').read_bytes())
     if args.strategy == 'deterministic_remove_name_v1':
         (output / 'remove-name-source.py').write_bytes(Path(__file__).with_name('remove_name.py').read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
     (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
-    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1') else 'live_model'),
+    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision') else 'live_model'),
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
@@ -642,6 +645,8 @@ def main():
         report['rename_token_sha256'] = hashlib.sha256(Path(__file__).with_name('rename_tokens.py').read_bytes()).hexdigest()
     if args.strategy in ('syntax_rename_roles','deterministic_rename_roles'):
         report['rename_role_sha256'] = hashlib.sha256(Path(__file__).with_name('rename_roles.py').read_bytes()).hexdigest()
+    if args.strategy == 'deterministic_telemetry_precision':
+        report['type_precision_sha256'] = hashlib.sha256(Path(__file__).with_name('type_precision.py').read_bytes()).hexdigest()
     if args.strategy == 'deterministic_utf8_v2':
         report['type_utf8_sha256'] = hashlib.sha256(Path(__file__).with_name('type_utf8.py').read_bytes()).hexdigest()
     if args.strategy == 'deterministic_remove_name_v1':
@@ -680,7 +685,10 @@ def main():
             source = output / 'source'
             report['source_preparation'] = 'explicit snapshot of fixture revision; original checkout untouched'
         verify_source(source,case)
-        if args.strategy == 'deterministic_remove_name_v1' and not args.response:
+        if args.strategy == 'deterministic_telemetry_precision' and not args.response:
+            from patchgen.type_precision import propose
+            proposal = propose(case, output)
+        elif args.strategy == 'deterministic_remove_name_v1' and not args.response:
             from patchgen.remove_name import propose
             proposal = propose(case, output)
         elif args.strategy == 'deterministic_utf8_v2' and not args.response:

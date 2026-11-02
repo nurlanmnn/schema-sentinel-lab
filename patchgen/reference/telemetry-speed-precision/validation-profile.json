@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change_id": "telemetry-speed-precision",
+  "new_schema_sha256": "947f19d616a50f7dbdb6f439365cbb01e9099b3fecbc840e265cf20a532f6566",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "telemetry_case": "precision"
+}

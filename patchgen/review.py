@@ -11,7 +11,7 @@ from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, check_results, e
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
-             'proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch',
+             'proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
@@ -82,6 +82,10 @@ def check_host_evidence(root, report, available=None):
             raise ContractError('passing review requires complete host evidence')
         if any(not artifact_path(root,name).is_file() for name in names):
             raise ContractError('passing review requires complete host evidence')
+    if report.get('strategy') == 'deterministic_telemetry_precision':
+        required(('proposal/type-precision-source.py',))
+        if sha(artifact_path(root,'proposal/type-precision-source.py').read_bytes()) != report.get('type_precision_sha256'):
+            raise ContractError('precision policy source hash mismatch')
     if report.get('codegen') == 'local_pinned':
         required(LOCAL_CODEGEN_ARTIFACTS)
         tools = json.loads(artifact_path(root,'proposal/local-codegen-toolchain.json').read_text())
@@ -91,21 +95,24 @@ def check_host_evidence(root, report, available=None):
             raise ContractError('local codegen evidence mismatch')
     if report.get('validation_profile',{}).get('telemetry_case'):
         required(TELEMETRY_ARTIFACTS)
+        mode = report['validation_profile']['telemetry_case']
+        if mode not in ('rename','precision'):
+            raise ContractError('unknown telemetry review mode')
         result = json.loads(artifact_path(root,'proposal/telemetry/report.json').read_text())
         if (result != report.get('telemetry_validation') or result.get('status') != 'passed'
-                or result.get('case') != 'rename' or result.get('runtime_cases') != 24
+                or result.get('case') != mode or result.get('runtime_cases') != (33 if mode=='precision' else 24)
                 or result.get('runtime_revision') != report.get('source_revision')
                 or sha(artifact_path(root,'proposal/telemetry-oracle-source.py').read_bytes()) != report.get('telemetry_oracle_sha256')):
             raise ContractError('telemetry review has inconsistent validation evidence')
         retained = json.loads(artifact_path(root,'proposal/telemetry/expected.json').read_text())
-        if retained != dict(requests=requests(),results=expected('rename')):
+        if retained != dict(requests=requests(mode),results=expected(mode)):
             raise ContractError('telemetry review has inconsistent expected cases')
         for runtime in ('python','typescript','csharp'):
             record = json.loads(artifact_path(root,'proposal/telemetry/'+runtime+'.json').read_text())
             try:
                 if type(record.get('exit_code')) is not int or record['exit_code'] != 0:
                     raise ValueError('runtime did not exit successfully')
-                check_results(json.loads(record['stdout']),expected('rename'))
+                check_results(json.loads(record['stdout']),expected(mode))
             except (KeyError,ValueError) as error:
                 raise ContractError('telemetry runtime evidence mismatch') from error
 

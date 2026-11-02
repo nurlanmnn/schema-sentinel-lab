@@ -10,6 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'telemetry-precision': ('telemetry-speed-precision', 'deterministic_telemetry_precision'),
     'telemetry-rename': ('telemetry-speed-rename', 'deterministic_rename_roles'),
     'removal': ('entity-name-removal', 'deterministic_remove_name_v1'),
     'rename': ('entity-name-rename', 'deterministic_rename_roles'),
@@ -96,9 +97,9 @@ def execute(case, output, local_codegen=False):
             pipeline = json.loads((output / 'run/report.json').read_text())
             if pipeline['status'] != 'validation_passed' or not (output / 'review/index.html').is_file():
                 raise RuntimeError('Demo did not produce a validated proposal and review bundle.')
-            if case == 'telemetry-rename':
+            if case.startswith('telemetry-'):
                 result = pipeline.get('proposal_report',{}).get('telemetry_validation',{})
-                if result.get('status') != 'passed' or result.get('runtime_cases') != 24:
+                if result.get('status') != 'passed' or result.get('runtime_cases') != (33 if case=='telemetry-precision' else 24):
                     raise RuntimeError('Telemetry demo lacks passing behavior evidence.')
                 report['telemetry_validation'] = {key:result[key] for key in ('status','case','runtime_cases')}
             if case.startswith('pubsub-'):

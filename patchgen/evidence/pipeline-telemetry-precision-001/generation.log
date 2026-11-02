@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "deterministic_proposal",
+  "prompt_version": "host-precision/1.0",
+  "strategy": "deterministic_telemetry_precision",
+  "generator_sha256": "95b631dcb4a7313dfab51d32e7a93816c0dcf0365ddd261f10c17068534e4daf",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "type_precision_sha256": "b592062de94f43d58498754b8e0ec9077484dc54a7d42d9f8f15b4f51c45eba1",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "30361cb781d82b30bf605266b77682f9c33dfb7262782ed55800f9b905b611ae",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "change_id": "telemetry-speed-precision",
+    "new_schema_sha256": "947f19d616a50f7dbdb6f439365cbb01e9099b3fecbc840e265cf20a532f6566",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "precision"
+  },
+  "telemetry_oracle_sha256": "4764072f575f1b9f358ae181b2645afe69456977c6ccb4e63ca683a849fd1fb7",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/pipeline-telemetry-precision-001/proposal/workspace/.venv/bin/python: usage: telemetry-oracle-source.py [-h] [--root ROOT] --output OUTPUT\n                                  [--case {baseline,rename}]\ntelemetry-oracle-source.py: error: argument --case: invalid choice: 'precision' (choose from baseline, rename)\n",
+  "workflow_elapsed_seconds": 6.179532750044018,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

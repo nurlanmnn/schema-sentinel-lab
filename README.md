@@ -157,3 +157,6 @@ For a distinct buildable telemetry migration, run `run_demo.py --case telemetry-
 [tools/codegen](tools/codegen/README.md)). It checks float32 producer/consumer bytes,
 renamed observations and a speed threshold in all three languages. See
 [decision 0015](docs/decisions/0015-buildable-telemetry-benchmark.md) for evidence and scope.
+`--case telemetry-precision` exercises float32-to-float64 serialization and
+near-threshold precision across 33 runtime/case checks, with coordinated rollout
+required for the wire-type change.

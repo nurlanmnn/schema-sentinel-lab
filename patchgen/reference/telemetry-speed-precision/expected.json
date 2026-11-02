@@ -1,0 +1,30 @@
+{
+  "category": "field_type_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "lines": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "lines": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "lines": [
+        12,
+        13,
+        14
+      ]
+    }
+  ],
+  "method": "authored construction, observation and active threshold inventory; input precision already double, constructor narrowing at line 12"
+}

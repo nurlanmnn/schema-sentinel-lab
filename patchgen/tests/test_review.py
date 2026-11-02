@@ -78,6 +78,15 @@ class ReviewTests(unittest.TestCase):
         file.write_text(json.dumps(tools));export(self.run,self.bundle)
         self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
 
+    def test_precision_policy_snapshot_cannot_be_missing_or_changed(self):
+        self.report['strategy']='deterministic_telemetry_precision'
+        self.report['type_precision_sha256']=sha(b'TEST ONLY');self.write_run()
+        with self.assertRaisesRegex(ContractError,'complete host evidence'):export(self.run,self.bundle)
+        source=self.run/'proposal/type-precision-source.py';source.write_bytes(b'CHANGED')
+        with self.assertRaisesRegex(ContractError,'policy source hash mismatch'):export(self.run,self.bundle)
+        source.write_bytes(b'TEST ONLY');export(self.run,self.bundle)
+        self.assertEqual(verify(self.bundle,self.decision())['status'],'verified')
+
     def pubsub_run(self):
         self.report['validation_profile'] = {'pubsub_case': 'rename'}
         result = dict(status='passed', case='rename', runtime_revision='a'*40,

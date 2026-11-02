@@ -312,3 +312,22 @@ exactly 30 m/s when Python is changed to >=30. The negative review cannot approv
 Earlier control runs 001/002 failed patch-format/authoring checks and are retained
 as invalid controls. `demo-telemetry-rename-001` passes the end-to-end launcher.
 Final suites: 114 patchgen tests, 23 testbed tests. None records human acceptance.
+
+### Buildable telemetry precision (2026-11-02)
+
+`pipeline-telemetry-precision-003` passes a second distinct telemetry migration,
+float32 -> float64 field 2, pinned to `665e06e`. The independent detector classifies
+the wire-type change and the locator recovers 9/9 authored runtime lines, no extras.
+The bounded deterministic policy removes C#'s explicit narrowing cast while
+regenerated bindings widen all three runtimes. Eleven independently wire-encoded
+inputs produce 33 successful runtime/case checks, including near-threshold values
+and a value float32 cannot preserve. Units, keys and strict >30 semantics remain.
+The complete review is pending human decision. Confidence is unestimated.
+Initial precision runs 001/002 retain evaluator CLI/key wiring failures; they are
+not migration successes. See decision 0016 for exact syntax and rollout limits.
+
+Precision controls: `telemetry-precision-reference-001` passes the known answer as
+offline replay. `telemetry-precision-narrowing-negative-001` retains C#'s float cast;
+it compiles and passes Entity checks but fails producer-byte verification on the
+first precision-sensitive case. Approval is disabled. `demo-telemetry-precision-001`
+passes the launcher and review export. Final suites: 119 patchgen, 23 testbed tests.

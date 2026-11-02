@@ -1,0 +1,10 @@
+{
+  "contract_version": "1.0",
+  "outcome": "patch",
+  "diff": "diff --git a/proto/telemetry/vehicle.proto b/proto/telemetry/vehicle.proto\n--- a/proto/telemetry/vehicle.proto\n+++ b/proto/telemetry/vehicle.proto\n@@ -3,5 +3,5 @@\n message VehicleTelemetry {\n   string vehicle_id = 1;\n   // Ground speed in meters per second.\n-  float speed_mps = 2;\n+  double speed_mps = 2;\n }\ndiff --git a/runtimes/csharp/Telemetry.cs b/runtimes/csharp/Telemetry.cs\n--- a/runtimes/csharp/Telemetry.cs\n+++ b/runtimes/csharp/Telemetry.cs\n@@ -9,7 +9,7 @@\n             new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException(\"Missing requests\");\n         var results = requests.Select(request => {\n             var entity = Simulation.Telemetry.VehicleTelemetry.Parser.ParseFrom(Convert.FromBase64String(request.Payload));\n-            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = (float)request.Speed };\n+            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = request.Speed };\n             var fields = new Dictionary<string, object> { [\"vehicle_id\"] = entity.VehicleId, [\"speed_mps\"] = entity.SpeedMps };\n             return new { fields, speeding = entity.SpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };\n         });\n",
+  "rationale": "Evaluator-authored float64 control; not a model result.",
+  "confidence": 0,
+  "assumptions": [
+    "Known-correct or retained-narrowing control only."
+  ]
+}
