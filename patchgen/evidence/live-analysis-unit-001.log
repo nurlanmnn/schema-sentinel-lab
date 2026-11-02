@@ -1,0 +1,9 @@
+test_analysis_refuses_incomplete_or_deterministic_runs (patchgen.tests.test_live_suite.LiveSuiteTests.test_analysis_refuses_incomplete_or_deterministic_runs) ... ok
+test_deterministic_pass_never_counts_as_model_success (patchgen.tests.test_live_suite.LiveSuiteTests.test_deterministic_pass_never_counts_as_model_success) ... ok
+test_failed_contract_retains_actual_requests_and_generation_time (patchgen.tests.test_live_suite.LiveSuiteTests.test_failed_contract_retains_actual_requests_and_generation_time) ... ok
+test_missing_report_is_failed_not_a_success (patchgen.tests.test_live_suite.LiveSuiteTests.test_missing_report_is_failed_not_a_success) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.005s
+
+OK

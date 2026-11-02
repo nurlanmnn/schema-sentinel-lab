@@ -7,6 +7,15 @@ from patchgen.live_suite import collect
 
 
 class LiveSuiteTests(unittest.TestCase):
+    def test_analysis_refuses_incomplete_or_deterministic_runs(self):
+        from patchgen.live_analysis import analyze
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)/'source';root.mkdir()
+            for status,mode in [('running','live_model'),('completed','deterministic_authored_suite')]:
+                (root/'summary.json').write_text(json.dumps({'status':status,'mode':mode,'results':[]}))
+                with self.assertRaises(ValueError):analyze(root,Path(tmp)/'analysis')
+                self.assertFalse((Path(tmp)/'analysis').exists())
+
     def test_missing_report_is_failed_not_a_success(self):
         with tempfile.TemporaryDirectory() as tmp:
             result=collect(Path(tmp),1,3)
