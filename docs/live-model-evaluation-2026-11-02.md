@@ -48,7 +48,27 @@ Prompt 2.8 (`candidate_blocks`) is a separate in-sample development experiment
 using the same 8B digest and six inputs. It requires fixed candidate IDs through
 the response schema and asks the model for exact source blocks. The host authors
 no runtime replacements. Its results must be reported separately, with the same
-compilation and independent semantic gates; see decision 0022.
+compilation and independent semantic gates; see decision 0022. Its completed run
+also produced **0/6 validated proposals from 18 live requests**. File contract
+passes increased from 13/18 to 16/18, with about 12.7 minutes of generation. This
+format improvement did not produce a successful migration. The paired audit in
+`patchgen/evidence/live-8b-prompt-comparison001/` found the same generation inputs,
+inference options and captured validation gates and classifies this as prompt
+development, not a model comparison.
+
+| Prompt 2.8 case | First blocking gate |
+| --- | --- |
+| Pub/sub rename | TypeScript compilation: old property names retained |
+| Pub/sub removal | Python syntax: empty `if` blocks after deleting statements |
+| Pub/sub UTF-8 | Contract: unchanged replacement block |
+| Telemetry rename | C# compilation: old accessor retained in the threshold check |
+| Telemetry precision | Contract: unchanged replacement block; source inspection also shows an unrelated C# semicolon deletion |
+| Telemetry units | Independent semantic observation mismatch |
+
+Raw evidence is in `patchgen/evidence/live-six-ministral8b-blocks001/` and analysis
+in `patchgen/evidence/live-six-ministral8b-blocks-analysis001/`. A separate bounded
+feedback probe on the selected failed rename case is described in decision 0023;
+it has a different protocol and is not included in either one-shot rate.
 
 Model choice remains unresolved. [Mistral's official documentation](https://docs.mistral.ai/models/ministral-3-14b-25-12)
 identifies Ministral 3 14B under Apache-2.0. The

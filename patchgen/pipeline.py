@@ -14,7 +14,7 @@ from patchgen.generator import command, save, ContractError, require, safe_path,
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(case, output, generate=False, response=None, strategy="candidate_edits", local_codegen=False, model="ministral-3:8b"):
+def run(case, output, generate=False, response=None, strategy="candidate_edits", local_codegen=False, model="ministral-3:8b", feedback=None):
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
@@ -77,6 +77,8 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits",
             args += ['--validation-profile',profile_name]
         if response:
             args += ['--response',str(response.resolve())]
+        if feedback:
+            args += ['--feedback',str(feedback.resolve())]
         with (output/'generation.log').open('w') as log:
             process = subprocess.run(args,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT)
         report['proposal_exit_code'] = process.returncode
@@ -96,16 +98,20 @@ def main():
     parser.add_argument('--model',choices=('ministral-3:3b','ministral-3:8b'),default='ministral-3:8b',help='installed local model only')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
-    parser.add_argument('--strategy',choices=('deterministic_inventory_width','candidate_edits','candidate_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('deterministic_inventory_width','candidate_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
+    parser.add_argument('--feedback',type=Path,help='explicit feedback for a separately measured live feedback attempt')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
+        if (bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks')
+                or args.feedback and (not args.generate or args.response)):
+            raise ContractError('feedback requires the live feedback strategy and --generate')
         if args.review_output and not (args.generate or args.response):
             raise ContractError('--review-output requires --generate or --response')
         if args.review_output and (args.review_output.exists() or args.review_output.resolve() == args.output.resolve()
                                    or args.output.resolve() in args.review_output.resolve().parents):
             raise ContractError('review output must be new and outside pipeline output')
-        report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response,args.strategy,args.local_codegen,args.model)
+        report = run(json.loads(args.fixture.read_text()),args.output,args.generate,args.response,args.strategy,args.local_codegen,args.model,args.feedback)
         if args.review_output:
             from patchgen.review import export
             export(args.output,args.review_output)

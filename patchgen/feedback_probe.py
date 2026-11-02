@@ -82,6 +82,8 @@ def execute(source,output,max_rounds=2):
         print(f"Feedback round {round_number}: {attempt['status']}; actual requests={attempt['model_requests']}",flush=True)
         if attempt['validated_feedback_proposal']:
             report['validated_feedback_proposal']=True;break
+        if not (target/'run/proposal/report.json').is_file() or not attempt['model_requests']:
+            report['stop_reason']='generation_infrastructure';break
         previous=target/'run/proposal'
     report.update(status='completed',feedback_model_requests=sum(a['model_requests'] for a in report['attempts']),
                   total_model_requests_including_initial=initial['model_requests']+sum(a['model_requests'] for a in report['attempts']))

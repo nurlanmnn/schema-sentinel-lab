@@ -6,7 +6,8 @@ import json
 from pathlib import Path
 from patchgen.live_suite import CASES
 
-GATE_FUNCTIONS=('validate_output','verify_source','check_patch','load_validation_profile','apply_and_validate')
+GATE_FUNCTIONS=('require','safe_path','command','validate_output','verify_source','check_patch',
+                'load_validation_profile','apply_and_validate')
 GATE_METADATA=('validation_profile','oracle_sha256','benchmark_oracle_sha256','local_codegen_sha256',
                'pubsub_harness_sha256','telemetry_oracle_sha256')
 

@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "2.8",
+  "strategy": "candidate_blocks",
+  "generator_sha256": "11ceda8421b10c0d15c97b45137d397b51cb6b616d98eb12fe3279be62864288",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "anchor_edits_sha256": "90f00d3126f5ac7741f538ad30a75e4b52c55f05b8bd2971cfb9ba6d95813c02",
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+    "change_id": "telemetry-speed-rename",
+    "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "rename"
+  },
+  "telemetry_oracle_sha256": "d511be5794713e99547840c48a6e3e30c29e8bb0dabaf4e2354b7cfb1b2deac1",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "error": "command failed (1): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: nistral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 104 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\n\n> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release\n  Determining projects to restore...\n  All projects are up-to-date for restore.\n/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/Telemetry.cs(14,52): error CS1061: 'VehicleTelemetry' does not contain a definition for 'SpeedMps' and no accessible extension method 'SpeedMps' accepting a first argument of type 'VehicleTelemetry' could be found (are you missing a using directive or an assembly reference?) [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]\n\nBuild FAILED.\n\n/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/Telemetry.cs(14,52): error CS1061: 'VehicleTelemetry' does not contain a definition for 'SpeedMps' and no accessible extension method 'SpeedMps' accepting a first argument of type 'VehicleTelemetry' could be found (are you missing a using directive or an assembly reference?) [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]\n    0 Warning(s)\n    1 Error(s)\n\nTime Elapsed 00:00:01.11\n\nCommand failed (exit 1). See the output above.\n",
+  "workflow_elapsed_seconds": 130.13736279204022,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

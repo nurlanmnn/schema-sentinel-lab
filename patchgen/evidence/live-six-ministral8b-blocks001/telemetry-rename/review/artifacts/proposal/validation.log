@@ -1,0 +1,59 @@
+$ git worktree add --detach /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace 32e39a2fa9e6aeeab326afa6708868191785dad5
+Preparing worktree (detached HEAD 32e39a2)
+HEAD is now at 32e39a2 Add buildable three-language telemetry baseline and independent behavior oracle
+
+exit=0; elapsed_seconds=1.204838
+$ git apply --check /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.013937
+$ git apply /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.011909
+Pinned local generation completed: protoc 25.1, ts-proto 1.165.0, Buf descriptors
+$ /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python run_local.py
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m venv "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/.venv"
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/.venv/bin/python" -m pip install -r runtimes/python/requirements.txt
+Collecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))
+  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)
+Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-4.25.8
+
+[notice] A new release of pip is available: 25.2 -> 26.3
+[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/.venv/bin/python -m pip install --upgrade pip
+
+> /opt/homebrew/bin/npm ci --prefix runtimes/typescript
+
+added 14 packages, and audited 15 packages in 613ms
+
+found 0 vulnerabilities
+
+> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj
+  Determining projects to restore...
+  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 104 ms).
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+
+> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/Telemetry.cs(14,52): error CS1061: 'VehicleTelemetry' does not contain a definition for 'SpeedMps' and no accessible extension method 'SpeedMps' accepting a first argument of type 'VehicleTelemetry' could be found (are you missing a using directive or an assembly reference?) [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]
+
+Build FAILED.
+
+/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/Telemetry.cs(14,52): error CS1061: 'VehicleTelemetry' does not contain a definition for 'SpeedMps' and no accessible extension method 'SpeedMps' accepting a first argument of type 'VehicleTelemetry' could be found (are you missing a using directive or an assembly reference?) [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/live-six-ministral8b-blocks001/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.11
+
+Command failed (exit 1). See the output above.
+
+exit=1; elapsed_seconds=5.555142

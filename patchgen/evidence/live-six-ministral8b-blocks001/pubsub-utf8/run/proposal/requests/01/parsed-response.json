@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "This candidate is for v1 Entity construction, which remains unchanged (string entity_id). The intended behavior explicitly preserves v1 string identifiers."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "v2 Entity.entity_id is now bytes; the runtime must encode/decode UTF-8 for string observations. The field value must be converted to a UTF-8 byte array before serialization and decoded back to a string for observation output."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "This candidate is for v1 Entity construction, which remains unchanged (string entity_id). The intended behavior explicitly preserves v1 string identifiers."
+    },
+    "C004": {
+      "decision": "edit",
+      "reason": "v2 Entity.entity_id is now bytes; the runtime must encode/decode UTF-8 for string observations. The field value must be converted to a UTF-8 byte array before serialization and decoded back to a string for observation output."
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields = new() { [\"entity_id\"] = decoded.EntityId };\n",
+      "after": "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) };\n"
+    },
+    {
+      "before": "        : new Simulation.V2.Entity { EntityId = \"cs_202\" };\n",
+      "after": "        : new Simulation.V2.Entity { EntityId = System.Text.Encoding.UTF8.GetBytes(\"cs_202\") }\n"
+    }
+  ],
+  "rationale": "The schema change requires v2 entity_id to be handled as bytes while preserving UTF-8 round-trip compatibility for string observations. The runtime must encode strings to UTF-8 bytes on construction and decode them back to strings for observation output. This ensures backward compatibility with the intended behavior of keeping v1 string identifiers unchanged and maintaining identical round-trips for valid UTF-8 text.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The protobuf library's ToByteArray() method returns raw bytes, not a UTF-8 encoded string representation.",
+    "System.Text.Encoding.UTF8 is the correct encoding for the intended behavior (explicitly stated in the prompt).",
+    "No additional validation or error handling is required beyond what the schema change mandates."
+  ]
+}

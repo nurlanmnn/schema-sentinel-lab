@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The `speed_mps` field in the constructor now expects a double (float64) due to schema change, requiring explicit type conversion if input is float32. The runtime must preserve precision by casting the input value to match the new wire format."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The `entity.speed_mps` readout must be preserved as-is since it now uses double (float64) on wire, but the output JSON key (`speed_mps`) remains unchanged. No conversion is needed for observed values."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "The comparison `entity.speed_mps > 30.0` must use a float64 literal (e.g., `30.0`) to avoid implicit narrowing of the double value to float32, ensuring strict adherence to the new precision requirements."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=float(request['speed']))\n"
+    },
+    {
+      "before": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n",
+      "after": ""
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}, 'speeding': entity.speed_mps > 30.0,\n"
+    }
+  ],
+  "rationale": "The schema change from float32 to double (float64) on wire requires explicit handling of precision in Python. The edits ensure that:\n1. Input values are cast to float64 during construction to match the new wire format.\n2. Observed `speed_mps` values are preserved as-is since they are already deserialized as double (float64).\n3. The comparison uses a float64 literal (`30.0`) to avoid implicit narrowing of the double value, maintaining strict >30 threshold behavior.\nThe output JSON key (`speed_mps`) remains unchanged per intended_behavior.",
+  "confidence": 1.0,
+  "assumptions": [
+    "Python's `float()` function preserves precision for float64 values when converting from float32 inputs (no loss of precision).",
+    "The generated bindings handle double-to-double serialization/deserialization correctly without additional type annotations.",
+    "No other runtime dependencies exist that would interfere with the wire format changes."
+  ]
+}

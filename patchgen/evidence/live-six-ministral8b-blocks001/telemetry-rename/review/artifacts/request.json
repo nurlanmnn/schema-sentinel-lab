@@ -1,0 +1,10 @@
+{
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "change": {
+    "id": "telemetry-speed-rename",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float ground_speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Rename VehicleTelemetry.speed_mps to ground_speed_mps on wire field 2. Keep float32 meters per second and strict speeding threshold greater than 30.0 m/s. Runtime observation key becomes ground_speed_mps. Preserve vehicle_id and producer wire bytes. Entity v1/v2 behavior is unchanged. Do not edit tests."
+}

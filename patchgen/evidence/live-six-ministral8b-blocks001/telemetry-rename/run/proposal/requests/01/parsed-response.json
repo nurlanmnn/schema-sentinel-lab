@@ -1,0 +1,33 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The property name `SpeedMps` in the protobuf-generated C# class corresponds to the renamed field `ground_speed_mps`. The runtime must use the new generated accessor name (`GroundSpeedMps`) and align with the schema change."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The JSON observation key `speed_mps` must be updated to `ground_speed_mps` to match the protobuf field rename. This preserves the intended behavior of reporting ground speed in meters per second."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "The logic for checking if the vehicle is speeding (`entity.SpeedMps > 30.0`) relies on the protobuf-generated property `SpeedMps`, which will be renamed to `GroundSpeedMps` by the compiler after schema regeneration. The threshold comparison remains valid as it uses the same underlying value, and no additional logic changes are needed."
+    }
+  },
+  "edits": [
+    {
+      "before": "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = request.Speed };\n",
+      "after": "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, GroundSpeedMps = request.Speed };\n"
+    },
+    {
+      "before": "            var fields = new Dictionary<string, object> { [\"vehicle_id\"] = entity.VehicleId, [\"speed_mps\"] = entity.SpeedMps };\n",
+      "after": "            var fields = new Dictionary<string, object> { [\"vehicle_id\"] = entity.VehicleId, [\"ground_speed_mps\"] = entity.GroundSpeedMps };\n"
+    }
+  ],
+  "rationale": "The protobuf schema rename from `speed_mps` to `ground_speed_mps` requires updates in the runtime code to use the new generated property name (`GroundSpeedMps`) and JSON observation key. The speeding threshold logic remains unchanged because it operates on the same underlying value, only now accessed via the renamed property. This preserves the behavior of detecting vehicles exceeding 30 m/s while aligning with the schema change.",
+  "confidence": 1.0,
+  "assumptions": [
+    "The protobuf compiler will generate `GroundSpeedMps` as the C# accessor for the renamed field `ground_speed_mps`.",
+    "No additional logic or validation is required beyond renaming keys and properties to match the schema."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The constructor call uses the old field name `speed_mps` and must be updated to use the new unit (`speed_kph`) with a conversion factor of 3.6 (m/s \u2192 km/h)."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The output JSON key `speed_mps` in the `fields` dict must be renamed to `speed_kph`, and the value must be scaled by 3.6."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "The speeding threshold check (`entity.speed_mps > 30.0`) must use the new unit (`speed_kph`) with a converted threshold (>108.0) and reference the correct field name."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=float(request['speed']) * 3.6)\n"
+    },
+    {
+      "before": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n",
+      "after": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': float(entity.speed_kph)}\n"
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': fields, 'speeding': float(entity.speed_kph) > 108.0,\n"
+    }
+  ],
+  "rationale": "The schema change requires converting meters per second (m/s) to kilometers per hour (km/h) by multiplying by 3.6. All references to the old field name (`speed_mps`) must be updated to use `speed_kph`, and all speed comparisons must reflect the new unit's threshold (>108.0 km/h). The constructed payload uses the raw protobuf value, which is now in km/h due to the conversion logic. JSON output exposes exact decoded float32 values as numbers.",
+  "confidence": 1.0,
+  "assumptions": [
+    "The input `request['speed']` is a numeric value representing meters per second (m/s) and can be safely multiplied by 3.6 without loss of precision.",
+    "The protobuf-generated bindings preserve the float32 type for `speed_kph`, so no additional serialization/deserialization steps are needed beyond the conversion logic.",
+    "The threshold check is strictly enforced as >108.0 km/h (previously >30.0 m/s).",
+    "No mixed-unit scenarios exist during rollout; only the new unit is used in this runtime."
+  ]
+}
