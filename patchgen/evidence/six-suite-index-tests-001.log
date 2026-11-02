@@ -1,0 +1,31 @@
+test_child_launch_failure_does_not_skip_remaining_cases (patchgen.tests.test_suite.SuiteTests.test_child_launch_failure_does_not_skip_remaining_cases) ... pubsub-rename: failed
+pubsub-removal: failed
+pubsub-utf8: failed
+telemetry-rename: failed
+telemetry-precision: failed
+telemetry-units: failed
+ok
+test_conflicting_embedded_truth_identity_is_rejected (patchgen.tests.test_suite.SuiteTests.test_conflicting_embedded_truth_identity_is_rejected) ... ok
+test_existing_output_is_never_overwritten (patchgen.tests.test_suite.SuiteTests.test_existing_output_is_never_overwritten) ... ok
+test_incompatible_ground_truth_count_is_unavailable (patchgen.tests.test_suite.SuiteTests.test_incompatible_ground_truth_count_is_unavailable) ... ok
+test_manifest_counts_distinct_migrations_only (patchgen.tests.test_suite.SuiteTests.test_manifest_counts_distinct_migrations_only) ... ok
+test_missing_report_keeps_failed_case_in_denominators (patchgen.tests.test_suite.SuiteTests.test_missing_report_keeps_failed_case_in_denominators) ... ok
+test_pass_label_alone_cannot_count_as_validated_proposal (patchgen.tests.test_suite.SuiteTests.test_pass_label_alone_cannot_count_as_validated_proposal) ... ok
+test_readable_partial_run_keeps_pending_cases_visible (patchgen.tests.test_suite.SuiteTests.test_readable_partial_run_keeps_pending_cases_visible) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK
+{
+  "distinct_migration_cases": 6,
+  "validation_passed": 0,
+  "validation_rate": 0.0,
+  "classification_correct": 0,
+  "classification_accuracy": 0.0,
+  "impact_measurements_available": 0,
+  "expected_sites": 45,
+  "matched_sites": 0,
+  "impact_recall": 0.0,
+  "extra_sites": 0
+}

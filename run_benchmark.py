@@ -89,6 +89,34 @@ def summarize(rows):
                 extra_sites=sum(r['extra_sites'] for r in rows))
 
 
+
+def render_summary(report, entries):
+    """Readable evidence index; pending cases stay visible during a partial run."""
+    rows = {row['case']: row for row in report['results']}
+    lines = ['# Six-migration evaluation', '',
+             'Status: ' + report['status'] + '. Deterministic authored cases; human decisions pending.', '',
+             '| Migration | Validation | Structural category correct | Candidate lines | Extras | Evidence |',
+             '| --- | --- | --- | --- | --- | --- |']
+    for entry in entries:
+        name = entry['case']
+        row = rows.get(name)
+        if row is None:
+            lines.append(f"| {name} | pending | unmeasured | unmeasured/{entry['expected_sites']} | unmeasured | pending |")
+            continue
+        category = str(row['classification_correct']).lower() if row['measurement_available'] else 'unmeasured'
+        matched = str(row['matched_sites']) if row['measurement_available'] else 'unmeasured'
+        extras = str(row['extra_sites']) if row['measurement_available'] else 'unmeasured'
+        evidence = f"[log]({name}.log)"
+        if row['status'] == 'validation_passed':
+            evidence += f", [review]({name}/review/index.html)"
+        lines.append(f"| {name} | {row['status']} | {category} | {matched}/{entry['expected_sites']} | {extras} | {evidence} |")
+    lines += ['', 'All six cases remain in completed-suite denominators. Missing measurements count as zero matched sites and incorrect classification.',
+              '', 'Timings include bootstrap and prepared-fixture work. Live model performance and human review time are unmeasured.',
+              'This is six small authored migrations, not the twenty-case MVP benchmark. Structural classification does not infer units.',
+              '', '[Machine-readable summary](summary.json) · [Pinned manifest](manifest.json)', '']
+    return '\n'.join(lines)
+
+
 def execute(output, local_codegen=False):
     output = run_demo.check_output(output)
     entries = manifest()
@@ -105,6 +133,7 @@ def execute(output, local_codegen=False):
                   runner_sha256=digest(Path(__file__)), results=[])
     def save():
         (output / 'summary.json').write_text(json.dumps(report, indent=2) + '\n')
+        (output / 'summary.md').write_text(render_summary(report, entries))
     save()
     started = time.monotonic()
     for entry in entries:

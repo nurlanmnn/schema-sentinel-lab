@@ -60,6 +60,9 @@ class SuiteTests(unittest.TestCase):
             self.assertEqual(report['metrics']['expected_sites'], 45)
             self.assertEqual(report['metrics']['validation_passed'], 0)
             self.assertEqual(len(list(output.glob('*.log'))), 6)
+            summary = (output / 'summary.md').read_text()
+            self.assertEqual(summary.count('| failed |'), 6)
+            self.assertNotIn('](pubsub-rename/review/index.html)', summary)
 
     def test_conflicting_embedded_truth_identity_is_rejected(self):
         original_read = suite.read
@@ -71,6 +74,13 @@ class SuiteTests(unittest.TestCase):
         with patch('run_benchmark.read', side_effect=altered):
             with self.assertRaisesRegex(RuntimeError, 'identity mismatch'):
                 suite.manifest()
+
+    def test_readable_partial_run_keeps_pending_cases_visible(self):
+        report = {'status': 'running', 'results': []}
+        text = suite.render_summary(report, suite.manifest())
+        self.assertEqual(text.count('| pending |'), 12)
+        self.assertEqual(text.count('unmeasured/6'), 3)
+        self.assertEqual(text.count('unmeasured/9'), 3)
 
     def test_existing_output_is_never_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -72,3 +72,9 @@ implementation state and exact source snapshot; this evidence predates its
 commit. Unit checks also exercise missing/incompatible reports, false pass
 labels, immutable outputs, conflicting ground-truth identity, and continuation
 after all six child launches fail.
+
+The launcher also writes `summary.md` as a readable evidence index after each
+case. Pending cases remain visible during incomplete runs; failed cases link to
+logs without implying that a valid review exists. `six-migration-suite-002`
+repeats the complete runtime evaluation with this index enabled. The original
+retained suite is unchanged.

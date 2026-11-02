@@ -1,0 +1,8 @@
+{"runtime": "python", "version": "v1", "fields": {"entity_id": "", "display_name": ""}}
+{"runtime": "python", "version": "v1", "fields": {"entity_id": "pubsub-001", "display_name": "Sensor A"}}
+{"runtime": "python", "version": "v1", "fields": {"entity_id": "entity-\u96ea-\ud83d\ude80", "display_name": "Caf\u00e9 / \u0394 / \ud83d\ude80"}}
+{"runtime": "python", "version": "v1", "fields": {"entity_id": "quotes \"\n\\", "display_name": "line\nbreak \" \\"}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": ""}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": "pubsub-001"}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": "entity-\u96ea-\ud83d\ude80"}}
+{"runtime": "python", "version": "v2", "fields": {"entity_id": "quotes \"\n\\"}}
