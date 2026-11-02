@@ -100,3 +100,26 @@ and deterministic proposal isolation from model calls/caller-added answer fields
 These are software tests, not additional realistic benchmark cases. Role constraints
 and all-token coverage are recorded in decision 0006. Type migration, active enum
 consumers, twenty cases, human baseline, pub/sub, CI and a review UI remain open.
+
+## Bounded UTF-8 type migration — 2 November 2026
+
+`pipeline-type-deterministic-001` passes the independent detector/locator/adapter
+and validator with `deterministic_utf8_v2` (`host-utf8/1.0`). It finds 6/6 known
+sites plus the same three unchanged v1 candidates. All six required construction/
+observation expressions are migrated; the three v1 candidates are explicitly
+preserved. This is a deterministic proposal with zero model requests and no
+reference-response replay. Earlier live type failures remain unchanged.
+
+Passing checks include Buf regeneration, TypeScript/.NET compilation, 11 existing
+unit tests, four original v1 relay round trips, four independent v1 payloads,
+six standalone v1/v2 samples, Python v2 text/invalid-version checks and four valid
+UTF-8 v2 payloads decoded/reencoded in each of Python, TypeScript and C#.
+The UTF-8 policy is explicit and syntax support is testbed-specific; this does
+not demonstrate general semantic migration or invalid-byte interoperability.
+Human approval is pending. `proposal/validated.patch` is the review bundle.
+
+The current suite passes 71 software tests (`type-utf8-tests-001.log`), adding
+wrong-type/binding rejection, unresolved candidate rejection, v1 preservation
+and no-model/no-reference construction checks. No new realistic schema-change
+case or human baseline is counted. The remaining MVP work includes review UX,
+benchmark expansion, active enum consumers, pub/sub and CI.

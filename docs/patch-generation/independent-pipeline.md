@@ -102,3 +102,15 @@ This proposes every located token using descriptor/role-derived names, records
 that receiver identity is unproved, and runs the same independent validation.
 It reads no reference response and makes zero model requests. Human review is
 required; this cannot be counted as a live model result or a type migration.
+
+## Bounded UTF-8 type migration
+
+```sh
+.venv/bin/python -m patchgen.pipeline --fixture patchgen/fixtures/v2-identifier-bytes/runtime-input.json --output patchgen/evidence/my-utf8-proposal --generate --strategy deterministic_utf8_v2
+```
+
+This explicit policy supports the adopted testbed's v2 singular entity_id
+string-to-bytes change with valid UTF-8 textual observations. It uses no model or
+reference response. Constructor/observation syntax and version dispatch must
+match supported shapes; unmatched candidate lines reject. v1 candidates remain
+unchanged. This is not arbitrary type/semantic migration. See decision 0007.
