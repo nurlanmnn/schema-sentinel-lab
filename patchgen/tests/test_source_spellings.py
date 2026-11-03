@@ -98,3 +98,27 @@ var unrelated = vehicle[@"other"];
         positions, warnings, error = scan(source, 'csharp', 'foo_2bar', event=event)
         self.assertEqual([p['start_line'] for p in positions], [1, 2])
         self.assertFalse(warnings or error)
+
+    def test_python_aliased_reflection_tracks_dynamic_calls_and_literal_sources(self):
+        source = """import builtins as api
+from builtins import getattr as get
+read = api.getattr
+alias = read
+key = "speed_mps"
+print(alias(vehicle, key))
+print(get(vehicle, user_key))
+print(api . getattr(vehicle, unknown))
+print(get(vehicle, "speed_mps"))
+print(unrelated(vehicle, user_key))
+"""
+        positions, warnings, error = scan(source, 'python', 'speed_mps')
+        self.assertEqual([p['start_line'] for p in positions], [5, 6, 7, 8, 9])
+        self.assertEqual([warning['line'] for warning in warnings], [6, 7, 8])
+        self.assertFalse(error)
+        self.assertTrue(all(p['resolution'] == 'candidate' for p in positions))
+
+    def test_starred_reflection_args_are_unresolved(self):
+        positions, warnings, error = scan('getattr(*args)\n', 'python', 'speed_mps')
+        self.assertEqual([p['start_line'] for p in positions], [1])
+        self.assertEqual([warning['line'] for warning in warnings], [1])
+        self.assertFalse(error)

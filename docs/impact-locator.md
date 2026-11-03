@@ -43,7 +43,7 @@ immutable const decoder/encoder flow. C# matches and unknown receivers stay
 candidate-only.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-67-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+69-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
@@ -118,3 +118,9 @@ source in the verified manifest. Omitted or fabricated candidates and a forged
 complete status on a scan with warnings are rejected. This uses the owning
 scanner and checks consistency under the current implementation. Regenerate
 records when scanner behavior changes.
+
+Python reflection scanning also follows direct builtin imports and same-file
+callable aliases. Dynamic or starred keys require review. When a reflected
+identifier has a matching literal initializer, both the call and the
+initializer are candidates. The alias scan combines file-wide possibilities,
+so rebinding can create extra warnings.

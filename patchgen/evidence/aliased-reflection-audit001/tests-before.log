@@ -1,0 +1,43 @@
+........F.F..
+======================================================================
+FAIL: test_python_aliased_reflection_tracks_dynamic_calls_and_literal_sources (patchgen.tests.test_source_spellings.SourceSpellingTests.test_python_aliased_reflection_tracks_dynamic_calls_and_literal_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 115, in test_python_aliased_reflection_tracks_dynamic_calls_and_literal_sources
+    self.assertEqual([p['start_line'] for p in positions], [5, 6, 7, 8, 9])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [9] != [5, 6, 7, 8, 9]
+
+First differing element 0:
+9
+5
+
+Second list contains 4 additional elements.
+First extra element 1:
+6
+
+- [9]
++ [5, 6, 7, 8, 9]
+
+======================================================================
+FAIL: test_starred_reflection_args_are_unresolved (patchgen.tests.test_source_spellings.SourceSpellingTests.test_starred_reflection_args_are_unresolved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 122, in test_starred_reflection_args_are_unresolved
+    self.assertEqual([p['start_line'] for p in positions], [1])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [1]
+
+Second list contains 1 additional elements.
+First extra element 0:
+1
+
+- []
++ [1]
+?  +
+
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.002s
+
+FAILED (failures=2)

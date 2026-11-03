@@ -84,6 +84,53 @@ def key_initializer(node, language):
     return None, None
 
 
+PYTHON_REFLECTION = {'getattr', 'setattr', 'delattr', 'hasattr'}
+
+
+def python_reflection_keys(tree):
+    """Find possible dynamic builtin-reflection calls through visible aliases."""
+    modules, callables = {'builtins'}, set(PYTHON_REFLECTION)
+    assignments, calls = [], []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            modules.update(alias.asname or alias.name for alias in node.names if alias.name == 'builtins')
+        elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module == 'builtins':
+            callables.update(alias.asname or alias.name for alias in node.names if alias.name in PYTHON_REFLECTION)
+        elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            assignments.extend((target.id, node.value) for target in targets if isinstance(target, ast.Name))
+        elif isinstance(node, ast.Call):
+            calls.append(node)
+
+    def is_reflector(expr):
+        if isinstance(expr, ast.Name):
+            return expr.id in callables
+        return (isinstance(expr, ast.Attribute) and isinstance(expr.value, ast.Name)
+                and expr.value.id in modules and expr.attr in PYTHON_REFLECTION)
+
+    # File-wide overapproximation only. Rebinding can add warnings, but can
+    # never establish that a call resolves to a builtin or a canonical receiver.
+    while True:
+        size = len(modules) + len(callables)
+        for name, value in assignments:
+            if isinstance(value, ast.Name) and value.id in modules:
+                modules.add(name)
+            if is_reflector(value):
+                callables.add(name)
+        if len(modules) + len(callables) == size:
+            break
+
+    for call in calls:
+        if not is_reflector(call.func):
+            continue
+        if any(isinstance(arg, ast.Starred) for arg in call.args[:2]):
+            yield call.lineno, None
+        elif len(call.args) >= 2:
+            key = call.args[1]
+            if not isinstance(key, ast.Constant) or not isinstance(key.value, str):
+                yield call.lineno, key
+
+
 def scan(text, language, field, *, event=None):
     raw = text.encode()
     tree = Parser(Language(FACTORIES[language]())).parse(raw)
@@ -107,15 +154,6 @@ def scan(text, language, field, *, event=None):
         if literal_string(node, raw, language) in keys:
             if parent and parent.type in ('argument_list','arguments','subscript','subscript_expression','element_access_expression','pair','dictionary_splat_pattern','argument','computed_property_name'):
                 lines.setdefault(node.start_point.row+1,set()).add('literal-key/reflection candidate')
-        if node.type == 'call':
-            function = node.child_by_field_name('function')
-            function_name = identifier_value(raw[function.start_byte:function.end_byte].decode(), language) if function else ''
-            if function_name in ('getattr', 'setattr', 'delattr', 'hasattr',
-                                 'builtins.getattr', 'builtins.setattr', 'builtins.delattr', 'builtins.hasattr'):
-                args = node.child_by_field_name('arguments')
-                if args and len(args.named_children)>1 and literal_string(args.named_children[1], raw, language) is None:
-                    warnings.append(dict(line=node.start_point.row+1, reason='dynamic reflection field name'))
-                    lines.setdefault(node.start_point.row+1,set()).add('dynamic reflection candidate; field identity unknown')
         target, initializer = key_initializer(node, language)
         if target and target.type == 'identifier' and literal_string(initializer, raw, language) in keys:
             key_sources.setdefault(identifier(target), set()).add(initializer.start_point.row+1)
@@ -132,6 +170,21 @@ def scan(text, language, field, *, event=None):
         if member and identifier_value(member_name, language) in ('GetProperty', 'GetField', 'GetMember'):
             warnings.append(dict(line=node.start_point.row+1,reason='reflection requires review'))
             lines.setdefault(node.start_point.row+1,set()).add('reflection candidate; field identity unknown')
+    parse_error = tree.root_node.has_error
+    if language == 'python':
+        try:
+            python_tree = ast.parse(text)
+        except SyntaxError:
+            parse_error = True
+        else:
+            for line, key in python_reflection_keys(python_tree):
+                warnings.append(dict(line=line, reason='dynamic reflection field name'))
+                lines.setdefault(line, set()).add('dynamic reflection candidate; field identity unknown')
+                if isinstance(key, ast.Name) and key.id in key_sources:
+                    lines.setdefault(key.lineno, set()).add('reflection with possible named field key')
+                    for source_line in key_sources[key.id]:
+                        lines.setdefault(source_line, set()).add('named field-key literal source')
+    warnings.sort(key=lambda warning: (warning['line'], warning['reason']))
     # Match names only within this file. Shadowing, rebinding and execution order
     # may create extras; these candidates never assert that the key reaches a use.
     for key in key_sources.keys() & key_uses.keys():
@@ -140,7 +193,7 @@ def scan(text, language, field, *, event=None):
         for line in key_uses[key]:
             lines.setdefault(line, set()).add('subscript with possible named field key')
     return [dict(start_line=line,end_line=line,reason='Conservative syntax candidate: '+', '.join(sorted(kinds)),
-                 resolution='candidate') for line,kinds in sorted(lines.items())], warnings, tree.root_node.has_error
+                 resolution='candidate') for line,kinds in sorted(lines.items())], warnings, parse_error
 
 
 def attach_bindings(text, language, event, policy, positions, parse_error=False, *, schema_path=None, source_path=None, typescript_policy=None):
@@ -211,7 +264,7 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.10',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.11',
                   scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')

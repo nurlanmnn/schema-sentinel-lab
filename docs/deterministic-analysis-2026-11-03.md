@@ -352,3 +352,15 @@ Earlier locator records retain narrower provenance.
 All 234 patchgen tests and 27 testbed tests passed. The telemetry analysis
 adapted with 9/9 affected lines and zero extras. Evidence is in
 `candidate-contract-audit001` and `candidate-contract-smoke001`.
+
+## Follow-up: Dynamic keys behind Python reflection aliases
+
+The syntax scan recognizes builtin reflection through same-file import and
+assignment aliases. Computed and starred keys now remain visible as review
+issues. A named literal initializer is included when it may supply the key.
+The file-wide alias match adds candidates and never establishes a binding.
+
+All 236 patchgen tests passed. The 69-case component corpus matched every
+expected outcome, recovered 64/65 affected lines and all 24 expected binding
+claims, with 27 extra candidates and no extra binding claims. The eight domain
+outcomes still matched. Reports are in `aliased-reflection-audit001`.

@@ -876,6 +876,33 @@
       ],
       "affected_sites": [],
       "expected_bound": []
+    },
+    {
+      "id": "python-aliased-reflection-named-key",
+      "language": "python",
+      "source": "import builtins as api\nread = api.getattr\nkey = \"speed_mps\"\nread(vehicle, key)\n",
+      "expected_candidates": [
+        3,
+        4
+      ],
+      "affected_sites": [
+        3,
+        4
+      ],
+      "expected_bound": []
+    },
+    {
+      "id": "python-aliased-starred-reflection",
+      "language": "python",
+      "source": "from builtins import getattr as read\nread(*args)\n",
+      "expected_candidates": [
+        2
+      ],
+      "affected_sites": [
+        2
+      ],
+      "expected_bound": [],
+      "contract": "The caller passes a message and the affected field name as positional arguments."
     }
   ]
 }
