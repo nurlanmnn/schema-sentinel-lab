@@ -65,6 +65,41 @@ class BindingTests(unittest.TestCase):
         for source in examples:
             with self.subTest(source=source): self.assertFalse(bound(source)[0])
 
+    def test_match_captures_shadow_imports_and_rebind_instances(self):
+        examples = [
+            'def f(value):\n    e = V()\n    match value:\n        case V:\n            pass\n    return e.speed_mps\n',
+            'e = V()\nmatch value:\n    case e:\n        pass\nprint(e.speed_mps)\n',
+            'e = V()\nmatch value:\n    case [*e]:\n        pass\nprint(e.speed_mps)\n',
+            'e = V()\nmatch value:\n    case {"key": _, **e}:\n        pass\nprint(e.speed_mps)\n',
+        ]
+        for source in examples:
+            with self.subTest(source=source): self.assertFalse(bound(IMPORT + source)[0])
+
+    def test_definition_header_rebinding_cannot_keep_import_identity(self):
+        examples = [
+            'def mutate(x=(V := other)):\n    pass\ne = V()\nprint(e.speed_mps)\n',
+            'class C((V := other)):\n    pass\ne = V()\nprint(e.speed_mps)\n',
+            '@(V := other)\ndef mutate():\n    pass\ne = V()\nprint(e.speed_mps)\n',
+        ]
+        for source in examples:
+            with self.subTest(source=source): self.assertFalse(bound(IMPORT + source)[0])
+
+    def test_hidden_and_qualified_namespace_mutations_disable_claims(self):
+        examples = [
+            'import builtins\nbuiltins.setattr(V, "FromString", other)\n',
+            'import builtins as b\nb.setattr(V, "FromString", other)\n',
+            'from builtins import setattr as mutate\nmutate(V, "FromString", other)\n',
+            'vars(V)["FromString"] = other\n',
+            'V.__dict__.update(FromString=other)\n',
+            'class Mutator:\n    V.FromString = other\n',
+            'class Mutator:\n    Alias = V\n    Alias.FromString = other\n',
+        ]
+        for source in examples:
+            with self.subTest(source=source):
+                refs, issues = bound(IMPORT + source + 'e = V.FromString(payload)\nprint(e.speed_mps)\n')
+                self.assertFalse(refs)
+                self.assertTrue(issues)
+
     def test_bound_required_reference_cannot_be_dismissed(self):
         positions = [dict(start_line=1, end_line=1, required_reference=True)]
         value = dict(outcome='no_change', edits=[], rationale='bindings rewrite references', confidence=.5,

@@ -107,3 +107,21 @@ All 183 patchgen tests pass in
 `deterministic-boundary-unit002/tests-final.log`. The analysis-only
 `binding-boundary-smoke001` still recovers 9/9 telemetry lines with no extras and
 retains three required Python lines. No model or migration validation was run.
+
+## Follow-up: Python scope audit
+
+Adversarial source inspection found stale positive bindings after `match`
+captures and definition-header assignment expressions, plus namespace mutation
+hidden in class bodies or accessed through qualified builtins/`vars`. Added
+three regression groups with fourteen negative source examples, retained the
+failing run, and widened conservative invalidation. Removed the superseded
+statement-only namespace-mutation collector rather than keeping two competing
+checks. Unsupported sites remain syntax candidates.
+
+`patchgen/evidence/python-scope-audit001/` retains before/after unit logs, a
+source snapshot and regression tests. All 186 patchgen tests pass. The existing
+32-case component corpus still matches 32/32 authored expectations, with 24/25
+affected candidate lines, eight extras, 8/8 expected bound lines and zero extra
+binding claims (`python-scope-corpus001`). These measurements remain static
+component evidence, not validated migrations or a human baseline. No model
+requests or patch proposals were made.

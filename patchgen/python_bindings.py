@@ -32,6 +32,11 @@ def local_names(body):
             continue
         result.update(stored_names(node))
         for item in ast.walk(node):
+            # Pattern captures use string fields rather than Name(Store).
+            if isinstance(item, (ast.MatchAs, ast.MatchStar)) and item.name:
+                result.add(item.name)
+            if isinstance(item, ast.MatchMapping) and item.rest:
+                result.add(item.rest)
             if isinstance(item, (ast.Import, ast.ImportFrom)):
                 result.update(alias.asname or alias.name.split('.')[0] for alias in item.names)
             if isinstance(item, ast.ExceptHandler) and item.name:
@@ -43,15 +48,58 @@ def references(text, field, module, symbol):
     """Return bound field tokens and limitations; retain no negative type claims."""
     tree = ast.parse(text)
     found, issues = [], []
-    namespace_mutations = []
-    # A wildcard, namespace mutation or declaration outside our lexical model
-    # disables evidence for the file. It does not suppress lexical candidates.
-    hazards = (ast.Global, ast.Nonlocal)
-    if any(isinstance(n, hazards) or
-           isinstance(n, ast.ImportFrom) and any(a.name == '*' for a in n.names) or
-           isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in ('exec', 'eval', 'globals', 'locals', 'setattr', 'delattr')
-           for n in ast.walk(tree)):
-        return [], ['dynamic namespace mutation or global/nonlocal declaration; binding evidence disabled']
+    # Audit hazards across the entire AST, including unsupported class/nested
+    # bodies. This deliberately overapproximates aliases across lexical scopes:
+    # uncertainty may remove positive evidence, never establish receiver identity.
+    mutation_calls = {'exec', 'eval', 'globals', 'locals', 'vars', 'setattr', 'delattr'}
+    imported = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            if node.module == 'builtins':
+                mutation_calls.update(a.asname or a.name for a in node.names if a.name in mutation_calls)
+            if node.level == 0 and node.module == module:
+                imported.update(a.asname or a.name for a in node.names if a.name == symbol)
+        elif isinstance(node, ast.Import):
+            imported.update(a.asname for a in node.names if a.name == module and a.asname)
+    # Follow only class/module alias syntax, without constructors or instance
+    # values. Scope conflation here is safe because this set only rejects claims.
+    while True:
+        previous = set(imported)
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Assign, ast.AnnAssign)):
+                value = node.value
+                if isinstance(value, ast.Name) and value.id in imported or (
+                        isinstance(value, ast.Attribute) and value.attr == symbol and
+                        isinstance(value.value, ast.Name) and value.value.id in imported):
+                    targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                    imported.update(t.id for t in targets if isinstance(t, ast.Name))
+        if imported == previous:
+            break
+    for node in ast.walk(tree):
+        reason = None
+        if isinstance(node, (ast.Global, ast.Nonlocal)) or (
+                isinstance(node, ast.ImportFrom) and any(a.name == '*' for a in node.names)):
+            reason = 'dynamic namespace or global/nonlocal declaration'
+        elif isinstance(node, ast.Call) and (
+                isinstance(node.func, ast.Name) and node.func.id in mutation_calls or
+                isinstance(node.func, ast.Attribute) and node.func.attr in mutation_calls):
+            reason = 'dynamic namespace mutation/introspection'
+        elif isinstance(node, ast.Attribute) and node.attr == '__dict__':
+            reason = 'explicit namespace dictionary access'
+        elif isinstance(node, (ast.Attribute, ast.Subscript)) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            if (isinstance(node, ast.Attribute) and node.attr == '__class__' or
+                    any(isinstance(n, ast.Name) and n.id in imported for n in ast.walk(node))):
+                reason = 'possible generated class/module mutation'
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            # Defaults, decorators, annotations and class bases execute outside
+            # the body scope. Their walrus assignments are not straight-line
+            # body assignments and must not leave inherited imports intact.
+            headers = [value for name, value in ast.iter_fields(node) if name != 'body']
+            headers = [item for value in headers for item in (value if isinstance(value, list) else [value]) if isinstance(item, ast.AST)]
+            if any(isinstance(child, ast.NamedExpr) for header in headers for child in ast.walk(header)):
+                reason = 'assignment expression in definition header'
+        if reason:
+            return [], [dict(line=node.lineno, reason=reason + '; binding evidence disabled')]
 
     def evidence(node, value, kind):
         line = node.end_lineno if isinstance(node, ast.Attribute) else node.lineno
@@ -117,8 +165,6 @@ def references(text, field, module, symbol):
                     if isinstance(target, ast.Name):
                         env[target.id] = (value[0], value[1] + [dict(line=node.lineno, operation='assignment', name=target.id)]) if value else None
                     else:
-                        if any(isinstance(n, ast.Attribute) and n.attr in ('__class__', '__dict__') for n in ast.walk(target)) or any(isinstance(n, ast.Name) and env.get(n.id) and env[n.id][0] in ('module', 'class') for n in ast.walk(target)):
-                            namespace_mutations.append(target.lineno)
                         expression(target, env)
                         for name in stored_names(target): env[name] = None
             elif isinstance(node, (ast.Expr, ast.Return, ast.Raise, ast.Assert)):
@@ -128,10 +174,6 @@ def references(text, field, module, symbol):
             else:
                 # Branch/loop/exception/with/delete/augassign control flow cannot
                 # create evidence here. Invalidate every possibly assigned name.
-                for child in ast.walk(node):
-                    if isinstance(child, ast.Attribute) and isinstance(child.ctx, (ast.Store, ast.Del)) and any(
-                            isinstance(n, ast.Name) and env.get(n.id) and env[n.id][0] in ('module', 'class') for n in ast.walk(child)):
-                        namespace_mutations.append(child.lineno)
                 for name in local_names([node]): env[name] = None
                 issues.append(dict(line=node.lineno, reason='control flow unsupported for binding evidence'))
         return env
@@ -159,6 +201,4 @@ def references(text, field, module, symbol):
         args += [a for a in (node.args.vararg, node.args.kwarg) if a]
         for arg in args: env[arg.arg] = None
         statements(node.body, env)
-    if namespace_mutations:
-        return [], issues + [dict(line=line, reason='generated class/module mutation; binding evidence disabled') for line in sorted(set(namespace_mutations))]
     return sorted(found, key=lambda r: (r['line'], r['column'])), issues

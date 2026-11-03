@@ -43,3 +43,12 @@ semantic policy, never inferred from field names.
 The new 26-case source corpus and descriptor boundary regressions are component
 evaluation, not twenty validated migrations. See the measured checkpoint in
 `docs/deterministic-analysis-2026-11-03.md`.
+
+The follow-up scope audit also treats `match` captures (including starred and
+mapping-rest captures) as assignments. Explicit namespace hazards are checked
+across unsupported bodies, so a class body cannot conceal mutation of an imported
+message or an alias. Qualified/aliased builtins mutation calls, `vars`, namespace
+dictionary access, and walrus assignments in definition headers disable positive
+claims for the file. The hazard pass deliberately overapproximates names across
+scopes; it can suppress valid evidence when an unrelated local reuses a name.
+This is a conservative evidence boundary, not execution or monkeypatch analysis.
