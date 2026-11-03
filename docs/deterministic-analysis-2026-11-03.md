@@ -340,3 +340,15 @@ All 232 patchgen tests passed. The 67-case component corpus matched 67/67
 expectations, 61/62 affected lines and 24/24 expected binding claims with no extra
 binding claims. There were 27 extra syntax candidates. Evidence is in
 `python-reflection-audit001` and `python-reflection-corpus001`.
+
+## Follow-up: Verify candidate-only lines at the adapter boundary
+
+The adapter now reruns current locator syntax scans across the pinned runtime
+inventory. It rejects a dropped C# candidate line or file, a fabricated candidate
+or reason, and a complete status that hides dynamic warnings. The candidate
+verification is recorded separately from binding and detector verification.
+Earlier locator records retain narrower provenance.
+
+All 234 patchgen tests and 27 testbed tests passed. The telemetry analysis
+adapted with 9/9 affected lines and zero extras. Evidence is in
+`candidate-contract-audit001` and `candidate-contract-smoke001`.

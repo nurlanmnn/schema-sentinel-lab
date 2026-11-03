@@ -112,3 +112,9 @@ Python records exact single-string tokens passed to unshadowed `getattr` or
 Shadowed builtin names, unknown receivers and compound strings stay candidates.
 Branch-defined classes/functions and repeated imports invalidate inherited
 module identities.
+
+For locator 1.10 and later, the adapter reruns the syntax scan over every pinned
+source in the verified manifest. Omitted or fabricated candidates and a forged
+complete status on a scan with warnings are rejected. This uses the owning
+scanner and checks consistency under the current implementation. Regenerate
+records when scanner behavior changes.

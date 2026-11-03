@@ -225,3 +225,31 @@ class RuntimeInventoryTests(unittest.TestCase):
         self.assertEqual({f['language']: [p['start_line'] for p in f['positions']] for f in record['files']},
                          {'csharp': [3, 4, 5, 6, 7], 'python': [2, 3, 6]})
         self.assertTrue(all(not p.get('binding_evidence') for f in record['files'] for p in f['positions']))
+
+    def test_current_locator_cannot_omit_or_fabricate_unbound_candidates(self):
+        self.write('runtimes/csharp/Read.cs', 'class R { string Read() {\n Log(a.Name);\n return b.Name;\n} }\n')
+        self.commit()
+        record = locate(self.repo, self.detector)
+        adapt(self.repo, self.detector, record)
+        for mutation in ('drop_line', 'drop_file', 'fabricate_line', 'fabricate_reason'):
+            changed = copy.deepcopy(record)
+            target = next(f for f in changed['files'] if f['language'] == 'csharp')
+            if mutation == 'drop_line':
+                target['positions'].pop()
+            elif mutation == 'drop_file':
+                changed['files'].remove(target)
+            elif mutation == 'fabricate_line':
+                target['positions'][0].update(start_line=1, end_line=1)
+            else:
+                target['positions'][0]['reason'] = 'fabricated certainty'
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'syntax candidate'):
+                adapt(self.repo, self.detector, changed)
+
+    def test_current_locator_cannot_forge_complete_dynamic_scan(self):
+        self.write('runtimes/python/main.py', 'def read(entity, key):\n    return entity[key]\n')
+        self.commit()
+        record = locate(self.repo, self.detector)
+        self.assertEqual(record['status'], 'partial')
+        record.update(status='complete', issues=[])
+        with self.assertRaisesRegex(ContractError, 'syntax scan requires review'):
+            adapt(self.repo, self.detector, record)

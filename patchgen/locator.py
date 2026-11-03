@@ -211,7 +211,7 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.9',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.10',
                   scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')

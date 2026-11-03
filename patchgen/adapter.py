@@ -15,10 +15,15 @@ def digest(text):
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+def producer_version(record, family):
+    producer = record.get('producer')
+    match = re.fullmatch(re.escape(family) + r'/(\d+)\.(\d+)', producer) if isinstance(producer, str) else None
+    return tuple(map(int, match.groups())) if match else None
+
+
 def scan_manifest(repo, revision, locator):
     """Check an explicit scan inventory against the exact supported runtime tree."""
-    producer = re.fullmatch(r'independent-tree-sitter-locator/(\d+)\.(\d+)', locator.get('producer', ''))
-    version = tuple(map(int, producer.groups())) if producer else None
+    version = producer_version(locator, 'independent-tree-sitter-locator')
     manifest = locator.get('scan_manifest_version')
     # These are consistency checks on self-described capabilities, not producer
     # authentication. Genuine supplied legacy fixtures have no manifest fields.
@@ -59,8 +64,8 @@ def verify_detector_record(detector):
     Uses the owning detector implementation, so this is consistency validation,
     not an independent implementation or producer authentication.
     """
-    producer = re.fullmatch(r'independent-descriptor-detector/(\d+)\.(\d+)', detector['producer'])
-    if not producer or tuple(map(int, producer.groups())) < (1, 1):
+    version = producer_version(detector, 'independent-descriptor-detector')
+    if not version or version < (1, 1):
         return 'legacy supplied classification; descriptor claims not recomputed'
     if (detector.get('structural_status') != 'single_supported_event' or
             detector.get('unsupported') != [] or
@@ -76,6 +81,29 @@ def verify_detector_record(detector):
     if expected['change']['category'] != change['category'] or any(detector.get(key) != expected[key] for key in keys):
         raise ContractError('detector claims do not match schema descriptor recomputation')
     return 'schema hashes, descriptor hashes and supported event recomputed; not independent analysis'
+
+
+def verify_locator_candidates(locator, contexts, event):
+    version = producer_version(locator, 'independent-tree-sitter-locator')
+    if not version or version < (1, 10):
+        return 'legacy supplied candidates; syntax claims not recomputed'
+    if not event or not isinstance(event.get('old_name'), str) or not contexts:
+        raise ContractError('advertised locator needs a supported field event and pinned sources')
+    from patchgen.locator import scan
+    expected = {}
+    for path, source in contexts.items():
+        language = LANGUAGES[Path(path).suffix]
+        candidates, warnings, parse_error = scan(source, language, event['old_name'], event=event)
+        if parse_error or warnings:
+            raise ContractError('pinned syntax scan requires review: ' + path)
+        if candidates:
+            expected[path] = candidates
+    fields = ('start_line', 'end_line', 'reason', 'resolution')
+    supplied = {file['path']: [{key: pos[key] for key in fields} for pos in file['positions']]
+                for file in locator['files']}
+    if supplied != expected:
+        raise ContractError('locator syntax candidates do not match pinned source recomputation')
+    return 'syntax candidates and scan warnings recomputed from pinned source; not independent analysis'
 
 
 def adapt(repo, detector, locator):
@@ -97,6 +125,7 @@ def adapt(repo, detector, locator):
     events = detector.get('events', [])
     if not isinstance(events, list) or events and (len(events) != 1 or not isinstance(events[0], dict) or events[0].get('category') != change['category']):
         raise ContractError('invalid or inconsistent detector events')
+    binding_event = events[0] if events else None
     files=[]
     for item in require(locator,'files',list,'locator'):
         path=safe_path(require(item,'path',str,'locator.file'))
@@ -115,8 +144,6 @@ def adapt(repo, detector, locator):
             if pos.get('resolution') not in ('candidate', 'resolved'):raise ContractError('ambiguous locator site')
             ranges.append((start,end))
         output_positions = []
-        events = detector.get('events', [])
-        binding_event = events[0] if len(events) == 1 and isinstance(events[0], dict) else None
         try:
             bound, _ = analyze_bindings(context, item['language'], binding_event, change['schema_path'], path)
         except SyntaxError as error:
@@ -132,11 +159,10 @@ def adapt(repo, detector, locator):
                     raise ContractError('binding evidence requires a supported detector event')
                 if type(pos.get('required_reference')) is not bool or not isinstance(pos.get('binding_evidence'), list) or not pos['binding_evidence']:
                     raise ContractError('required-reference flag needs binding evidence')
-                required = reference_requires_edit(item['language'], binding_event)
-                if (pos['required_reference'] is not required or
+                if (pos['required_reference'] is not required_event or
                         json.dumps(pos['binding_evidence'], sort_keys=True) != json.dumps(expected, sort_keys=True)):
                     raise ContractError('binding evidence/required flag does not match pinned source analysis')
-                result.update(required_reference=required, binding_evidence=expected)
+                result.update(required_reference=required_event, binding_evidence=expected)
             output_positions.append(result)
         files.append(dict(path=path,language=item['language'],source_context=context,positions=output_positions))
     if contexts is not None and events:
@@ -152,14 +178,15 @@ def adapt(repo, detector, locator):
                     raise ContractError('omitted binding source cannot be parsed') from error
                 if bound and reference_requires_edit(LANGUAGES[Path(path).suffix], event):
                     raise ContractError('locator omitted a file with required bound references')
+    candidate_verification = verify_locator_candidates(locator, contexts, binding_event)
     case=validate_input(dict(contract_version='1.0',source_revision=revision,change=change,
         intended_behavior=require(detector,'intended_behavior',str,'detector'),affected_files=files))
     verify_source(repo,case)
-    provenance=dict(adapter_version='1.0',detector_verification=detector_verification,detector_producer=detector['producer'],locator_producer=locator['producer'],
+    provenance=dict(adapter_version='1.0',detector_verification=detector_verification,candidate_verification=candidate_verification,detector_producer=detector['producer'],locator_producer=locator['producer'],
         detector_sha256=digest(json.dumps(detector,sort_keys=True)),locator_sha256=digest(json.dumps(locator,sort_keys=True)),
         scan_verification=('exact runtime tree inventory and supported source manifest' if locator.get('scan_manifest_version') == '1.1' else 'exact supported tracked-runtime manifest') if contexts is not None else 'legacy supplied files only',
         binding_verification='positive claims recomputed under declared repository Python/ts-proto policies; not independent analysis',
-        source_revision=revision, site_resolution='candidate; optional bounded binding evidence', integration_scope='validated supplied records; completeness asserted by producer, not proved by adapter')
+        source_revision=revision, site_resolution='candidate; optional bounded binding evidence', integration_scope='validated supplied records; syntax scan is bounded and does not prove complete impact coverage')
     return case,provenance
 
 
