@@ -199,7 +199,9 @@
       "affected_sites": [
         3
       ],
-      "expected_bound": []
+      "expected_bound": [
+        3
+      ]
     },
     {
       "id": "dynamic-reflection",
@@ -339,7 +341,9 @@
       "affected_sites": [
         3
       ],
-      "expected_bound": [],
+      "expected_bound": [
+        3
+      ],
       "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
     },
     {
@@ -845,6 +849,33 @@
         5
       ],
       "contract": "The dynamic method is supplied by the caller and returns an unrelated object. No canonical identity can be claimed for its field."
+    },
+    {
+      "id": "python-bound-protobuf-reflection",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\ne = V()\ne.HasField(\"speed_mps\")\ne.ClearField(\"speed_mps\")\n",
+      "expected_candidates": [
+        3,
+        4
+      ],
+      "affected_sites": [
+        3,
+        4
+      ],
+      "expected_bound": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "python-reflection-builtin-shadow",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\ndef read(getattr):\n    return getattr(V(), \"speed_mps\")\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [],
+      "expected_bound": []
     }
   ]
 }

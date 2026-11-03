@@ -1,0 +1,45 @@
+{
+  "id": "python-normalized-dynamic-spellings",
+  "positions": [
+    {
+      "start_line": 1,
+      "end_line": 1,
+      "reason": "Conservative syntax candidate: dynamic reflection candidate; field identity unknown",
+      "resolution": "candidate"
+    },
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: dynamic subscript candidate; field identity unknown",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [
+    {
+      "line": 1,
+      "reason": "dynamic reflection field name"
+    },
+    {
+      "line": 2,
+      "reason": "dynamic subscript; receiver/key identity requires review"
+    }
+  ],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "fb95b3b21eed9a55b580aafc05943ae6b1f5d456b3ce9ac99c4bbb23312e9eed",
+  "candidate_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

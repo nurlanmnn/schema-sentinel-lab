@@ -43,7 +43,7 @@ immutable const decoder/encoder flow. C# matches and unknown receivers stay
 candidate-only.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-65-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+67-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
@@ -106,3 +106,9 @@ oneof changes still block adaptation. The locator considers descriptor JSON keys
 and old presence-group string names. Its C# candidates include pinned protoc
 property names, field-number constants and explicit proto3 optional Has/Clear
 members. These names do not resolve C# receivers or reflection calls.
+
+Python records exact single-string tokens passed to unshadowed `getattr` or
+`hasattr` and standard Protobuf `HasField` or `ClearField` on a bound instance.
+Shadowed builtin names, unknown receivers and compound strings stay candidates.
+Branch-defined classes/functions and repeated imports invalidate inherited
+module identities.

@@ -1,0 +1,111 @@
+{
+  "id": "ts-static-bracket-codec-methods",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 4,
+          "column": 3,
+          "end_line": 4,
+          "end_column": 11,
+          "kind": "field_access",
+          "binding": "canonical",
+          "module": "generated/ts/fleet/vehicle",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "namespace import",
+              "module": "generated/ts/fleet/vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "generated message symbol"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "C"
+            },
+            {
+              "line": 3,
+              "operation": "ts-proto decode"
+            },
+            {
+              "line": 3,
+              "operation": "assignment",
+              "name": "e"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    },
+    {
+      "start_line": 5,
+      "end_line": 5,
+      "reason": "Conservative syntax candidate: pair",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 5,
+          "column": 14,
+          "end_line": 5,
+          "end_column": 22,
+          "kind": "encoder_object_key",
+          "binding": "canonical",
+          "module": "generated/ts/fleet/vehicle",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "namespace import",
+              "module": "generated/ts/fleet/vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "generated message symbol"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "C"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    },
+    {
+      "start_line": 7,
+      "end_line": 7,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "8d941ad54323161f2b8f7bea4501905a435e8b06c9aa9ee51ae9b3f90c9f75ff",
+  "candidate_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [
+      7
+    ],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

@@ -1,0 +1,60 @@
+{
+  "id": "literal-reflection",
+  "positions": [
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 3,
+          "column": 23,
+          "end_line": 3,
+          "end_column": 34,
+          "kind": "reflection_field_key",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "constructor"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "entity"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "9384d0709a03c6cbbff6721b84ce4901384f080436bef0081755cf7ef218f0be",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

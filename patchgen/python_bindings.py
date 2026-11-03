@@ -26,25 +26,31 @@ def stored_names(node):
     return {n.id for n in ast.walk(node) if isinstance(n, ast.Name) and isinstance(n.ctx, (ast.Store, ast.Del))}
 
 
+DEFINITIONS = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+
+
+def declared_names(nodes):
+    names = set()
+    for node in nodes:
+        if isinstance(node, ast.Name) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            names.add(node.id)
+        elif isinstance(node, DEFINITIONS):
+            names.add(node.name)
+        elif isinstance(node, ast.arg):
+            names.add(node.arg)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            names.update(alias.asname or alias.name.split('.')[0] for alias in node.names)
+        elif isinstance(node, (ast.MatchAs, ast.MatchStar, ast.ExceptHandler)) and node.name:
+            names.add(node.name)
+        elif isinstance(node, ast.MatchMapping) and node.rest:
+            names.add(node.rest)
+    return names
+
+
 def local_names(body):
     """Python locals shadow globals throughout a function, even before assignment."""
-    result = set()
-    for node in body:
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            result.add(node.name)
-            continue
-        result.update(stored_names(node))
-        for item in ast.walk(node):
-            # Pattern captures use string fields rather than Name(Store).
-            if isinstance(item, (ast.MatchAs, ast.MatchStar)) and item.name:
-                result.add(item.name)
-            if isinstance(item, ast.MatchMapping) and item.rest:
-                result.add(item.rest)
-            if isinstance(item, (ast.Import, ast.ImportFrom)):
-                result.update(alias.asname or alias.name.split('.')[0] for alias in item.names)
-            if isinstance(item, ast.ExceptHandler) and item.name:
-                result.add(item.name)
-    return result
+    return declared_names(item for node in body
+                          for item in ((node,) if isinstance(node, DEFINITIONS) else ast.walk(node)))
 
 
 def references(text, field, module, symbol):
@@ -56,14 +62,20 @@ def references(text, field, module, symbol):
     # length from an attribute endpoint (which can point inside a Unicode token).
     normalized_text = text.replace('\r\n', '\n').replace('\r', '\n')
     source_lines = normalized_text.split('\n')
-    starts, ends = {}, {}
+    starts, ends, strings = {}, {}, set()
+    reflection_builtins = {'getattr', 'hasattr'} - declared_names(ast.walk(tree))
     for token in tokenize.generate_tokens(io.StringIO(normalized_text).readline):
-        if token.type != tokenize.NAME or unicodedata.normalize('NFKC', token.string) != field:
+        if token.type not in (tokenize.NAME, tokenize.STRING):
+            continue
+        if token.type == tokenize.NAME and unicodedata.normalize('NFKC', token.string) != field:
             continue
         start = (token.start[0], len(source_lines[token.start[0]-1][:token.start[1]].encode()))
         end = (token.end[0], len(source_lines[token.end[0]-1][:token.end[1]].encode()))
-        starts[start] = (start, end)
-        ends[end] = (start, end)
+        if token.type == tokenize.STRING:
+            strings.add((start, end))
+        else:
+            starts[start] = (start, end)
+            ends[end] = (start, end)
     # Audit hazards across the entire AST, including unsupported class/nested
     # bodies. This deliberately overapproximates aliases across lexical scopes:
     # uncertainty may remove positive evidence, never establish receiver identity.
@@ -124,8 +136,13 @@ def references(text, field, module, symbol):
             return [], [dict(line=node.lineno, reason=reason + '; binding evidence disabled')]
 
     def evidence(node, value, kind):
-        token = (ends.get((node.end_lineno, node.end_col_offset)) if isinstance(node, ast.Attribute)
-                 else starts.get((node.lineno, node.col_offset)))
+        if isinstance(node, ast.Constant):
+            token = ((node.lineno, node.col_offset), (node.end_lineno, node.end_col_offset))
+            if token not in strings:
+                return  # Folded adjacent strings do not have a single editable token.
+        else:
+            token = (ends.get((node.end_lineno, node.end_col_offset)) if isinstance(node, ast.Attribute)
+                     else starts.get((node.lineno, node.col_offset)))
         if token is None:
             issues.append(dict(line=node.lineno, reason='exact source field token unavailable; no binding evidence'))
             return
@@ -152,9 +169,21 @@ def references(text, field, module, symbol):
         if isinstance(node, ast.Call):
             # Recognize the parser only on the declared message class.
             parser = isinstance(node.func, ast.Attribute) and node.func.attr == 'FromString'
-            value = expression(node.func.value if parser else node.func, env)
-            for arg in node.args:
-                expression(arg, env)
+            reflection_method = (isinstance(node.func, ast.Attribute) and
+                                 node.func.attr in ('HasField', 'ClearField'))
+            receiver = expression(node.func.value, env) if reflection_method else None
+            value = None if reflection_method else expression(node.func.value if parser else node.func, env)
+            arguments = [expression(arg, env) for arg in node.args]
+            key = None
+            if not node.keywords:
+                if reflection_method and len(node.args) == 1:
+                    key = node.args[0]
+                elif isinstance(node.func, ast.Name) and node.func.id in reflection_builtins:
+                    arities = (2, 3) if node.func.id == 'getattr' else (2,)
+                    if len(node.args) in arities and not any(isinstance(arg, ast.Starred) for arg in node.args):
+                        receiver, key = arguments[0], node.args[1]
+            if receiver and receiver[0] == 'instance' and isinstance(key, ast.Constant) and key.value == field:
+                evidence(key, receiver, 'reflection_field_key')
             for keyword in node.keywords:
                 expression(keyword.value, env)
                 if not parser and value and value[0] == 'class' and keyword.arg == field:
@@ -207,12 +236,16 @@ def references(text, field, module, symbol):
     # Only immutable top-level import names may enter function scopes. Imports
     # rebound elsewhere in module code are excluded regardless of source order.
     module_env = statements(tree.body, {})
-    mutable = set()
+    mutable, seen_imports = set(), set()
     for node in tree.body:
-        if not isinstance(node, (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                name = alias.asname or alias.name.split('.')[0]
+                if name in seen_imports:
+                    mutable.add(name)
+                seen_imports.add(name)
+        else:
             mutable.update(local_names([node]))
-        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            mutable.add(node.name)
     globals_env = {name: value for name, value in module_env.items() if name not in mutable}
     for node in tree.body:
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):

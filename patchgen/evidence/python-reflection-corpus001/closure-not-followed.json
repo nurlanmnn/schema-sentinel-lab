@@ -1,0 +1,30 @@
+{
+  "id": "closure-not-followed",
+  "positions": [
+    {
+      "start_line": 5,
+      "end_line": 5,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "0d21c3ca4f872e5ff7f64b81bf86fa0524d3eea049387cdefe0a0a4868551fcc",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

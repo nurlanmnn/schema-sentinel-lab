@@ -1,0 +1,37 @@
+{
+  "id": "ts-container-codec-mutation",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [
+    {
+      "line": 2,
+      "reason": "possible codec mutation or immutable-binding reassignment; binding evidence disabled"
+    }
+  ],
+  "source_sha256": "1d5c854c248cac6255863343f1a30aa9c584afdfd116fd23668e0a149da4e5e7",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [
+      4
+    ],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

@@ -51,6 +51,38 @@ class BindingTests(unittest.TestCase):
         for example in examples:
             with self.subTest(source=example): self.assertFalse(bound(IMPORT + example)[0])
 
+    def test_branch_definition_and_late_import_cannot_establish_function_binding(self):
+        examples = [
+            IMPORT + 'def f():\n    return V().speed_mps\nif flag:\n    def V():\n        return other\n',
+            IMPORT + 'def f():\n    return V().speed_mps\nif flag:\n    class V: pass\n',
+            'from other import V\ndef f():\n    return V().speed_mps\nf()\n' + IMPORT,
+        ]
+        for source in examples:
+            with self.subTest(source=source):
+                self.assertFalse(bound(source)[0])
+
+    def test_static_reflection_binds_only_canonical_instances_and_builtins(self):
+        source = IMPORT + """entity = V()
+getattr(entity, "speed_mps")
+hasattr(entity, "speed_mps")
+entity.HasField("speed_mps")
+entity.ClearField("speed_mps")
+getattr(other, "speed_mps")
+other.ClearField("speed_mps")
+getattr(entity, "speed_" "mps")
+"""
+        refs, _ = bound(source)
+        self.assertEqual([ref['line'] for ref in refs], [3, 4, 5, 6])
+        for ref in refs:
+            line = source.splitlines()[ref['line'] - 1].encode()
+            self.assertEqual(line[ref['column'] - 1:ref['end_column'] - 1], b'"speed_mps"')
+        self.assertFalse(bound(IMPORT + 'def f(getattr):\n    return getattr(V(), "speed_mps")\n')[0])
+        self.assertFalse(bound(IMPORT + 'getattr = custom\ngetattr(V(), "speed_mps")\n')[0])
+        positions, _, _ = scan(source, 'python', 'speed_mps')
+        event = dict(category='field_renamed', old_name='speed_mps', new_name='ground_speed_mps')
+        positions, _ = attach_bindings(source, 'python', event, ('fleet.vehicle_pb2', 'Vehicle'), positions)
+        self.assertEqual([p['start_line'] for p in positions if p.get('required_reference')], [3, 4, 5, 6])
+
     def test_direct_module_import_and_class_alias(self):
         source = 'import fleet.vehicle_pb2 as pb\nAlias = pb.Vehicle\ne = Alias()\nprint(e.speed_mps)\n'
         self.assertEqual([r['line'] for r in bound(source)[0]], [4])

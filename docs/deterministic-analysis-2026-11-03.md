@@ -326,3 +326,17 @@ These are syntax candidates.
 All 230 patchgen tests passed. The normal detector/locator path is exercised on an
 authored pinned Git tree, and local protoc 25.1 confirms the generated names in
 `optional-presence-audit001`.
+
+## Follow-up: Python reflection and conditional definitions
+
+Branch-defined classes/functions and repeated imports now withdraw inherited
+Python module claims. An imported generated class can be replaced by a conditional
+definition or a different import at a call site. The straight-line binding policy
+also recognizes exact single-string keys in unshadowed builtin reflection and
+standard Protobuf HasField/ClearField calls on a known instance. Compound keys
+and shadowed or unrelated receivers stay unbound.
+
+All 232 patchgen tests passed. The 67-case component corpus matched 67/67
+expectations, 61/62 affected lines and 24/24 expected binding claims with no extra
+binding claims. There were 27 extra syntax candidates. Evidence is in
+`python-reflection-audit001` and `python-reflection-corpus001`.
