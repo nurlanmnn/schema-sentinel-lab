@@ -43,7 +43,7 @@ immutable const decoder/encoder flow. C# matches and unknown receivers stay
 candidate-only.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-54-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+56-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
@@ -74,3 +74,9 @@ outer local values into closures. Positive claims require the declared standard
 ts-proto codec API and no arbitrary monkeypatching. The real telemetry source has
 required rename references at TS lines 9–11 alongside Python lines 10–12; C# has
 no binding claims. The adapter checks both supported binding layers from source.
+
+Current locator producers must supply their advertised manifest capabilities.
+Version 1.4 onward requires manifest 1.1; version 1.3 requires a manifest. Orphaned
+scan/inventory fields cannot silently enter the legacy path. This checks record
+consistency, not producer authentication; genuinely supplied legacy records retain
+their narrower provenance.

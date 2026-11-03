@@ -1,0 +1,35 @@
+{
+  "id": "try-reassigns-receiver",
+  "positions": [
+    {
+      "start_line": 7,
+      "end_line": 7,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [
+    {
+      "line": 3,
+      "reason": "control flow unsupported for binding evidence"
+    }
+  ],
+  "source_sha256": "25b7228913b2c76677c0786bbe7927fd87e73a4535c38e0e3af0165da19d632a",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

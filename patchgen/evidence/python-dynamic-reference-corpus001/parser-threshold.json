@@ -1,0 +1,60 @@
+{
+  "id": "parser-threshold",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 4,
+          "column": 19,
+          "end_line": 4,
+          "end_column": 28,
+          "kind": "field_access",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 3,
+              "operation": "FromString"
+            },
+            {
+              "line": 3,
+              "operation": "assignment",
+              "name": "entity"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "7674cca38f888a4c57a03a20c8ffccaebfd64dadf96c516d4ac588844393da70",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

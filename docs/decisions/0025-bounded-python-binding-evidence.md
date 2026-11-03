@@ -47,9 +47,12 @@ evaluation, not twenty validated migrations. See the measured checkpoint in
 The follow-up scope audit also treats `match` captures (including starred and
 mapping-rest captures) as assignments. Explicit namespace hazards are checked
 across unsupported bodies, so a class body cannot conceal mutation of an imported
-message or an alias. Qualified/aliased builtins mutation calls, `vars`, namespace
-dictionary access, and walrus assignments in definition headers disable positive
-claims for the file. The hazard pass deliberately overapproximates names across
+message or an alias. References to mutation/introspection builtins (including qualified names,
+import aliases and defaults), namespace dictionary access, and assignment
+expressions anywhere disable positive claims for the file. The reference check
+occurs before builtin values can escape into aliases; harmless references and
+shadowed names can also suppress evidence. Annotation evaluation differences
+between Python versions do not establish binding identity. The hazard pass deliberately overapproximates names across
 scopes; it can suppress valid evidence when an unrelated local reuses a name.
 This is a conservative evidence boundary, not execution or monkeypatch analysis.
 

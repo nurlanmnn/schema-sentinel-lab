@@ -1,0 +1,2369 @@
+{
+  "scope": "Authored static component cases; no generated binding execution or end-to-end migration.",
+  "scenario_count": 56,
+  "expectation_matches": 56,
+  "records": [
+    {
+      "id": "parser-threshold",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 4,
+              "column": 19,
+              "end_line": 4,
+              "end_column": 28,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 3,
+                  "operation": "FromString"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "entity"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "7674cca38f888a4c57a03a20c8ffccaebfd64dadf96c516d4ac588844393da70",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "constructor-and-read",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: keyword_argument",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 2,
+              "column": 12,
+              "end_line": 2,
+              "end_column": 21,
+              "kind": "constructor_keyword",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 3,
+              "column": 14,
+              "end_line": 3,
+              "end_column": 23,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 2,
+                  "operation": "constructor"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "entity"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "a7999ec816569a17b1c21923e049e5a461564e64f4772dcaf009f5d2968e14f8",
+      "candidate_coverage": {
+        "expected": 2,
+        "matched": 2,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 2,
+        "matched": 2,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "instance-alias",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 4,
+              "column": 13,
+              "end_line": 4,
+              "end_column": 22,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 2,
+                  "operation": "constructor"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "entity"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "alias"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "72f28d500127a340419f3c8085b1eb192ea0e02998f67d788618ed06ba55fd98",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "class-alias",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 4,
+              "column": 14,
+              "end_line": 4,
+              "end_column": 23,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "Message"
+                },
+                {
+                  "line": 3,
+                  "operation": "constructor"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "entity"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "6cf66a793542efb154db9fa557c58f0788a6868b086a09316588ecbd1a137bbb",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "module-alias",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 3,
+              "column": 14,
+              "end_line": 3,
+              "end_column": 23,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "module import",
+                  "module": "fleet.vehicle_pb2"
+                },
+                {
+                  "line": 2,
+                  "operation": "generated message symbol"
+                },
+                {
+                  "line": 2,
+                  "operation": "FromString"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "entity"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "f9e07e7ef3ee7fb36fcdc02e5f628c2a4853445792e3823dc937c1ce25ac4d70",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "function-local-import",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 4,
+              "column": 19,
+              "end_line": 4,
+              "end_column": 28,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 2,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 3,
+                  "operation": "FromString"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "entity"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "dbed15b97b5ef0730d68019f610efcf3a1317393b0f0ba3d7739c7c4f7541a0a",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "parameter-shadows-import",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "8ff707bc26dd5e1c823db32d02bb514c1a43643e6c9f423025ebc076a67249d9",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "local-shadows-before-assignment",
+      "positions": [
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "4007b36ee4195110f2271f6fc8a6c0d661e6ac2456b692b402d9ebb4c196709f",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          5
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "instance-reassigned",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "be0c8e4e0952e26ea66498f01c677e7077a5a5f7f948fad6150856d8bd3a87a2",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          4
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "branch-may-reassign",
+      "positions": [
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 3,
+          "reason": "control flow unsupported for binding evidence"
+        }
+      ],
+      "source_sha256": "0dcc7b502f8b8b4570f149ecca73c935b9c3570ce51b4a76112de1f1f278a6ca",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "unknown-parameter",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "d120f08dfb50d8099626cad0b21dc25ec9b8b7ee286100ea73666bdf37c4c380",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "unchanged-v1-import",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: keyword_argument",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "fe3da2e0d424d0cb9859050e1cc937ae001660caa6cc63697b66cab78265d23d",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          2,
+          3
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "unrelated-object",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "c278a627ae4542ebedb1e6916430cd4c12b8727ec3023175306bb529daf8a51a",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          2
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "comments-and-string-values",
+      "positions": [],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "3e1f56eb920fc1622a54010e162abc97733ad7efde06bc439af6d7dc6736481b",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "literal-reflection",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "9384d0709a03c6cbbff6721b84ce4901384f080436bef0081755cf7ef218f0be",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "dynamic-reflection",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: dynamic reflection candidate; field identity unknown",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [
+        {
+          "line": 3,
+          "reason": "dynamic reflection field name"
+        }
+      ],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "83c14b99c8638b146304cba8ec7068f09da5789833fa5d5ad07108286d71426f",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "comprehension-parameter-shadow",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 3,
+          "reason": "expression scope/dataflow unsupported"
+        }
+      ],
+      "source_sha256": "9facf6d4d65e60172660fd3c701de67618ccf76cff63dc6298769fe38efd207d",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          3
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "closure-not-followed",
+      "positions": [
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "0d21c3ca4f872e5ff7f64b81bf86fa0524d3eea049387cdefe0a0a4868551fcc",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "walrus-reassigns-receiver",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 3,
+          "reason": "assignment expression outside declared straight-line policy; binding evidence disabled"
+        }
+      ],
+      "source_sha256": "169b5991d6a1090867854b6406f8e565b996cfde3f793a5ba8627dd023de4bea",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          4
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "member-write",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 3,
+              "column": 8,
+              "end_line": 3,
+              "end_column": 17,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 2,
+                  "operation": "constructor"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "entity"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "192508bca3fb8475eb1bafe79a4625525d0571552cc4b0bf49af690d240c1238",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "module-import-without-alias",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "9433f5cf22e78b0b5c1565858e0ee5925774cbad23e12ec42ac1b85984114d2d",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "annotation-is-not-runtime-evidence",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "993c436a897c5339749541ff0ef632703c84954d56d12996249a659d321b6b27",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "typescript-cast-remains-candidate",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "18c259a3490fbf180df178470653d40f5dad041143c553f4333ec4065808f3eb",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "csharp-typed-parameter-remains-candidate",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "fe511b83ac76526bf82365332c17dabb53255e7cde3c99971eef14d28fe5978f",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "try-reassigns-receiver",
+      "positions": [
+        {
+          "start_line": 7,
+          "end_line": 7,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 3,
+          "reason": "control flow unsupported for binding evidence"
+        }
+      ],
+      "source_sha256": "25b7228913b2c76677c0786bbe7927fd87e73a4535c38e0e3af0165da19d632a",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "lambda-scope-remains-candidate",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 3,
+          "reason": "expression scope/dataflow unsupported"
+        }
+      ],
+      "source_sha256": "3d63ddecd9af2092ab1e31ffdb5869ceab84583b27ed2a7b338b951bc05f72c2",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          3
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "escaped-reflection-key",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "12e498447a83184540f8788fb5d8f1095ddb9a6b87b8e70b6aaf5d86932ec3d5",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "computed-reflection-key",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: dynamic reflection candidate; field identity unknown",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [
+        {
+          "line": 3,
+          "reason": "dynamic reflection field name"
+        }
+      ],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "61c8310ad19bf70fe437b6f62260ce152663fa655a06aff4ebe005552e092578",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "bounded-dynamic-subscript",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: dynamic subscript candidate; field identity unknown",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [
+        {
+          "line": 2,
+          "reason": "dynamic subscript; receiver/key identity requires review"
+        }
+      ],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "1c02b1d84ced4489ed2dce71439ad6cb912f43ec0f0c29af38186b18e240352e",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "arbitrary-dynamic-subscript-limit",
+      "positions": [],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "1f71c6ed22bd667228484afb96a67b104df9ca6e8797dd0468185996f415033b",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 0,
+        "missed": [
+          2
+        ],
+        "extra": [],
+        "recall": 0.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "csharp-computed-reflection",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: reflection candidate; field identity unknown",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [
+        {
+          "line": 2,
+          "reason": "reflection requires review"
+        }
+      ],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "9bc002628334e07fa6087aac45c28437701b5d7ea94d24490835f66b614abd07",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "concatenated-reflection-key",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "e5707df68e5650ade10cf8863bc90162fcfd65189393a34f84b6b158c0e74b68",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "python-normalized-field-spelling",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: keyword_argument",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 2,
+              "column": 7,
+              "end_line": 2,
+              "end_column": 32,
+              "kind": "constructor_keyword",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 3,
+              "column": 15,
+              "end_line": 3,
+              "end_column": 40,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "from import",
+                  "module": "fleet.vehicle_pb2",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 2,
+                  "operation": "constructor"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "e"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "441b6a5ad377580fd6d3cb1d0adcadd131fdc141c5f170631e56c32b594a0e87",
+      "candidate_coverage": {
+        "expected": 2,
+        "matched": 2,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 2,
+        "matched": 2,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "typescript-escaped-field-spellings",
+      "positions": [
+        {
+          "start_line": 1,
+          "end_line": 1,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "078a1ee094dbba58c2a8bc5f884a6cbff1a938efadd4037c171810df3f306971",
+      "candidate_coverage": {
+        "expected": 6,
+        "matched": 6,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "csharp-escaped-field-spellings",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 7,
+          "end_line": 7,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "0fc7317a2af0ca5e848a9860d7a6f49324bf16622a3428d42864d4f2bfab1a75",
+      "candidate_coverage": {
+        "expected": 6,
+        "matched": 6,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "csharp-formatting-and-reflection-spelling",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: reflection candidate; field identity unknown",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [
+        {
+          "line": 3,
+          "reason": "reflection requires review"
+        }
+      ],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "88b3e37789a193a513751b9d154ed4473d4b9d7f43945a45bcf23cede9a6de98",
+      "candidate_coverage": {
+        "expected": 2,
+        "matched": 2,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "python-normalized-dynamic-spellings",
+      "positions": [
+        {
+          "start_line": 1,
+          "end_line": 1,
+          "reason": "Conservative syntax candidate: dynamic reflection candidate; field identity unknown",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: dynamic subscript candidate; field identity unknown",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [
+        {
+          "line": 1,
+          "reason": "dynamic reflection field name"
+        },
+        {
+          "line": 2,
+          "reason": "dynamic subscript; receiver/key identity requires review"
+        }
+      ],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "fb95b3b21eed9a55b580aafc05943ae6b1f5d456b3ce9ac99c4bbb23312e9eed",
+      "candidate_coverage": {
+        "expected": 2,
+        "matched": 2,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "python-string-keys-not-normalized",
+      "positions": [],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "c977a89aadbbafde7a5dc6419a1d363211092b17b0cde73c3a51f10370bac43a",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "typescript-identifiers-not-normalized",
+      "positions": [],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "47bef331c3bb05745df8e5734ef4ef39043384152921b6bac7eae98eef85ef39",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "csharp-verbatim-preserves-backslashes",
+      "positions": [],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "24958c063802874220becb751f233f5423e5c3a3087bd0d9909b2790f7af3d70",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-bound-encode-observe-threshold",
+      "positions": [
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: pair",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 6,
+              "column": 32,
+              "end_line": 6,
+              "end_column": 40,
+              "kind": "encoder_object_key",
+              "binding": "canonical",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "named import",
+                  "module": "generated/ts/fleet/vehicle",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "Codec"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        },
+        {
+          "start_line": 7,
+          "end_line": 7,
+          "reason": "Conservative syntax candidate: member_expression, pair",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 7,
+              "column": 36,
+              "end_line": 7,
+              "end_column": 44,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "named import",
+                  "module": "generated/ts/fleet/vehicle",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "Codec"
+                },
+                {
+                  "line": 4,
+                  "operation": "ts-proto decode"
+                },
+                {
+                  "line": 4,
+                  "operation": "assignment",
+                  "name": "e"
+                },
+                {
+                  "line": 5,
+                  "operation": "assignment",
+                  "name": "alias"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 8,
+              "column": 12,
+              "end_line": 8,
+              "end_column": 20,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "named import",
+                  "module": "generated/ts/fleet/vehicle",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "Codec"
+                },
+                {
+                  "line": 4,
+                  "operation": "ts-proto decode"
+                },
+                {
+                  "line": 4,
+                  "operation": "assignment",
+                  "name": "e"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "be67a89501640fd4f24ca51a990009074e9abe7cabcef2d960cfb5ffdfeee516",
+      "candidate_coverage": {
+        "expected": 3,
+        "matched": 3,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 3,
+        "matched": 3,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-bound-namespace-import",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 3,
+              "column": 15,
+              "end_line": 3,
+              "end_column": 23,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "namespace import",
+                  "module": "generated/ts/fleet/vehicle"
+                },
+                {
+                  "line": 2,
+                  "operation": "generated message symbol"
+                },
+                {
+                  "line": 2,
+                  "operation": "ts-proto decode"
+                },
+                {
+                  "line": 2,
+                  "operation": "assignment",
+                  "name": "e"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "f57088a7a3f343911c20d6e45d31d61d67e0765c32e5b532bd7d6cb8e9c52e3c",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-bound-arrow-decoder",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate",
+          "binding_evidence": [
+            {
+              "line": 4,
+              "column": 12,
+              "end_line": 4,
+              "end_column": 20,
+              "kind": "field_access",
+              "binding": "canonical",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle",
+              "evidence": [
+                {
+                  "line": 1,
+                  "operation": "named import",
+                  "module": "generated/ts/fleet/vehicle",
+                  "symbol": "Vehicle"
+                },
+                {
+                  "line": 3,
+                  "operation": "ts-proto decode"
+                },
+                {
+                  "line": 3,
+                  "operation": "assignment",
+                  "name": "e"
+                }
+              ]
+            }
+          ],
+          "required_reference": true
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "1b71212f814c8281f522e102502a4b462ed6c9a2ed4388fb25d855fc47f99d8c",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-wrong-generated-version",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "8790d772f43648ec2649333ae04f6c31683eb268e49c4a296c5657940663d971",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          3
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-parameter-shadows-import",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "6eb8da6bffa0bdeda6cc6fb05f82a377ea2ab69098095af4d273b417079a2b3c",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          4
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-nested-loop-shadow",
+      "positions": [
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 3,
+          "reason": "control flow unsupported for binding evidence"
+        }
+      ],
+      "source_sha256": "418a09453c43e34bd63720e8896801e094f014dc956add0b2c404e0748680dbe",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          6
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-mutable-rebound-receiver",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "f33c11ae1030c2a01f6af0dae7b7f472d01bc2d772604f9eff21f625e0905a2e",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          4
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-cast-cannot-bind",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "0bbfad7417239fb1cf7050e6abfb1a142ca33e6e4d0dff71d4939d8d80245756",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          3
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-annotation-cannot-bind",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "7a7a97d5ebcdd8b5f2ea53561e6d801e4b03f33253cf71cf7ac1286ae7a84ea9",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          3
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-outer-local-not-propagated",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "7ead553e1026798c6a8de0f3ea29b4aaf8fff9a70430f6b0948aafa83bc3fe3d",
+      "candidate_coverage": {
+        "expected": 1,
+        "matched": 1,
+        "missed": [],
+        "extra": [],
+        "recall": 1.0
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-native-mutator-alias-blocks",
+      "positions": [
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 2,
+          "reason": "dynamic namespace function or mutator reference; binding evidence disabled"
+        }
+      ],
+      "source_sha256": "6416756733afa34a6a855b8a4032413ee7f7da67f01cc21a4dbcc1f4a3d5d05b",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          5
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-bracket-mutator-blocks",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 2,
+          "reason": "dynamic namespace function or mutator reference; binding evidence disabled"
+        }
+      ],
+      "source_sha256": "0235d97e8f1dba6d508a6530b6187b6d53950399fc912070fc39bb5a7cfdb8b8",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          4
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-namespace-alias-shadow",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 2,
+          "reason": "TypeScript namespace/ambient scope unsupported; binding evidence disabled"
+        }
+      ],
+      "source_sha256": "20869cb5c0c5153360a0c619aa258a2738e7fa3897f547e6eaf00303d076d65f",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          2
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "ts-class-expression-name-shadow",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [],
+      "source_sha256": "1d791c061367f43a0241a54582935410795a6e8646d04c20f891df2d36152115",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          2
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "python-builtin-alias-mutation",
+      "positions": [
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 2,
+          "reason": "dynamic namespace mutation/introspection reference; binding evidence disabled"
+        }
+      ],
+      "source_sha256": "410b08c26d56d6365a71e461e8c57fdb73102773a1fea12b4267f9a7e236ce4e",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          5
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    },
+    {
+      "id": "python-annotation-walrus-mutation",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ],
+      "warnings": [],
+      "parse_error": false,
+      "binding_limitations": [
+        {
+          "line": 2,
+          "reason": "assignment expression outside declared straight-line policy; binding evidence disabled"
+        }
+      ],
+      "source_sha256": "42f425ba125f6f976f31120a3068ced9d73e78491e888ec71bf22441f613d118",
+      "candidate_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [
+          4
+        ],
+        "recall": null
+      },
+      "binding_coverage": {
+        "expected": 0,
+        "matched": 0,
+        "missed": [],
+        "extra": [],
+        "recall": null
+      },
+      "expectation_match": true
+    }
+  ],
+  "candidate_expected": 49,
+  "candidate_matched": 48,
+  "candidate_extras": 20,
+  "bound_expected": 15,
+  "bound_matched": 15,
+  "bound_extras": 0,
+  "model_requests": 0,
+  "validated_migrations": 0,
+  "human_acceptance": false,
+  "implementation_revision": "aefe9f25928f78c66b34037fe865f4677dd6c630",
+  "implementation": {
+    "analysis_corpus.py": "fa0fdf61aea9a2d704ca44bd356670125640103cfbc1b92ac29a40dd50433db1",
+    "detector.py": "0209566f29702ac7a8e94887a717e101a4d19ff5f7eb8859b29bdbb7acb0e0a8",
+    "locator.py": "ac84dcdfde65becde8c04595b0e3a85569d98c6f898daa030392e0fcb95713cf",
+    "python_bindings.py": "dc7eadc34e5043744b3908b9cfaad123ee8bea14aa39da2b91751230de8a4adc",
+    "runtime_inventory.py": "77860f657a6a591dd58b82b06c918b843374d1529d520de32c0a61842b467012",
+    "source_spellings.py": "89518b6680cc4b78b428f03a5483c29f37432a47f7ba17c0645ae730fea6dd35",
+    "typescript_bindings.py": "2c75e40e93c3c0421e4801c96aa7b4d98128d618231720847db3c80a60799eac",
+    "binding_analysis.py": "c1eec6ea5bd3284c25bca15fc58b51732ccaf856a4cb8e85be0474204bc443fe"
+  },
+  "catalog_sha256": "e8226f5f000dde5b81b00d8030befb9cf91a81c672d2127228b97940fbd7b421",
+  "limitations": [
+    "Explicit generated-module policy; no runtime import verification or arbitrary monkeypatch analysis.",
+    "Expected misses remain failures of analysis capability even when expectation_match is true.",
+    "No cross-function value propagation or C# binding proof; mutable TS/unknown sites remain candidates."
+  ]
+}

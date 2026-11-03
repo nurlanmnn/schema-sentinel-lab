@@ -27,3 +27,9 @@ identity, discover code outside `runtimes/`, or prove whole-program completeness
 No dependency was added. The shared `runtime_inventory` module owns the language
 and auxiliary policy used by locator and adapter, replacing their duplicated
 language tables.
+
+Adapter follow-up: advertised locator versions 1.4 onward require manifest 1.1,
+and 1.3 requires an explicit manifest. Scan or inventory fields without a version
+are rejected. Genuine supplied legacy fixtures remain readable with narrower
+provenance. Producer names are unauthenticated metadata: changing both identity
+and capabilities is outside this accidental-downgrade consistency check.

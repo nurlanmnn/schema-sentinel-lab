@@ -100,6 +100,29 @@ class BindingTests(unittest.TestCase):
                 self.assertFalse(refs)
                 self.assertTrue(issues)
 
+    def test_mutation_builtin_references_disable_claims_before_aliasing(self):
+        examples = [
+            'run = exec\nrun("V = other")\n',
+            'run = eval\nrun("mutate(V)")\n',
+            'mutate = setattr\nmutate(V, "FromString", other)\n',
+            'namespace = globals\nnamespace()["V"] = other\n',
+            'import builtins as b\nmutate = b.setattr\nmutate(V, "FromString", other)\n',
+            'from builtins import exec as run\nalias = run\nalias("V = other")\n',
+            'def f(run=exec):\n    run("mutate(V)")\n',
+        ]
+        for source in examples:
+            with self.subTest(source=source):
+                refs, issues = bound(IMPORT + source + 'e = V.FromString(payload)\nprint(e.speed_mps)\n')
+                self.assertFalse(refs)
+                self.assertTrue(issues)
+
+    def test_annotation_assignment_expression_disables_binding_claims(self):
+        source = IMPORT + 'x: (V := other) = 1\ne = V()\nprint(e.speed_mps)\n'
+        self.assertFalse(bound(source)[0])
+        positions, _, error = scan(source, 'python', 'speed_mps')
+        self.assertFalse(error)
+        self.assertEqual([p['start_line'] for p in positions], [4])
+
     def test_normalized_identifiers_keep_exact_source_byte_ranges(self):
         spelling = 'ｓｐｅｅｄ_ｍｐｓ'
         source = IMPORT + f'e = V({spelling}=1)\nprint("é", e.{spelling})\n'

@@ -204,3 +204,27 @@ Evidence is in `typescript-binding-audit001`, `typescript-binding-smoke001` and
 the final adapter guards; earlier smoke/corpus snapshots preserve their exact
 pre-commit implementations. Temporary source checkouts were removed. No model
 requests, generated migration proposals or human approvals occurred.
+
+## Follow-up: Dynamic builtin references and manifest downgrade
+
+Authored regressions reproduced positive Python binding claims after aliased
+mutation builtins and annotation assignment expressions. References to mutation/
+introspection builtins now disable evidence before values can escape through
+aliases or defaults. Assignment expressions anywhere disable evidence; this
+replaces the narrower definition-header check. Syntax candidates remain available.
+The rejection pass can suppress harmless shadowed names and is not a whole-program
+side-effect analysis. Failing/final focused logs and a source snapshot are in
+`python-dynamic-reference-audit001`.
+
+The adapter also rejected neither a stripped current manifest nor an advertised
+1.1 inventory downgraded to 1.0. Current producer capabilities now require their
+manifest version; orphaned scan fields are rejected. Genuine legacy fixtures are
+still accepted with narrower provenance. Producer strings are not authenticated.
+Before/after tests and a source snapshot are in `manifest-contract-audit001`.
+
+All 217 patchgen tests pass. Two authored Python cases bring the component corpus
+to 56/56 expected outcomes, 48/49 affected candidate lines, 20 extras, 15/15 expected
+bound lines and zero extra claims (`python-dynamic-reference-corpus001`). The
+full-suite initial failure was a stale aggregate extra-count assertion after
+adding two deliberately unbound cases; the retained log records it. No model
+requests, migration proposals or human approvals occurred.

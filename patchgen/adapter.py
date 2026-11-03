@@ -17,7 +17,16 @@ def digest(text):
 
 def scan_manifest(repo, revision, locator):
     """Check an explicit scan inventory against the exact supported runtime tree."""
+    producer = re.fullmatch(r'independent-tree-sitter-locator/(\d+)\.(\d+)', locator.get('producer', ''))
+    version = tuple(map(int, producer.groups())) if producer else None
+    manifest = locator.get('scan_manifest_version')
+    # These are consistency checks on self-described capabilities, not producer
+    # authentication. Genuine supplied legacy fixtures have no manifest fields.
+    if version and version >= (1, 4) and manifest != '1.1':
+        raise ContractError('advertised locator requires scan manifest 1.1')
     if 'scan_manifest_version' not in locator:
+        if version and version >= (1, 3) or 'scanned' in locator or 'runtime_inventory' in locator:
+            raise ContractError('missing scan manifest version for advertised scan inventory')
         return None
     if locator['scan_manifest_version'] not in ('1.0', '1.1'):
         raise ContractError('unsupported scan manifest version')

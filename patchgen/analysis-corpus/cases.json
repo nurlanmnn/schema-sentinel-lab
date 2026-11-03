@@ -408,7 +408,7 @@
     {
       "id": "python-normalized-field-spelling",
       "language": "python",
-      "source": "from fleet.vehicle_pb2 import Vehicle as V\ne = V(ｓｐｅｅｄ_ｍｐｓ=1)\nprint(\"é\", e.ｓｐｅｅｄ_ｍｐｓ)\n",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\ne = V(\uff53\uff50\uff45\uff45\uff44_\uff4d\uff50\uff53=1)\nprint(\"\u00e9\", e.\uff53\uff50\uff45\uff45\uff44_\uff4d\uff50\uff53)\n",
       "expected_candidates": [
         2,
         3
@@ -472,7 +472,7 @@
     {
       "id": "csharp-formatting-and-reflection-spelling",
       "language": "csharp",
-      "source": "class C { void F() {\nvar a = vehicle.Speed‌Mps;\nvar b = type.GetPro\\u0070erty(key);\n}}",
+      "source": "class C { void F() {\nvar a = vehicle.Speed\u200cMps;\nvar b = type.GetPro\\u0070erty(key);\n}}",
       "expected_candidates": [
         2,
         3
@@ -487,7 +487,7 @@
     {
       "id": "python-normalized-dynamic-spellings",
       "language": "python",
-      "source": "ｇｅｔａｔｔｒ(vehicle, key)\nｅｎｔｉｔｙ[key]\n",
+      "source": "\uff47\uff45\uff54\uff41\uff54\uff54\uff52(vehicle, key)\n\uff45\uff4e\uff54\uff49\uff54\uff59[key]\n",
       "expected_candidates": [
         1,
         2
@@ -502,7 +502,7 @@
     {
       "id": "python-string-keys-not-normalized",
       "language": "python",
-      "source": "vehicle[\"ｓｐｅｅｄ_ｍｐｓ\"]\ngetattr(vehicle, \"ｓｐｅｅｄ_ｍｐｓ\")\n",
+      "source": "vehicle[\"\uff53\uff50\uff45\uff45\uff44_\uff4d\uff50\uff53\"]\ngetattr(vehicle, \"\uff53\uff50\uff45\uff45\uff44_\uff4d\uff50\uff53\")\n",
       "expected_candidates": [],
       "affected_sites": [],
       "expected_bound": [],
@@ -511,7 +511,7 @@
     {
       "id": "typescript-identifiers-not-normalized",
       "language": "typescript",
-      "source": "const a = vehicle.ｓｐｅｅｄMps;\nconst b = vehicle[\"ｓｐｅｅｄMps\"];\n",
+      "source": "const a = vehicle.\uff53\uff50\uff45\uff45\uff44Mps;\nconst b = vehicle[\"\uff53\uff50\uff45\uff45\uff44Mps\"];\n",
       "expected_candidates": [],
       "affected_sites": [],
       "expected_bound": [],
@@ -699,6 +699,26 @@
       "affected_sites": [],
       "expected_bound": [],
       "contract": "V inside the namespace/class expression is an unrelated value; no imported canonical identity."
+    },
+    {
+      "id": "python-builtin-alias-mutation",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\nrun = exec\nrun(\"V = other\")\ne = V()\nprint(e.speed_mps)\n",
+      "expected_candidates": [
+        5
+      ],
+      "affected_sites": [],
+      "expected_bound": []
+    },
+    {
+      "id": "python-annotation-walrus-mutation",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\nx: (V := other) = 1\ne = V()\nprint(e.speed_mps)\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [],
+      "expected_bound": []
     }
   ]
 }

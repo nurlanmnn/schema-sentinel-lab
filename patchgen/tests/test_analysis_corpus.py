@@ -12,7 +12,7 @@ class AnalysisCorpusTests(unittest.TestCase):
             summary = run(Path(tmp)/'run')
             self.assertGreaterEqual(summary['scenario_count'], 20)
             self.assertEqual(summary['expectation_matches'], summary['scenario_count'])
-            self.assertEqual((summary['candidate_expected'], summary['candidate_matched'], summary['candidate_extras']), (49,48,18))
+            self.assertEqual((summary['candidate_expected'], summary['candidate_matched'], summary['candidate_extras']), (49,48,20))
             self.assertEqual((summary['bound_expected'], summary['bound_matched'], summary['bound_extras']), (15,15,0))
             dynamic = next(r for r in summary['records'] if r['id'] == 'dynamic-reflection')
             self.assertEqual(dynamic['candidate_coverage']['missed'], [])

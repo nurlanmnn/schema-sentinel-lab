@@ -1,0 +1,59 @@
+FFFF..FF....
+======================================================================
+FAIL: test_current_producer_cannot_drop_or_downgrade_manifest (patchgen.tests.test_runtime_inventory.RuntimeInventoryTests.test_current_producer_cannot_drop_or_downgrade_manifest) (mutation='drop_version')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_runtime_inventory.py", line 136, in test_current_producer_cannot_drop_or_downgrade_manifest
+    with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'manifest'):
+                                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_current_producer_cannot_drop_or_downgrade_manifest (patchgen.tests.test_runtime_inventory.RuntimeInventoryTests.test_current_producer_cannot_drop_or_downgrade_manifest) (mutation='downgrade')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_runtime_inventory.py", line 136, in test_current_producer_cannot_drop_or_downgrade_manifest
+    with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'manifest'):
+                                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_current_producer_cannot_drop_or_downgrade_manifest (patchgen.tests.test_runtime_inventory.RuntimeInventoryTests.test_current_producer_cannot_drop_or_downgrade_manifest) (mutation='drop_all')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_runtime_inventory.py", line 136, in test_current_producer_cannot_drop_or_downgrade_manifest
+    with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'manifest'):
+                                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_current_producer_cannot_drop_or_downgrade_manifest (patchgen.tests.test_runtime_inventory.RuntimeInventoryTests.test_current_producer_cannot_drop_or_downgrade_manifest) (mutation='drop_version_with_scan')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_runtime_inventory.py", line 136, in test_current_producer_cannot_drop_or_downgrade_manifest
+    with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'manifest'):
+                                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_orphaned_manifest_fields_are_not_legacy_records (patchgen.tests.test_runtime_inventory.RuntimeInventoryTests.test_orphaned_manifest_fields_are_not_legacy_records) (record={'scanned': []})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_runtime_inventory.py", line 147, in test_orphaned_manifest_fields_are_not_legacy_records
+    with self.subTest(record=record), self.assertRaisesRegex(ContractError, 'manifest'):
+                                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_orphaned_manifest_fields_are_not_legacy_records (patchgen.tests.test_runtime_inventory.RuntimeInventoryTests.test_orphaned_manifest_fields_are_not_legacy_records) (record={'runtime_inventory': []})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_runtime_inventory.py", line 147, in test_orphaned_manifest_fields_are_not_legacy_records
+    with self.subTest(record=record), self.assertRaisesRegex(ContractError, 'manifest'):
+                                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.974s
+
+FAILED (failures=6)

@@ -117,6 +117,37 @@ class RuntimeInventoryTests(unittest.TestCase):
             with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'runtime inventory'):
                 scan_manifest(self.repo, revision, record)
         legacy = copy.deepcopy(original)
+        legacy['producer'] = 'independent-tree-sitter-locator/1.3'
         legacy['scan_manifest_version'] = '1.0'
         legacy.pop('runtime_inventory')
         self.assertEqual(set(scan_manifest(self.repo, revision, legacy)), {'runtimes/python/main.py'})
+
+    def test_current_producer_cannot_drop_or_downgrade_manifest(self):
+        revision = self.commit()
+        original = locate(self.repo, self.detector)
+        for producer in ('independent-tree-sitter-locator/1.3', 'independent-tree-sitter-locator/1.4', original['producer']):
+            record = dict(original, producer=producer)
+            record.pop('scan_manifest_version')
+            with self.subTest(producer=producer), self.assertRaisesRegex(ContractError, 'manifest'):
+                scan_manifest(self.repo, revision, record)
+        for mutation in ('drop_version', 'downgrade', 'drop_all', 'drop_version_with_scan'):
+            record = copy.deepcopy(original)
+            if mutation == 'downgrade': record['scan_manifest_version'] = '1.0'
+            else: record.pop('scan_manifest_version')
+            if mutation == 'drop_all':
+                record.pop('runtime_inventory')
+                record.pop('scanned')
+            elif mutation == 'drop_version_with_scan': record.pop('runtime_inventory')
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'manifest'):
+                adapt(self.repo, self.detector, record)
+        legacy = copy.deepcopy(original)
+        legacy['producer'] = 'manually reviewed fixture; not live locator'
+        for key in ('scan_manifest_version', 'runtime_inventory', 'scanned'): legacy.pop(key)
+        _, provenance = adapt(self.repo, self.detector, legacy)
+        self.assertEqual(provenance['scan_verification'], 'legacy supplied files only')
+
+    def test_orphaned_manifest_fields_are_not_legacy_records(self):
+        revision = self.commit()
+        for record in ({'scanned': []}, {'runtime_inventory': []}):
+            with self.subTest(record=record), self.assertRaisesRegex(ContractError, 'manifest'):
+                scan_manifest(self.repo, revision, record)

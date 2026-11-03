@@ -96,24 +96,23 @@ def references(text, field, module, symbol):
         if isinstance(node, (ast.Global, ast.Nonlocal)) or (
                 isinstance(node, ast.ImportFrom) and any(a.name == '*' for a in node.names)):
             reason = 'dynamic namespace or global/nonlocal declaration'
-        elif isinstance(node, ast.Call) and (
-                isinstance(node.func, ast.Name) and node.func.id in mutation_calls or
-                isinstance(node.func, ast.Attribute) and node.func.attr in mutation_calls):
-            reason = 'dynamic namespace mutation/introspection'
+        elif (isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load) and node.id in mutation_calls or
+              isinstance(node, ast.Attribute) and node.attr in mutation_calls):
+            # Reject the source reference before it can escape through aliases,
+            # containers or default arguments. Scope/name conflation can suppress
+            # harmless shadowed names; this pass only withdraws positive claims.
+            reason = 'dynamic namespace mutation/introspection reference'
         elif isinstance(node, ast.Attribute) and node.attr == '__dict__':
             reason = 'explicit namespace dictionary access'
         elif isinstance(node, (ast.Attribute, ast.Subscript)) and isinstance(node.ctx, (ast.Store, ast.Del)):
             if (isinstance(node, ast.Attribute) and node.attr == '__class__' or
                     any(isinstance(n, ast.Name) and n.id in imported for n in ast.walk(node))):
                 reason = 'possible generated class/module mutation'
-        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            # Defaults, decorators, annotations and class bases execute outside
-            # the body scope. Their walrus assignments are not straight-line
-            # body assignments and must not leave inherited imports intact.
-            headers = [value for name, value in ast.iter_fields(node) if name != 'body']
-            headers = [item for value in headers for item in (value if isinstance(value, list) else [value]) if isinstance(item, ast.AST)]
-            if any(isinstance(child, ast.NamedExpr) for header in headers for child in ast.walk(header)):
-                reason = 'assignment expression in definition header'
+        elif isinstance(node, ast.NamedExpr):
+            # Includes annotations/defaults/decorators not visited by straight-line
+            # expression evaluation. Runtime annotation evaluation varies by Python
+            # version; no binding claim depends on that execution distinction.
+            reason = 'assignment expression outside declared straight-line policy'
         if reason:
             return [], [dict(line=node.lineno, reason=reason + '; binding evidence disabled')]
 
@@ -156,9 +155,9 @@ def references(text, field, module, symbol):
             if value and value[0] == 'class':
                 return ('instance', value[1] + [dict(line=node.lineno, operation='FromString' if parser else 'constructor')])
             return None
-        # Comprehensions, lambdas and assignment expressions introduce scopes or
+        # Comprehensions and lambdas introduce scopes or
         # dataflow not modeled here. Do not inspect them using the outer env.
-        if isinstance(node, (ast.Lambda, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.NamedExpr)):
+        if isinstance(node, (ast.Lambda, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)):
             for name in stored_names(node): env[name] = None
             issues.append(dict(line=node.lineno, reason='expression scope/dataflow unsupported'))
             return None
