@@ -58,6 +58,22 @@ def references(text, field, module, symbol, source_path):
     def name(node):
         return identifier_value(spelling(node), 'typescript')
 
+    def static_string(node):
+        if not node or node.type not in ('string', 'template_string'):
+            return None
+        if any(child.type == 'template_substitution' for child in node.named_children):
+            return None
+        return quoted_value(spelling(node), 'typescript')
+
+    def access(node):
+        if node and node.type == 'member_expression':
+            key = node.child_by_field_name('property')
+            return node.child_by_field_name('object'), key, name(key)
+        if node and node.type == 'subscript_expression':
+            key = node.child_by_field_name('index')
+            return node.child_by_field_name('object'), key, static_string(key)
+        return None, None, None
+
     def names(node):
         # Overapproximation used only to invalidate, never to establish a type.
         return {name(n) for n in walk(node) if n.type in ('identifier', 'type_identifier', 'shorthand_property_identifier_pattern')} if node else set()
@@ -203,25 +219,20 @@ def references(text, field, module, symbol, source_path):
             return None  # Each function is analyzed separately from imports only.
         if node.type == 'parenthesized_expression' and len(node.named_children) == 1:
             return expression(node.named_children[0], env)
-        if node.type == 'member_expression':
-            value = expression(node.child_by_field_name('object'), env)
-            token = node.child_by_field_name('property')
-            if value and value[0] == 'module' and name(token) == symbol:
+        if node.type in ('member_expression', 'subscript_expression'):
+            base, token, member = access(node)
+            value = expression(base, env)
+            if node.type == 'subscript_expression':
+                expression(token, env)
+            if value and value[0] == 'module' and member == symbol:
                 return ('codec', value[1]+[dict(line=token.start_point.row+1, operation='generated message symbol')])
-            if value and value[0] == 'instance' and name(token) == member_field:
-                evidence(token, value, 'field_access')
-            return None
-        if node.type == 'subscript_expression':
-            value = expression(node.child_by_field_name('object'), env)
-            key = node.child_by_field_name('index')
-            expression(key, env)
-            if key and key.type == 'string' and value and value[0] == 'instance' and quoted_value(spelling(key), 'typescript') == member_field:
-                evidence(key, value, 'field_key')
+            if value and value[0] == 'instance' and member == member_field:
+                evidence(token, value, 'field_key' if node.type == 'subscript_expression' else 'field_access')
             return None
         if node.type == 'call_expression':
             function = node.child_by_field_name('function')
-            method = function.child_by_field_name('property') if function and function.type == 'member_expression' else None
-            codec = expression(function.child_by_field_name('object'), env) if method else None
+            base, _, method = access(function)
+            codec = expression(base, env) if method else None
             if not method:
                 expression(function, env)
             args = node.child_by_field_name('arguments')
@@ -229,13 +240,20 @@ def references(text, field, module, symbol, source_path):
             for argument in arguments:
                 expression(argument, env)
             if codec and codec[0] == 'codec':
-                if name(method) == 'decode':
+                if method == 'decode':
                     return ('instance', codec[1]+[dict(line=node.start_point.row+1, operation='ts-proto decode')])
-                if name(method) == 'encode' and arguments and arguments[0].type == 'object':
+                if method == 'encode' and arguments and arguments[0].type == 'object':
                     for pair in arguments[0].named_children:
                         key = pair.child_by_field_name('key') if pair.type == 'pair' else pair if pair.type == 'shorthand_property_identifier' else None
-                        key_name = quoted_value(spelling(key), 'typescript') if key and key.type == 'string' else name(key)
-                        if key and key_name == member_field:
+                        if key and key.type == 'computed_property_name':
+                            items = [child for child in key.named_children if child.type != 'comment']
+                            key = items[0] if len(items) == 1 else None
+                            key_name = static_string(key)
+                        elif key and key.type in ('property_identifier', 'shorthand_property_identifier'):
+                            key_name = name(key)
+                        else:
+                            key_name = static_string(key)
+                        if key_name == member_field:
                             evidence(key, codec, 'encoder_object_key')
             return None
         if node.type in ('assignment_expression', 'augmented_assignment_expression'):

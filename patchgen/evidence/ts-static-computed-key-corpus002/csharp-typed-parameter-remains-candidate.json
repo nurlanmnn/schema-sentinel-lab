@@ -1,0 +1,30 @@
+{
+  "id": "csharp-typed-parameter-remains-candidate",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: member_access_expression",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "fe511b83ac76526bf82365332c17dabb53255e7cde3c99971eef14d28fe5978f",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

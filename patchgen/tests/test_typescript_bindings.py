@@ -133,6 +133,37 @@ class TypeScriptBindingTests(unittest.TestCase):
         line = source.splitlines()[ref['line']-1].encode()
         self.assertEqual(line[ref['column']-1:ref['end_column']-1], rb'sp\u0065edMps')
 
+    def test_static_template_keys_and_computed_encoder_literal_keys_bind(self):
+        source = IMPORT + 'const e = V.decode(data);\n' + r'e[`sp\u0065edMps`];' + '\n' + '''V.encode({["speedMps"]: 1});
+V.encode({[`speedMps`]: 1});
+e[`speed${suffix}`];
+V.encode({[`speed${suffix}`]: 1});
+'''
+        positions, _, error = scan(source, 'typescript', 'speed_mps')
+        self.assertFalse(error)
+        self.assertEqual([p['start_line'] for p in positions], [3,4,5])
+        refs, _ = bound(source)
+        self.assertEqual([r['line'] for r in refs], [3,4,5])
+        self.assertEqual([r['kind'] for r in refs], ['field_key', 'encoder_object_key', 'encoder_object_key'])
+        for ref, token in zip(refs, (rb'`sp\u0065edMps`', b'"speedMps"', b'`speedMps`')):
+            line = source.splitlines()[ref['line']-1].encode()
+            self.assertEqual(line[ref['column']-1:ref['end_column']-1], token)
+        event = dict(old_name='speed_mps', new_name='ground_speed_mps', category='field_renamed',
+                     message='simulation.telemetry.VehicleTelemetry')
+        positions, _ = attach_bindings(source, 'typescript', event, None, positions,
+                                      schema_path='proto/telemetry/vehicle.proto', source_path=PATH)
+        self.assertTrue(all(p['required_reference'] for p in positions))
+
+    def test_static_brackets_keep_declared_module_and_codec_identity(self):
+        source = ('import * as pb from "../../generated/ts/telemetry/vehicle";\n'
+                  'const C = pb[`VehicleTelemetry`];\n'
+                  'const e = C["decode"](data);\n'
+                  'e.speedMps;\n'
+                  'C[`encode`]({speedMps: 1});\n'
+                  'const other = C[method](data);\n'
+                  'other.speedMps;\n')
+        self.assertEqual([r['line'] for r in bound(source)[0]], [4,5])
+
     def test_type_change_attaches_provenance_without_forcing_edits(self):
         source = IMPORT + 'const e = V.decode(data);\nconsole.log(e.speedMps);\n'
         positions, _, _ = scan(source, 'typescript', 'speed_mps')

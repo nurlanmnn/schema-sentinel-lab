@@ -1,0 +1,21 @@
+...........F...
+======================================================================
+FAIL: test_static_brackets_keep_declared_module_and_codec_identity (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_static_brackets_keep_declared_module_and_codec_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 165, in test_static_brackets_keep_declared_module_and_codec_identity
+    self.assertEqual([r['line'] for r in bound(source)[0]], [4,5])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [4, 5]
+
+Second list contains 2 additional elements.
+First extra element 0:
+4
+
+- []
++ [4, 5]
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.593s
+
+FAILED (failures=1)

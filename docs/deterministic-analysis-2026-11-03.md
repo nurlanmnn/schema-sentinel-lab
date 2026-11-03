@@ -295,3 +295,20 @@ extra binding claims. All eight domain expectations still match. Evidence is in
 `named-field-key-audit001`, `named-field-key-corpus001` and `named-field-key-domain001`.
 Temporary domain source checkouts were removed. No migration proposals or model
 requests occurred.
+
+## Follow-up: Static computed TypeScript keys
+
+Static quoted/template bracket keys now preserve declared TS module/codec identity
+through direct encode/decode calls, decoded field reads and computed encoder keys.
+Interpolated and variable keys cannot establish those identities. The syntax scan
+now finds computed literal object keys, and binding evidence keeps original byte
+ranges. Two authored cases add five bound affected lines, with a deliberately
+unbound dynamic method result.
+
+All 226 patchgen tests pass. The final 65-case authored component corpus matches
+65/65 expected outcomes, 59/60 affected candidate lines, 26 extras, 20/20 bound
+lines and zero extra binding claims. The telemetry smoke adapted with 9/9 authored
+lines and zero extras. Logs and source snapshots are in `ts-static-computed-key-audit001`,
+`ts-static-computed-key-corpus002` and `ts-static-computed-key-smoke001`; the earlier
+64-case run is retained. The temporary smoke checkout was removed. No models or
+migration proposals ran.

@@ -1,0 +1,37 @@
+{
+  "id": "python-container-class-mutation",
+  "positions": [
+    {
+      "start_line": 5,
+      "end_line": 5,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [
+    {
+      "line": 3,
+      "reason": "possible generated class/module mutation; binding evidence disabled"
+    }
+  ],
+  "source_sha256": "45435845f179cea2c0767a99ec6f69496128e7012b3be3ae65a13eeef688956b",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [
+      5
+    ],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

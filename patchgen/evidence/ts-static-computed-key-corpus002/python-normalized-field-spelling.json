@@ -1,0 +1,87 @@
+{
+  "id": "python-normalized-field-spelling",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: keyword_argument",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 2,
+          "column": 7,
+          "end_line": 2,
+          "end_column": 32,
+          "kind": "constructor_keyword",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    },
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 3,
+          "column": 15,
+          "end_line": 3,
+          "end_column": 40,
+          "kind": "field_access",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "constructor"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "e"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "441b6a5ad377580fd6d3cb1d0adcadd131fdc141c5f170631e56c32b594a0e87",
+  "candidate_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

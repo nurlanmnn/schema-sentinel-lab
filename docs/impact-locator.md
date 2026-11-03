@@ -43,7 +43,7 @@ immutable const decoder/encoder flow. C# matches and unknown receivers stay
 candidate-only.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-63-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+65-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
@@ -94,3 +94,8 @@ The adapter also rebuilds old/new descriptors for advertised detector version
 before using binding evidence. Genuine legacy detector fixtures keep supplied
 classification with narrower provenance. This reuses the owning detector and
 checks consistency; it neither authenticates producers nor proves semantics.
+
+TypeScript binding evidence accepts static string or no-substitution template
+keys for field reads, declared namespace/codec access and computed encoder object
+keys. Exact original literal token ranges are recorded. Interpolated or variable
+keys do not establish a codec or a bound field.

@@ -101,7 +101,7 @@ def scan(text, language, field):
             if parent and parent.type not in ('comment','string','string_literal'):
                 lines.setdefault(node.start_point.row+1, set()).add(parent.type)
         if literal_string(node, raw, language) in variants:
-            if parent and parent.type in ('argument_list','arguments','subscript','subscript_expression','element_access_expression','pair','dictionary_splat_pattern','argument'):
+            if parent and parent.type in ('argument_list','arguments','subscript','subscript_expression','element_access_expression','pair','dictionary_splat_pattern','argument','computed_property_name'):
                 lines.setdefault(node.start_point.row+1,set()).add('literal-key/reflection candidate')
         if node.type == 'call':
             function = node.child_by_field_name('function')
@@ -207,7 +207,7 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.6',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.7',
                   scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')

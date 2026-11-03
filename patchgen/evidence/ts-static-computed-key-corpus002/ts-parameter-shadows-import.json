@@ -1,0 +1,32 @@
+{
+  "id": "ts-parameter-shadows-import",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "6eb8da6bffa0bdeda6cc6fb05f82a377ea2ab69098095af4d273b417079a2b3c",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [
+      4
+    ],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

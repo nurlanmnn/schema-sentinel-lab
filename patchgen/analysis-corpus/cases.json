@@ -806,6 +806,45 @@
       "affected_sites": [],
       "expected_bound": [],
       "contract": "The parameter shadows the unused global; a file-local name match intentionally reports both as extras."
+    },
+    {
+      "id": "ts-static-computed-field-keys",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst e = V.decode(data);\ne[`speedMps`];\nV.encode({[\"speedMps\"]: 1});\nV.encode({[`speedMps`]: 1});\ne[`speed${suffix}`];\n",
+      "expected_candidates": [
+        3,
+        4,
+        5
+      ],
+      "affected_sites": [
+        3,
+        4,
+        5
+      ],
+      "expected_bound": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "ts-static-bracket-codec-methods",
+      "language": "typescript",
+      "source": "import * as pb from \"../../generated/ts/fleet/vehicle\";\nconst C = pb[`Vehicle`];\nconst e = C[\"decode\"](data);\ne.speedMps;\nC[`encode`]({speedMps: 1});\nconst other = C[method](data);\nother.speedMps;\n",
+      "expected_candidates": [
+        4,
+        5,
+        7
+      ],
+      "affected_sites": [
+        4,
+        5
+      ],
+      "expected_bound": [
+        4,
+        5
+      ],
+      "contract": "The dynamic method is supplied by the caller and returns an unrelated object. No canonical identity can be claimed for its field."
     }
   ]
 }

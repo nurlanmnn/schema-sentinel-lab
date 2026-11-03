@@ -1,0 +1,39 @@
+{
+  "id": "unchanged-v1-import",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: keyword_argument",
+      "resolution": "candidate"
+    },
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "fe3da2e0d424d0cb9859050e1cc937ae001660caa6cc63697b66cab78265d23d",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [
+      2,
+      3
+    ],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

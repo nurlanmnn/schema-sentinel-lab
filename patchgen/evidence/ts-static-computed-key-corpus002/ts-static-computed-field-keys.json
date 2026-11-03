@@ -1,0 +1,114 @@
+{
+  "id": "ts-static-computed-field-keys",
+  "positions": [
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 3,
+          "column": 3,
+          "end_line": 3,
+          "end_column": 13,
+          "kind": "field_key",
+          "binding": "canonical",
+          "module": "generated/ts/fleet/vehicle",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "named import",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "ts-proto decode"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "e"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    },
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 4,
+          "column": 12,
+          "end_line": 4,
+          "end_column": 22,
+          "kind": "encoder_object_key",
+          "binding": "canonical",
+          "module": "generated/ts/fleet/vehicle",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "named import",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    },
+    {
+      "start_line": 5,
+      "end_line": 5,
+      "reason": "Conservative syntax candidate: literal-key/reflection candidate",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 5,
+          "column": 12,
+          "end_line": 5,
+          "end_column": 22,
+          "kind": "encoder_object_key",
+          "binding": "canonical",
+          "module": "generated/ts/fleet/vehicle",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "named import",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "eab49d4ad29994f26ade98e562d6f23d0074416787e98c3821cf086105235675",
+  "candidate_coverage": {
+    "expected": 3,
+    "matched": 3,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 3,
+    "matched": 3,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

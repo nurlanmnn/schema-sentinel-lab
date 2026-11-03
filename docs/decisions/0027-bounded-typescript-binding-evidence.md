@@ -51,3 +51,9 @@ checking writes. It does not establish receiver types through those forms.
 Call results are excluded so constructor/decoder instances do not become class
 aliases, and ordinary instance-field writes retain their source evidence. Unknown
 call effects and arbitrary monkeypatching remain outside the declared policy.
+
+Static bracket access through a quoted string or template without substitutions
+can retain the declared module/codec identity for `encode`/`decode`. The same
+literal forms are recognized for decoded field reads and computed encoder object
+keys, with exact original token ranges. Interpolated or variable keys remain
+unresolved. This uses the same standard codec assumptions as dot access.
