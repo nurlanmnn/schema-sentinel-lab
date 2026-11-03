@@ -1,0 +1,87 @@
+{
+  "id": "constructor-and-read",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: keyword_argument",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 2,
+          "column": 12,
+          "end_line": 2,
+          "end_column": 21,
+          "kind": "constructor_keyword",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    },
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 3,
+          "column": 14,
+          "end_line": 3,
+          "end_column": 23,
+          "kind": "field_access",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "constructor"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "entity"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "a7999ec816569a17b1c21923e049e5a461564e64f4772dcaf009f5d2968e14f8",
+  "candidate_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

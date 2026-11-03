@@ -1,7 +1,6 @@
 """Conservative syntax candidates; no whole-program receiver/type certainty."""
 import ast
 import re
-import unicodedata
 from tree_sitter import Language, Parser
 import tree_sitter_python
 import tree_sitter_typescript
@@ -10,6 +9,7 @@ from patchgen.adapter import digest
 from patchgen.generator import command
 from patchgen.python_bindings import POLICY, references
 from patchgen.runtime_inventory import inventory, blocking_entries
+from patchgen.source_spellings import identifier_value, quoted_value
 
 FACTORIES = {'python':tree_sitter_python.language, 'typescript':tree_sitter_typescript.language_typescript,
              'csharp':tree_sitter_c_sharp.language}
@@ -28,7 +28,7 @@ def names(field):
 
 
 def literal_string(node, raw, language):
-    if node is None or node.type not in ('string', 'string_literal', 'concatenated_string'):
+    if node is None or node.type not in ('string', 'string_literal', 'concatenated_string', 'verbatim_string_literal', 'template_string'):
         return None
     value = raw[node.start_byte:node.end_byte].decode()
     if language == 'python':
@@ -37,8 +37,9 @@ def literal_string(node, raw, language):
             return result if isinstance(result, str) else None
         except (ValueError, SyntaxError):
             return None
-    # Non-Python literal decoding is deliberately limited to plain quoted text.
-    return value[1:-1] if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'") else None
+    if node.type == 'template_string' and any(child.type == 'template_substitution' for child in node.named_children):
+        return None
+    return quoted_value(value, language)
 
 
 def dynamic_index(node, raw, language):
@@ -48,7 +49,7 @@ def dynamic_index(node, raw, language):
     # Broader unknown indexing (HTTP headers, arrays, etc.) needs receiver/key
     # analysis before it can become a useful blocking impact candidate.
     receiver = node.named_children[0] if node.named_children else None
-    if receiver is None or raw[receiver.start_byte:receiver.end_byte].decode() not in ('entity', 'decoded'):
+    if receiver is None or identifier_value(raw[receiver.start_byte:receiver.end_byte].decode(), language) not in ('entity', 'decoded'):
         return False
     index = node.child_by_field_name('index') or node.child_by_field_name('subscript')
     if index is not None and index.type == 'bracketed_argument_list':
@@ -72,8 +73,7 @@ def scan(text, language, field):
     for node in walk(tree.root_node):
         value = raw[node.start_byte:node.end_byte].decode()
         parent = node.parent
-        identifier = unicodedata.normalize('NFKC', value) if language == 'python' else value.lstrip('@')
-        if node.type in ('identifier','property_identifier') and identifier in variants:
+        if node.type in ('identifier','property_identifier') and identifier_value(value, language) in variants:
             if parent and parent.type not in ('comment','string','string_literal'):
                 lines.setdefault(node.start_point.row+1, set()).add(parent.type)
         if literal_string(node, raw, language) in variants:
@@ -81,7 +81,7 @@ def scan(text, language, field):
                 lines.setdefault(node.start_point.row+1,set()).add('literal-key/reflection candidate')
         if node.type == 'call':
             function = node.child_by_field_name('function')
-            function_name = raw[function.start_byte:function.end_byte].decode() if function else ''
+            function_name = identifier_value(raw[function.start_byte:function.end_byte].decode(), language) if function else ''
             if function_name in ('getattr', 'setattr', 'delattr', 'hasattr',
                                  'builtins.getattr', 'builtins.setattr', 'builtins.delattr', 'builtins.hasattr'):
                 args = node.child_by_field_name('arguments')
@@ -91,7 +91,10 @@ def scan(text, language, field):
         if dynamic_index(node, raw, language):
             warnings.append(dict(line=node.start_point.row+1,reason='dynamic subscript; receiver/key identity requires review'))
             lines.setdefault(node.start_point.row+1,set()).add('dynamic subscript candidate; field identity unknown')
-        if node.type in ('invocation_expression','call_expression') and re.search(r'\.(?:GetProperty|GetField|GetMember)\s*\(',value):
+        function = node.child_by_field_name('function') if node.type in ('invocation_expression','call_expression') else None
+        member = (function.child_by_field_name('name') or function.child_by_field_name('property')) if function else None
+        member_name = raw[member.start_byte:member.end_byte].decode() if member else ''
+        if member and identifier_value(member_name, language) in ('GetProperty', 'GetField', 'GetMember'):
             warnings.append(dict(line=node.start_point.row+1,reason='reflection requires review'))
             lines.setdefault(node.start_point.row+1,set()).add('reflection candidate; field identity unknown')
     return [dict(start_line=line,end_line=line,reason='Conservative syntax candidate: '+', '.join(sorted(kinds)),

@@ -41,7 +41,7 @@ def run(output):
     catalog = json.loads(manifest_raw)
     save(output / 'catalog.json', catalog)
     implementation = {name: hashlib.sha256((ROOT / 'patchgen' / name).read_bytes()).hexdigest()
-                      for name in ('corpus.py', 'detector.py', 'locator.py', 'python_bindings.py','runtime_inventory.py', 'adapter.py')}
+                      for name in ('corpus.py', 'detector.py', 'locator.py', 'python_bindings.py','runtime_inventory.py','source_spellings.py', 'adapter.py')}
     for name in implementation:
         shutil.copyfile(ROOT / 'patchgen' / name, output / ('implementation-' + name))
     records = []

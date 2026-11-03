@@ -398,6 +398,127 @@
       ],
       "expected_bound": [],
       "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+    },
+    {
+      "id": "python-normalized-field-spelling",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\ne = V(ｓｐｅｅｄ_ｍｐｓ=1)\nprint(\"é\", e.ｓｐｅｅｄ_ｍｐｓ)\n",
+      "expected_candidates": [
+        2,
+        3
+      ],
+      "affected_sites": [
+        2,
+        3
+      ],
+      "expected_bound": [
+        2,
+        3
+      ],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "typescript-escaped-field-spellings",
+      "language": "typescript",
+      "source": "const a = vehicle.sp\\u0065edMps;\nconst b = vehicle.sp\\u{65}edMps;\nconst c = vehicle[\"speed\\u004dps\"];\nconst d = vehicle['speed\\x4dps'];\nconst e = vehicle[`speedMps`];\nconst f = {\"speed\\u004dps\": 1};\nconst unrelated = vehicle[\"other\"];\n",
+      "expected_candidates": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "affected_sites": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "csharp-escaped-field-spellings",
+      "language": "csharp",
+      "source": "class C { void F() {\nvar a = vehicle.Sp\\u0065edMps;\nvar b = vehicle.@SpeedMps;\nvar c = vehicle[\"Speed\\u004dps\"];\nvar d = vehicle[@\"SpeedMps\"];\nvar e = vehicle[\"Speed\\x004dps\"];\nvar f = vehicle[\"Speed\\U0000004dps\"];\nvar unrelated = vehicle[@\"other\"];\n}}\n",
+      "expected_candidates": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "affected_sites": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "csharp-formatting-and-reflection-spelling",
+      "language": "csharp",
+      "source": "class C { void F() {\nvar a = vehicle.Speed‌Mps;\nvar b = type.GetPro\\u0070erty(key);\n}}",
+      "expected_candidates": [
+        2,
+        3
+      ],
+      "affected_sites": [
+        2,
+        3
+      ],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "python-normalized-dynamic-spellings",
+      "language": "python",
+      "source": "ｇｅｔａｔｔｒ(vehicle, key)\nｅｎｔｉｔｙ[key]\n",
+      "expected_candidates": [
+        1,
+        2
+      ],
+      "affected_sites": [
+        1,
+        2
+      ],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "python-string-keys-not-normalized",
+      "language": "python",
+      "source": "vehicle[\"ｓｐｅｅｄ_ｍｐｓ\"]\ngetattr(vehicle, \"ｓｐｅｅｄ_ｍｐｓ\")\n",
+      "expected_candidates": [],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "typescript-identifiers-not-normalized",
+      "language": "typescript",
+      "source": "const a = vehicle.ｓｐｅｅｄMps;\nconst b = vehicle[\"ｓｐｅｅｄMps\"];\n",
+      "expected_candidates": [],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "csharp-verbatim-preserves-backslashes",
+      "language": "csharp",
+      "source": "class C { void F() { var a = vehicle[@\"Speed\\u004dps\"]; }}",
+      "expected_candidates": [],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
     }
   ]
 }

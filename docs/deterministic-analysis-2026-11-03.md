@@ -158,3 +158,24 @@ All 194 patchgen tests pass. The unchanged 32-case component corpus retains its
 extra claims (`python-token-corpus001`). This adds a bounded lexical capability;
 it does not change the documented arbitrary-receiver/dataflow limitations. No
 model requests or migration proposals occurred.
+
+## Follow-up: Cross-language source spellings
+
+Added bounded language-specific decoding for TypeScript/C# escaped identifiers
+and string keys, static TypeScript templates and C# verbatim strings. Identifier
+normalization stays language-specific: Python uses NFKC, C# ignores formatting
+characters, and JavaScript does neither. String values are never normalized as
+identifiers. C# reflection calls use parsed member names, replacing the previous
+invocation-text regex. Normalized Python reflection/receiver spellings also remain
+review candidates. No receiver/type claims were added for TypeScript or C#.
+
+Eight authored source-spelling cases expand the component corpus to 40. Current
+results are 40/40 expected outcomes, 42/43 affected candidate lines, eight extras,
+10/10 expected bound lines and zero extra binding claims. The remaining miss is
+still the arbitrary dynamic-subscript receiver. All 202 patchgen tests pass.
+`source-spelling-audit001` retains failing/final tests, implementation snapshots,
+and runnable Node/.NET lexical sanity fixtures. Node and .NET outputs confirm the
+language distinctions; the .NET fixture restored only from an empty local source,
+with no new external package. These fixtures do not validate generated bindings
+or migrations. `source-spelling-corpus001` retains the expanded corpus results.
+No model requests, proposals or human acceptance occurred.

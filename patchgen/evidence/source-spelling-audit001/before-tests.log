@@ -1,0 +1,47 @@
+test_csharp_escaped_identifiers_and_string_keys (patchgen.tests.test_source_spellings.SourceSpellingTests.test_csharp_escaped_identifiers_and_string_keys) ... FAIL
+test_csharp_verbatim_backslashes_are_not_decoded (patchgen.tests.test_source_spellings.SourceSpellingTests.test_csharp_verbatim_backslashes_are_not_decoded) ... ok
+test_interpolated_typescript_template_stays_uncertain (patchgen.tests.test_source_spellings.SourceSpellingTests.test_interpolated_typescript_template_stays_uncertain) ... ok
+test_javascript_identifier_normalization_is_not_python_normalization (patchgen.tests.test_source_spellings.SourceSpellingTests.test_javascript_identifier_normalization_is_not_python_normalization) ... ok
+test_string_values_do_not_get_identifier_normalization (patchgen.tests.test_source_spellings.SourceSpellingTests.test_string_values_do_not_get_identifier_normalization) ... ok
+test_typescript_escaped_identifiers_and_literal_keys (patchgen.tests.test_source_spellings.SourceSpellingTests.test_typescript_escaped_identifiers_and_literal_keys) ... FAIL
+
+======================================================================
+FAIL: test_csharp_escaped_identifiers_and_string_keys (patchgen.tests.test_source_spellings.SourceSpellingTests.test_csharp_escaped_identifiers_and_string_keys)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 34, in test_csharp_escaped_identifiers_and_string_keys
+    self.assertEqual([p['start_line'] for p in positions], [2,3,4,5,6,7])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [3] != [2, 3, 4, 5, 6, 7]
+
+First differing element 0:
+3
+2
+
+Second list contains 5 additional elements.
+First extra element 1:
+3
+
+- [3]
++ [2, 3, 4, 5, 6, 7]
+
+======================================================================
+FAIL: test_typescript_escaped_identifiers_and_literal_keys (patchgen.tests.test_source_spellings.SourceSpellingTests.test_typescript_escaped_identifiers_and_literal_keys)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 17, in test_typescript_escaped_identifiers_and_literal_keys
+    self.assertEqual([p['start_line'] for p in positions], [1,2,3,4,5,6])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [1, 2, 3, 4, 5, 6]
+
+Second list contains 6 additional elements.
+First extra element 0:
+1
+
+- []
++ [1, 2, 3, 4, 5, 6]
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+FAILED (failures=2)

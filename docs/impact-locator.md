@@ -41,7 +41,7 @@ canonical import/constructor/parser evidence and required rename/removal referen
 It does not promote TypeScript/C# matches or unknown receivers to type proof.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-32-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+40-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
@@ -57,3 +57,11 @@ Git mode and object ID. Unknown files, unsupported paths, symlinks and submodule
 block completeness. A narrow auxiliary build/dependency-file policy is explicit
 in [decision 0026](decisions/0026-explicit-runtime-tree-inventory.md). The adapter
 recomputes this inventory instead of trusting a producer's completion status.
+
+Name matching now decodes escaped TypeScript/C# identifiers, ordinary quoted
+string keys, static TypeScript templates and C# verbatim strings. Python names
+use NFKC normalization; string values do not. C# identifier formatting characters
+are ignored following compiler behavior. C# raw literals and interpolated keys
+remain outside this bounded literal decoder. C# reflection member names are
+read from syntax nodes, including escaped spellings, rather than a regex over
+invocation text. These improvements add lexical recall, not receiver proof.
