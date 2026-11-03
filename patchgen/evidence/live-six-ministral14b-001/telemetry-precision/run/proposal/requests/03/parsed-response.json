@@ -1,0 +1,36 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 9,
+      "end_line": 10,
+      "replacement_lines": [
+        "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: Number(request.speed) }).finish();"
+      ]
+    }
+  ],
+  "rationale": "The schema change requires `speed_mps` to be serialized as a `double` (float64). In TypeScript, the generated protobuf bindings already handle this conversion automatically when encoding. The only necessary adjustment is ensuring the input value (`request.speed`) is explicitly converted to a `number` type during construction to avoid implicit coercion issues and ensure strict typing. No changes are needed for decoding or field access since the generated code handles wire format differences transparently.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated TypeScript bindings for `VehicleTelemetry` correctly map `double speed_mps` to a JavaScript `number` type (which is IEEE 754 double-precision by default).",
+    "No additional precision loss occurs during serialization/deserialization of the widened field.",
+    "The `request.speed` value is already numeric and does not require validation beyond explicit conversion."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 9,
+      "decision": "edit",
+      "reason": "Explicitly convert `request.speed` to a `number` during encoding to ensure type safety and avoid implicit coercion. This aligns with the schema change's intent of preserving precision through serialization."
+    },
+    {
+      "line": 10,
+      "decision": "unaffected",
+      "reason": "Field access (`entity.speedMps`) is handled by generated protobuf bindings, which already account for wire format changes (e.g., `float` \u2192 `double`). No manual adjustment needed."
+    },
+    {
+      "line": 11,
+      "decision": "unaffected",
+      "reason": "The comparison (`entity.speedMps > 30.0`) and logic remain unchanged; the threshold is strict and type-agnostic for numeric values. The generated bindings ensure correct deserialization of `double` to JavaScript `number`."
+    }
+  ]
+}

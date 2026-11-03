@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 31,
+      "end_line": 31,
+      "replacement_lines": [
+        "    fields = {\"entity_id\": entity.entity_id.decode('utf-8') if version == \"v2\" else entity.entity_id}"
+      ]
+    },
+    {
+      "start_line": 115,
+      "end_line": 115,
+      "replacement_lines": [
+        "        entity = module.Entity(entity_id=\"py_101\".encode('utf-8'))"
+      ]
+    }
+  ],
+  "rationale": "The schema change requires UTF-8 encoding/decoding for v2 `entity_id` (bytes) while preserving string behavior in v1. The edits ensure consistent handling: decoding the bytes to a string for observation output and encoding the sample identifier during construction.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The standalone sample identifiers are ASCII-compatible UTF-8 (e.g., \"py_101\")",
+    "Observation keys must remain strings, so v2 bytes are decoded for output",
+    "No mixed-version interoperability is required in this runtime"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 31,
+      "decision": "edit",
+      "reason": "Direct use of `entity.entity_id` must decode v2 bytes to string for observation compatibility. Version-specific handling ensures backward compatibility."
+    },
+    {
+      "line": 115,
+      "decision": "edit",
+      "reason": "v2 construction requires UTF-8 encoding of the sample identifier (string \u2192 bytes)."
+    }
+  ]
+}

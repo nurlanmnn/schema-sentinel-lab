@@ -132,18 +132,18 @@ The response returns along the same path. Each service records the fields it
 decoded, and the test checks those values, the returned message, and service order.
 Generated bindings are already committed; the normal local run does not need Buf.
 
-The impact locator is a separate prototype, run with its own setup and command:
+Deterministic analysis runs separately from the runtime testbed:
 
 ```mermaid
 flowchart LR
-    schemas["proto/v1/ and proto/v2/<br/>Two schema versions"]
-    descriptors["v1.bin and v2.bin<br/>Schema descriptions"]
-    locator["impact_locator.py<br/>Compare and search"]
-    matches["Terminal output<br/>Possible affected code"]
+    schemas["Old/new canonical schema<br/>Matching file and package identity"]
+    detector["patchgen.detector<br/>Compare descriptors"]
+    locator["patchgen.locator<br/>Find syntax candidates"]
+    matches["Versioned JSON evidence<br/>Locations, uncertainty, coverage"]
 
-    schemas -->|buf build| descriptors
-    descriptors --> locator
-    locator -->|Buf, Semgrep, and Tree-sitter| matches
+    schemas --> detector
+    detector --> locator
+    locator --> matches
 ```
 
 `run_local.py` does not run the impact locator. See the
@@ -156,7 +156,7 @@ flowchart LR
 
 See [testbed development](testbed/README.md) for individual service commands and
 optional Docker commands. The [impact locator guide](docs/impact-locator.md)
-covers the separate Buf, Semgrep, and Tree-sitter prototype.
+covers the current descriptor and Tree-sitter pipeline and its limitations.
 
 For a distinct buildable telemetry migration, run `run_demo.py --case telemetry-rename`
 (or add `--local-codegen` after installing the pinned tools in

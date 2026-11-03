@@ -1,0 +1,49 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, GroundSpeedMps = request.Speed };"
+      ]
+    },
+    {
+      "start_line": 13,
+      "end_line": 13,
+      "replacement_lines": [
+        "            var fields = new Dictionary<string, object> { [\"vehicle_id\"] = entity.VehicleId, [\"ground_speed_mps\"] = entity.GroundSpeedMps };"
+      ]
+    },
+    {
+      "start_line": 14,
+      "end_line": 14,
+      "replacement_lines": [
+        "            return new { fields, speeding = entity.GroundSpeedMps > 30.0f, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };"
+      ]
+    }
+  ],
+  "rationale": "Updated all references to the renamed field `speed_mps` (now `ground_speed_mps`) in the C# runtime code. This includes constructor assignment (`SpeedMps \u2192 GroundSpeedMps`), dictionary key (`\"speed_mps\" \u2192 \"ground_speed_mps\"`), and logic usage (`entity.SpeedMps \u2192 entity.GroundSpeedMps`). The threshold check remains functionally identical (strictly greater than 30.0 m/s).",
+  "confidence": 1,
+  "assumptions": [
+    "The `GroundSpeedMps` property exists in the generated C# protobuf class for `VehicleTelemetry`.",
+    "No other usages of `speed_mps` exist outside these candidates (e.g., no external dependencies or additional reflection sites)."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Direct assignment to the renamed field in protobuf message construction."
+    },
+    {
+      "line": 13,
+      "decision": "edit",
+      "reason": "Dictionary key and reflection access for runtime observation; must match wire field name."
+    },
+    {
+      "line": 14,
+      "decision": "edit",
+      "reason": "Logic usage of the renamed property in speeding check and payload construction."
+    }
+  ]
+}

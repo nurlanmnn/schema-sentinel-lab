@@ -1,0 +1,37 @@
+{
+  "timestamp_utc": "2026-11-03T00:12:00.997433+00:00",
+  "reason": "Responses complete for telemetry rename; release idle model during fixed build/validation under sustained host memory pressure. No prompt, source, inference options or validation gates changed.",
+  "case": "telemetry-rename",
+  "model": "ministral-3:14b",
+  "before": {
+    "models": [
+      {
+        "name": "ministral-3:14b",
+        "model": "ministral-3:14b",
+        "size": 10737680383,
+        "digest": "4760c35aeb9d9e9c6174c2492562c0b999e80a222804fd96b1915ab72bbcdcf7",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "mistral3",
+          "families": [
+            "mistral3"
+          ],
+          "parameter_size": "13.9B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-11-02T19:13:03.380951-05:00",
+        "size_vram": 10737680383,
+        "context_length": 16384
+      }
+    ]
+  },
+  "unload": {
+    "model": "ministral-3:14b",
+    "created_at": "2026-11-03T00:12:02.648894Z",
+    "response": "",
+    "done": true,
+    "done_reason": "unload"
+  },
+  "unload_seconds": 1.040940959006548
+}

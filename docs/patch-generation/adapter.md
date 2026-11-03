@@ -48,7 +48,7 @@ Entity.name, using the existing six-site removal reference inventory.
 - Overall: 2/6 = 33.3% line-site recall, no extra sites in these three files.
 - Semgrep was not run because its executable is absent. This is not combined-locator recall.
 
-The committed legacy v1.bin/v2.bin files refer to `model.proto`, whereas current
+The historical legacy v1.bin/v2.bin files refer to `model.proto`, whereas current
 source uses `entity.proto`. The diagnostic parser extracts one field-removal
 record from legacy descriptors. Freshly rebuilding the two source descriptors
 and running the current hardwired comparison yields FILE_NO_DELETE only; its
@@ -64,11 +64,11 @@ export versioned structured change/impact records, resolve the C# language key,
 cover cast expressions and constructor sites, and rerun independent coverage
 before requesting live integration acceptance. No teammate implementation changed.
 
-Reproduce the measurement with Python 3.11 and the already documented pins:
-
-```sh
-python -m patchgen.locator_probe --source EXACT_TESTBED_CHECKOUT --output patchgen/evidence/locator-next
-```
+The obsolete probe and descriptor binaries were retired on November 3. This
+section records a historical measurement, not a supported current command.
+Historical source is retained at commit `2449c3d`; reproduce it only from an
+isolated checkout of that revision using its original dependencies. The current
+entry point is `python -m patchgen.pipeline`, described in the pipeline guide.
 
 This session used an isolated temporary Python 3.11.17 environment with
 `tree-sitter==0.21.3` (MIT package metadata) and `tree-sitter-languages==1.10.2`

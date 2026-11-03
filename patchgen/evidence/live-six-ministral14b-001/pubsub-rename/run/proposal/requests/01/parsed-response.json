@@ -1,0 +1,37 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"display_name\"] = decoded.DisplayName };"
+      ]
+    },
+    {
+      "start_line": 67,
+      "end_line": 67,
+      "replacement_lines": [
+        "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", DisplayName = \"Sensor B\" }"
+      ]
+    }
+  ],
+  "rationale": "The schema change renames the `name` field to `display_name` in v1. The C# code uses generated protobuf bindings, so all references to `decoded.Name` and `new Simulation.V1.Entity { Name = ... }` must be updated to use the new property name (`DisplayName`). This is a direct rename migration with no type conversion or logic changes required.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated C# protobuf bindings will expose `DisplayName` as the renamed property for v1 entities",
+    "No additional runtime behavior depends on the old field name beyond its access in this file"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "Direct use of `Name` property in dictionary construction for v1 entities. Must be updated to `DisplayName`."
+    },
+    {
+      "line": 67,
+      "decision": "edit",
+      "reason": "Constructor usage of `Name` field when creating a new v1 entity. Must be updated to `DisplayName`."
+    }
+  ]
+}

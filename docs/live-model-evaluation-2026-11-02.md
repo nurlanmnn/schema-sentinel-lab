@@ -59,6 +59,7 @@ no mismatch and classified this as a model comparison:
 | Ministral 3 8B / prompt 2.5 | 0/6 | 13/18 | 18 | 14.1 | 7.35 |
 | Ministral 3 3B / prompt 2.5 | 0/6 | 11/18 | 18 | 5.6 | 4.19 |
 | Ministral 3 8B / prompt 2.8 | 0/6 | 16/18 | 18 | 12.7 | Not aggregated here |
+| Ministral 3 14B / prompt 2.5 | 0/6 | 12/18 | 18 | 25.8 | 10.74 |
 
 GB uses decimal bytes. Allocation is the maximum observed Ollama sample for the
 requested model, not whole-host memory or a guaranteed peak. The resource analyses
@@ -106,10 +107,29 @@ Model choice remains unresolved. [Mistral's official documentation](https://docs
 identifies Ministral 3 14B under Apache-2.0. The
 [official Ollama package](https://ollama.com/library/ministral-3:14b) is a roughly
 9.1 GB Q4_K_M download. It is a plausible larger comparison, not a demonstrated
-solution or a guaranteed fit on this 16 GiB Mac. The user approved its download
-and local comparison on November 2; it is installed and the fixed six-case run
-is in progress. No completed 14B result exists yet. A fair model comparison keeps prompt 2.5,
-the six inputs, options and validation gates fixed before testing prompt changes.
+solution or a comfortable fit on this 16 GiB Mac. The user approved its download
+and local comparison on November 2. The completed 14B run produced 0/6 validated
+proposals from 18 requests: four cases failed file contracts, and telemetry rename
+and units failed TypeScript compilation due to obsolete field accesses. The audit
+in `patchgen/evidence/live-8b-14b-comparison001/` found identical inputs, prompt
+payloads apart from model name, inference options and captured validation gates.
+
+The 14B pipelines took 33.6 minutes in total. Host memory observations reached
+1% reported free memory and 18,458.5M reported swap use; 5,581.44M was already in
+use before the test. These are whole-host observations, not isolated model RSS.
+An idle-model unload during telemetry-rename validation was recorded to relieve
+pressure; the next case reloaded the same model. Loading and resource pressure
+affect the timings, which are not a controlled cold/warm speed benchmark.
+The finalizer completed both analyses and unloaded the model. Raw evidence is
+under `live-six-ministral14b-001/`, with analysis in
+`live-six-ministral14b-analysis001/` and host observations in
+`live-six-ministral14b-host001/`, all under `patchgen/evidence/`.
+
+A separate Python-only reproduction confirmed that the retained telemetry rename
+proposal raises `AttributeError: speed_mps` because its threshold still reads the
+old field. Its evidence is `patchgen/evidence/14b-python-rename-repro001/`. The
+original full-case run first stopped at TypeScript compilation; this reproduction
+does not change that result or add a model request.
 
 These six authored cases are development evidence, not the twenty-case MVP,
 held-out general reliability, human manual baseline, human approval or deployment.

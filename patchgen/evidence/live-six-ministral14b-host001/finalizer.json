@@ -1,0 +1,22 @@
+{
+  "status": "completed",
+  "scope": "analysis and cleanup only; no repair, approval, apply, merge or extra model requests",
+  "analysis_exit_codes": [
+    0,
+    0
+  ],
+  "validated_model_patches": 0,
+  "planned_cases": 6,
+  "actual_model_requests": 18,
+  "human_approval_required": true,
+  "unload": {
+    "model": "ministral-3:14b",
+    "created_at": "2026-11-03T00:20:22.080091Z",
+    "response": "",
+    "done": true,
+    "done_reason": "unload"
+  },
+  "models_after": {
+    "models": []
+  }
+}

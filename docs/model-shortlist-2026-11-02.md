@@ -12,7 +12,7 @@ allocation at 16K context. These observations are not peak-memory guarantees.
 | Candidate | Local package | Why investigate | Current evidence / boundary |
 | --- | --- | --- | --- |
 | Installed Ministral 3 3B | Already installed | A no-download size comparison using the frozen 2.5 protocol | Completed 0/6; 11/18 file contracts; faster/smaller than 8B on this host, no validated migration |
-| Ministral 3 14B | Official Q4_K_M, about 9.1 GB; digest prefix `4760c35aeb9d` | Controlled same-family size comparison before changing the prompt | User approved November 2; installed and six-case comparison started; no result yet |
+| Ministral 3 14B | Official Q4_K_M, about 9.1 GB; digest prefix `4760c35aeb9d` | Controlled same-family size comparison before changing the prompt | Completed 0/6, 12/18 file contracts; heavy host memory pressure; model unloaded afterward |
 | Gemma 4 12B | Official `gemma4:12b-it-q4_K_M`, 8.0 GB; digest prefix `6114515d63c1` | A different model family with a smaller package than the 14B candidate | Not installed or authorized for download; serving compatibility, memory and migration quality unmeasured |
 
 [Mistral's model documentation](https://docs.mistral.ai/models/ministral-3-14b-25-12)

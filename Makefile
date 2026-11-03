@@ -1,5 +1,5 @@
 PYTHON ?= .venv/bin/python
-.PHONY: all setup build generate run-python run-csharp run-ts run-all test-unit test-local test-docker descriptors
+.PHONY: all setup build generate run-python run-csharp run-ts run-all test-unit test-local test-docker
 all: test-local
 setup:
 	python3 run_local.py setup
@@ -23,6 +23,3 @@ test-local:
 	python3 run_local.py test
 test-docker:
 	./testbed/scripts/test-roundtrip.sh
-descriptors:
-	buf build --path proto/v1 --as-file-descriptor-set -o v1.bin
-	buf build --path proto/v2 --as-file-descriptor-set -o v2.bin

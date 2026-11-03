@@ -1,0 +1,37 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 13,
+      "end_line": 13,
+      "replacement_lines": [
+        "  const fields = { entity_id: entity.entityId };"
+      ]
+    },
+    {
+      "start_line": 83,
+      "end_line": 83,
+      "replacement_lines": [
+        "    ? EntityV1.encode({ entityId: \"ts_303\" }).finish()"
+      ]
+    }
+  ],
+  "rationale": "The `name` field was removed from the v1 schema, so all references to it must be eliminated. In line 13, the spread operator for v1-specific fields is no longer needed since only `entity_id` remains. Line 83's explicit inclusion of `name` in the encoding call is also obsolete and should be removed.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated bindings (`EntityV1`) will correctly handle legacy payloads containing field 2 (reserved) without error, as per the schema change instructions.",
+    "No other parts of the codebase rely on `name` being present in v1 observations or construction."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 13,
+      "decision": "edit",
+      "reason": "Directly references removed field `name` in v1-specific spread operator. Must be removed to align with schema change."
+    },
+    {
+      "line": 83,
+      "decision": "edit",
+      "reason": "Explicitly includes the removed `name` field during v1 entity construction. Must be removed for consistency with new schema."
+    }
+  ]
+}
