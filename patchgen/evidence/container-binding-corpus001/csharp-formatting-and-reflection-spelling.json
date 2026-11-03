@@ -1,0 +1,41 @@
+{
+  "id": "csharp-formatting-and-reflection-spelling",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: member_access_expression",
+      "resolution": "candidate"
+    },
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: reflection candidate; field identity unknown",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [
+    {
+      "line": 3,
+      "reason": "reflection requires review"
+    }
+  ],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "88b3e37789a193a513751b9d154ed4473d4b9d7f43945a45bcf23cede9a6de98",
+  "candidate_coverage": {
+    "expected": 2,
+    "matched": 2,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

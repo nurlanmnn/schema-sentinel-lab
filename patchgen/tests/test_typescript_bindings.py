@@ -109,6 +109,22 @@ class TypeScriptBindingTests(unittest.TestCase):
                 self.assertFalse(refs)
                 self.assertTrue(issues)
 
+    def test_container_and_conditional_codec_alias_mutations_disable_claims(self):
+        self.assertEqual([r['line'] for r in bound(IMPORT + 'const e = V.decode(data);\ne.speedMps = 2;')[0]], [3])
+        examples = [
+            'const box = [V]; box[0].decode = other;',
+            'const box = {codec: V}; const C = box.codec; C.decode = other;',
+            'const C = flag ? V : other; C.decode = other;',
+            'const C = flag && V; C.decode = other;',
+            'holder.codec = V; holder.codec.decode = other;',
+            'import * as pb from "../../generated/ts/telemetry/vehicle"; const C = pb["VehicleTelemetry"]; C.decode = other;',
+        ]
+        for source in examples:
+            with self.subTest(source=source):
+                refs, issues = bound(IMPORT + source + '\nconst e = V.decode(data); e.speedMps;')
+                self.assertFalse(refs)
+                self.assertTrue(issues)
+
     def test_escaped_field_token_ranges_preserve_original_utf8_source(self):
         source = IMPORT + 'const e = V.decode(data);\n' + r'console.log("é", e.sp\u0065edMps);'+'\n'
         refs, _ = bound(source)

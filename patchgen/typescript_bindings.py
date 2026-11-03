@@ -129,14 +129,21 @@ def references(text, field, module, symbol, source_path):
     # Visible namespace writes are hazards even inside unsupported/nested scopes.
     # Alias names are conflated across scopes only for this rejection pass.
     aliases = set(imports)
+
+    def possible_codec_alias(node):
+        if node is None or node.type in FUNCTIONS or node.type in ('call_expression', 'new_expression'):
+            return False  # Decoded instances must not become codec aliases.
+        if node.type in ('identifier', 'shorthand_property_identifier'):
+            return name(node) in aliases
+        return any(possible_codec_alias(child) for child in node.named_children)
+
     while True:
         previous = set(aliases)
         for node in walk(tree.root_node):
             if node.type in ('variable_declarator', 'assignment_expression'):
                 target = node.child_by_field_name('name') or node.child_by_field_name('left')
                 value = node.child_by_field_name('value') or node.child_by_field_name('right')
-                if value and (value.type == 'identifier' and name(value) in aliases or
-                              value.type == 'member_expression' and names(value.child_by_field_name('object')) & aliases):
+                if possible_codec_alias(value):
                     aliases.update(names(target))
         if previous == aliases:
             break

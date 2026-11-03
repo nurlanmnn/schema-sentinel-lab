@@ -1,0 +1,95 @@
+...FFFFF.............FFFFF..........
+======================================================================
+FAIL: test_container_and_conditional_class_alias_mutations_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_container_and_conditional_class_alias_mutations_disable_claims) (source='box = [V]\nbox[0].FromString = other\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_python_bindings.py", line 137, in test_container_and_conditional_class_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 5, 'column': 9, 'end_line': 5, 'end_column': 18, 'kind': 'field_access', 'binding': 'canonical', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle', 'evidence': [{'line': 1, 'operation': 'from import', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle'}, {'line': 4, 'operation': 'FromString'}, {'line': 4, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_class_alias_mutations_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_container_and_conditional_class_alias_mutations_disable_claims) (source='box = {"codec": V}\nAlias = box["codec"]\nAlias.FromString = other\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_python_bindings.py", line 137, in test_container_and_conditional_class_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 6, 'column': 9, 'end_line': 6, 'end_column': 18, 'kind': 'field_access', 'binding': 'canonical', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle', 'evidence': [{'line': 1, 'operation': 'from import', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle'}, {'line': 5, 'operation': 'FromString'}, {'line': 5, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_class_alias_mutations_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_container_and_conditional_class_alias_mutations_disable_claims) (source='Alias = V if flag else other\nAlias.FromString = other\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_python_bindings.py", line 137, in test_container_and_conditional_class_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 5, 'column': 9, 'end_line': 5, 'end_column': 18, 'kind': 'field_access', 'binding': 'canonical', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle', 'evidence': [{'line': 1, 'operation': 'from import', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle'}, {'line': 4, 'operation': 'FromString'}, {'line': 4, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_class_alias_mutations_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_container_and_conditional_class_alias_mutations_disable_claims) (source='Alias = flag and V\nAlias.FromString = other\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_python_bindings.py", line 137, in test_container_and_conditional_class_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 5, 'column': 9, 'end_line': 5, 'end_column': 18, 'kind': 'field_access', 'binding': 'canonical', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle', 'evidence': [{'line': 1, 'operation': 'from import', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle'}, {'line': 4, 'operation': 'FromString'}, {'line': 4, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_class_alias_mutations_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_container_and_conditional_class_alias_mutations_disable_claims) (source='holder.codec = V\nholder.codec.FromString = other\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_python_bindings.py", line 137, in test_container_and_conditional_class_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 5, 'column': 9, 'end_line': 5, 'end_column': 18, 'kind': 'field_access', 'binding': 'canonical', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle', 'evidence': [{'line': 1, 'operation': 'from import', 'module': 'fleet.vehicle_pb2', 'symbol': 'Vehicle'}, {'line': 4, 'operation': 'FromString'}, {'line': 4, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_codec_alias_mutations_disable_claims (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_container_and_conditional_codec_alias_mutations_disable_claims) (source='const box = [V]; box[0].decode = other;')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 124, in test_container_and_conditional_codec_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 3, 'column': 29, 'end_line': 3, 'end_column': 37, 'kind': 'field_access', 'binding': 'canonical', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry', 'evidence': [{'line': 1, 'operation': 'named import', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry'}, {'line': 3, 'operation': 'ts-proto decode'}, {'line': 3, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_codec_alias_mutations_disable_claims (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_container_and_conditional_codec_alias_mutations_disable_claims) (source='const box = {codec: V}; const C = box.codec; C.decode = other;')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 124, in test_container_and_conditional_codec_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 3, 'column': 29, 'end_line': 3, 'end_column': 37, 'kind': 'field_access', 'binding': 'canonical', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry', 'evidence': [{'line': 1, 'operation': 'named import', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry'}, {'line': 3, 'operation': 'ts-proto decode'}, {'line': 3, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_codec_alias_mutations_disable_claims (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_container_and_conditional_codec_alias_mutations_disable_claims) (source='const C = flag ? V : other; C.decode = other;')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 124, in test_container_and_conditional_codec_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 3, 'column': 29, 'end_line': 3, 'end_column': 37, 'kind': 'field_access', 'binding': 'canonical', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry', 'evidence': [{'line': 1, 'operation': 'named import', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry'}, {'line': 3, 'operation': 'ts-proto decode'}, {'line': 3, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_codec_alias_mutations_disable_claims (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_container_and_conditional_codec_alias_mutations_disable_claims) (source='const C = flag && V; C.decode = other;')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 124, in test_container_and_conditional_codec_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 3, 'column': 29, 'end_line': 3, 'end_column': 37, 'kind': 'field_access', 'binding': 'canonical', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry', 'evidence': [{'line': 1, 'operation': 'named import', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry'}, {'line': 3, 'operation': 'ts-proto decode'}, {'line': 3, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+======================================================================
+FAIL: test_container_and_conditional_codec_alias_mutations_disable_claims (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_container_and_conditional_codec_alias_mutations_disable_claims) (source='import * as pb from "../../generated/ts/telemetry/vehicle"; const C = pb["VehicleTelemetry"]; C.decode = other;')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 124, in test_container_and_conditional_codec_alias_mutations_disable_claims
+    self.assertFalse(refs)
+    ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: [{'line': 3, 'column': 29, 'end_line': 3, 'end_column': 37, 'kind': 'field_access', 'binding': 'canonical', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry', 'evidence': [{'line': 1, 'operation': 'named import', 'module': 'generated/ts/telemetry/vehicle', 'symbol': 'VehicleTelemetry'}, {'line': 3, 'operation': 'ts-proto decode'}, {'line': 3, 'operation': 'assignment', 'name': 'e'}]}] is not false
+
+----------------------------------------------------------------------
+Ran 28 tests in 3.023s
+
+FAILED (failures=10)

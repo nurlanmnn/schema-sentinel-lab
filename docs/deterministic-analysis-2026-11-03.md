@@ -245,3 +245,20 @@ the failing regression, final tests, a real Git-tree adapter test, implementatio
 snapshots and both generated TS files. An intermediate focused failure was a
 wrong test review-line number; its log is retained. No models, generated migration
 proposals or human acceptance were involved.
+
+## Follow-up: Class/codec aliases through containers and conditionals
+
+Independent adversarial examples reproduced retained binding claims after visible
+mutations through arrays/lists, dictionaries/objects, conditional expressions,
+boolean expressions, bracketed namespace aliases and stored object properties.
+The rejection-only alias pass now propagates those possible class/codec values;
+no positive receiver identity is inferred through them. Call results remain
+excluded, preserving ordinary message-instance field writes. Unknown call effects
+and arbitrary monkeypatching are still outside the declared source policy.
+
+All 221 patchgen tests pass, including explicit positive instance-write checks.
+Three authored corpus cases bring the suite to 59/59 expected outcomes, 48/49
+affected candidate lines, 23 extras, 15/15 expected bound lines and zero extra
+claims. Evidence and before/after logs are in `container-binding-audit001` and
+`container-binding-corpus001`. No model requests, migration proposals or human
+approvals occurred.

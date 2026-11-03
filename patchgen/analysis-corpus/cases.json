@@ -719,6 +719,36 @@
       ],
       "affected_sites": [],
       "expected_bound": []
+    },
+    {
+      "id": "python-container-class-mutation",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\nbox = [V]\nbox[0].FromString = other\ne = V.FromString(data)\nprint(e.speed_mps)\n",
+      "expected_candidates": [
+        5
+      ],
+      "affected_sites": [],
+      "expected_bound": []
+    },
+    {
+      "id": "ts-container-codec-mutation",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst box = [V]; box[0].decode = other;\nconst e = V.decode(data);\ne.speedMps;\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [],
+      "expected_bound": []
+    },
+    {
+      "id": "ts-bracket-codec-alias-mutation",
+      "language": "typescript",
+      "source": "import * as pb from \"../../generated/ts/fleet/vehicle\";\nconst C = pb[\"Vehicle\"]; C.decode = other;\nconst e = pb.Vehicle.decode(data);\ne.speedMps;\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [],
+      "expected_bound": []
     }
   ]
 }

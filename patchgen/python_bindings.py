@@ -77,18 +77,25 @@ def references(text, field, module, symbol):
                 imported.update(a.asname or a.name for a in node.names if a.name == symbol)
         elif isinstance(node, ast.Import):
             imported.update(a.asname for a in node.names if a.name == module and a.asname)
-    # Follow only class/module alias syntax, without constructors or instance
-    # values. Scope conflation here is safe because this set only rejects claims.
+    def possible_class_alias(node):
+        if isinstance(node, ast.Name):
+            return node.id in imported
+        # Calls may produce message instances; treating those as class aliases
+        # would reject ordinary field writes. Unknown call effects remain outside
+        # this source-only policy. No closure/comprehension propagation is claimed.
+        if node is None or isinstance(node, (ast.Call, ast.Lambda, ast.ListComp,
+                                            ast.SetComp, ast.DictComp, ast.GeneratorExp)):
+            return False
+        return any(possible_class_alias(child) for child in ast.iter_child_nodes(node))
+
+    # Overapproximate class/module aliases through containers, indexing and
+    # conditionals. This set only rejects visible writes, never types a receiver.
     while True:
         previous = set(imported)
         for node in ast.walk(tree):
-            if isinstance(node, (ast.Assign, ast.AnnAssign)):
-                value = node.value
-                if isinstance(value, ast.Name) and value.id in imported or (
-                        isinstance(value, ast.Attribute) and value.attr == symbol and
-                        isinstance(value.value, ast.Name) and value.value.id in imported):
-                    targets = node.targets if isinstance(node, ast.Assign) else [node.target]
-                    imported.update(t.id for t in targets if isinstance(t, ast.Name))
+            if isinstance(node, (ast.Assign, ast.AnnAssign)) and possible_class_alias(node.value):
+                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                imported.update(n.id for target in targets for n in ast.walk(target) if isinstance(n, ast.Name))
         if imported == previous:
             break
     for node in ast.walk(tree):

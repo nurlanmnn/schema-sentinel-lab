@@ -44,3 +44,10 @@ remains required. Unsupported new spellings leave the edit requirement unresolve
 and record a limitation. A shared rule governs locator flags and adapter checks
 for both positions and omitted files. A local protoc/ts-proto fixture confirms
 the unchanged member, without model inference or external generation.
+
+The rejection-only alias set now follows visible class/codec values through
+containers, indexing, properties and conditional/boolean expressions before
+checking writes. It does not establish receiver types through those forms.
+Call results are excluded so constructor/decoder instances do not become class
+aliases, and ordinary instance-field writes retain their source evidence. Unknown
+call effects and arbitrary monkeypatching remain outside the declared policy.

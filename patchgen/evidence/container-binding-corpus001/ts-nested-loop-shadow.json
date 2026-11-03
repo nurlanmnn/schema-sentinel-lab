@@ -1,0 +1,37 @@
+{
+  "id": "ts-nested-loop-shadow",
+  "positions": [
+    {
+      "start_line": 6,
+      "end_line": 6,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [
+    {
+      "line": 3,
+      "reason": "control flow unsupported for binding evidence"
+    }
+  ],
+  "source_sha256": "418a09453c43e34bd63720e8896801e094f014dc956add0b2c404e0748680dbe",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [
+      6
+    ],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

@@ -61,3 +61,10 @@ ranges come from original `tokenize` NAME tokens, not normalized identifier
 lengths. This preserves exact UTF-8 byte ranges for compatible Unicode spellings,
 non-ASCII prefixes and multiline accesses; an unavailable exact token suppresses
 the binding claim. String-key values are not identifier-normalized.
+
+The rejection-only alias set now follows visible class/codec values through
+containers, indexing, properties and conditional/boolean expressions before
+checking writes. It does not establish receiver types through those forms.
+Call results are excluded so constructor/decoder instances do not become class
+aliases, and ordinary instance-field writes retain their source evidence. Unknown
+call effects and arbitrary monkeypatching remain outside the declared policy.

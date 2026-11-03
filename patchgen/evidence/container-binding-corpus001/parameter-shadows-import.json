@@ -1,0 +1,30 @@
+{
+  "id": "parameter-shadows-import",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "8ff707bc26dd5e1c823db32d02bb514c1a43643e6c9f423025ebc076a67249d9",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

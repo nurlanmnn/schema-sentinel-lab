@@ -123,6 +123,21 @@ class BindingTests(unittest.TestCase):
         self.assertFalse(error)
         self.assertEqual([p['start_line'] for p in positions], [4])
 
+    def test_container_and_conditional_class_alias_mutations_disable_claims(self):
+        self.assertEqual([r['line'] for r in bound(IMPORT + 'e = V()\ne.speed_mps = 2\n')[0]], [3])
+        examples = [
+            'box = [V]\nbox[0].FromString = other\n',
+            'box = {"codec": V}\nAlias = box["codec"]\nAlias.FromString = other\n',
+            'Alias = V if flag else other\nAlias.FromString = other\n',
+            'Alias = flag and V\nAlias.FromString = other\n',
+            'holder.codec = V\nholder.codec.FromString = other\n',
+        ]
+        for source in examples:
+            with self.subTest(source=source):
+                refs, issues = bound(IMPORT + source + 'e = V.FromString(payload)\nprint(e.speed_mps)\n')
+                self.assertFalse(refs)
+                self.assertTrue(issues)
+
     def test_normalized_identifiers_keep_exact_source_byte_ranges(self):
         spelling = 'ｓｐｅｅｄ_ｍｐｓ'
         source = IMPORT + f'e = V({spelling}=1)\nprint("é", e.{spelling})\n'

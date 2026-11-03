@@ -43,7 +43,7 @@ immutable const decoder/encoder flow. C# matches and unknown receivers stay
 candidate-only.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-56-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+59-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
