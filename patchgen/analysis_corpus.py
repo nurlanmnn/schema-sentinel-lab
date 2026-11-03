@@ -24,7 +24,7 @@ def run(output):
     catalog = json.loads(raw)
     save(output/'catalog.json', catalog)
     implementation = {}
-    for name in ('analysis_corpus.py', 'detector.py', 'locator.py', 'python_bindings.py', 'runtime_inventory.py','source_spellings.py'):
+    for name in ('analysis_corpus.py', 'detector.py', 'locator.py', 'python_bindings.py', 'runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py'):
         content = (ROOT/'patchgen'/name).read_bytes()
         implementation[name] = hashlib.sha256(content).hexdigest()
         (output/('implementation-'+name)).write_bytes(content)
@@ -36,8 +36,11 @@ def run(output):
     for case in catalog['cases']:
         positions, warnings, error = scan(case['source'], case['language'], 'speed_mps')
         policy = catalog['binding_policy']
+        ts_policy = policy.get('typescript')
         positions, limitations = attach_bindings(case['source'], case['language'], detector['events'][0],
-                                                 (policy['module'], policy['symbol']), positions, error)
+                                                 (policy['module'], policy['symbol']), positions, error,
+                                                 source_path=ts_policy['source_path'] if ts_policy else None,
+                                                 typescript_policy=(ts_policy['module'], ts_policy['symbol']) if ts_policy else None)
         actual = [p['start_line'] for p in positions]
         bound = [p['start_line'] for p in positions if p.get('binding_evidence')]
         # Expectations are read only after production outputs have been obtained.
@@ -61,7 +64,7 @@ def run(output):
                    catalog_sha256=hashlib.sha256(raw).hexdigest(),
                    limitations=['Explicit generated-module policy; no runtime import verification or arbitrary monkeypatch analysis.',
                                 'Expected misses remain failures of analysis capability even when expectation_match is true.',
-                                'No cross-function/dataflow or TypeScript/C# binding proof; unknown sites remain candidates.'])
+                                'No cross-function value propagation or C# binding proof; mutable TS/unknown sites remain candidates.'])
     save(output/'summary.json', summary)
     return summary
 

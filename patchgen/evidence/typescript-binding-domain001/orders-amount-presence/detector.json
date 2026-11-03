@@ -1,0 +1,28 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "partial",
+  "structural_status": "unsupported",
+  "analysis_issues": [],
+  "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+  "old_schema_sha256": "d1a259bcc31cff39da50433e4f19e12c21415d82f89e515c8c477a7298c70085",
+  "new_schema_sha256": "f9556c8a1f6a1b29de7a05c170e85f7bf7296dd5cf1109fce78075737628f320",
+  "old_descriptor_sha256": "fb888b58fd75f2ddb5278996153094b3650368483eb422e60d65e20c25ea6b4a",
+  "new_descriptor_sha256": "9a7fe6eb034b53e379c2582c812360f3b000768fbeab781a567a222f0b27ee11",
+  "events": [],
+  "unsupported": [
+    "demo.orders.Order: message options/oneofs changed",
+    "demo.orders.Order.amount_cents: cardinality/oneof/options/default changed",
+    "demo.orders.Order: unsupported message structure change",
+    "demo.orders.Order: unsupported field metadata change"
+  ],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "orders-amount-presence",
+    "category": "ambiguous",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.orders;\nmessage Order {\n  string order_id = 1;\n  int64 amount_cents = 2;\n  string currency = 3;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.orders;\nmessage Order {\n  string order_id = 1;\n  optional int64 amount_cents = 2;\n  string currency = 3;\n}\n"
+  },
+  "intended_behavior": "Distinguish absent pending amounts from explicit zero amounts; constructors and observations must preserve presence. Do not equate absence to zero."
+}

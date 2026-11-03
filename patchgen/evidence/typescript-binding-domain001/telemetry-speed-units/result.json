@@ -1,0 +1,12 @@
+{
+  "id": "telemetry-speed-units",
+  "domain": "telemetry",
+  "proposal_validation": "not_run",
+  "human_approval_required": true,
+  "expectation_match": true,
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "detector_status": "partial",
+  "category": "ambiguous",
+  "locator_status": "partial",
+  "measurement": null
+}

@@ -8,7 +8,13 @@
   "binding_policy": {
     "module": "fleet.vehicle_pb2",
     "symbol": "Vehicle",
-    "assumption": "Explicit standard generated-module identity declared for these authored examples; not runtime import resolution."
+    "assumption": "Explicit standard generated-module identity declared for these authored examples; not runtime import resolution.",
+    "typescript": {
+      "module": "generated/ts/fleet/vehicle",
+      "symbol": "Vehicle",
+      "source_path": "runtimes/typescript/consumer.ts",
+      "assumption": "Explicit standard ts-proto emitted module identity; const flow only, no runtime import resolution or monkeypatching."
+    }
   },
   "cases": [
     {
@@ -519,6 +525,180 @@
       "affected_sites": [],
       "expected_bound": [],
       "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+    },
+    {
+      "id": "ts-bound-encode-observe-threshold",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nfunction run(payload: Uint8Array) {\n  const Codec = V;\n  const e = Codec.decode(payload);\n  const alias = e;\n  const sample = Codec.encode({speedMps: 1}).finish();\n  const fields = {speed_mps: alias.speedMps};\n  return e.speedMps > 30;\n}\n",
+      "expected_candidates": [
+        6,
+        7,
+        8
+      ],
+      "affected_sites": [
+        6,
+        7,
+        8
+      ],
+      "expected_bound": [
+        6,
+        7,
+        8
+      ],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-bound-namespace-import",
+      "language": "typescript",
+      "source": "import * as pb from \"../../generated/ts/fleet/vehicle\";\nconst e = pb.Vehicle.decode(data);\nconsole.log(e.speedMps);\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [
+        3
+      ],
+      "expected_bound": [
+        3
+      ],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-bound-arrow-decoder",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst results = requests.map(request => {\n  const e = V.decode(request.payload);\n  return e.speedMps > 30;\n});\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [
+        4
+      ],
+      "expected_bound": [
+        4
+      ],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-wrong-generated-version",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/v1/vehicle\";\nconst e = V.decode(data);\ne.speedMps;\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-parameter-shadows-import",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nfunction f(V: any) {\n  const e = V.decode(data);\n  return e.speedMps;\n}\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-nested-loop-shadow",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nfunction run() {\n  for (const V of others) {\n    consume(() => {\n      const e = V.decode(data);\n      return e.speedMps;\n    });\n  }\n}\n",
+      "expected_candidates": [
+        6
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-mutable-rebound-receiver",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nlet e = V.decode(data);\ne = other;\ne.speedMps;\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-cast-cannot-bind",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst e = other as V;\ne.speedMps;\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-annotation-cannot-bind",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst e: V = other;\ne.speedMps;\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-outer-local-not-propagated",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nfunction run() {\n  const e = V.decode(data);\n  return () => e.speedMps;\n}\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [
+        4
+      ],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-native-mutator-alias-blocks",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst mutate = Object.assign;\nmutate(V, {decode: Other.decode});\nconst e = V.decode(data);\ne.speedMps;\n",
+      "expected_candidates": [
+        5
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-bracket-mutator-blocks",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nObject[\"assign\"](V, {decode: Other.decode});\nconst e = V.decode(data);\ne.speedMps;\n",
+      "expected_candidates": [
+        4
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "Authored ts-proto const/source-binding boundary. Other/parameter values in negative cases belong to an unrelated message; no annotation/cast establishes canonical identity."
+    },
+    {
+      "id": "ts-namespace-alias-shadow",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nnamespace N { import V = Other; export function f() { const e = V.decode(data); return e.speedMps; } }\n",
+      "expected_candidates": [
+        2
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "V inside the namespace/class expression is an unrelated value; no imported canonical identity."
+    },
+    {
+      "id": "ts-class-expression-name-shadow",
+      "language": "typescript",
+      "source": "import { Vehicle as V } from \"../../generated/ts/fleet/vehicle\";\nconst X = class V { f() { const e = V.decode(data); return e.speedMps; } };\n",
+      "expected_candidates": [
+        2
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "V inside the namespace/class expression is an unrelated value; no imported canonical identity."
     }
   ]
 }

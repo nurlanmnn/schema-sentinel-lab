@@ -7,7 +7,9 @@ import tree_sitter_typescript
 import tree_sitter_c_sharp
 from patchgen.adapter import digest
 from patchgen.generator import command
-from patchgen.python_bindings import POLICY, references
+from patchgen.python_bindings import POLICY
+from patchgen.typescript_bindings import POLICY as TYPESCRIPT_POLICY
+from patchgen.binding_analysis import analyze_bindings
 from patchgen.runtime_inventory import inventory, blocking_entries
 from patchgen.source_spellings import identifier_value, quoted_value
 
@@ -101,14 +103,14 @@ def scan(text, language, field):
                  resolution='candidate') for line,kinds in sorted(lines.items())], warnings, tree.root_node.has_error
 
 
-def attach_bindings(text, language, event, policy, positions, parse_error=False):
+def attach_bindings(text, language, event, policy, positions, parse_error=False, *, schema_path=None, source_path=None, typescript_policy=None):
     """Attach positive evidence without upgrading all matches or excluding candidates."""
     limitations = []
-    if language == 'python' and policy and not parse_error:
+    if not parse_error:
         try:
-            bound, limitations = references(text, event['old_name'], *policy)
+            bound, limitations = analyze_bindings(text, language, event, schema_path, source_path, python_policy=policy, typescript_policy=typescript_policy)
         except SyntaxError:
-            return positions, ['Python AST parse failed; no binding evidence']
+            return positions, [language+' binding parse failed; no binding evidence']
         for position in positions:
             evidence = [item for item in bound if item['line'] == position['start_line']]
             if evidence:
@@ -169,7 +171,7 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.4',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.5',
                   scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')
@@ -183,10 +185,12 @@ def locate(repo, detector):
         record['enum_analysis'] = enum
         record['issues'].append('enum candidates only; consumer behavior/exhaustiveness analysis unsupported')
     policy = POLICY.get((detector['change']['schema_path'], event.get('message')))
-    record['binding_policy'] = dict(scope='declared standard protoc Python modules; lexical import identity only',
+    ts_policy = TYPESCRIPT_POLICY.get((detector['change']['schema_path'], event.get('message')))
+    record['binding_policy'] = dict(scope='declared generated Python/ts-proto modules; bounded import and immutable TS dataflow evidence',
         python_module=policy[0] if policy else None, python_symbol=policy[1] if policy else None,
+        typescript_module=ts_policy[0] if ts_policy else None, typescript_symbol=ts_policy[1] if ts_policy else None,
         assumptions=['Generated module imports follow the declared policy; no runtime monkeypatching.',
-                     'No cross-function, branch merge, annotation or whole-program type proof.'],
+                     'No cross-function value capture, branch merge, annotation/cast or whole-program type proof; TS follows const only.'],
         dynamic_subscript_scope='entity/decoded receiver spelling heuristic only; arbitrary receivers/compound keys unsupported')
     for entry in entries:
         if entry['disposition'] != 'source':
@@ -196,7 +200,8 @@ def locate(repo, detector):
         positions, warnings, error = (scan_enum(text,language,enum['symbols']) if enum else
                                       scan(text,language,event['old_name']))
         if not enum:
-            positions, limitations = attach_bindings(text, language, event, policy, positions, error)
+            positions, limitations = attach_bindings(text, language, event, policy, positions, error,
+                                                    schema_path=detector['change']['schema_path'], source_path=path)
             record.setdefault('binding_limitations', []).extend(dict(path=path, detail=item) for item in limitations)
         record['scanned'].append(dict(path=path, source_sha256=digest(text), language=language))
         if error or warnings:

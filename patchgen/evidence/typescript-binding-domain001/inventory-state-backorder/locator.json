@@ -1,0 +1,184 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.4",
+  "scan_manifest_version": "1.1",
+  "runtime_inventory": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "d2969b4601c9f762bab5f35db459e68160c3ba23",
+      "language": "csharp",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "4c17db56c12b5cffe53567acf0b40504f70103bd",
+      "language": "python",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "f68d19dfe25e020b021bf7e11d299c01524202e3",
+      "language": "typescript",
+      "disposition": "source"
+    }
+  ],
+  "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+  "change_id": "inventory-state-backorder",
+  "old_schema_sha256": "73c7cc1cc350698d5e9ca997292728d50b006193c93950ee3a0e2222825bdc4c",
+  "status": "partial",
+  "files": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "language": "csharp",
+      "source_sha256": "340458f8b1022504b889aa85b38b15789130af80a1d4c91598b4b43d4365505a",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Enum syntax candidate; matched symbols: StockAvailable, StockState, state, stockAvailable, stock_available",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Enum syntax candidate; matched symbols: state",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Enum syntax candidate; matched symbols: StockAvailable, StockState, state, stockAvailable, stock_available",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "language": "python",
+      "source_sha256": "34ac7bd3a895752d1bd11e61b94281d755318c6432129b9ca4c5f2baafee7d86",
+      "positions": [
+        {
+          "start_line": 1,
+          "end_line": 1,
+          "reason": "Enum syntax candidate; matched symbols: STOCK_AVAILABLE",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Enum syntax candidate; matched symbols: STOCK_AVAILABLE, state",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Enum syntax candidate; matched symbols: state",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Enum syntax candidate; matched symbols: STOCK_AVAILABLE, state",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "language": "typescript",
+      "source_sha256": "c0041dfb759983a6e0598f1493fc5639874c823954dde690321ca38fcc64b1fa",
+      "positions": [
+        {
+          "start_line": 1,
+          "end_line": 1,
+          "reason": "Enum syntax candidate; matched symbols: StockState",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Enum syntax candidate; matched symbols: STOCK_AVAILABLE, StockState, state",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Enum syntax candidate; matched symbols: state",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Enum syntax candidate; matched symbols: STOCK_AVAILABLE, StockState, state",
+          "resolution": "candidate"
+        }
+      ]
+    }
+  ],
+  "scanned": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "source_sha256": "340458f8b1022504b889aa85b38b15789130af80a1d4c91598b4b43d4365505a",
+      "language": "csharp"
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "source_sha256": "34ac7bd3a895752d1bd11e61b94281d755318c6432129b9ca4c5f2baafee7d86",
+      "language": "python"
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "source_sha256": "c0041dfb759983a6e0598f1493fc5639874c823954dde690321ca38fcc64b1fa",
+      "language": "typescript"
+    }
+  ],
+  "issues": [
+    "enum candidates only; consumer behavior/exhaustiveness analysis unsupported"
+  ],
+  "resolution_scope": "syntax candidates; binding evidence is separate and bounded; conservative cross-version matches",
+  "enum_analysis": {
+    "enum": "demo.inventory.StockState",
+    "fields": [
+      {
+        "message": "demo.inventory.StockItem",
+        "name": "state",
+        "number": 4
+      }
+    ],
+    "symbols": [
+      "STOCK_AVAILABLE",
+      "STOCK_UNKNOWN",
+      "StockAvailable",
+      "StockState",
+      "StockUnknown",
+      "state",
+      "stockAvailable",
+      "stockUnknown",
+      "stock_available",
+      "stock_unknown"
+    ],
+    "status": "candidate_only",
+    "limitations": [
+      "No alias, receiver, numeric dispatch, exhaustiveness or default-case proof.",
+      "All enum additions remain partial and blocked from generation."
+    ]
+  },
+  "binding_policy": {
+    "scope": "declared generated Python/ts-proto modules; bounded import and immutable TS dataflow evidence",
+    "python_module": null,
+    "python_symbol": null,
+    "typescript_module": null,
+    "typescript_symbol": null,
+    "assumptions": [
+      "Generated module imports follow the declared policy; no runtime monkeypatching.",
+      "No cross-function value capture, branch merge, annotation/cast or whole-program type proof; TS follows const only."
+    ],
+    "dynamic_subscript_scope": "entity/decoded receiver spelling heuristic only; arbitrary receivers/compound keys unsupported"
+  }
+}

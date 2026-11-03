@@ -1,0 +1,22 @@
+test_fixture_roundtrip_and_reference_coverage (patchgen.tests.test_adapter.AdapterTests.test_fixture_roundtrip_and_reference_coverage) ... ok
+test_general_migration_prompt_retains_removal_replay (patchgen.tests.test_adapter.AdapterTests.test_general_migration_prompt_retains_removal_replay) ... ok
+test_provenance_and_reference_not_in_model_prompt (patchgen.tests.test_adapter.AdapterTests.test_provenance_and_reference_not_in_model_prompt) ... ok
+test_stale_missing_ambiguous_and_unsafe_inputs_rejected (patchgen.tests.test_adapter.AdapterTests.test_stale_missing_ambiguous_and_unsafe_inputs_rejected) ... ok
+test_arrow_body_has_its_own_immutable_decode_evidence (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_arrow_body_has_its_own_immutable_decode_evidence) ... ok
+test_codec_mutation_and_const_reassignment_disable_evidence (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_codec_mutation_and_const_reassignment_disable_evidence) ... ok
+test_decode_alias_threshold_and_encode_object (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_decode_alias_threshold_and_encode_object) ... ok
+test_escaped_field_token_ranges_preserve_original_utf8_source (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_escaped_field_token_ranges_preserve_original_utf8_source) ... ok
+test_exact_module_and_namespace_import (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_exact_module_and_namespace_import) ... ok
+test_loop_class_and_nested_scope_shadowing_remain_unknown (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_loop_class_and_nested_scope_shadowing_remain_unknown) ... ok
+test_mutable_assignments_and_branch_joins_stay_candidates (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_mutable_assignments_and_branch_joins_stay_candidates) ... ok
+test_parameters_hoisting_and_nested_capture_shadow_imports (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_parameters_hoisting_and_nested_capture_shadow_imports) ... ok
+test_real_telemetry_threshold_and_adapter_tampering (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_real_telemetry_threshold_and_adapter_tampering) ... ok
+test_type_change_attaches_provenance_without_forcing_edits (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_type_change_attaches_provenance_without_forcing_edits) ... ok
+test_type_only_imports_and_casts_cannot_establish_identity (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_type_only_imports_and_casts_cannot_establish_identity) ... ok
+test_authored_catalog_expectations_are_not_locator_inputs (patchgen.tests.test_analysis_corpus.AnalysisCorpusTests.test_authored_catalog_expectations_are_not_locator_inputs) ... ok
+test_component_inventories_keep_misses_extras_and_binding_claims_separate (patchgen.tests.test_analysis_corpus.AnalysisCorpusTests.test_component_inventories_keep_misses_extras_and_binding_claims_separate) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 1.755s
+
+OK

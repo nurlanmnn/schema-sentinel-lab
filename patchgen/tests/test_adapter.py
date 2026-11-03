@@ -36,7 +36,8 @@ class AdapterTests(unittest.TestCase):
           lambda d,l:l['files'][0]['positions'][0].update(resolution='uncertain'),
           lambda d,l:l['files'][0]['positions'].append(l['files'][0]['positions'][0]),
           lambda d,l:l['files'][0]['positions'][0].update(start_line=True),lambda d,l:l.pop('old_schema_sha256'),
-          lambda d,l:d.pop('intended_behavior')]
+          lambda d,l:d.pop('intended_behavior'),
+          lambda d,l:l['files'][0]['positions'][0].update(required_reference=True,binding_evidence=[{}])]
         for mutate in mutations:
             d=copy.deepcopy(DETECTOR);l=copy.deepcopy(LOCATOR);mutate(d,l)
             with self.subTest(mutate=mutate),self.assertRaises((ContractError,KeyError)):self.invoke(d,l)

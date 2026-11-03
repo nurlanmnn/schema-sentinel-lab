@@ -4,7 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
-from patchgen.python_bindings import POLICY, references
+from patchgen.binding_analysis import analyze_bindings
 from patchgen.runtime_inventory import LANGUAGES, inventory, blocking_entries
 from patchgen.generator import ContractError, command, require, safe_path, validate_input, verify_source, save
 
@@ -80,18 +80,12 @@ def adapt(repo, detector, locator):
             if pos.get('resolution') not in ('candidate', 'resolved'):raise ContractError('ambiguous locator site')
             ranges.append((start,end))
         output_positions = []
-        binding_positions = [p for p in positions if 'required_reference' in p or 'binding_evidence' in p]
         events = detector.get('events', [])
         binding_event = events[0] if len(events) == 1 and isinstance(events[0], dict) else None
-        policy = POLICY.get((change['schema_path'], binding_event.get('message'))) if binding_event else None
-        bound = []
-        if item['language'] == 'python' and policy and binding_event.get('old_name'):
-            try:
-                bound, _ = references(context, binding_event['old_name'], *policy)
-            except SyntaxError as error:
-                raise ContractError('binding source cannot be parsed') from error
-        elif binding_positions:
-            raise ContractError('binding evidence lacks a supported canonical policy/event')
+        try:
+            bound, _ = analyze_bindings(context, item['language'], binding_event, change['schema_path'], path)
+        except SyntaxError as error:
+            raise ContractError('binding source cannot be parsed') from error
         required_event = binding_event and binding_event['category'] in ('field_renamed', 'field_removed')
         if required_event and any(not any(a <= ref['line'] <= b for a, b in ranges) for ref in bound):
             raise ContractError('missing required bound reference positions')
@@ -99,6 +93,8 @@ def adapt(repo, detector, locator):
             result = dict(start_line=pos['start_line'], end_line=pos['end_line'], reason=require(pos,'reason',str,path))
             expected = [ref for ref in bound if pos['start_line'] <= ref['line'] <= pos['end_line']]
             if expected or 'required_reference' in pos or 'binding_evidence' in pos:
+                if binding_event is None:
+                    raise ContractError('binding evidence requires a supported detector event')
                 if type(pos.get('required_reference')) is not bool or not isinstance(pos.get('binding_evidence'), list) or not pos['binding_evidence']:
                     raise ContractError('required-reference flag needs binding evidence')
                 required = binding_event['category'] in ('field_renamed', 'field_removed')
@@ -110,16 +106,15 @@ def adapt(repo, detector, locator):
         files.append(dict(path=path,language=item['language'],source_context=context,positions=output_positions))
     if contexts is not None and events:
         event = events[0]
-        policy = POLICY.get((change['schema_path'], event.get('message')))
-        if policy and event.get('old_name') and event['category'] in ('field_renamed', 'field_removed'):
+        if event.get('old_name') and event['category'] in ('field_renamed', 'field_removed'):
             included = {file['path'] for file in files}
             for path, context in contexts.items():
-                if LANGUAGES[Path(path).suffix] != 'python' or path in included:
+                if path in included:
                     continue
                 try:
-                    bound, _ = references(context, event['old_name'], *policy)
+                    bound, _ = analyze_bindings(context, LANGUAGES[Path(path).suffix], event, change['schema_path'], path)
                 except SyntaxError as error:
-                    raise ContractError('omitted Python source cannot be parsed') from error
+                    raise ContractError('omitted binding source cannot be parsed') from error
                 if bound:
                     raise ContractError('locator omitted a file with required bound references')
     case=validate_input(dict(contract_version='1.0',source_revision=revision,change=change,
@@ -128,7 +123,7 @@ def adapt(repo, detector, locator):
     provenance=dict(adapter_version='1.0',detector_producer=detector['producer'],locator_producer=locator['producer'],
         detector_sha256=digest(json.dumps(detector,sort_keys=True)),locator_sha256=digest(json.dumps(locator,sort_keys=True)),
         scan_verification=('exact runtime tree inventory and supported source manifest' if locator.get('scan_manifest_version') == '1.1' else 'exact supported tracked-runtime manifest') if contexts is not None else 'legacy supplied files only',
-        binding_verification='positive claims recomputed under declared repository Python policy; not independent analysis',
+        binding_verification='positive claims recomputed under declared repository Python/ts-proto policies; not independent analysis',
         source_revision=revision, site_resolution='candidate; optional bounded binding evidence', integration_scope='validated supplied records; completeness asserted by producer, not proved by adapter')
     return case,provenance
 

@@ -1,0 +1,21 @@
+{
+  "scope": "Authored static component cases; no generated binding execution or end-to-end migration.",
+  "scenario_count": 52,
+  "expectation_matches": 52,
+  "candidate_expected": 49,
+  "candidate_matched": 48,
+  "candidate_extras": 16,
+  "bound_expected": 15,
+  "bound_matched": 15,
+  "bound_extras": 0,
+  "model_requests": 0,
+  "validated_migrations": 0,
+  "human_acceptance": false,
+  "implementation_revision": "bfa2dca01b905502455db4e8d6f5625ad7bad7d2",
+  "catalog_sha256": "cc64cf00e19b839a8b22852c24b798ae78e2a7bb8db1ab12d4e4119fb1dc15ff",
+  "limitations": [
+    "Explicit generated-module policy; no runtime import verification or arbitrary monkeypatch analysis.",
+    "Expected misses remain failures of analysis capability even when expectation_match is true.",
+    "No cross-function value propagation or C# binding proof; mutable TS/unknown sites remain candidates."
+  ]
+}

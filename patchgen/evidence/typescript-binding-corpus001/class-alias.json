@@ -1,0 +1,65 @@
+{
+  "id": "class-alias",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 4,
+          "column": 14,
+          "end_line": 4,
+          "end_column": 23,
+          "kind": "field_access",
+          "binding": "canonical",
+          "module": "fleet.vehicle_pb2",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "from import",
+              "module": "fleet.vehicle_pb2",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 2,
+              "operation": "assignment",
+              "name": "Message"
+            },
+            {
+              "line": 3,
+              "operation": "constructor"
+            },
+            {
+              "line": 3,
+              "operation": "assignment",
+              "name": "entity"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "6cf66a793542efb154db9fa557c58f0788a6868b086a09316588ecbd1a137bbb",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

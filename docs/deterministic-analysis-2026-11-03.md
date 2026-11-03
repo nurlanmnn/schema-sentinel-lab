@@ -179,3 +179,28 @@ language distinctions; the .NET fixture restored only from an empty local source
 with no new external package. These fixtures do not validate generated bindings
 or migrations. `source-spelling-corpus001` retains the expanded corpus results.
 No model requests, proposals or human acceptance occurred.
+
+## Follow-up: TypeScript const/source-binding evidence
+
+Added a bounded ts-proto layer for exact generated-module imports, immutable const
+aliases, direct decode results, encoder object keys and field reads. Parameter,
+loop, class and enclosing-scope shadowing, visible namespace mutations and
+unsupported TypeScript namespaces suppress claims. Mutable variables, casts,
+annotations and outer local captures remain candidates. Audits reproduced and
+retained scope/mutator counterexamples before fixing them. Shared dispatch lets
+the adapter recompute TS claims and reject altered evidence or dropped references.
+
+All 213 patchgen tests and 27 testbed tests pass. Fourteen authored TS boundary
+cases expand the component corpus to 54: 54/54 expected outcomes, 48/49 affected
+candidate lines, 18 extras, 15/15 expected binding lines and zero extra claims
+(`typescript-binding-corpus002`). The previous 52-case run remains retained.
+These are source inventories, not migration successes or a human baseline.
+
+The real analysis-only telemetry smoke still adapts with 9/9 known lines and no
+extras; Python lines 10–12 and TypeScript lines 9–11 carry required rename
+references. C# remains unbound. The eight-domain-case corpus still matches 8/8.
+Evidence is in `typescript-binding-audit001`, `typescript-binding-smoke001` and
+`typescript-binding-domain001`. The audit's final implementation snapshots include
+the final adapter guards; earlier smoke/corpus snapshots preserve their exact
+pre-commit implementations. Temporary source checkouts were removed. No model
+requests, generated migration proposals or human approvals occurred.
