@@ -142,3 +142,19 @@ still matches 8/8 authored outcomes (`runtime-inventory-domain001`), and the
 analysis-only telemetry smoke adapts with 9/9 known lines and zero extras
 (`runtime-inventory-smoke001`). Source snapshots are retained; temporary source
 checkouts were removed. No proposals, model requests or human acceptance occurred.
+
+## Follow-up: Python identifier spelling and token ranges
+
+An authored fullwidth field identifier reproduced a candidate miss and incorrect
+binding byte columns. Python normalizes identifiers in its AST but keeps original
+source offsets. The locator now normalizes identifier comparisons, and the binding
+layer indexes exact source NAME tokens rather than subtracting the normalized
+field-name length. Two regression groups cover normalized constructor keywords,
+attribute accesses, non-ASCII prefixes and multiline tokens. Evidence retains the
+failing reproduction and source snapshots in `python-token-audit001`.
+
+All 194 patchgen tests pass. The unchanged 32-case component corpus retains its
+24/25 affected candidate lines, eight extras and 8/8 expected bound lines with no
+extra claims (`python-token-corpus001`). This adds a bounded lexical capability;
+it does not change the documented arbitrary-receiver/dataflow limitations. No
+model requests or migration proposals occurred.

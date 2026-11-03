@@ -52,3 +52,9 @@ dictionary access, and walrus assignments in definition headers disable positive
 claims for the file. The hazard pass deliberately overapproximates names across
 scopes; it can suppress valid evidence when an unrelated local reuses a name.
 This is a conservative evidence boundary, not execution or monkeypatch analysis.
+
+Python identifier comparisons apply the language's NFKC normalization. Evidence
+ranges come from original `tokenize` NAME tokens, not normalized identifier
+lengths. This preserves exact UTF-8 byte ranges for compatible Unicode spellings,
+non-ASCII prefixes and multiline accesses; an unavailable exact token suppresses
+the binding claim. String-key values are not identifier-normalized.

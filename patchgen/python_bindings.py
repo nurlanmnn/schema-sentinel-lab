@@ -6,6 +6,9 @@ Unrecognized expressions never acquire a message type. Branches and nested scope
 are deliberately not followed; lexical candidates remain available in the locator.
 """
 import ast
+import io
+import tokenize
+import unicodedata
 
 # Declared standard protoc outputs for this repository (buf module root: proto).
 # Unknown schema/message pairs, including authored corpus stubs, stay candidates.
@@ -48,6 +51,19 @@ def references(text, field, module, symbol):
     """Return bound field tokens and limitations; retain no negative type claims."""
     tree = ast.parse(text)
     found, issues = [], []
+    # AST identifiers are NFKC-normalized; offsets still describe the original
+    # UTF-8 source. Index real NAME tokens instead of subtracting normalized-name
+    # length from an attribute endpoint (which can point inside a Unicode token).
+    normalized_text = text.replace('\r\n', '\n').replace('\r', '\n')
+    source_lines = normalized_text.split('\n')
+    starts, ends = {}, {}
+    for token in tokenize.generate_tokens(io.StringIO(normalized_text).readline):
+        if token.type != tokenize.NAME or unicodedata.normalize('NFKC', token.string) != field:
+            continue
+        start = (token.start[0], len(source_lines[token.start[0]-1][:token.start[1]].encode()))
+        end = (token.end[0], len(source_lines[token.end[0]-1][:token.end[1]].encode()))
+        starts[start] = (start, end)
+        ends[end] = (start, end)
     # Audit hazards across the entire AST, including unsupported class/nested
     # bodies. This deliberately overapproximates aliases across lexical scopes:
     # uncertainty may remove positive evidence, never establish receiver identity.
@@ -102,10 +118,14 @@ def references(text, field, module, symbol):
             return [], [dict(line=node.lineno, reason=reason + '; binding evidence disabled')]
 
     def evidence(node, value, kind):
-        line = node.end_lineno if isinstance(node, ast.Attribute) else node.lineno
-        column = node.end_col_offset - len(field.encode()) + 1 if isinstance(node, ast.Attribute) else node.col_offset + 1
-        found.append(dict(line=line, column=column,
-                          end_line=line, end_column=column + len(field.encode()),
+        token = (ends.get((node.end_lineno, node.end_col_offset)) if isinstance(node, ast.Attribute)
+                 else starts.get((node.lineno, node.col_offset)))
+        if token is None:
+            issues.append(dict(line=node.lineno, reason='exact source field token unavailable; no binding evidence'))
+            return
+        (line, column), (end_line, end_column) = token
+        found.append(dict(line=line, column=column+1,
+                          end_line=end_line, end_column=end_column+1,
                           kind=kind, binding='canonical', module=module, symbol=symbol,
                           evidence=value[1]))
 

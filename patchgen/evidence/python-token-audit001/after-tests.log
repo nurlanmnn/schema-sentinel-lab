@@ -1,0 +1,17 @@
+test_bound_required_reference_cannot_be_dismissed (patchgen.tests.test_python_bindings.BindingTests.test_bound_required_reference_cannot_be_dismissed) ... ok
+test_constructor_parser_alias_and_threshold (patchgen.tests.test_python_bindings.BindingTests.test_constructor_parser_alias_and_threshold) ... ok
+test_definition_header_rebinding_cannot_keep_import_identity (patchgen.tests.test_python_bindings.BindingTests.test_definition_header_rebinding_cannot_keep_import_identity) ... ok
+test_direct_module_import_and_class_alias (patchgen.tests.test_python_bindings.BindingTests.test_direct_module_import_and_class_alias) ... ok
+test_global_rebind_and_namespace_mutation_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_global_rebind_and_namespace_mutation_disable_claims) ... ok
+test_hidden_and_qualified_namespace_mutations_disable_claims (patchgen.tests.test_python_bindings.BindingTests.test_hidden_and_qualified_namespace_mutations_disable_claims) ... ok
+test_match_captures_shadow_imports_and_rebind_instances (patchgen.tests.test_python_bindings.BindingTests.test_match_captures_shadow_imports_and_rebind_instances) ... ok
+test_multiline_attribute_and_keyword_positions_point_to_field_tokens (patchgen.tests.test_python_bindings.BindingTests.test_multiline_attribute_and_keyword_positions_point_to_field_tokens) ... ok
+test_normalized_identifiers_keep_exact_source_byte_ranges (patchgen.tests.test_python_bindings.BindingTests.test_normalized_identifiers_keep_exact_source_byte_ranges) ... ok
+test_real_telemetry_threshold_has_required_binding_evidence (patchgen.tests.test_python_bindings.BindingTests.test_real_telemetry_threshold_has_required_binding_evidence) ... ok
+test_shadowing_rebinding_and_compound_flow_cannot_keep_type (patchgen.tests.test_python_bindings.BindingTests.test_shadowing_rebinding_and_compound_flow_cannot_keep_type) ... ok
+test_wrong_version_and_unknown_parameter_remain_candidates (patchgen.tests.test_python_bindings.BindingTests.test_wrong_version_and_unknown_parameter_remain_candidates) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.734s
+
+OK

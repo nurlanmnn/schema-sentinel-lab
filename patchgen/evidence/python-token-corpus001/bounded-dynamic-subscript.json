@@ -1,0 +1,35 @@
+{
+  "id": "bounded-dynamic-subscript",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: dynamic subscript candidate; field identity unknown",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [
+    {
+      "line": 2,
+      "reason": "dynamic subscript; receiver/key identity requires review"
+    }
+  ],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "1c02b1d84ced4489ed2dce71439ad6cb912f43ec0f0c29af38186b18e240352e",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

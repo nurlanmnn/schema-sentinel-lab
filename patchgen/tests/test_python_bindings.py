@@ -100,6 +100,29 @@ class BindingTests(unittest.TestCase):
                 self.assertFalse(refs)
                 self.assertTrue(issues)
 
+    def test_normalized_identifiers_keep_exact_source_byte_ranges(self):
+        spelling = 'ｓｐｅｅｄ_ｍｐｓ'
+        source = IMPORT + f'e = V({spelling}=1)\nprint("é", e.{spelling})\n'
+        positions, _, error = scan(source, 'python', 'speed_mps')
+        self.assertFalse(error)
+        self.assertEqual([p['start_line'] for p in positions], [2,3])
+        refs, _ = bound(source)
+        self.assertEqual([r['line'] for r in refs], [2,3])
+        for ref in refs:
+            line = source.splitlines()[ref['line']-1].encode()
+            self.assertEqual(line[ref['column']-1:ref['end_column']-1].decode(), spelling)
+        event = dict(old_name='speed_mps', category='field_renamed')
+        positions, _ = attach_bindings(source, 'python', event, ('fleet.vehicle_pb2','Vehicle'), positions)
+        self.assertTrue(all(p.get('required_reference') for p in positions))
+
+    def test_multiline_attribute_and_keyword_positions_point_to_field_tokens(self):
+        source = IMPORT + 'e = V(\n    speed_mps=1,\n)\nprint((e\n    .speed_mps))\n'
+        refs, _ = bound(source)
+        self.assertEqual([r['line'] for r in refs], [3,6])
+        for ref in refs:
+            raw = source.splitlines()[ref['line']-1].encode()
+            self.assertEqual(raw[ref['column']-1:ref['end_column']-1], b'speed_mps')
+
     def test_bound_required_reference_cannot_be_dismissed(self):
         positions = [dict(start_line=1, end_line=1, required_reference=True)]
         value = dict(outcome='no_change', edits=[], rationale='bindings rewrite references', confidence=.5,

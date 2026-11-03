@@ -1,6 +1,7 @@
 """Conservative syntax candidates; no whole-program receiver/type certainty."""
 import ast
 import re
+import unicodedata
 from tree_sitter import Language, Parser
 import tree_sitter_python
 import tree_sitter_typescript
@@ -71,7 +72,8 @@ def scan(text, language, field):
     for node in walk(tree.root_node):
         value = raw[node.start_byte:node.end_byte].decode()
         parent = node.parent
-        if node.type in ('identifier','property_identifier') and value.lstrip('@') in variants:
+        identifier = unicodedata.normalize('NFKC', value) if language == 'python' else value.lstrip('@')
+        if node.type in ('identifier','property_identifier') and identifier in variants:
             if parent and parent.type not in ('comment','string','string_literal'):
                 lines.setdefault(node.start_point.row+1, set()).add(parent.type)
         if literal_string(node, raw, language) in variants:
