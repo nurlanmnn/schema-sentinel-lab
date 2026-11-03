@@ -262,3 +262,19 @@ affected candidate lines, 23 extras, 15/15 expected bound lines and zero extra
 claims. Evidence and before/after logs are in `container-binding-audit001` and
 `container-binding-corpus001`. No model requests, migration proposals or human
 approvals occurred.
+
+## Follow-up: Recheck advertised detector event identities at the adapter
+
+A live detector record could drop its event or supply a different message/field
+identity and enter adaptation with stripped required-reference evidence. The
+adapter now rebuilds descriptors for advertised detector 1.1 onward and verifies
+the single supported classification, event, schema hashes and descriptor hashes.
+Forged unsupported/structural outcomes also reject. Legacy supplied detector
+fixtures remain readable with explicit narrower provenance. This is consistency
+validation using the owning detector, not independent verification or producer
+authentication.
+
+All 222 patchgen tests and 27 testbed tests pass. The analysis-only telemetry
+smoke adapted with 9/9 authored lines and zero extras. Evidence is in
+`detector-contract-audit001` and `detector-contract-smoke001`; the temporary source
+checkout was removed. No model requests, proposals or human approvals occurred.

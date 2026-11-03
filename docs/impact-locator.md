@@ -85,3 +85,9 @@ Required-reference flags are language-specific: a rename that preserves the
 generated TS member (for example `speed_mps -> speedMps`) retains binding evidence
 without forcing an edit. Removals and known distinct generated-member renames
 remain required. Unsupported new member spellings record an unresolved limitation.
+
+The adapter also rebuilds old/new descriptors for advertised detector version
+1.1 onward. It requires the same supported event, classification and hashes
+before using binding evidence. Genuine legacy detector fixtures keep supplied
+classification with narrower provenance. This reuses the owning detector and
+checks consistency; it neither authenticates producers nor proves semantics.

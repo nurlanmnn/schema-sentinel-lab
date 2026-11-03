@@ -1,0 +1,32 @@
+test_final_payload_change_fails (test_evidence.EvidenceTests.test_final_payload_change_fails) ... ok
+test_intermediate_misdecode_fails_even_when_final_payload_matches (test_evidence.EvidenceTests.test_intermediate_misdecode_fails_even_when_final_payload_matches) ... ok
+test_matching_decoders (test_evidence.EvidenceTests.test_matching_decoders) ... ok
+test_missing_runtime_fails (test_evidence.EvidenceTests.test_missing_runtime_fails) ... ok
+test_trace_fails_separately (test_evidence.EvidenceTests.test_trace_fails_separately) ... ok
+test_oracle_rejects_invalid_modes_and_out_of_range_integers (test_inventory.InventoryOracleTests.test_oracle_rejects_invalid_modes_and_out_of_range_integers) ... ok
+test_oracle_rejects_narrowing_numbers_and_boolean_predicates (test_inventory.InventoryOracleTests.test_oracle_rejects_narrowing_numbers_and_boolean_predicates) ... ok
+test_width_corpus_includes_signed_endpoints_and_unsafe_neighbors (test_inventory.InventoryOracleTests.test_width_corpus_includes_signed_endpoints_and_unsafe_neighbors) ... ok
+test_wire_literals (test_inventory.InventoryOracleTests.test_wire_literals) ... ok
+test_cleanup_stops_a_running_child_process (test_local_runner.LocalRunnerTests.test_cleanup_stops_a_running_child_process) ... ok
+test_macos_and_linux_use_the_bin_interpreter (test_local_runner.LocalRunnerTests.test_macos_and_linux_use_the_bin_interpreter) ... ok
+test_missing_tools_fail_before_installation (test_local_runner.LocalRunnerTests.test_missing_tools_fail_before_installation) ... ok
+test_occupied_port_does_not_start_or_stop_other_programs (test_local_runner.LocalRunnerTests.test_occupied_port_does_not_start_or_stop_other_programs) ... ok
+test_python_server_starts_without_reverse_dns (test_local_runner.LocalRunnerTests.test_python_server_starts_without_reverse_dns) ... ok
+test_windows_uses_the_scripts_interpreter (test_local_runner.LocalRunnerTests.test_windows_uses_the_scripts_interpreter) ... ok
+test_bad_requests_and_capacity (test_pubsub.BrokerTests.test_bad_requests_and_capacity) ... ok
+test_fanout_isolation_independent_fifo_and_poll_redelivery (test_pubsub.BrokerTests.test_fanout_isolation_independent_fifo_and_poll_redelivery) ... ok
+test_independent_wire_encoder_known_bytes (test_pubsub.BrokerTests.test_independent_wire_encoder_known_bytes) ... ok
+test_invalid_ack_does_not_mutate_and_duplicate_rejects (test_pubsub.BrokerTests.test_invalid_ack_does_not_mutate_and_duplicate_rejects) ... ok
+test_migration_expectations_are_explicit_and_independent_of_wire_bytes (test_pubsub.BrokerTests.test_migration_expectations_are_explicit_and_independent_of_wire_bytes) ... ok
+test_no_history_replay (test_pubsub.BrokerTests.test_no_history_replay) ... ok
+test_observation_shape_rejected_before_queue_mutation (test_pubsub.BrokerTests.test_observation_shape_rejected_before_queue_mutation) ... ok
+test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject (test_pubsub.EvidenceTests.test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject) ... ok
+test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads (test_pubsub.EvidenceTests.test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads) ... ok
+test_real_http_malformed_routes_types_and_success (test_pubsub.HttpBrokerTests.test_real_http_malformed_routes_types_and_success) ... ok
+test_valid_and_boundary (test_telemetry.TelemetryOracleTests.test_valid_and_boundary) ... ok
+test_wrong_units_threshold_key_or_construction_rejected (test_telemetry.TelemetryOracleTests.test_wrong_units_threshold_key_or_construction_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.524s
+
+OK

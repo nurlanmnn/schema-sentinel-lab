@@ -53,6 +53,31 @@ def scan_manifest(repo, revision, locator):
     return contexts
 
 
+def verify_detector_record(detector):
+    """Recompute advertised live descriptor claims; legacy fixtures stay explicit.
+
+    Uses the owning detector implementation, so this is consistency validation,
+    not an independent implementation or producer authentication.
+    """
+    producer = re.fullmatch(r'independent-descriptor-detector/(\d+)\.(\d+)', detector['producer'])
+    if not producer or tuple(map(int, producer.groups())) < (1, 1):
+        return 'legacy supplied classification; descriptor claims not recomputed'
+    if (detector.get('structural_status') != 'single_supported_event' or
+            detector.get('unsupported') != [] or
+            not isinstance(detector.get('events'), list) or len(detector['events']) != 1):
+        raise ContractError('advertised detector requires one supported event and explicit structural status')
+    from patchgen.detector import detect
+    change = detector['change']
+    expected = detect(change['old_schema'], change['new_schema'], change['schema_path'],
+                      detector['source_revision'], change['id'],
+                      require(detector, 'intended_behavior', str, 'detector'))
+    keys = ('status', 'structural_status', 'events', 'unsupported', 'old_schema_sha256',
+            'new_schema_sha256', 'old_descriptor_sha256', 'new_descriptor_sha256')
+    if expected['change']['category'] != change['category'] or any(detector.get(key) != expected[key] for key in keys):
+        raise ContractError('detector claims do not match schema descriptor recomputation')
+    return 'schema hashes, descriptor hashes and supported event recomputed; not independent analysis'
+
+
 def adapt(repo, detector, locator):
     for name,record in [('detector',detector),('locator',locator)]:
         if require(record,'adapter_version',str,name)!='1.0':raise ContractError('unsupported '+name+' adapter_version')
@@ -67,6 +92,7 @@ def adapt(repo, detector, locator):
     if (locator.get('source_revision')!=revision or locator.get('change_id')!=change.get('id')
             or locator.get('old_schema_sha256')!=digest(change.get('old_schema',''))):
         raise ContractError('locator revision/change/schema identity mismatch')
+    detector_verification = verify_detector_record(detector)
     contexts = scan_manifest(repo, revision, locator)
     events = detector.get('events', [])
     if not isinstance(events, list) or events and (len(events) != 1 or not isinstance(events[0], dict) or events[0].get('category') != change['category']):
@@ -129,7 +155,7 @@ def adapt(repo, detector, locator):
     case=validate_input(dict(contract_version='1.0',source_revision=revision,change=change,
         intended_behavior=require(detector,'intended_behavior',str,'detector'),affected_files=files))
     verify_source(repo,case)
-    provenance=dict(adapter_version='1.0',detector_producer=detector['producer'],locator_producer=locator['producer'],
+    provenance=dict(adapter_version='1.0',detector_verification=detector_verification,detector_producer=detector['producer'],locator_producer=locator['producer'],
         detector_sha256=digest(json.dumps(detector,sort_keys=True)),locator_sha256=digest(json.dumps(locator,sort_keys=True)),
         scan_verification=('exact runtime tree inventory and supported source manifest' if locator.get('scan_manifest_version') == '1.1' else 'exact supported tracked-runtime manifest') if contexts is not None else 'legacy supplied files only',
         binding_verification='positive claims recomputed under declared repository Python/ts-proto policies; not independent analysis',

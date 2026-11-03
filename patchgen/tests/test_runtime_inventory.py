@@ -172,3 +172,32 @@ class RuntimeInventoryTests(unittest.TestCase):
         next(f for f in changed['files'] if f['language'] == 'typescript')['positions'][0]['required_reference'] = True
         with self.assertRaisesRegex(ContractError, 'required flag'):
             adapt(self.repo, detector, changed)
+
+    def test_advertised_live_detector_cannot_strip_or_forge_events(self):
+        from patchgen.detector import detect
+        change = self.detector['change']
+        self.write('runtimes/python/main.py', 'from v1.entity_pb2 import Entity as V\ne = V(name="a")\nprint(e.name)\n')
+        revision = self.commit()
+        detector = detect(change['old_schema'], change['new_schema'], change['schema_path'],
+                          revision, change['id'], self.detector['intended_behavior'])
+        record = locate(self.repo, detector)
+        adapt(self.repo, detector, record)
+        for mutation in ('drop_events', 'empty_events', 'old_name', 'message', 'new_schema',
+                         'schema_hash', 'descriptor_hash', 'unsupported', 'structural_status'):
+            changed = copy.deepcopy(detector)
+            stripped = copy.deepcopy(record)
+            # A stripped event plus stripped flags must not select legacy semantics.
+            for file in stripped['files']:
+                for position in file['positions']:
+                    position.pop('binding_evidence', None)
+                    position.pop('required_reference', None)
+            if mutation == 'drop_events': changed.pop('events')
+            elif mutation == 'empty_events': changed['events'] = []
+            elif mutation in ('old_name', 'message'): changed['events'][0][mutation] = 'forged'
+            elif mutation == 'new_schema': changed['change']['new_schema'] = change['old_schema']
+            elif mutation == 'schema_hash': changed['new_schema_sha256'] = '0'*64
+            elif mutation == 'descriptor_hash': changed['old_descriptor_sha256'] = '0'*64
+            elif mutation == 'unsupported': changed['unsupported'] = ['companion metadata edit']
+            else: changed['structural_status'] = 'no_structural_change'
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'detector'):
+                adapt(self.repo, changed, stripped)
