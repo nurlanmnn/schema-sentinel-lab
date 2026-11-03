@@ -17,7 +17,7 @@ identities; parameter and enclosing lexical shadowing invalidate those identitie
 It does not propagate outer local values into closures. Mutable `let`/`var` flow,
 branch joins, destructuring, casts, annotations and inferred interface compatibility
 never establish a message value. Exact original UTF-8 token ranges are retained.
-Field-name conversion is restricted to the declared simple lower/snake-case policy.
+Field-name conversion is restricted to the declared ASCII lower-initial camel/snake-case policy.
 
 A conservative AST hazard pass covers aliases and mutations in unsupported bodies.
 Visible codec writes, const reassignments, native namespace mutator references
@@ -35,3 +35,12 @@ They do not prove every field token was transformed. C# remains candidate-only.
 Corpus-only policy overrides are explicit fixture assumptions, as for the existing
 Python corpus; the adapter does not accept them as repository policy. Historical
 source/evidence snapshots remain intact. No dependencies or model requests were added.
+
+Required edits now distinguish source identity from generated member changes.
+Under default ts-proto key naming, `speed_mps -> speedMps` preserves `speedMps`.
+The bound TS reference is optional in this case; Python still needs the rename.
+Removal remains required, and a rename with two known distinct generated names
+remains required. Unsupported new spellings leave the edit requirement unresolved
+and record a limitation. A shared rule governs locator flags and adapter checks
+for both positions and omitted files. A local protoc/ts-proto fixture confirms
+the unchanged member, without model inference or external generation.

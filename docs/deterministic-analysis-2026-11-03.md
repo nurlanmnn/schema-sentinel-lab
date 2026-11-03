@@ -228,3 +228,20 @@ bound lines and zero extra claims (`python-dynamic-reference-corpus001`). The
 full-suite initial failure was a stale aggregate extra-count assertion after
 adding two deliberately unbound cases; the retained log records it. No model
 requests, migration proposals or human approvals occurred.
+
+## Follow-up: Generated member identity versus schema rename
+
+An authored regression reproduced a required TS edit for the schema rename
+`speed_mps -> speedMps`, although local protoc 25.1/ts-proto 1.165.0 generate the
+same `speedMps` member for both versions. Binding identity remains attached, but
+a shared locator/adapter rule requires an edit only for removal or a known
+generated-member change. Python's field still changes. Unsupported new TS member
+spellings record an unresolved edit-requirement limitation. No type annotations
+or casts establish identity. The bounded naming subset now includes lower-initial
+mixed case, matching the inspected pinned generator's default key conversion.
+
+All 219 patchgen tests pass. Evidence in `runtime-member-rename-audit001` includes
+the failing regression, final tests, a real Git-tree adapter test, implementation
+snapshots and both generated TS files. An intermediate focused failure was a
+wrong test review-line number; its log is retained. No models, generated migration
+proposals or human acceptance were involved.

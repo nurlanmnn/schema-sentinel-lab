@@ -1,0 +1,16 @@
+.........E..
+======================================================================
+ERROR: test_rename_with_unchanged_generated_member_is_optional (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_rename_with_unchanged_generated_member_is_optional)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 147, in test_rename_with_unchanged_generated_member_is_optional
+    self.assertEqual(resolve_candidates(source, value, positions), source)
+                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/generator.py", line 277, in resolve_candidates
+    raise ContractError('invalid/duplicate candidate review line')
+patchgen.generator.ContractError: invalid/duplicate candidate review line
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.245s
+
+FAILED (errors=1)

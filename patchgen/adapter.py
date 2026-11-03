@@ -4,7 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
-from patchgen.binding_analysis import analyze_bindings
+from patchgen.binding_analysis import analyze_bindings, reference_requires_edit
 from patchgen.runtime_inventory import LANGUAGES, inventory, blocking_entries
 from patchgen.generator import ContractError, command, require, safe_path, validate_input, verify_source, save
 
@@ -95,7 +95,7 @@ def adapt(repo, detector, locator):
             bound, _ = analyze_bindings(context, item['language'], binding_event, change['schema_path'], path)
         except SyntaxError as error:
             raise ContractError('binding source cannot be parsed') from error
-        required_event = binding_event and binding_event['category'] in ('field_renamed', 'field_removed')
+        required_event = reference_requires_edit(item['language'], binding_event)
         if required_event and any(not any(a <= ref['line'] <= b for a, b in ranges) for ref in bound):
             raise ContractError('missing required bound reference positions')
         for pos in positions:
@@ -106,7 +106,7 @@ def adapt(repo, detector, locator):
                     raise ContractError('binding evidence requires a supported detector event')
                 if type(pos.get('required_reference')) is not bool or not isinstance(pos.get('binding_evidence'), list) or not pos['binding_evidence']:
                     raise ContractError('required-reference flag needs binding evidence')
-                required = binding_event['category'] in ('field_renamed', 'field_removed')
+                required = reference_requires_edit(item['language'], binding_event)
                 if (pos['required_reference'] is not required or
                         json.dumps(pos['binding_evidence'], sort_keys=True) != json.dumps(expected, sort_keys=True)):
                     raise ContractError('binding evidence/required flag does not match pinned source analysis')
@@ -124,7 +124,7 @@ def adapt(repo, detector, locator):
                     bound, _ = analyze_bindings(context, LANGUAGES[Path(path).suffix], event, change['schema_path'], path)
                 except SyntaxError as error:
                     raise ContractError('omitted binding source cannot be parsed') from error
-                if bound:
+                if bound and reference_requires_edit(LANGUAGES[Path(path).suffix], event):
                     raise ContractError('locator omitted a file with required bound references')
     case=validate_input(dict(contract_version='1.0',source_revision=revision,change=change,
         intended_behavior=require(detector,'intended_behavior',str,'detector'),affected_files=files))

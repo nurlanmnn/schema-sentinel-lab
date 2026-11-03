@@ -9,7 +9,7 @@ from patchgen.adapter import digest
 from patchgen.generator import command
 from patchgen.python_bindings import POLICY
 from patchgen.typescript_bindings import POLICY as TYPESCRIPT_POLICY
-from patchgen.binding_analysis import analyze_bindings
+from patchgen.binding_analysis import analyze_bindings, reference_requires_edit
 from patchgen.runtime_inventory import inventory, blocking_entries
 from patchgen.source_spellings import identifier_value, quoted_value
 
@@ -115,7 +115,7 @@ def attach_bindings(text, language, event, policy, positions, parse_error=False,
             evidence = [item for item in bound if item['line'] == position['start_line']]
             if evidence:
                 position['binding_evidence'] = evidence
-                position['required_reference'] = event['category'] in ('field_renamed', 'field_removed')
+                position['required_reference'] = reference_requires_edit(language, event)
     return positions, limitations
 
 

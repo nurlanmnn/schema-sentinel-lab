@@ -151,3 +151,24 @@ class RuntimeInventoryTests(unittest.TestCase):
         for record in ({'scanned': []}, {'runtime_inventory': []}):
             with self.subTest(record=record), self.assertRaisesRegex(ContractError, 'manifest'):
                 scan_manifest(self.repo, revision, record)
+
+    def test_same_generated_ts_member_rename_survives_adapter(self):
+        from patchgen.detector import detect
+        old = 'syntax="proto3"; package simulation.v1; message Entity { float speed_mps=1; }'
+        new = old.replace('speed_mps', 'speedMps')
+        path = 'proto/v1/entity.proto'
+        self.write(path, old)
+        self.write('runtimes/typescript/main.ts',
+                   'import { Entity as V } from "../../generated/ts/v1/entity";\n'
+                   'const e = V.decode(data);\nconsole.log(e.speedMps);\n')
+        revision = self.commit()
+        detector = detect(old, new, path, revision, 'same-ts-member', 'Preserve speed value')
+        record = locate(self.repo, detector)
+        case, _ = adapt(self.repo, detector, record)
+        position = next(f for f in case['affected_files'] if f['language'] == 'typescript')['positions'][0]
+        self.assertTrue(position['binding_evidence'])
+        self.assertIs(position['required_reference'], False)
+        changed = copy.deepcopy(record)
+        next(f for f in changed['files'] if f['language'] == 'typescript')['positions'][0]['required_reference'] = True
+        with self.assertRaisesRegex(ContractError, 'required flag'):
+            adapt(self.repo, detector, changed)

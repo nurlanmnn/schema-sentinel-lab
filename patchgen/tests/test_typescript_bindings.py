@@ -127,6 +127,25 @@ class TypeScriptBindingTests(unittest.TestCase):
         self.assertTrue(positions[0]['binding_evidence'])
         self.assertIs(positions[0]['required_reference'], False)
 
+    def test_rename_with_unchanged_generated_member_is_optional(self):
+        source = IMPORT + 'const e = V.decode(data);\nconsole.log(e.speedMps);\n'
+        for new_name, required in (('speedMps', False), ('ground_speed_mps', True)):
+            positions, _, _ = scan(source, 'typescript', 'speed_mps')
+            event = dict(old_name='speed_mps', new_name=new_name, category='field_renamed',
+                         message='simulation.telemetry.VehicleTelemetry')
+            positions, _ = attach_bindings(source, 'typescript', event, None, positions,
+                                          schema_path='proto/telemetry/vehicle.proto', source_path=PATH)
+            with self.subTest(new_name=new_name):
+                self.assertTrue(positions[0]['binding_evidence'])
+                self.assertIs(positions[0]['required_reference'], required)
+        value = dict(outcome='no_change', edits=[], rationale='same generated TS member', confidence=.9,
+                     assumptions=[], candidate_reviews=[dict(line=3, decision='unaffected', reason='same member')])
+        positions, _, _ = scan(source, 'typescript', 'speed_mps')
+        event['new_name'] = 'speedMps'
+        positions, _ = attach_bindings(source, 'typescript', event, None, positions,
+                                      schema_path='proto/telemetry/vehicle.proto', source_path=PATH)
+        self.assertEqual(resolve_candidates(source, value, positions), source)
+
     def test_real_telemetry_threshold_and_adapter_tampering(self):
         fixture = json.loads((ROOT/'patchgen/fixtures/telemetry-speed-rename/runtime-input.json').read_text())
         change = fixture['change']

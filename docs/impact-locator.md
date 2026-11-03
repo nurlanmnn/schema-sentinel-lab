@@ -80,3 +80,8 @@ Version 1.4 onward requires manifest 1.1; version 1.3 requires a manifest. Orpha
 scan/inventory fields cannot silently enter the legacy path. This checks record
 consistency, not producer authentication; genuinely supplied legacy records retain
 their narrower provenance.
+
+Required-reference flags are language-specific: a rename that preserves the
+generated TS member (for example `speed_mps -> speedMps`) retains binding evidence
+without forcing an edit. Removals and known distinct generated-member renames
+remain required. Unsupported new member spellings record an unresolved limitation.

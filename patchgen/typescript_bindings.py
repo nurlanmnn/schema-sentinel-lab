@@ -30,15 +30,26 @@ def walk(node, nested=True):
             yield from walk(child, nested)
 
 
+def runtime_field_name(field):
+    """Bounded ts-proto 1.165.0 default keys policy, including mixed case.
+
+    This subset excludes leading/trailing/repeated underscores and all-uppercase
+    words. Unsupported spellings withdraw evidence rather than guessing.
+    """
+    if not isinstance(field, str) or not re.fullmatch(r'[a-z][a-zA-Z0-9]*(?:_[a-zA-Z0-9]+)*', field):
+        return None
+    parts = field.split('_')
+    return parts[0] + ''.join(p[:1].upper()+p[1:] for p in parts[1:])
+
+
 def references(text, field, module, symbol, source_path):
     raw = text.encode()
     tree = Parser(Language(tree_sitter_typescript.language_typescript())).parse(raw)
     if tree.root_node.has_error:
         raise SyntaxError('TypeScript parse failed')
-    if not re.fullmatch(r'[a-z][a-z0-9]*(?:_[a-z0-9]+)*', field):
+    member_field = runtime_field_name(field)
+    if member_field is None:
         return [], ['field naming outside declared ts-proto camel-case policy']
-    parts = field.split('_')
-    member_field = parts[0] + ''.join(p[:1].upper()+p[1:] for p in parts[1:])
     found, issues, imports = [], [], {}
 
     def spelling(node):

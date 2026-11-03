@@ -1,0 +1,23 @@
+{
+  "id": "typescript-identifiers-not-normalized",
+  "positions": [],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "47bef331c3bb05745df8e5734ef4ef39043384152921b6bac7eae98eef85ef39",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

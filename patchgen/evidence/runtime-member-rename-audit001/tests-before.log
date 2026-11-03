@@ -1,0 +1,25 @@
+.........FE..
+======================================================================
+ERROR: test_rename_with_unchanged_generated_member_is_optional (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_rename_with_unchanged_generated_member_is_optional)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 147, in test_rename_with_unchanged_generated_member_is_optional
+    self.assertEqual(resolve_candidates(source, value, positions), source)
+                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/generator.py", line 277, in resolve_candidates
+    raise ContractError('invalid/duplicate candidate review line')
+patchgen.generator.ContractError: invalid/duplicate candidate review line
+
+======================================================================
+FAIL: test_rename_with_unchanged_generated_member_is_optional (patchgen.tests.test_typescript_bindings.TypeScriptBindingTests.test_rename_with_unchanged_generated_member_is_optional) (new_name='speedMps')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_typescript_bindings.py", line 140, in test_rename_with_unchanged_generated_member_is_optional
+    self.assertIs(positions[0]['required_reference'], required)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not False
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.531s
+
+FAILED (failures=1, errors=1)
