@@ -44,8 +44,8 @@ def field_identity(field):
                 default_value=field.default_value if field.HasField("default_value") else None)
 
 
-def oneof_structure(message):
-    """Compare synthetic proto3 presence groups by owning field number."""
+def oneof_structure(message, renamed_fields):
+    """Ignore a synthetic group name only when its own field is renamed."""
     members = {}
     for field in message.field:
         if field.HasField('oneof_index'):
@@ -54,9 +54,11 @@ def oneof_structure(message):
     for index, declaration in enumerate(message.oneof_decl):
         fields = members.get(index, [])
         if len(fields) == 1 and fields[0].proto3_optional:
-            declaration = copy.deepcopy(declaration)
-            declaration.ClearField('name')
-            result.append((fields[0].number, declaration))
+            field_number = fields[0].number
+            if field_number in renamed_fields:
+                declaration = copy.deepcopy(declaration)
+                declaration.ClearField('name')
+            result.append((field_number, declaration))
         else:
             result.append((None, declaration))
     return result
@@ -81,7 +83,9 @@ def compare(old, new):
     for name in sorted(before.keys() & after.keys()):
         a, b = before[name], after[name]
         aa, bb = {f.number:f for f in a.field}, {f.number:f for f in b.field}
-        if oneof_structure(a) != oneof_structure(b) or a.options != b.options:
+        renamed_fields = {number for number in aa.keys() & bb.keys()
+                          if aa[number].name != bb[number].name}
+        if oneof_structure(a, renamed_fields) != oneof_structure(b, renamed_fields) or a.options != b.options:
             unsupported.append(name + ': message options/oneofs changed')
         for number in sorted(aa.keys() | bb.keys()):
             x, y = aa.get(number), bb.get(number)

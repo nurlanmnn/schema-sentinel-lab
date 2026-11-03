@@ -101,7 +101,8 @@ keys. Exact original literal token ranges are recorded. Interpolated or variable
 keys do not establish a codec or a bound field.
 
 The detector compares compiler-generated proto3 optional presence groups by field
-number while preserving their actual old and new names in rename events. Real
+number when their own field is renamed. Events preserve the actual old and new
+group names. An unrelated group-name change requires review. Real
 oneof changes still block adaptation. The locator considers descriptor JSON keys
 and old presence-group string names. Its C# candidates include pinned protoc
 property names, field-number constants and explicit proto3 optional Has/Clear

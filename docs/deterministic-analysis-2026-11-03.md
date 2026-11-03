@@ -364,3 +364,16 @@ All 236 patchgen tests passed. The 69-case component corpus matched every
 expected outcome, recovered 64/65 affected lines and all 24 expected binding
 claims, with 27 extra candidates and no extra binding claims. The eight domain
 outcomes still matched. Reports are in `aliased-reflection-audit001`.
+
+## Follow-up: Guard unrelated presence changes and measure review warnings
+
+The optional-rename exception now applies only to the synthetic group owned by
+the renamed field. The detector rejects a rename that alters another field's
+synthetic group through a compiler name collision. The component corpus scores
+authored warning lines separately from candidate and binding coverage.
+
+All 237 patchgen tests passed. All 69 component and eight domain outcomes
+matched. The component scan found 64/65 affected lines and 24/24 expected
+binding claims, with 27 extra candidates and no extra binding claims. All nine
+expected warning lines matched. The telemetry smoke adapted with 9/9 affected
+lines and zero extras. Evidence is in `presence-companion-audit001`.

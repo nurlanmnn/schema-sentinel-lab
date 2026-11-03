@@ -104,3 +104,10 @@ class DescriptorBoundaryTests(unittest.TestCase):
         old = build('syntax="proto3"; message Packet { oneof group { string label=1; } }')
         new = build('syntax="proto3"; message Packet { oneof other { string caption=1; } }')
         self.assertTrue(any('oneofs' in issue for issue in compare(old, new)[1]))
+
+    def test_unrelated_rename_cannot_hide_changed_presence_group(self):
+        old = 'syntax="proto3"; message Packet { optional string label=1; string other=2; }'
+        new = old.replace('other=', '_label=')
+        record = detect(old, new, 'model.proto', 'a'*40, 'rename', 'Rename only the second field')
+        self.assertEqual(record['status'], 'partial')
+        self.assertTrue(any('oneofs' in issue for issue in record['unsupported']))

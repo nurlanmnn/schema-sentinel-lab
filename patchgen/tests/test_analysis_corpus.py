@@ -23,8 +23,13 @@ class AnalysisCorpusTests(unittest.TestCase):
     def test_authored_catalog_expectations_are_not_locator_inputs(self):
         original = json.loads(CATALOG.read_text())
         original['cases'][0]['expected_bound'] = []
+        dynamic = next(case for case in original['cases'] if case['id'] == 'dynamic-reflection')
+        dynamic['expected_warning_lines'] = []
         original_read_bytes = Path.read_bytes
         with tempfile.TemporaryDirectory() as tmp, patch.object(Path, 'read_bytes', autospec=True, side_effect=lambda path: json.dumps(original).encode() if path == CATALOG else original_read_bytes(path)):
             summary = run(Path(tmp)/'run')
             self.assertFalse(summary['records'][0]['expectation_match'])
             self.assertEqual(summary['records'][0]['binding_coverage']['extra'], [4])
+            warning_record = next(record for record in summary['records'] if record['id'] == 'dynamic-reflection')
+            self.assertFalse(warning_record['expectation_match'])
+            self.assertEqual(warning_record['warning_coverage']['extra'], [3])

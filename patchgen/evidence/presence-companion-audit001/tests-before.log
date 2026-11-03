@@ -1,0 +1,17 @@
+.............F
+======================================================================
+FAIL: test_unrelated_rename_cannot_hide_changed_presence_group (patchgen.tests.test_detector_boundaries.DescriptorBoundaryTests.test_unrelated_rename_cannot_hide_changed_presence_group)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_detector_boundaries.py", line 112, in test_unrelated_rename_cannot_hide_changed_presence_group
+    self.assertEqual(record['status'], 'partial')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'complete' != 'partial'
+- complete
++ partial
+
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.481s
+
+FAILED (failures=1)

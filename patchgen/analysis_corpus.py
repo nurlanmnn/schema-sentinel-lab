@@ -42,13 +42,16 @@ def run(output):
                                                  source_path=ts_policy['source_path'] if ts_policy else None,
                                                  typescript_policy=(ts_policy['module'], ts_policy['symbol']) if ts_policy else None)
         actual = [p['start_line'] for p in positions]
+        warning_lines = sorted({warning['line'] for warning in warnings})
         bound = [p['start_line'] for p in positions if p.get('binding_evidence')]
         # Expectations are read only after production outputs have been obtained.
         record = dict(id=case['id'], positions=positions, warnings=warnings, parse_error=error,
                       binding_limitations=limitations, source_sha256=hashlib.sha256(case['source'].encode()).hexdigest(),
                       candidate_coverage=measure(case['affected_sites'], actual),
                       binding_coverage=measure(case['expected_bound'], bound),
-                      expectation_match=(actual == case['expected_candidates'] and bound == case['expected_bound'] and not error))
+                      warning_coverage=measure(case.get('expected_warning_lines', []), warning_lines),
+                      expectation_match=(actual == case['expected_candidates'] and bound == case['expected_bound']
+                                         and warning_lines == case.get('expected_warning_lines', []) and not error))
         save(output/(case['id']+'.json'), record)
         records.append(record)
     summary = dict(scope=catalog['scope'], scenario_count=len(records),

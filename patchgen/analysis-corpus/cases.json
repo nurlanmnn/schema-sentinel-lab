@@ -213,7 +213,10 @@
       "affected_sites": [
         3
       ],
-      "expected_bound": []
+      "expected_bound": [],
+      "expected_warning_lines": [
+        3
+      ]
     },
     {
       "id": "comprehension-parameter-shadow",
@@ -357,7 +360,10 @@
         3
       ],
       "expected_bound": [],
-      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects.",
+      "expected_warning_lines": [
+        3
+      ]
     },
     {
       "id": "bounded-dynamic-subscript",
@@ -370,7 +376,10 @@
         2
       ],
       "expected_bound": [],
-      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects.",
+      "expected_warning_lines": [
+        2
+      ]
     },
     {
       "id": "arbitrary-dynamic-subscript-limit",
@@ -394,7 +403,10 @@
         2
       ],
       "expected_bound": [],
-      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects.",
+      "expected_warning_lines": [
+        2
+      ]
     },
     {
       "id": "concatenated-reflection-key",
@@ -486,7 +498,10 @@
         3
       ],
       "expected_bound": [],
-      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity.",
+      "expected_warning_lines": [
+        3
+      ]
     },
     {
       "id": "python-normalized-dynamic-spellings",
@@ -501,7 +516,11 @@
         2
       ],
       "expected_bound": [],
-      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity."
+      "contract": "Authored lexical spelling boundary: property/key identities follow local Node/.NET sanity fixtures; candidates do not establish receiver identity.",
+      "expected_warning_lines": [
+        1,
+        2
+      ]
     },
     {
       "id": "python-string-keys-not-normalized",
@@ -889,7 +908,10 @@
         3,
         4
       ],
-      "expected_bound": []
+      "expected_bound": [],
+      "expected_warning_lines": [
+        4
+      ]
     },
     {
       "id": "python-aliased-starred-reflection",
@@ -902,7 +924,10 @@
         2
       ],
       "expected_bound": [],
-      "contract": "The caller passes a message and the affected field name as positional arguments."
+      "contract": "The caller passes a message and the affected field name as positional arguments.",
+      "expected_warning_lines": [
+        2
+      ]
     }
   ]
 }
