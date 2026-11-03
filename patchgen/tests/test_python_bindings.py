@@ -1,4 +1,5 @@
 """Independent positive and adversarial source examples for bounded binding claims."""
+import copy
 import json
 from pathlib import Path
 import subprocess
@@ -84,6 +85,23 @@ class BindingTests(unittest.TestCase):
             subprocess.run(['git', 'worktree', 'add', '--detach', str(checkout), case['source_revision']], cwd=ROOT, check=True, capture_output=True)
             try:
                 adapted, _ = adapt(checkout, detector, locator)
+                for mutation in ('symbol', 'line', 'flag', 'drop_flag', 'drop_both', 'drop_position', 'drop_file', 'drop_scan', 'stale_scan'):
+                    tampered = copy.deepcopy(locator)
+                    pos = next(f for f in tampered['files'] if f['language'] == 'python')['positions'][0]
+                    if mutation == 'symbol': pos['binding_evidence'][0]['symbol'] = 'DifferentMessage'
+                    elif mutation == 'line': pos['binding_evidence'][0]['line'] = 999
+                    elif mutation == 'flag': pos['required_reference'] = False
+                    elif mutation == 'drop_flag': pos.pop('required_reference')
+                    elif mutation == 'drop_both':
+                        pos.pop('required_reference'); pos.pop('binding_evidence')
+                    elif mutation == 'drop_position':
+                        next(f for f in tampered['files'] if f['language'] == 'python')['positions'].pop()
+                    elif mutation == 'drop_file':
+                        tampered['files'] = [f for f in tampered['files'] if f['language'] != 'python']
+                    elif mutation == 'drop_scan': tampered['scanned'].pop()
+                    else: tampered['scanned'][0]['source_sha256'] = '0'*64
+                    with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'binding|reference|manifest'):
+                        adapt(checkout, detector, tampered)
             finally:
                 subprocess.run(['git', 'worktree', 'remove', '--force', str(checkout)], cwd=ROOT, check=True, capture_output=True)
         source = next(f for f in adapted['affected_files'] if f['language'] == 'python')

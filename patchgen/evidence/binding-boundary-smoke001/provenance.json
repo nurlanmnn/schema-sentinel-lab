@@ -1,0 +1,12 @@
+{
+  "adapter_version": "1.0",
+  "detector_producer": "independent-descriptor-detector/1.1",
+  "locator_producer": "independent-tree-sitter-locator/1.3",
+  "detector_sha256": "737dcbb2ab42c3c5067e0f15a418842f5b067dbb9ce598b7db6eed042742ae20",
+  "locator_sha256": "0b65904e2c86f37b754bb1066023504da53c1626270eef7c4da1f5c25a455c48",
+  "scan_verification": "exact supported tracked-runtime manifest",
+  "binding_verification": "positive claims recomputed under declared repository Python policy; not independent analysis",
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "site_resolution": "candidate; optional bounded binding evidence",
+  "integration_scope": "validated supplied records; completeness asserted by producer, not proved by adapter"
+}

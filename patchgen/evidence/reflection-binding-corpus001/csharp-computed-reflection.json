@@ -1,0 +1,35 @@
+{
+  "id": "csharp-computed-reflection",
+  "positions": [
+    {
+      "start_line": 2,
+      "end_line": 2,
+      "reason": "Conservative syntax candidate: reflection candidate; field identity unknown",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [
+    {
+      "line": 2,
+      "reason": "reflection requires review"
+    }
+  ],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "9bc002628334e07fa6087aac45c28437701b5d7ea94d24490835f66b614abd07",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

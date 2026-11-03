@@ -41,5 +41,13 @@ canonical import/constructor/parser evidence and required rename/removal referen
 It does not promote TypeScript/C# matches or unknown receivers to type proof.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-26-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+32-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
+
+The current adapter verifies the supported tracked-runtime scan manifest and
+recomputes positive Python evidence from the pinned source before preserving it.
+It rejects missing bound lines/files and altered or stripped evidence. Legacy
+supplied records without the manifest have narrower provenance. Computed Python
+reflection is a review candidate with unknown field identity, never a bound claim.
+Dynamic subscript analysis still uses the bounded `entity`/`decoded` spelling
+heuristic; arbitrary receiver names and compound targets remain outside that scope.

@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from patchgen.python_bindings import POLICY, references
 from patchgen.generator import ContractError, command, require, safe_path, validate_input, verify_source, save
 
 CATEGORIES={'field_removed','field_renamed','field_type_changed','enum_value_added'}
@@ -12,6 +13,31 @@ LANGUAGES={'.py':'python','.ts':'typescript','.cs':'csharp'}
 
 def digest(text):
     return hashlib.sha256(text.encode()).hexdigest()
+
+
+def scan_manifest(repo, revision, locator):
+    """Check an explicit scan inventory against the exact supported runtime tree."""
+    if 'scan_manifest_version' not in locator:
+        return None
+    if locator['scan_manifest_version'] != '1.0':
+        raise ContractError('unsupported scan manifest version')
+    paths = command(['git','ls-tree','-r','--name-only',revision,'--','runtimes/'], repo).splitlines()
+    expected = {path for path in paths if Path(path).suffix in LANGUAGES}
+    entries = require(locator, 'scanned', list, 'locator')
+    contexts = {}
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise ContractError('invalid scan manifest entry')
+        path = safe_path(require(entry, 'path', str, 'scan manifest'))
+        if path not in expected or path in contexts or entry.get('language') != LANGUAGES[Path(path).suffix]:
+            raise ContractError('scan manifest path/language mismatch')
+        context = command(['git','show',revision+':'+path], repo)
+        if entry.get('source_sha256') != digest(context):
+            raise ContractError('stale scan manifest source hash')
+        contexts[path] = context
+    if set(contexts) != expected:
+        raise ContractError('incomplete scan manifest')
+    return contexts
 
 
 def adapt(repo, detector, locator):
@@ -28,12 +54,18 @@ def adapt(repo, detector, locator):
     if (locator.get('source_revision')!=revision or locator.get('change_id')!=change.get('id')
             or locator.get('old_schema_sha256')!=digest(change.get('old_schema',''))):
         raise ContractError('locator revision/change/schema identity mismatch')
+    contexts = scan_manifest(repo, revision, locator)
+    events = detector.get('events', [])
+    if not isinstance(events, list) or events and (len(events) != 1 or not isinstance(events[0], dict) or events[0].get('category') != change['category']):
+        raise ContractError('invalid or inconsistent detector events')
     files=[]
     for item in require(locator,'files',list,'locator'):
         path=safe_path(require(item,'path',str,'locator.file'))
         if not path.startswith('runtimes/') or LANGUAGES.get(Path(path).suffix)!=item.get('language'):
             raise ContractError('unsupported runtime path/language')
-        context=command(['git','show',revision+':'+path],repo)
+        if contexts is not None and path not in contexts:
+            raise ContractError('locator file missing from scan manifest')
+        context=contexts[path] if contexts is not None else command(['git','show',revision+':'+path],repo)
         if item.get('source_sha256')!=digest(context):raise ContractError('stale locator source hash: '+path)
         positions=require(item,'positions',list,path)
         ranges=[]
@@ -44,19 +76,55 @@ def adapt(repo, detector, locator):
             if pos.get('resolution') not in ('candidate', 'resolved'):raise ContractError('ambiguous locator site')
             ranges.append((start,end))
         output_positions = []
+        binding_positions = [p for p in positions if 'required_reference' in p or 'binding_evidence' in p]
+        events = detector.get('events', [])
+        binding_event = events[0] if len(events) == 1 and isinstance(events[0], dict) else None
+        policy = POLICY.get((change['schema_path'], binding_event.get('message'))) if binding_event else None
+        bound = []
+        if item['language'] == 'python' and policy and binding_event.get('old_name'):
+            try:
+                bound, _ = references(context, binding_event['old_name'], *policy)
+            except SyntaxError as error:
+                raise ContractError('binding source cannot be parsed') from error
+        elif binding_positions:
+            raise ContractError('binding evidence lacks a supported canonical policy/event')
+        required_event = binding_event and binding_event['category'] in ('field_renamed', 'field_removed')
+        if required_event and any(not any(a <= ref['line'] <= b for a, b in ranges) for ref in bound):
+            raise ContractError('missing required bound reference positions')
         for pos in positions:
             result = dict(start_line=pos['start_line'], end_line=pos['end_line'], reason=require(pos,'reason',str,path))
-            if 'required_reference' in pos:
-                if type(pos['required_reference']) is not bool or not isinstance(pos.get('binding_evidence'), list) or not pos['binding_evidence']:
+            expected = [ref for ref in bound if pos['start_line'] <= ref['line'] <= pos['end_line']]
+            if expected or 'required_reference' in pos or 'binding_evidence' in pos:
+                if type(pos.get('required_reference')) is not bool or not isinstance(pos.get('binding_evidence'), list) or not pos['binding_evidence']:
                     raise ContractError('required-reference flag needs binding evidence')
-                result.update(required_reference=pos['required_reference'], binding_evidence=pos['binding_evidence'])
+                required = binding_event['category'] in ('field_renamed', 'field_removed')
+                if (pos['required_reference'] is not required or
+                        json.dumps(pos['binding_evidence'], sort_keys=True) != json.dumps(expected, sort_keys=True)):
+                    raise ContractError('binding evidence/required flag does not match pinned source analysis')
+                result.update(required_reference=required, binding_evidence=expected)
             output_positions.append(result)
         files.append(dict(path=path,language=item['language'],source_context=context,positions=output_positions))
+    if contexts is not None and events:
+        event = events[0]
+        policy = POLICY.get((change['schema_path'], event.get('message')))
+        if policy and event.get('old_name') and event['category'] in ('field_renamed', 'field_removed'):
+            included = {file['path'] for file in files}
+            for path, context in contexts.items():
+                if LANGUAGES[Path(path).suffix] != 'python' or path in included:
+                    continue
+                try:
+                    bound, _ = references(context, event['old_name'], *policy)
+                except SyntaxError as error:
+                    raise ContractError('omitted Python source cannot be parsed') from error
+                if bound:
+                    raise ContractError('locator omitted a file with required bound references')
     case=validate_input(dict(contract_version='1.0',source_revision=revision,change=change,
         intended_behavior=require(detector,'intended_behavior',str,'detector'),affected_files=files))
     verify_source(repo,case)
     provenance=dict(adapter_version='1.0',detector_producer=detector['producer'],locator_producer=locator['producer'],
         detector_sha256=digest(json.dumps(detector,sort_keys=True)),locator_sha256=digest(json.dumps(locator,sort_keys=True)),
+        scan_verification='exact supported tracked-runtime manifest' if contexts is not None else 'legacy supplied files only',
+        binding_verification='positive claims recomputed under declared repository Python policy; not independent analysis',
         source_revision=revision, site_resolution='candidate; optional bounded binding evidence', integration_scope='validated supplied records; completeness asserted by producer, not proved by adapter')
     return case,provenance
 

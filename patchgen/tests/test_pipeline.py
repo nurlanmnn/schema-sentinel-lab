@@ -102,7 +102,7 @@ class LocatorTests(unittest.TestCase):
 
     def test_literal_and_dynamic_reflection(self):
         positions,warnings,error=scan('getattr(e, "name")\ngetattr(e, field)\n','python','name')
-        self.assertEqual([p['start_line'] for p in positions],[1])
+        self.assertEqual([p['start_line'] for p in positions],[1,2])
         self.assertEqual(warnings[0]['line'],2)
 
     def test_parse_failure(self):

@@ -199,7 +199,9 @@
       "id": "dynamic-reflection",
       "language": "python",
       "source": "from fleet.vehicle_pb2 import Vehicle as V\nentity = V()\nprint(getattr(entity, field_name))\n",
-      "expected_candidates": [],
+      "expected_candidates": [
+        3
+      ],
       "affected_sites": [
         3
       ],
@@ -320,6 +322,82 @@
       ],
       "affected_sites": [],
       "expected_bound": []
+    },
+    {
+      "id": "escaped-reflection-key",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\nentity = V()\nprint(getattr(entity, \"speed\\x5fmps\"))\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [
+        3
+      ],
+      "expected_bound": [],
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+    },
+    {
+      "id": "computed-reflection-key",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\nentity = V()\nprint(getattr(entity, f\"{prefix}_mps\"))\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [
+        3
+      ],
+      "expected_bound": [],
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+    },
+    {
+      "id": "bounded-dynamic-subscript",
+      "language": "python",
+      "source": "def read(entity, key):\n    return entity[key]\n",
+      "expected_candidates": [
+        2
+      ],
+      "affected_sites": [
+        2
+      ],
+      "expected_bound": [],
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+    },
+    {
+      "id": "arbitrary-dynamic-subscript-limit",
+      "language": "python",
+      "source": "def read(vehicle, key):\n    return vehicle[key]\n",
+      "expected_candidates": [],
+      "affected_sites": [
+        2
+      ],
+      "expected_bound": [],
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+    },
+    {
+      "id": "csharp-computed-reflection",
+      "language": "csharp",
+      "source": "class Consumer {\n  object Read(Type type, string key) => type.GetProperty(key);\n}\n",
+      "expected_candidates": [
+        2
+      ],
+      "affected_sites": [
+        2
+      ],
+      "expected_bound": [],
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
+    },
+    {
+      "id": "concatenated-reflection-key",
+      "language": "python",
+      "source": "from fleet.vehicle_pb2 import Vehicle as V\nentity = V()\nprint(getattr(entity, \"speed_\" \"mps\"))\n",
+      "expected_candidates": [
+        3
+      ],
+      "affected_sites": [
+        3
+      ],
+      "expected_bound": [],
+      "contract": "Dynamic keys/prefix are supplied by the authored caller as speed_mps / speed. Subscript receivers are observation maps, not raw Protobuf objects."
     }
   ]
 }

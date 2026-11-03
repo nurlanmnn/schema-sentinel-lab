@@ -1,4 +1,5 @@
 """Conservative syntax candidates; no whole-program receiver/type certainty."""
+import ast
 import re
 from pathlib import Path
 from tree_sitter import Language, Parser
@@ -26,6 +27,43 @@ def names(field):
             ''.join(p[:1].upper()+p[1:] for p in parts)}
 
 
+def literal_string(node, raw, language):
+    if node is None or node.type not in ('string', 'string_literal', 'concatenated_string'):
+        return None
+    value = raw[node.start_byte:node.end_byte].decode()
+    if language == 'python':
+        try:
+            result = ast.literal_eval(value)
+            return result if isinstance(result, str) else None
+        except (ValueError, SyntaxError):
+            return None
+    # Non-Python literal decoding is deliberately limited to plain quoted text.
+    return value[1:-1] if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'") else None
+
+
+def dynamic_index(node, raw, language):
+    if node.type not in ('element_access_expression', 'subscript', 'subscript_expression'):
+        return False
+    # Retain the existing bounded entity/decoded heuristic for subscripts.
+    # Broader unknown indexing (HTTP headers, arrays, etc.) needs receiver/key
+    # analysis before it can become a useful blocking impact candidate.
+    receiver = node.named_children[0] if node.named_children else None
+    if receiver is None or raw[receiver.start_byte:receiver.end_byte].decode() not in ('entity', 'decoded'):
+        return False
+    index = node.child_by_field_name('index') or node.child_by_field_name('subscript')
+    if index is not None and index.type == 'bracketed_argument_list':
+        children = index.named_children
+        index = children[0] if len(children) == 1 else None
+        if index is not None and index.type == 'argument' and len(index.named_children) == 1:
+            index = index.named_children[0]
+    if index is None:
+        return True
+    if literal_string(index, raw, language) is not None:
+        return False
+    return index.type not in ('integer','float','number','integer_literal','real_literal',
+                              'true','false','boolean','none','null','null_literal','boolean_literal')
+
+
 def scan(text, language, field):
     raw = text.encode()
     tree = Parser(Language(FACTORIES[language]())).parse(raw)
@@ -37,17 +75,24 @@ def scan(text, language, field):
         if node.type in ('identifier','property_identifier') and value.lstrip('@') in variants:
             if parent and parent.type not in ('comment','string','string_literal'):
                 lines.setdefault(node.start_point.row+1, set()).add(parent.type)
-        if node.type in ('string','string_literal') and value.strip('"\'') in variants:
+        if literal_string(node, raw, language) in variants:
             if parent and parent.type in ('argument_list','arguments','subscript','subscript_expression','element_access_expression','pair','dictionary_splat_pattern','argument'):
                 lines.setdefault(node.start_point.row+1,set()).add('literal-key/reflection candidate')
-        if node.type == 'call' and value.startswith(('getattr(', 'setattr(', 'delattr(')):
-            args = node.child_by_field_name('arguments')
-            if args and len(args.named_children)>1 and args.named_children[1].type != 'string':
-                warnings.append(dict(line=node.start_point.row+1, reason='dynamic reflection field name'))
-        if node.type in ('element_access_expression','subscript','subscript_expression') and re.match(r'(?:entity|decoded)\s*\[\s*[^\"\']',value):
-            warnings.append(dict(line=node.start_point.row+1,reason='dynamic entity subscript requires review'))
+        if node.type == 'call':
+            function = node.child_by_field_name('function')
+            function_name = raw[function.start_byte:function.end_byte].decode() if function else ''
+            if function_name in ('getattr', 'setattr', 'delattr', 'hasattr',
+                                 'builtins.getattr', 'builtins.setattr', 'builtins.delattr', 'builtins.hasattr'):
+                args = node.child_by_field_name('arguments')
+                if args and len(args.named_children)>1 and literal_string(args.named_children[1], raw, language) is None:
+                    warnings.append(dict(line=node.start_point.row+1, reason='dynamic reflection field name'))
+                    lines.setdefault(node.start_point.row+1,set()).add('dynamic reflection candidate; field identity unknown')
+        if dynamic_index(node, raw, language):
+            warnings.append(dict(line=node.start_point.row+1,reason='dynamic subscript; receiver/key identity requires review'))
+            lines.setdefault(node.start_point.row+1,set()).add('dynamic subscript candidate; field identity unknown')
         if node.type in ('invocation_expression','call_expression') and re.search(r'\.(?:GetProperty|GetField|GetMember)\s*\(',value):
             warnings.append(dict(line=node.start_point.row+1,reason='reflection requires review'))
+            lines.setdefault(node.start_point.row+1,set()).add('reflection candidate; field identity unknown')
     return [dict(start_line=line,end_line=line,reason='Conservative syntax candidate: '+', '.join(sorted(kinds)),
                  resolution='candidate') for line,kinds in sorted(lines.items())], warnings, tree.root_node.has_error
 
@@ -120,8 +165,8 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     paths = command(['git','ls-tree','-r','--name-only',revision,'--','runtimes/'],repo).splitlines()
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.2',
-                  source_revision=revision, change_id=detector['change']['id'],
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.3',
+                  scan_manifest_version='1.0', source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')
     if detector['status'] != 'complete':
@@ -136,7 +181,8 @@ def locate(repo, detector):
     record['binding_policy'] = dict(scope='declared standard protoc Python modules; lexical import identity only',
         python_module=policy[0] if policy else None, python_symbol=policy[1] if policy else None,
         assumptions=['Generated module imports follow the declared policy; no runtime monkeypatching.',
-                     'No cross-function, branch merge, annotation or whole-program type proof.'])
+                     'No cross-function, branch merge, annotation or whole-program type proof.'],
+        dynamic_subscript_scope='entity/decoded receiver spelling heuristic only; arbitrary receivers/compound keys unsupported')
     for path in paths:
         suffix = Path(path).suffix
         if suffix not in LANGUAGES:

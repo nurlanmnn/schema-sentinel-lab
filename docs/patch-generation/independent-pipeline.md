@@ -8,8 +8,12 @@ and package identity, locates conservative runtime syntax candidates in Python,
 TypeScript and C#, and feeds normalized records into adapter 1.0 and the existing
 isolated patch generator. Human approval is always required.
 
-Use Python 3.13 and the existing Buf, Node 22+, .NET 8 and local Ollama setup.
-No additional model is needed if `ministral-3:8b` is already installed.
+Use Python 3.13 and Buf for deterministic analysis. Node 22+ and .NET 8 are
+needed for the retained full validation demos. Analysis does not require Ollama.
+The current priority is [deterministic hardening](../decisions/0024-deterministic-analysis-priority.md);
+live-generation commands below are retained experimental paths, not the next step.
+See the [November 3 results](../deterministic-analysis-2026-11-03.md) for current
+candidate/binding semantics, scan-manifest checks and the 32-case component suite.
 
 ```sh
 python3 -m venv .venv
@@ -31,7 +35,7 @@ or `--generate` alone for prompt 2.5 general line edits. Neither new live strate
 has a passing result; see the retained failures before interpreting the output.
 
 The default case is the pinned v1 name-to-display_name migration. Start
-`ollama serve` first if it is stopped. The output directory must be new. Omit
+Ollama only for an explicitly chosen live experiment. The output directory must be new. Omit
 `--generate` to stop after detector, locator, measurements and adapter. The optional token strategy uses prompt 2.6: model-selected AST token replacements
 with host-preserved layout. Omit `--strategy syntax_rename` to use the general
 line-edit prompt 2.5. Token editing rejects non-rename cases. For the

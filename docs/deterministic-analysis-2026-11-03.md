@@ -75,3 +75,35 @@ lines, two enum-import extras). The analysis-only telemetry smoke recovers 9/9
 known runtime lines with no extras and records the three Python required lines;
 see `binding-domain-corpus001` and `binding-telemetry-smoke002`. All 27 testbed
 unit tests pass in the same unit evidence directory.
+
+## Follow-up: reflection candidates and verified source inventories
+
+The active source suite now has 32 authored examples. The original 26 cases
+recover 19/19 affected lines after computed reflection becomes a warning plus a
+candidate. Six additional literal/reflection/subscript cases expose a remaining
+scope limit: `vehicle[key]` with an arbitrary receiver spelling is not covered by
+the retained `entity`/`decoded` subscript heuristic. It remains a measured miss;
+expanding all subscripts indiscriminately also pulled HTTP-header operations into
+blocking impact reports, without establishing schema identity.
+
+`reflection-binding-corpus001/summary.json` records 32/32 declared expectation
+matches, 24/25 affected candidate lines, eight extra candidates, and 8/8 expected
+bound lines with no extra binding claims. Matching an expected limitation does
+not repair that limitation. Dynamic access remains uncertain and review-blocked;
+escaped and concatenated Python string keys now compare their actual values.
+Non-Python literal decoding remains limited to plain quoted strings.
+
+The locator now declares a supported-source scan manifest. The adapter checks its
+paths/languages/hashes against the exact tracked runtime tree and recomputes
+positive Python evidence under the declared policy. It rejects dropped required
+lines, omitted Python files containing bound references, altered evidence, missing
+flags, incomplete manifests and stale hashes. Legacy supplied fixture records
+without that manifest remain readable with explicitly narrower provenance.
+Recomputing uses the same bounded algorithm; this is consistency enforcement, not
+an independent proof of whole-program completeness. Unknown source extensions,
+external code, dynamic imports and arbitrary aliasing remain limitations.
+
+All 183 patchgen tests pass in
+`deterministic-boundary-unit002/tests-final.log`. The analysis-only
+`binding-boundary-smoke001` still recovers 9/9 telemetry lines with no extras and
+retains three required Python lines. No model or migration validation was run.
