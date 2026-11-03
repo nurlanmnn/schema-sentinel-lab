@@ -91,3 +91,10 @@ var unrelated = vehicle[@"other"];
         for language, source in examples:
             with self.subTest(language=language):
                 self.assertEqual(scan(source, language, 'speed_mps'), ([], [], False))
+
+    def test_csharp_numeric_generated_property_and_field_number(self):
+        event = dict(message='Packet', old_field=dict(name='foo_2bar'))
+        source = 'class C { int F(Packet packet) => packet.Foo2Bar\n + Packet.Foo2BarFieldNumber; }'
+        positions, warnings, error = scan(source, 'csharp', 'foo_2bar', event=event)
+        self.assertEqual([p['start_line'] for p in positions], [1, 2])
+        self.assertFalse(warnings or error)

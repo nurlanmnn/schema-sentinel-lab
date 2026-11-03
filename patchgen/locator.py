@@ -11,7 +11,7 @@ from patchgen.python_bindings import POLICY
 from patchgen.typescript_bindings import POLICY as TYPESCRIPT_POLICY
 from patchgen.binding_analysis import analyze_bindings, reference_requires_edit
 from patchgen.runtime_inventory import inventory, blocking_entries
-from patchgen.source_spellings import identifier_value, quoted_value
+from patchgen.source_spellings import csharp_field_spellings, identifier_value, quoted_value
 
 FACTORIES = {'python':tree_sitter_python.language, 'typescript':tree_sitter_typescript.language_typescript,
              'csharp':tree_sitter_c_sharp.language}
@@ -84,11 +84,15 @@ def key_initializer(node, language):
     return None, None
 
 
-def scan(text, language, field):
+def scan(text, language, field, *, event=None):
     raw = text.encode()
     tree = Parser(Language(FACTORIES[language]())).parse(raw)
     lines, warnings = {}, []
     variants = names(field)
+    old_field = (event or {}).get('old_field') or {}
+    if language == 'csharp' and event and event.get('message'):
+        variants.update(csharp_field_spellings(field, event['message'], old_field.get('proto3_optional')))
+    keys = variants | {key for key in (old_field.get('json_name'), (event or {}).get('old_presence_group')) if key}
     key_sources, key_uses = {}, {}
 
     def identifier(node):
@@ -100,7 +104,7 @@ def scan(text, language, field):
         if node.type in ('identifier','property_identifier') and identifier_value(value, language) in variants:
             if parent and parent.type not in ('comment','string','string_literal'):
                 lines.setdefault(node.start_point.row+1, set()).add(parent.type)
-        if literal_string(node, raw, language) in variants:
+        if literal_string(node, raw, language) in keys:
             if parent and parent.type in ('argument_list','arguments','subscript','subscript_expression','element_access_expression','pair','dictionary_splat_pattern','argument','computed_property_name'):
                 lines.setdefault(node.start_point.row+1,set()).add('literal-key/reflection candidate')
         if node.type == 'call':
@@ -113,7 +117,7 @@ def scan(text, language, field):
                     warnings.append(dict(line=node.start_point.row+1, reason='dynamic reflection field name'))
                     lines.setdefault(node.start_point.row+1,set()).add('dynamic reflection candidate; field identity unknown')
         target, initializer = key_initializer(node, language)
-        if target and target.type == 'identifier' and literal_string(initializer, raw, language) in variants:
+        if target and target.type == 'identifier' and literal_string(initializer, raw, language) in keys:
             key_sources.setdefault(identifier(target), set()).add(initializer.start_point.row+1)
         if node.type in SUBSCRIPTS:
             index = subscript_key(node)
@@ -207,7 +211,7 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.7',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.8',
                   scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')
@@ -234,7 +238,7 @@ def locate(repo, detector):
         path, language = entry['path'], entry['language']
         text = command(['git','show',revision+':'+path],repo)
         positions, warnings, error = (scan_enum(text,language,enum['symbols']) if enum else
-                                      scan(text,language,event['old_name']))
+                                      scan(text,language,event['old_name'],event=event))
         if not enum:
             positions, limitations = attach_bindings(text, language, event, policy, positions, error,
                                                     schema_path=detector['change']['schema_path'], source_path=path)

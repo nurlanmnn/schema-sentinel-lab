@@ -90,3 +90,17 @@ class DescriptorBoundaryTests(unittest.TestCase):
         self.assertEqual(record['structural_status'], 'no_structural_change')
         self.assertEqual(record['status'], 'partial')
         self.assertFalse(record['events'])
+
+    def test_optional_field_rename_preserves_synthetic_oneof_identity(self):
+        old = 'syntax="proto3"; message Packet { optional string label=1; string _label=2; }'
+        record = detect(old, old.replace('string label=', 'string caption='), 'model.proto', 'a'*40, 'rename', 'Keep optional presence')
+        self.assertEqual(record['status'], 'complete')
+        self.assertEqual([e['category'] for e in record['events']], ['field_renamed'])
+        self.assertTrue(record['events'][0]['new_field']['proto3_optional'])
+        self.assertEqual(record['events'][0]['old_presence_group'], 'X_label')
+        self.assertEqual(record['events'][0]['new_presence_group'], '_caption')
+
+    def test_real_oneof_rename_still_blocks_a_field_rename(self):
+        old = build('syntax="proto3"; message Packet { oneof group { string label=1; } }')
+        new = build('syntax="proto3"; message Packet { oneof other { string caption=1; } }')
+        self.assertTrue(any('oneofs' in issue for issue in compare(old, new)[1]))

@@ -94,3 +94,29 @@ def quoted_value(value, language):
         else:
             return None
     return ''.join(out)
+
+
+# The pinned protoc C# generator suffixes names that collide with its message API.
+CSHARP_RESERVED_MEMBERS = frozenset((
+    'Types', 'Descriptor', 'Parser', 'Clone', 'Equals', 'ToString', 'GetHashCode',
+    'WriteTo', 'MergeFrom', 'CalculateSize', 'OnConstruction',
+))
+
+
+def csharp_field_spellings(field, message, explicit_optional):
+    """Return candidate member names for the pinned protoc C# naming policy."""
+    parts = []
+    capitalize = True
+    for char in field:
+        if char == '_':
+            capitalize = True
+            continue
+        parts.append(char.upper() if capitalize else char)
+        capitalize = char.isdigit()
+    member = ''.join(parts)
+    if member in CSHARP_RESERVED_MEMBERS or member == message.rsplit('.', 1)[-1]:
+        member += '_'
+    names = {member, member + 'FieldNumber'}
+    if explicit_optional:
+        names.update(('Has' + member, 'Clear' + member))
+    return names

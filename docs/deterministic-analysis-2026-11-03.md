@@ -312,3 +312,17 @@ lines and zero extras. Logs and source snapshots are in `ts-static-computed-key-
 `ts-static-computed-key-corpus002` and `ts-static-computed-key-smoke001`; the earlier
 64-case run is retained. The temporary smoke checkout was removed. No models or
 migration proposals ran.
+
+## Follow-up: Proto3 optional presence and generated member names
+
+A proto3 optional field rename now compares its synthetic oneof by owning field
+number. The event retains actual group names, including compiler collision
+prefixes. Real oneof changes remain unsupported. The locator can find the old
+presence group in string references and use the descriptor's JSON spelling for
+literal or named-key candidates. C# gains generated property names, reserved API
+suffixes, field-number constants and explicit proto3 optional Has/Clear names.
+These are syntax candidates.
+
+All 230 patchgen tests passed. The normal detector/locator path is exercised on an
+authored pinned Git tree, and local protoc 25.1 confirms the generated names in
+`optional-presence-audit001`.

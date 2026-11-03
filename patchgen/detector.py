@@ -44,6 +44,24 @@ def field_identity(field):
                 default_value=field.default_value if field.HasField("default_value") else None)
 
 
+def oneof_structure(message):
+    """Compare synthetic proto3 presence groups by owning field number."""
+    members = {}
+    for field in message.field:
+        if field.HasField('oneof_index'):
+            members.setdefault(field.oneof_index, []).append(field)
+    result = []
+    for index, declaration in enumerate(message.oneof_decl):
+        fields = members.get(index, [])
+        if len(fields) == 1 and fields[0].proto3_optional:
+            declaration = copy.deepcopy(declaration)
+            declaration.ClearField('name')
+            result.append((fields[0].number, declaration))
+        else:
+            result.append((None, declaration))
+    return result
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
@@ -63,7 +81,7 @@ def compare(old, new):
     for name in sorted(before.keys() & after.keys()):
         a, b = before[name], after[name]
         aa, bb = {f.number:f for f in a.field}, {f.number:f for f in b.field}
-        if a.oneof_decl != b.oneof_decl or a.options != b.options:
+        if oneof_structure(a) != oneof_structure(b) or a.options != b.options:
             unsupported.append(name + ': message options/oneofs changed')
         for number in sorted(aa.keys() | bb.keys()):
             x, y = aa.get(number), bb.get(number)
@@ -75,7 +93,12 @@ def compare(old, new):
             if y is None:
                 events.append(dict(category='field_removed', **base)); continue
             if x.name != y.name:
-                events.append(dict(category='field_renamed', **base))
+                rename = dict(category='field_renamed', **base)
+                if (x.proto3_optional and y.proto3_optional and
+                        x.HasField('oneof_index') and y.HasField('oneof_index')):
+                    rename.update(old_presence_group=a.oneof_decl[x.oneof_index].name,
+                                  new_presence_group=b.oneof_decl[y.oneof_index].name)
+                events.append(rename)
             if (x.type, x.type_name) != (y.type, y.type_name):
                 events.append(dict(category='field_type_changed', old_type=x.type, new_type=y.type,
                                    old_type_name=x.type_name.lstrip('.'), new_type_name=y.type_name.lstrip('.'), **base))
@@ -146,7 +169,7 @@ def compare(old, new):
             if covered != reservation.end - reservation.start:
                 unsupported.append(name + ': unrelated reserved numbers added')
         for message in (a,b):
-            for key in ('field','nested_type','enum_type','reserved_name','reserved_range'):
+            for key in ('field','nested_type','enum_type','reserved_name','reserved_range','oneof_decl'):
                 message.ClearField(key)
         if a != b:
             unsupported.append(name + ': unsupported message structure change')

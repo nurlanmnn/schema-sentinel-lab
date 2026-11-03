@@ -201,3 +201,27 @@ class RuntimeInventoryTests(unittest.TestCase):
             else: changed['structural_status'] = 'no_structural_change'
             with self.subTest(mutation=mutation), self.assertRaisesRegex(ContractError, 'detector'):
                 adapt(self.repo, changed, stripped)
+
+    def test_generated_csharp_members_and_custom_json_key_are_candidates(self):
+        from patchgen.detector import detect
+        path = 'model.proto'
+        old = 'syntax="proto3"; message Packet { optional string parser=1 [json_name="wire-parser"]; }'
+        new = old.replace('string parser', 'string caption')
+        self.write(path, old)
+        self.write('runtimes/csharp/Read.cs', """class Reader {
+    void Read(Packet packet) {
+        Log(packet.Parser_);
+        Log(Packet.Parser_FieldNumber);
+        Log(packet.HasParser_);
+        packet.ClearParser_();
+        Log(packet.Parser);
+    }
+}
+""")
+        self.write('runtimes/python/main.py', 'def read(payload):\n    key = "wire-parser"\n    return payload[key]\n\ndef present(message):\n    return message.WhichOneof("_parser")\n')
+        revision = self.commit()
+        record = locate(self.repo, detect(old, new, path, revision, 'rename', 'Preserve presence and JSON key'))
+        self.assertEqual(record['status'], 'complete')
+        self.assertEqual({f['language']: [p['start_line'] for p in f['positions']] for f in record['files']},
+                         {'csharp': [3, 4, 5, 6, 7], 'python': [2, 3, 6]})
+        self.assertTrue(all(not p.get('binding_evidence') for f in record['files'] for p in f['positions']))

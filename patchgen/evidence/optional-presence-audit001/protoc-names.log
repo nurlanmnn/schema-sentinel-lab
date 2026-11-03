@@ -1,0 +1,15 @@
+libprotoc 25.1
+syntax="proto3"; message Packet { optional string parser=1 [json_name="wire-parser"]; }
+public const int Parser_FieldNumber = 1;
+public string Parser_ {
+public bool HasParser_ {
+public void ClearParser_() {
+descriptor JSON name: wire-parser
+syntax="proto3"; message Packet { int32 foo_2bar=1; }
+public const int Foo2BarFieldNumber = 1;
+public int Foo2Bar {
+descriptor JSON name: foo2bar
+syntax="proto3"; message Packet { int32 packet=1; }
+public const int Packet_FieldNumber = 1;
+public int Packet_ {
+descriptor JSON name: packet
