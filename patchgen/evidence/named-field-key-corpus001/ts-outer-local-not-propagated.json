@@ -1,0 +1,30 @@
+{
+  "id": "ts-outer-local-not-propagated",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "7ead553e1026798c6a8de0f3ea29b4aaf8fff9a70430f6b0948aafa83bc3fe3d",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

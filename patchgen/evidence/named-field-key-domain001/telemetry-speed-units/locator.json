@@ -1,0 +1,41 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.6",
+  "scan_manifest_version": "1.1",
+  "runtime_inventory": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "f53fc08dd213bbc82c9f1df6965d4b97d2552232",
+      "language": "csharp",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "6f2bb2d12f9b8a53283bb2d93a63ac0a152fbdb0",
+      "language": "python",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "bbd8b0bbea4bd6d941097f931c7c6be10ec2d891",
+      "language": "typescript",
+      "disposition": "source"
+    }
+  ],
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "change_id": "telemetry-speed-units",
+  "old_schema_sha256": "7d68ca52eafb3ad70dfa051daba58aafd02ed0a4f06e2cb491dc61e5dfad3dc1",
+  "status": "partial",
+  "files": [],
+  "scanned": [],
+  "issues": [
+    "detector incomplete"
+  ],
+  "resolution_scope": "syntax candidates; binding evidence is separate and bounded; conservative cross-version matches"
+}

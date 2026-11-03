@@ -44,21 +44,24 @@ def literal_string(node, raw, language):
     return quoted_value(value, language)
 
 
-def dynamic_index(node, raw, language):
-    if node.type not in ('element_access_expression', 'subscript', 'subscript_expression'):
-        return False
-    # Retain the existing bounded entity/decoded heuristic for subscripts.
-    # Broader unknown indexing (HTTP headers, arrays, etc.) needs receiver/key
-    # analysis before it can become a useful blocking impact candidate.
-    receiver = node.named_children[0] if node.named_children else None
-    if receiver is None or identifier_value(raw[receiver.start_byte:receiver.end_byte].decode(), language) not in ('entity', 'decoded'):
-        return False
+SUBSCRIPTS = {'element_access_expression', 'subscript', 'subscript_expression'}
+
+
+def subscript_key(node):
     index = node.child_by_field_name('index') or node.child_by_field_name('subscript')
     if index is not None and index.type == 'bracketed_argument_list':
         children = index.named_children
         index = children[0] if len(children) == 1 else None
         if index is not None and index.type == 'argument' and len(index.named_children) == 1:
             index = index.named_children[0]
+    return index
+
+
+def dynamic_index(node, index, raw, language):
+    # Keep the bounded receiver heuristic for otherwise unknown subscripts.
+    receiver = node.named_children[0] if node.named_children else None
+    if receiver is None or identifier_value(raw[receiver.start_byte:receiver.end_byte].decode(), language) not in ('entity', 'decoded'):
+        return False
     if index is None:
         return True
     if literal_string(index, raw, language) is not None:
@@ -67,11 +70,30 @@ def dynamic_index(node, raw, language):
                               'true','false','boolean','none','null','null_literal','boolean_literal')
 
 
+def key_initializer(node, language):
+    if language == 'python' and node.type == 'assignment':
+        return node.child_by_field_name('left'), node.child_by_field_name('right')
+    if node.type == 'variable_declarator':
+        target = node.child_by_field_name('name')
+        if language == 'typescript':
+            return target, node.child_by_field_name('value')
+        if language == 'csharp':
+            children = [child for child in node.named_children if child.type != 'comment']
+            if len(children) == 2 and children[0] == target:
+                return target, children[1]
+    return None, None
+
+
 def scan(text, language, field):
     raw = text.encode()
     tree = Parser(Language(FACTORIES[language]())).parse(raw)
     lines, warnings = {}, []
     variants = names(field)
+    key_sources, key_uses = {}, {}
+
+    def identifier(node):
+        return identifier_value(raw[node.start_byte:node.end_byte].decode(), language)
+
     for node in walk(tree.root_node):
         value = raw[node.start_byte:node.end_byte].decode()
         parent = node.parent
@@ -90,15 +112,29 @@ def scan(text, language, field):
                 if args and len(args.named_children)>1 and literal_string(args.named_children[1], raw, language) is None:
                     warnings.append(dict(line=node.start_point.row+1, reason='dynamic reflection field name'))
                     lines.setdefault(node.start_point.row+1,set()).add('dynamic reflection candidate; field identity unknown')
-        if dynamic_index(node, raw, language):
-            warnings.append(dict(line=node.start_point.row+1,reason='dynamic subscript; receiver/key identity requires review'))
-            lines.setdefault(node.start_point.row+1,set()).add('dynamic subscript candidate; field identity unknown')
+        target, initializer = key_initializer(node, language)
+        if target and target.type == 'identifier' and literal_string(initializer, raw, language) in variants:
+            key_sources.setdefault(identifier(target), set()).add(initializer.start_point.row+1)
+        if node.type in SUBSCRIPTS:
+            index = subscript_key(node)
+            if index and index.type == 'identifier':
+                key_uses.setdefault(identifier(index), set()).add(index.start_point.row+1)
+            if dynamic_index(node, index, raw, language):
+                warnings.append(dict(line=node.start_point.row+1,reason='dynamic subscript; receiver/key identity requires review'))
+                lines.setdefault(node.start_point.row+1,set()).add('dynamic subscript candidate; field identity unknown')
         function = node.child_by_field_name('function') if node.type in ('invocation_expression','call_expression') else None
         member = (function.child_by_field_name('name') or function.child_by_field_name('property')) if function else None
         member_name = raw[member.start_byte:member.end_byte].decode() if member else ''
         if member and identifier_value(member_name, language) in ('GetProperty', 'GetField', 'GetMember'):
             warnings.append(dict(line=node.start_point.row+1,reason='reflection requires review'))
             lines.setdefault(node.start_point.row+1,set()).add('reflection candidate; field identity unknown')
+    # Match names only within this file. Shadowing, rebinding and execution order
+    # may create extras; these candidates never assert that the key reaches a use.
+    for key in key_sources.keys() & key_uses.keys():
+        for line in key_sources[key]:
+            lines.setdefault(line, set()).add('named field-key literal source')
+        for line in key_uses[key]:
+            lines.setdefault(line, set()).add('subscript with possible named field key')
     return [dict(start_line=line,end_line=line,reason='Conservative syntax candidate: '+', '.join(sorted(kinds)),
                  resolution='candidate') for line,kinds in sorted(lines.items())], warnings, tree.root_node.has_error
 
@@ -171,7 +207,7 @@ def scan_enum(text, language, symbols):
 def locate(repo, detector):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.5',
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.6',
                   scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')
@@ -191,7 +227,7 @@ def locate(repo, detector):
         typescript_module=ts_policy[0] if ts_policy else None, typescript_symbol=ts_policy[1] if ts_policy else None,
         assumptions=['Generated module imports follow the declared policy; no runtime monkeypatching.',
                      'No cross-function value capture, branch merge, annotation/cast or whole-program type proof; TS follows const only.'],
-        dynamic_subscript_scope='entity/decoded receiver spelling heuristic only; arbitrary receivers/compound keys unsupported')
+        dynamic_subscript_scope='possible same-file named literal keys or entity/decoded receiver spelling; unknown arbitrary receivers/compound keys unsupported')
     for entry in entries:
         if entry['disposition'] != 'source':
             continue

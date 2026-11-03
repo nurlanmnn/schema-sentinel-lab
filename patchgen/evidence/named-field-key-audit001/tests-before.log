@@ -1,0 +1,53 @@
+.....FFF....
+======================================================================
+FAIL: test_named_field_literal_and_index_use_are_both_candidates (patchgen.tests.test_source_spellings.SourceSpellingTests.test_named_field_literal_and_index_use_are_both_candidates) (language='python')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 80, in test_named_field_literal_and_index_use_are_both_candidates
+    self.assertEqual([p['start_line'] for p in positions], expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [1, 2]
+
+Second list contains 2 additional elements.
+First extra element 0:
+1
+
+- []
++ [1, 2]
+
+======================================================================
+FAIL: test_named_field_literal_and_index_use_are_both_candidates (patchgen.tests.test_source_spellings.SourceSpellingTests.test_named_field_literal_and_index_use_are_both_candidates) (language='typescript')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 80, in test_named_field_literal_and_index_use_are_both_candidates
+    self.assertEqual([p['start_line'] for p in positions], expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [1, 2]
+
+Second list contains 2 additional elements.
+First extra element 0:
+1
+
+- []
++ [1, 2]
+
+======================================================================
+FAIL: test_named_field_literal_and_index_use_are_both_candidates (patchgen.tests.test_source_spellings.SourceSpellingTests.test_named_field_literal_and_index_use_are_both_candidates) (language='csharp')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/tests/test_source_spellings.py", line 80, in test_named_field_literal_and_index_use_are_both_candidates
+    self.assertEqual([p['start_line'] for p in positions], expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [2, 3]
+
+Second list contains 2 additional elements.
+First extra element 0:
+2
+
+- []
++ [2, 3]
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.013s
+
+FAILED (failures=3)

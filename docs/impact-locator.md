@@ -43,7 +43,7 @@ immutable const decoder/encoder flow. C# matches and unknown receivers stay
 candidate-only.
 The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
 assumptions, supported syntax and downstream enforcement limits. The authored
-59-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+63-case component suite runs with `python -m patchgen.analysis_corpus`; use the
 prepared `.venv` and a fresh `--output` directory.
 
 The current adapter verifies the supported tracked-runtime scan manifest and
@@ -51,8 +51,11 @@ recomputes positive Python/TypeScript evidence from the pinned source before pre
 It rejects missing bound lines/files and altered or stripped evidence. Legacy
 supplied records without the manifest have narrower provenance. Computed Python
 reflection is a review candidate with unknown field identity, never a bound claim.
-Dynamic subscript analysis still uses the bounded `entity`/`decoded` spelling
-heuristic; arbitrary receiver names and compound targets remain outside that scope.
+Subscripts with an identifier key now also match same-file initializers containing
+a decoded field-name literal. The initializer and index use become separate syntax
+candidates. Scope, rebinding and control flow are not resolved; shadowed names can
+add candidates. Unknown keys keep the bounded `entity`/`decoded` receiver heuristic.
+An arbitrary `vehicle[key]` with no local field-name initializer can still be missed.
 
 New scan manifests (version 1.1) include every tracked runtime-tree entry with its
 Git mode and object ID. Unknown files, unsupported paths, symlinks and submodules

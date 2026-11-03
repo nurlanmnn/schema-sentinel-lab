@@ -1,0 +1,60 @@
+{
+  "id": "ts-bound-arrow-decoder",
+  "positions": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "reason": "Conservative syntax candidate: member_expression",
+      "resolution": "candidate",
+      "binding_evidence": [
+        {
+          "line": 4,
+          "column": 12,
+          "end_line": 4,
+          "end_column": 20,
+          "kind": "field_access",
+          "binding": "canonical",
+          "module": "generated/ts/fleet/vehicle",
+          "symbol": "Vehicle",
+          "evidence": [
+            {
+              "line": 1,
+              "operation": "named import",
+              "module": "generated/ts/fleet/vehicle",
+              "symbol": "Vehicle"
+            },
+            {
+              "line": 3,
+              "operation": "ts-proto decode"
+            },
+            {
+              "line": 3,
+              "operation": "assignment",
+              "name": "e"
+            }
+          ]
+        }
+      ],
+      "required_reference": true
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [],
+  "source_sha256": "1b71212f814c8281f522e102502a4b462ed6c9a2ed4388fb25d855fc47f99d8c",
+  "candidate_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "binding_coverage": {
+    "expected": 1,
+    "matched": 1,
+    "missed": [],
+    "extra": [],
+    "recall": 1.0
+  },
+  "expectation_match": true
+}

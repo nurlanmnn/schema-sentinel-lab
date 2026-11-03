@@ -278,3 +278,20 @@ All 222 patchgen tests and 27 testbed tests pass. The analysis-only telemetry
 smoke adapted with 9/9 authored lines and zero extras. Evidence is in
 `detector-contract-audit001` and `detector-contract-smoke001`; the temporary source
 checkout was removed. No model requests, proposals or human approvals occurred.
+
+## Follow-up: Named literal field keys across runtime languages
+
+Python, TypeScript and C# now report a field-name literal initializer and a
+same-file index using its variable name as separate candidates. This recovers
+source edit/context lines behind `vehicle[key]` when there is a visible matching
+initializer. The name match does not model shadowing or rebinding; a fourth authored
+case measures the two resulting extras. Unrelated header keys, unused literals
+and unknown arbitrary index expressions do not become blanket warnings. The
+original caller-supplied arbitrary-key miss remains visible.
+
+All 224 patchgen tests pass. The 63-case component corpus matches 63/63 expected
+outcomes, 54/55 affected candidate lines, 25 extras and 15/15 bound lines with zero
+extra binding claims. All eight domain expectations still match. Evidence is in
+`named-field-key-audit001`, `named-field-key-corpus001` and `named-field-key-domain001`.
+Temporary domain source checkouts were removed. No migration proposals or model
+requests occurred.

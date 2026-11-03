@@ -67,3 +67,27 @@ var unrelated = vehicle[@"other"];
         self.assertEqual([p['start_line'] for p in positions], [1])
         self.assertTrue(warnings)
         self.assertFalse(error)
+
+    def test_named_field_literal_and_index_use_are_both_candidates(self):
+        examples = [
+            ('python', 'key = "speed_mps"\nprint(vehicle[key])\n', [1, 2]),
+            ('typescript', 'const key = `speedMps`;\nvehicle[key];\n', [1, 2]),
+            ('csharp', 'class C { void F() {\nconst string key = @"SpeedMps";\nvar a = vehicle[key];\n}}\n', [2, 3]),
+        ]
+        for language, source, expected in examples:
+            with self.subTest(language=language):
+                positions, warnings, error = scan(source, language, 'speed_mps')
+                self.assertEqual([p['start_line'] for p in positions], expected)
+                self.assertFalse(warnings)
+                self.assertFalse(error)
+                self.assertTrue(all(p['resolution'] == 'candidate' and not p.get('binding_evidence') for p in positions))
+
+    def test_named_key_heuristic_does_not_flag_unrelated_or_unknown_indexing(self):
+        examples = [
+            ('python', 'unused = "speed_mps"\nkey = "Authorization"\nprint(headers[key], vehicle[external])\n'),
+            ('typescript', 'const unused = "speedMps";\nconst key = "Authorization";\nheaders[key]; vehicle[external];\n'),
+            ('csharp', 'class C { void F() {\nvar unused = "SpeedMps";\nvar key = "Authorization";\nvar a = headers[key]; var b = vehicle[external];\n}}\n'),
+        ]
+        for language, source in examples:
+            with self.subTest(language=language):
+                self.assertEqual(scan(source, language, 'speed_mps'), ([], [], False))

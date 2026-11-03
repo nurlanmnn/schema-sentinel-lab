@@ -749,6 +749,63 @@
       ],
       "affected_sites": [],
       "expected_bound": []
+    },
+    {
+      "id": "python-named-observation-key",
+      "language": "python",
+      "source": "def read(vehicle):\n    key = \"speed_mps\"\n    return vehicle[key]\n",
+      "expected_candidates": [
+        2,
+        3
+      ],
+      "affected_sites": [
+        2,
+        3
+      ],
+      "expected_bound": [],
+      "contract": "The literal is the edit site; the observation-map access consumes the changed key."
+    },
+    {
+      "id": "ts-named-observation-key",
+      "language": "typescript",
+      "source": "function read(vehicle: Record<string, number>) {\n  const key = `speedMps`;\n  return vehicle[key];\n}\n",
+      "expected_candidates": [
+        2,
+        3
+      ],
+      "affected_sites": [
+        2,
+        3
+      ],
+      "expected_bound": [],
+      "contract": "The literal is the edit site; the observation-map access consumes the changed key."
+    },
+    {
+      "id": "csharp-named-observation-key",
+      "language": "csharp",
+      "source": "class C { float Read(Dictionary<string, float> vehicle) {\nconst string key = @\"SpeedMps\";\nreturn vehicle[key];\n}}\n",
+      "expected_candidates": [
+        2,
+        3
+      ],
+      "affected_sites": [
+        2,
+        3
+      ],
+      "expected_bound": [],
+      "contract": "The literal is the edit site; the observation-map access consumes the changed key."
+    },
+    {
+      "id": "ts-named-key-shadow-extra",
+      "language": "typescript",
+      "source": "const key = \"speedMps\";\nfunction read(key: string) { return headers[key]; }\n",
+      "expected_candidates": [
+        1,
+        2
+      ],
+      "affected_sites": [],
+      "expected_bound": [],
+      "contract": "The parameter shadows the unused global; a file-local name match intentionally reports both as extras."
     }
   ]
 }
