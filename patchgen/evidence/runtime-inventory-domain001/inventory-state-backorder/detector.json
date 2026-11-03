@@ -1,0 +1,30 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+  "old_schema_sha256": "73c7cc1cc350698d5e9ca997292728d50b006193c93950ee3a0e2222825bdc4c",
+  "new_schema_sha256": "141001a35fc8eac2e874133a6498479b41262b577c388d49a5320a33dd87b082",
+  "old_descriptor_sha256": "6413d31f36fb6ba6380834648394e40e178c4e67725338a1888e078604b0025a",
+  "new_descriptor_sha256": "e5806b8730fdd047c5ba66c4ccde710147307afb3d5dd78a4e610da3eaa8c29b",
+  "events": [
+    {
+      "category": "enum_value_added",
+      "enum": "demo.inventory.StockState",
+      "value": "STOCK_BACKORDERED",
+      "number": 2
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "inventory-state-backorder",
+    "category": "enum_value_added",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.inventory;\nenum StockState { STOCK_UNKNOWN = 0; STOCK_AVAILABLE = 1; }\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  repeated string labels = 3;\n  StockState state = 4;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.inventory;\nenum StockState { STOCK_UNKNOWN = 0; STOCK_AVAILABLE = 1; STOCK_BACKORDERED = 2; }\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  repeated string labels = 3;\n  StockState state = 4;\n}\n"
+  },
+  "intended_behavior": "Add active BACKORDERED stock state; observations report it, but can_fulfill must remain false for this state."
+}

@@ -24,7 +24,7 @@ def run(output):
     catalog = json.loads(raw)
     save(output/'catalog.json', catalog)
     implementation = {}
-    for name in ('analysis_corpus.py', 'detector.py', 'locator.py', 'python_bindings.py'):
+    for name in ('analysis_corpus.py', 'detector.py', 'locator.py', 'python_bindings.py', 'runtime_inventory.py'):
         content = (ROOT/'patchgen'/name).read_bytes()
         implementation[name] = hashlib.sha256(content).hexdigest()
         (output/('implementation-'+name)).write_bytes(content)

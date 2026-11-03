@@ -1,0 +1,142 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.4",
+  "scan_manifest_version": "1.1",
+  "runtime_inventory": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "f53fc08dd213bbc82c9f1df6965d4b97d2552232",
+      "language": "csharp",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "6f2bb2d12f9b8a53283bb2d93a63ac0a152fbdb0",
+      "language": "python",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "bbd8b0bbea4bd6d941097f931c7c6be10ec2d891",
+      "language": "typescript",
+      "disposition": "source"
+    }
+  ],
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "change_id": "telemetry-speed-rename",
+  "old_schema_sha256": "7d68ca52eafb3ad70dfa051daba58aafd02ed0a4f06e2cb491dc61e5dfad3dc1",
+  "status": "complete",
+  "files": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "language": "csharp",
+      "source_sha256": "f48fb58ddaac970159134dfeeb1dad8d21765d68d352d25dc4e32723b4c9f7f8",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: assignment_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: anonymous_object_creation_expression, member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "language": "python",
+      "source_sha256": "4be00642d9e8d7b38c035bdd1e5d85ab2f5451344f0ea6d37eddfcf205224025",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: keyword_argument",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "language": "typescript",
+      "source_sha256": "20a851523e5188ad085022adf88e5eb9653067ee34f8e8bd3027dcaf13b6e651",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: pair",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression, pair",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ]
+    }
+  ],
+  "scanned": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "source_sha256": "f48fb58ddaac970159134dfeeb1dad8d21765d68d352d25dc4e32723b4c9f7f8",
+      "language": "csharp"
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "source_sha256": "4be00642d9e8d7b38c035bdd1e5d85ab2f5451344f0ea6d37eddfcf205224025",
+      "language": "python"
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "source_sha256": "20a851523e5188ad085022adf88e5eb9653067ee34f8e8bd3027dcaf13b6e651",
+      "language": "typescript"
+    }
+  ],
+  "issues": [],
+  "resolution_scope": "syntax candidates; binding evidence is separate and bounded; conservative cross-version matches",
+  "binding_policy": {
+    "scope": "declared standard protoc Python modules; lexical import identity only",
+    "python_module": null,
+    "python_symbol": null,
+    "assumptions": [
+      "Generated module imports follow the declared policy; no runtime monkeypatching.",
+      "No cross-function, branch merge, annotation or whole-program type proof."
+    ],
+    "dynamic_subscript_scope": "entity/decoded receiver spelling heuristic only; arbitrary receivers/compound keys unsupported"
+  },
+  "binding_limitations": []
+}

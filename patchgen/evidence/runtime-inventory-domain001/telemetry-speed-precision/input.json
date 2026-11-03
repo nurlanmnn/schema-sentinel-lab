@@ -1,0 +1,80 @@
+{
+  "contract_version": "1.0",
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "change": {
+    "id": "telemetry-speed-precision",
+    "category": "field_type_changed",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  double speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Widen speed representation to double while preserving meters/second and existing readings; wire type changes require coordinated rollout.",
+  "affected_files": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "language": "csharp",
+      "source_context": "using Demo.Telemetry;\nclass TelemetryReader {\n    static VehicleTelemetry Sample() => new VehicleTelemetry { VehicleId = \"car-1\", SpeedMps = 12.5f };\n    static object Observe(VehicleTelemetry entity) => new { vehicle_id = entity.VehicleId, speed_mps = entity.SpeedMps };\n    static bool Speeding(VehicleTelemetry entity) => entity.SpeedMps > 30.0f;\n}\n",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: assignment_expression"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: anonymous_object_creation_expression, member_access_expression"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: member_access_expression"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "language": "python",
+      "source_context": "from generated.telemetry_pb2 import VehicleTelemetry\n\ndef sample():\n    return VehicleTelemetry(vehicle_id=\"car-1\", speed_mps=12.5)\ndef observe(entity):\n    return {\"vehicle_id\": entity.vehicle_id, \"speed_mps\": entity.speed_mps}\ndef speeding(entity):\n    return entity.speed_mps > 30.0\n",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: keyword_argument"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: attribute"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "language": "typescript",
+      "source_context": "import { VehicleTelemetry } from \"./generated/telemetry\";\nexport const sample = () => VehicleTelemetry.create({ vehicleId: \"car-1\", speedMps: 12.5 });\nexport const observe = (entity: VehicleTelemetry) => ({ vehicle_id: entity.vehicleId, speed_mps: entity.speedMps });\nexport const speeding = (entity: VehicleTelemetry) => entity.speedMps > 30.0;\n",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: pair"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression, pair"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression"
+        }
+      ]
+    }
+  ]
+}

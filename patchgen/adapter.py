@@ -5,10 +5,10 @@ import json
 import re
 from pathlib import Path
 from patchgen.python_bindings import POLICY, references
+from patchgen.runtime_inventory import LANGUAGES, inventory, blocking_entries
 from patchgen.generator import ContractError, command, require, safe_path, validate_input, verify_source, save
 
 CATEGORIES={'field_removed','field_renamed','field_type_changed','enum_value_added'}
-LANGUAGES={'.py':'python','.ts':'typescript','.cs':'csharp'}
 
 
 def digest(text):
@@ -19,10 +19,14 @@ def scan_manifest(repo, revision, locator):
     """Check an explicit scan inventory against the exact supported runtime tree."""
     if 'scan_manifest_version' not in locator:
         return None
-    if locator['scan_manifest_version'] != '1.0':
+    if locator['scan_manifest_version'] not in ('1.0', '1.1'):
         raise ContractError('unsupported scan manifest version')
-    paths = command(['git','ls-tree','-r','--name-only',revision,'--','runtimes/'], repo).splitlines()
-    expected = {path for path in paths if Path(path).suffix in LANGUAGES}
+    entries = inventory(repo, revision)
+    if blocking_entries(entries):
+        raise ContractError('scan manifest contains unsupported runtime inventory entries')
+    if locator['scan_manifest_version'] == '1.1' and locator.get('runtime_inventory') != entries:
+        raise ContractError('runtime inventory does not match pinned Git tree')
+    expected = {entry['path'] for entry in entries if entry['disposition'] == 'source'}
     entries = require(locator, 'scanned', list, 'locator')
     contexts = {}
     for entry in entries:
@@ -123,7 +127,7 @@ def adapt(repo, detector, locator):
     verify_source(repo,case)
     provenance=dict(adapter_version='1.0',detector_producer=detector['producer'],locator_producer=locator['producer'],
         detector_sha256=digest(json.dumps(detector,sort_keys=True)),locator_sha256=digest(json.dumps(locator,sort_keys=True)),
-        scan_verification='exact supported tracked-runtime manifest' if contexts is not None else 'legacy supplied files only',
+        scan_verification=('exact runtime tree inventory and supported source manifest' if locator.get('scan_manifest_version') == '1.1' else 'exact supported tracked-runtime manifest') if contexts is not None else 'legacy supplied files only',
         binding_verification='positive claims recomputed under declared repository Python policy; not independent analysis',
         source_revision=revision, site_resolution='candidate; optional bounded binding evidence', integration_scope='validated supplied records; completeness asserted by producer, not proved by adapter')
     return case,provenance

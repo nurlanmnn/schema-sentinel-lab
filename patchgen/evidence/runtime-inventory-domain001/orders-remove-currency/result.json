@@ -1,0 +1,18 @@
+{
+  "id": "orders-remove-currency",
+  "domain": "orders",
+  "proposal_validation": "not_run",
+  "human_approval_required": true,
+  "expectation_match": true,
+  "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+  "detector_status": "complete",
+  "category": "field_removed",
+  "locator_status": "complete",
+  "measurement": {
+    "expected_sites": 9,
+    "matched_sites": 9,
+    "recall": 1.0,
+    "missed": [],
+    "extra": []
+  }
+}

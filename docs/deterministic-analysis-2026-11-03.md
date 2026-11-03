@@ -125,3 +125,20 @@ affected candidate lines, eight extras, 8/8 expected bound lines and zero extra
 binding claims (`python-scope-corpus001`). These measurements remain static
 component evidence, not validated migrations or a human baseline. No model
 requests or patch proposals were made.
+
+## Follow-up: Runtime-tree inventory
+
+Replaced the source-extension allowlist's silent skips with a complete Git tree
+inventory and an explicit auxiliary build-file policy. Unknown extensions,
+extensionless files, unsupported paths, symlinks and gitlinks block completion.
+New manifest 1.1 rows are checked again by the adapter against the pinned tree.
+Language policy is shared rather than duplicated in locator and adapter.
+
+All 192 patchgen tests pass, including six real-Git-tree regression groups covering
+Unicode filenames, executable modes, symlinks, submodules, unsafe filenames,
+unknown extensions and forged inventory. Evidence is in
+`patchgen/evidence/runtime-inventory-audit001/`. The eight-domain-case corpus
+still matches 8/8 authored outcomes (`runtime-inventory-domain001`), and the
+analysis-only telemetry smoke adapts with 9/9 known lines and zero extras
+(`runtime-inventory-smoke001`). Source snapshots are retained; temporary source
+checkouts were removed. No proposals, model requests or human acceptance occurred.

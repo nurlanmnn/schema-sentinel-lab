@@ -1,7 +1,6 @@
 """Conservative syntax candidates; no whole-program receiver/type certainty."""
 import ast
 import re
-from pathlib import Path
 from tree_sitter import Language, Parser
 import tree_sitter_python
 import tree_sitter_typescript
@@ -9,8 +8,8 @@ import tree_sitter_c_sharp
 from patchgen.adapter import digest
 from patchgen.generator import command
 from patchgen.python_bindings import POLICY, references
+from patchgen.runtime_inventory import inventory, blocking_entries
 
-LANGUAGES = {'.py':'python', '.ts':'typescript', '.cs':'csharp'}
 FACTORIES = {'python':tree_sitter_python.language, 'typescript':tree_sitter_typescript.language_typescript,
              'csharp':tree_sitter_c_sharp.language}
 
@@ -164,11 +163,12 @@ def scan_enum(text, language, symbols):
 
 def locate(repo, detector):
     revision = detector['source_revision']
-    paths = command(['git','ls-tree','-r','--name-only',revision,'--','runtimes/'],repo).splitlines()
-    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.3',
-                  scan_manifest_version='1.0', source_revision=revision, change_id=detector['change']['id'],
+    entries = inventory(repo, revision)
+    record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.4',
+                  scan_manifest_version='1.1', runtime_inventory=entries, source_revision=revision, change_id=detector['change']['id'],
                   old_schema_sha256=detector['old_schema_sha256'], status='partial', files=[], scanned=[], issues=[],
                   resolution_scope='syntax candidates; binding evidence is separate and bounded; conservative cross-version matches')
+    record['issues'].extend(dict(path=e['path'], reason=e['disposition']) for e in blocking_entries(entries))
     if detector['status'] != 'complete':
         record['issues'].append('detector incomplete'); return record
     event = detector['events'][0]
@@ -183,13 +183,10 @@ def locate(repo, detector):
         assumptions=['Generated module imports follow the declared policy; no runtime monkeypatching.',
                      'No cross-function, branch merge, annotation or whole-program type proof.'],
         dynamic_subscript_scope='entity/decoded receiver spelling heuristic only; arbitrary receivers/compound keys unsupported')
-    for path in paths:
-        suffix = Path(path).suffix
-        if suffix not in LANGUAGES:
-            if suffix in ('.tsx','.jsx','.js','.mjs','.java','.cpp','.cc','.h','.rs','.go'):
-                record['issues'].append(dict(path=path,reason='unsupported runtime source language'))
+    for entry in entries:
+        if entry['disposition'] != 'source':
             continue
-        language = LANGUAGES[suffix]
+        path, language = entry['path'], entry['language']
         text = command(['git','show',revision+':'+path],repo)
         positions, warnings, error = (scan_enum(text,language,enum['symbols']) if enum else
                                       scan(text,language,event['old_name']))

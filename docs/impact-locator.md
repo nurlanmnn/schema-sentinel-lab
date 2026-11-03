@@ -51,3 +51,9 @@ supplied records without the manifest have narrower provenance. Computed Python
 reflection is a review candidate with unknown field identity, never a bound claim.
 Dynamic subscript analysis still uses the bounded `entity`/`decoded` spelling
 heuristic; arbitrary receiver names and compound targets remain outside that scope.
+
+New scan manifests (version 1.1) include every tracked runtime-tree entry with its
+Git mode and object ID. Unknown files, unsupported paths, symlinks and submodules
+block completeness. A narrow auxiliary build/dependency-file policy is explicit
+in [decision 0026](decisions/0026-explicit-runtime-tree-inventory.md). The adapter
+recomputes this inventory instead of trusting a producer's completion status.
