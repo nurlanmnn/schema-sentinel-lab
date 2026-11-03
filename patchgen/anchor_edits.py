@@ -31,7 +31,9 @@ REVIEW_SCHEMA={'type':'object','additionalProperties':False,
 def candidates(file):
     lines=file['source_context'].splitlines(keepends=True)
     positions=sorted({line for p in file['positions'] for line in range(p['start_line'],p['end_line']+1)})
-    return {f'C{index:03d}':dict(line=line,text=lines[line-1]) for index,line in enumerate(positions,1)}
+    return {f'C{index:03d}':dict(line=line,text=lines[line-1],
+        **({'required_reference': True} if any(p.get('required_reference') and p['start_line'] <= line <= p['end_line'] for p in file['positions']) else {}))
+        for index,line in enumerate(positions,1)}
 
 
 def make_prompt(case,file):
@@ -40,13 +42,16 @@ def make_prompt(case,file):
     payload.pop('affected_files')
     payload['file']={key:file[key] for key in ('path','language','source_context')}
     inventory=candidates(file)
-    payload['candidates']=[dict(id=key,source_line=value['text']) for key,value in inventory.items()]
+    payload['candidates']=[dict(id=key,source_line=value['text'], **({'required_reference': True} if value.get('required_reference') else {})) for key,value in inventory.items()]
     properties={**SCHEMA['properties'],
         'candidate_reviews':{'type':'object','additionalProperties':False,
                              'properties':{key:REVIEW_SCHEMA for key in inventory},'required':list(inventory)}}
     payload['response_schema']={**SCHEMA,'properties':{key:properties[key] for key in
         ('outcome','candidate_reviews','edits','rationale','confidence','assumptions')}}
     payload['prompt_version']=VERSION
+    if any(value.get('required_reference') for value in inventory.values()):
+        payload['prompt_version'] += '-binding1'
+        payload['binding_policy'] = 'required_reference candidates must be edited or deferred with needs_clarification; canonical binding evidence prevents an unaffected decision.'
     return [{'role':'system','content':SYSTEM},{'role':'user','content':json.dumps(payload,indent=2)}],inventory
 
 

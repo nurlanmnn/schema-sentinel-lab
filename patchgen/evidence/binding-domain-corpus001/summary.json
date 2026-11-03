@@ -1,0 +1,162 @@
+{
+  "scope": "descriptor/locator evaluation only; no proposal or migration validation",
+  "scenario_count": 8,
+  "expectation_matches": 8,
+  "detector_complete": 5,
+  "locator_complete": 4,
+  "generated_validated_migrations": 0,
+  "model_requests": 0,
+  "human_acceptance": false,
+  "catalog_sha256": "cb018a9efd5cc9508e909de8229c6a0db9b36ed89f79fe701a6c58f6c418a1ff",
+  "implementation": {
+    "corpus.py": "99ee204e05df8e35f078e4429367e02444bc5a2ed8ab27eb36b6c32cb1531426",
+    "detector.py": "1f79630a6e70369f9cafa5093faf1e2dd9ba5c49b5ad90f6add6b84dc0cb8035",
+    "locator.py": "6c3e553d34ee08d11f538b29aec7d83a4023572178ab7e03652a6f39dde77769",
+    "python_bindings.py": "44fd678a058bad8ccb636f98d50a996019547950c573a1d0ac9fb77049c77fe0",
+    "adapter.py": "f48206887c1efa7a9888af041252e4549b4d989a7743b8d9d1ef0e1dca6fad6d"
+  },
+  "implementation_revision": "ace9d9a0918cd1c4e208f39af5a4c0c7cea3f08b",
+  "records": [
+    {
+      "id": "telemetry-speed-rename",
+      "domain": "telemetry",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+      "detector_status": "complete",
+      "category": "field_renamed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      }
+    },
+    {
+      "id": "telemetry-speed-precision",
+      "domain": "telemetry",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+      "detector_status": "complete",
+      "category": "field_type_changed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      }
+    },
+    {
+      "id": "telemetry-speed-units",
+      "domain": "telemetry",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+      "detector_status": "partial",
+      "category": "ambiguous",
+      "locator_status": "partial",
+      "measurement": null
+    },
+    {
+      "id": "inventory-quantity-width",
+      "domain": "inventory",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+      "detector_status": "complete",
+      "category": "field_type_changed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      }
+    },
+    {
+      "id": "inventory-label-cardinality",
+      "domain": "inventory",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+      "detector_status": "partial",
+      "category": "ambiguous",
+      "locator_status": "partial",
+      "measurement": null
+    },
+    {
+      "id": "inventory-state-backorder",
+      "domain": "inventory",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "a2b2741dd67bf440731ec50a834cce1c00b3334c",
+      "detector_status": "complete",
+      "category": "enum_value_added",
+      "locator_status": "partial",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/python/consumer.py",
+            "line": 1
+          },
+          {
+            "path": "runtimes/typescript/consumer.ts",
+            "line": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "orders-remove-currency",
+      "domain": "orders",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+      "detector_status": "complete",
+      "category": "field_removed",
+      "locator_status": "complete",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": []
+      }
+    },
+    {
+      "id": "orders-amount-presence",
+      "domain": "orders",
+      "proposal_validation": "not_run",
+      "human_approval_required": true,
+      "expectation_match": true,
+      "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+      "detector_status": "partial",
+      "category": "ambiguous",
+      "locator_status": "partial",
+      "measurement": null
+    }
+  ],
+  "limitations": [
+    "Small authored consumer snippets; no generated bindings, builds or runtime migration.",
+    "Expected unsupported outcomes are visible limitations, not successful migrations.",
+    "Impact inventories are manual source inspection, not a measured human baseline.",
+    "No broad recall or twenty-case end-to-end benchmark claim."
+  ]
+}

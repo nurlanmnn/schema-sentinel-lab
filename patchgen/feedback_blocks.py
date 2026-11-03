@@ -35,7 +35,7 @@ Bindings are regenerated from new_schema. An old property is not retained merely
 wire number stays the same. Keep unrelated declarations and remove obsolete empty branches.
 Do not weaken tests or validation, invent fields, or claim that validation has passed.'''
     payload=json.loads(messages[1]['content'])
-    payload['prompt_version']=VERSION
+    payload['prompt_version']=VERSION + ('-binding1' if any(p.get('required_reference') for p in file['positions']) else '')
     payload['previous_attempt']={key:feedback['files'][file['path']][key]
                                  for key in ('previous_response','validation_diagnostics')}
     messages[1]['content']=json.dumps(payload,indent=2)

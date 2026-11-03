@@ -1,7 +1,7 @@
 """Bounded signed int32 -> int64 inventory proposal with decimal-string JSON."""
 from tree_sitter import Language, Parser
 from patchgen.locator import FACTORIES, walk
-from patchgen.detector import detect, descriptor
+from patchgen.detector import detect, descriptor, matches_single_event
 from patchgen.type_utf8 import compact
 from patchgen.generator import ContractError, save, unified_diff, validate_output
 
@@ -33,7 +33,7 @@ def target(case):
     result = detect(c['old_schema'], c['new_schema'], c['schema_path'], case['source_revision'], c['id'], case['intended_behavior'])
     event = dict(category='field_type_changed', message='simulation.inventory.StockItem', field_number=2,
                  old_name='quantity', new_name='quantity', old_type=5, new_type=3)
-    if result['status'] != 'complete' or result['events'] != [event]:
+    if not matches_single_event(result, event):
         raise ContractError('inventory width policy requires StockItem.quantity int32->int64 field 2')
     file, _ = descriptor(c['new_schema'], c['schema_path'])
     field = next(f for m in file.message_type if m.name == 'StockItem' for f in m.field if f.number == 2)

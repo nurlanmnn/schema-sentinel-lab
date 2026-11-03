@@ -1,0 +1,37 @@
+{
+  "id": "comprehension-parameter-shadow",
+  "positions": [
+    {
+      "start_line": 3,
+      "end_line": 3,
+      "reason": "Conservative syntax candidate: attribute",
+      "resolution": "candidate"
+    }
+  ],
+  "warnings": [],
+  "parse_error": false,
+  "binding_limitations": [
+    {
+      "line": 3,
+      "reason": "expression scope/dataflow unsupported"
+    }
+  ],
+  "source_sha256": "9facf6d4d65e60172660fd3c701de67618ccf76cff63dc6298769fe38efd207d",
+  "candidate_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [
+      3
+    ],
+    "recall": null
+  },
+  "binding_coverage": {
+    "expected": 0,
+    "matched": 0,
+    "missed": [],
+    "extra": [],
+    "recall": null
+  },
+  "expectation_match": true
+}

@@ -34,3 +34,12 @@ The original `impact_locator.py`, committed `v1.bin`/`v2.bin`, and
 diagnostic prose, stale descriptor identities and an incompatible older grammar
 bundle. Their source remains in Git history, and historical measurements and
 raw evidence remain retained. They are not alternate supported entry points.
+
+As of the [November 3 hardening checkpoint](deterministic-analysis-2026-11-03.md),
+positions explicitly say `candidate`. A bounded Python layer separately records
+canonical import/constructor/parser evidence and required rename/removal references.
+It does not promote TypeScript/C# matches or unknown receivers to type proof.
+The [binding decision](decisions/0025-bounded-python-binding-evidence.md) defines
+assumptions, supported syntax and downstream enforcement limits. The authored
+26-case component suite runs with `python -m patchgen.analysis_corpus`; use the
+prepared `.venv` and a fresh `--output` directory.

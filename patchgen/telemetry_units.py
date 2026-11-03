@@ -1,7 +1,7 @@
 """Explicit adopted telemetry m/s -> km/h proposal. Semantics are supplied, not inferred."""
 from tree_sitter import Language, Parser
 from patchgen.locator import FACTORIES
-from patchgen.detector import detect, descriptor
+from patchgen.detector import detect, descriptor, matches_single_event
 from patchgen.type_precision import inspect_shapes
 from patchgen.rename_roles import inventory
 from patchgen.generator import ContractError, save, unified_diff, validate_output
@@ -18,7 +18,7 @@ def target(case):
                     case['source_revision'],change['id'],case['intended_behavior'])
     wanted=dict(category='field_renamed',message='simulation.telemetry.VehicleTelemetry',field_number=2,
                 old_name='speed_mps',new_name='speed_kph')
-    if result['status']!='complete' or result['events']!=[wanted]:
+    if not matches_single_event(result, wanted):
         raise ContractError('units policy only supports VehicleTelemetry.speed_mps -> speed_kph field 2')
     file,_=descriptor(change['new_schema'],change['schema_path'])
     field=next(f for m in file.message_type if m.name=='VehicleTelemetry' for f in m.field if f.number==2)

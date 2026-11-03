@@ -1,0 +1,114 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.2",
+  "source_revision": "d8c9c459674f13db5c12d52d87d5c7b58c4a17ce",
+  "change_id": "orders-remove-currency",
+  "old_schema_sha256": "d1a259bcc31cff39da50433e4f19e12c21415d82f89e515c8c477a7298c70085",
+  "status": "complete",
+  "files": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "language": "csharp",
+      "source_sha256": "c4d9c06676bb6ea924021db4ac543b6213c225bae4803e32c40e5ff274e0e620",
+      "positions": [
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: assignment_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: anonymous_object_creation_expression, member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "language": "python",
+      "source_sha256": "9010294e0e98c0b21b09dfa5af1162960a858ee6654e285759680d79842bee63",
+      "positions": [
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: keyword_argument",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 6,
+          "end_line": 6,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "language": "typescript",
+      "source_sha256": "19f0e3f6d63fe87771b19a2bfada6a2e15be5ab2be2e883c7b05d8dcaa6c61c0",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: pair",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 3,
+          "end_line": 3,
+          "reason": "Conservative syntax candidate: member_expression, pair",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 4,
+          "end_line": 4,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ]
+    }
+  ],
+  "scanned": [
+    {
+      "path": "runtimes/csharp/consumer.cs",
+      "source_sha256": "c4d9c06676bb6ea924021db4ac543b6213c225bae4803e32c40e5ff274e0e620",
+      "language": "csharp"
+    },
+    {
+      "path": "runtimes/python/consumer.py",
+      "source_sha256": "9010294e0e98c0b21b09dfa5af1162960a858ee6654e285759680d79842bee63",
+      "language": "python"
+    },
+    {
+      "path": "runtimes/typescript/consumer.ts",
+      "source_sha256": "19f0e3f6d63fe87771b19a2bfada6a2e15be5ab2be2e883c7b05d8dcaa6c61c0",
+      "language": "typescript"
+    }
+  ],
+  "issues": [],
+  "resolution_scope": "syntax candidates; binding evidence is separate and bounded; conservative cross-version matches",
+  "binding_policy": {
+    "scope": "declared standard protoc Python modules; lexical import identity only",
+    "python_module": null,
+    "python_symbol": null,
+    "assumptions": [
+      "Generated module imports follow the declared policy; no runtime monkeypatching.",
+      "No cross-function, branch merge, annotation or whole-program type proof."
+    ]
+  },
+  "binding_limitations": []
+}

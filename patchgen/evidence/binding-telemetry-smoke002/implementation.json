@@ -1,0 +1,20 @@
+{
+  "revision": "ace9d9a0918cd1c4e208f39af5a4c0c7cea3f08b",
+  "files": {
+    "detector.py": "0209566f29702ac7a8e94887a717e101a4d19ff5f7eb8859b29bdbb7acb0e0a8",
+    "locator.py": "6c3e553d34ee08d11f538b29aec7d83a4023572178ab7e03652a6f39dde77769",
+    "python_bindings.py": "fa1c927e118dd3f0715736c2b2e5a60a0e9300edbc095668353b4516ae5a01d6",
+    "pipeline.py": "fb0ead1b0a537ce017d3597487be5d5c6d6974a9b72af50b9f82431398002fc6",
+    "adapter.py": "f48206887c1efa7a9888af041252e4549b4d989a7743b8d9d1ef0e1dca6fad6d",
+    "generator.py": "d4837a946a00c24af05ea65c006e31b8948f0952ce3439ca349e7bbe4ddde5cc",
+    "anchor_edits.py": "46cfe4788f3eb5e1f9985847c1ad96769bf0fd8b9f0fdc97c9d46ccc7348170d",
+    "feedback_blocks.py": "f0866e712b2e9c1fb79bb2a4b41c7d712e56b47a1575b20ca95e2ae62b543f17",
+    "rename_tokens.py": "1d41bbe66eada8e28067ee6bb1b7ec87586f0733cfd05edd4a179e97ec54fd6d",
+    "rename_roles.py": "f7fde1fae25f69a5c8dd216a201a070a281a25e42501cb3ed8943d647346d923",
+    "type_utf8.py": "7f19829a29e63c8dfebb800ca86a3e422a982fc388fe2f8885c5f2d4c812de43",
+    "remove_name.py": "f3f3a377adc391cb705a4d93d99b7a1706cd54a336af7db8f573accfbb8da74e",
+    "type_precision.py": "5544b2420ee325a60141b8a243c762b3ee14cf6ca7a4912c4848387ccfec7722",
+    "telemetry_units.py": "05deaa6bbce509973f0a2e273236adcd4434310f8cc223a337a79baf2d410315",
+    "inventory_width.py": "c9c621584601c112829bc090c94cd1c58d468e4c80dc089961fa72601c4c4694"
+  }
+}

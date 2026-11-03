@@ -1,7 +1,7 @@
 """Bounded v1 Entity.name removal for the adopted testbed syntax, without inference."""
 from tree_sitter import Language, Parser
 from patchgen.locator import FACTORIES, walk
-from patchgen.detector import detect, descriptor
+from patchgen.detector import detect, descriptor, matches_single_event
 from patchgen.type_utf8 import compact
 from patchgen.generator import ContractError, save, unified_diff, validate_output
 
@@ -12,7 +12,7 @@ def target(case):
                     case['source_revision'], c['id'], case['intended_behavior'])
     expected = dict(category='field_removed', message='simulation.v1.Entity', field_number=2,
                     old_name='name', new_name=None)
-    if result['status'] != 'complete' or result['events'] != [expected]:
+    if not matches_single_event(result, expected):
         raise ContractError('Removal policy supports only singular simulation.v1.Entity.name string field 2')
     old, _ = descriptor(c['old_schema'], c['schema_path'])
     new, _ = descriptor(c['new_schema'], c['schema_path'])

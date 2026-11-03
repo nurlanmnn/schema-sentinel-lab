@@ -41,15 +41,23 @@ def adapt(repo, detector, locator):
             start=pos.get('start_line');end=pos.get('end_line')
             if type(start) is not int or type(end) is not int or not 1<=start<=end<=len(context.splitlines()):raise ContractError('invalid locator range')
             if any(start<=b and end>=a for a,b in ranges):raise ContractError('duplicate or overlapping locator ranges')
-            if pos.get('resolution')!='resolved':raise ContractError('ambiguous locator site')
+            if pos.get('resolution') not in ('candidate', 'resolved'):raise ContractError('ambiguous locator site')
             ranges.append((start,end))
-        files.append(dict(path=path,language=item['language'],source_context=context,positions=[dict(start_line=p['start_line'],end_line=p['end_line'],reason=require(p,'reason',str,path)) for p in positions]))
+        output_positions = []
+        for pos in positions:
+            result = dict(start_line=pos['start_line'], end_line=pos['end_line'], reason=require(pos,'reason',str,path))
+            if 'required_reference' in pos:
+                if type(pos['required_reference']) is not bool or not isinstance(pos.get('binding_evidence'), list) or not pos['binding_evidence']:
+                    raise ContractError('required-reference flag needs binding evidence')
+                result.update(required_reference=pos['required_reference'], binding_evidence=pos['binding_evidence'])
+            output_positions.append(result)
+        files.append(dict(path=path,language=item['language'],source_context=context,positions=output_positions))
     case=validate_input(dict(contract_version='1.0',source_revision=revision,change=change,
         intended_behavior=require(detector,'intended_behavior',str,'detector'),affected_files=files))
     verify_source(repo,case)
     provenance=dict(adapter_version='1.0',detector_producer=detector['producer'],locator_producer=locator['producer'],
         detector_sha256=digest(json.dumps(detector,sort_keys=True)),locator_sha256=digest(json.dumps(locator,sort_keys=True)),
-        source_revision=revision,integration_scope='validated supplied records; completeness asserted by producer, not proved by adapter')
+        source_revision=revision, site_resolution='candidate; optional bounded binding evidence', integration_scope='validated supplied records; completeness asserted by producer, not proved by adapter')
     return case,provenance
 
 

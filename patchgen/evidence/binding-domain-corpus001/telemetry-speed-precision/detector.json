@@ -1,0 +1,57 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "6bca8c5392700abb989df859c62efce53b1ce590",
+  "old_schema_sha256": "7d68ca52eafb3ad70dfa051daba58aafd02ed0a4f06e2cb491dc61e5dfad3dc1",
+  "new_schema_sha256": "9137432cafaafddf23f61df283e5fc587bac74ac8c1abf2d1fd138c8a7a79b91",
+  "old_descriptor_sha256": "7bfc6e1591e341b94bab10eea5d2e8d8c824ccfce2b9c47883c9c03e2c4b9c41",
+  "new_descriptor_sha256": "a4532acd1eb289039dcf4e47fd167291f9c841285cb46ed44be0600d1f69c0ef",
+  "events": [
+    {
+      "category": "field_type_changed",
+      "old_type": 2,
+      "new_type": 1,
+      "old_type_name": "",
+      "new_type_name": "",
+      "message": "demo.telemetry.VehicleTelemetry",
+      "field_number": 2,
+      "old_name": "speed_mps",
+      "new_name": "speed_mps",
+      "old_field": {
+        "name": "speed_mps",
+        "number": 2,
+        "type": 2,
+        "type_name": "",
+        "label": 1,
+        "json_name": "speedMps",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      },
+      "new_field": {
+        "name": "speed_mps",
+        "number": 2,
+        "type": 1,
+        "type_name": "",
+        "label": 1,
+        "json_name": "speedMps",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      }
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "telemetry-speed-precision",
+    "category": "field_type_changed",
+    "schema_path": "model.proto",
+    "old_schema": "syntax = \"proto3\";\npackage demo.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage demo.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  double speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Widen speed representation to double while preserving meters/second and existing readings; wire type changes require coordinated rollout."
+}

@@ -186,6 +186,8 @@ def validate_input(case):
             if type(start) is not int or type(end) is not int or not 1 <= start <= end <= len(context.splitlines()):
                 raise ContractError(f'{path}: invalid 1-based inclusive positions')
             require(pos, 'reason', str, path)
+            if 'required_reference' in pos and type(pos['required_reference']) is not bool:
+                raise ContractError(f'{path}: required_reference must be boolean')
     return case
 
 
@@ -200,7 +202,7 @@ def prompt(case):
 
 def file_context(file):
     result = {k:file[k] for k in ('path','language','source_context')}
-    result['positions'] = [{k:p[k] for k in ('start_line','end_line','reason')} for p in file['positions']]
+    result['positions'] = [{k:p[k] for k in ('start_line','end_line','reason','required_reference','binding_evidence') if k in p} for p in file['positions']]
     return result
 
 
@@ -210,6 +212,10 @@ def edit_prompt(case, file, strategy='exact_edits'):
     payload['affected_files'] = [file_context(file)]
     payload['response_schema'] = {'exact_edits':EDIT_SCHEMA,'file_content':FILE_SCHEMA,'line_edits':LINE_SCHEMA,'migration_edits':LINE_SCHEMA,'candidate_edits':CANDIDATE_SCHEMA}[strategy]
     payload['prompt_version'] = STRATEGY_VERSIONS[strategy]
+    bound = any(p.get('required_reference') for p in file['positions'])
+    if bound:
+        payload['prompt_version'] += '-binding1'
+        payload['binding_policy'] = 'required_reference lines have bounded canonical import/constructor evidence and must be edited or deferred with needs_clarification; they cannot be marked unaffected.'
     if strategy in ('line_edits','migration_edits','candidate_edits'):
         context = payload['affected_files'][0]
         context['source_lines'] = [{'line':i,'text':line} for i,line in enumerate(context.pop('source_context').splitlines(),1)]
@@ -257,6 +263,8 @@ def resolve_candidates(source, value, positions):
     # Validate untrusted edit ranges/types before using them in coverage arithmetic.
     resolve_lines(source,value)
     expected = {line for p in positions for line in range(p['start_line'],p['end_line']+1)}
+    bound_required = {line for p in positions if p.get('required_reference') is True
+                      for line in range(p['start_line'], p['end_line']+1)}
     reviews = require(value,'candidate_reviews',list,'file_response')
     seen, required, unaffected = set(), set(), set()
     if value.get('outcome') == 'needs_clarification':
@@ -272,6 +280,8 @@ def resolve_candidates(source, value, positions):
         decision = review.get('decision')
         if decision not in ('edit','unaffected'):
             raise ContractError('unknown candidate decision')
+        if line in bound_required and decision == 'unaffected':
+            raise ContractError('bound required reference cannot be dismissed as unaffected')
         (required if decision=='edit' else unaffected).add(line)
     if seen != expected:
         raise ContractError('missing candidate reviews')

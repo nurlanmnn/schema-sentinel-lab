@@ -7,7 +7,7 @@ import ast
 import re
 from tree_sitter import Language, Parser
 from patchgen.locator import FACTORIES, walk
-from patchgen.detector import detect, descriptor
+from patchgen.detector import detect, descriptor, matches_single_event
 from patchgen.generator import ContractError, save, unified_diff, validate_output
 
 
@@ -21,7 +21,7 @@ def target(case):
                     case['source_revision'], change['id'], case['intended_behavior'])
     expected = dict(category='field_type_changed', message='simulation.v2.Entity', field_number=1,
                     old_name='entity_id', new_name='entity_id', old_type=9, new_type=12)
-    if result['status'] != 'complete' or result['events'] != [expected]:
+    if not matches_single_event(result, expected):
         raise ContractError('UTF-8 policy supports only singular simulation.v2.Entity.entity_id string->bytes on field 1')
     file, _ = descriptor(change['new_schema'], change['schema_path'])
     message = next(m for m in file.message_type if m.name == 'Entity')

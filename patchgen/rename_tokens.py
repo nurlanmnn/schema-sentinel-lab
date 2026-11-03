@@ -63,6 +63,9 @@ def make_prompt(case, file):
     payload['syntax_tokens'] = [{k:v for k,v in t.items() if k not in ('start_byte','end_byte')} for t in tokens]
     payload['response_schema'] = SCHEMA
     payload['prompt_version'] = '2.6'
+    if any(p.get('required_reference') for p in file['positions']):
+        payload['prompt_version'] += '-binding1'
+        payload['binding_policy'] = 'required_reference lines must be edited or deferred with needs_clarification; they cannot be marked unaffected.'
     return [dict(role='system',content=SYSTEM),dict(role='user',content=json.dumps(payload,indent=2))],tokens
 
 

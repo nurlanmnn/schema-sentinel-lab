@@ -66,7 +66,7 @@ def make_prompt(case, file):
     messages, _ = base_prompt(case, file)
     tokens = inventory(case, file)
     payload = json.loads(messages[1]['content'])
-    payload['prompt_version'] = '2.7'
+    payload['prompt_version'] = '2.7' + ('-binding1' if any(p.get('required_reference') for p in file['positions']) else '')
     payload['syntax_tokens'] = [{k:v for k,v in t.items() if k not in ('start_byte','end_byte')} for t in tokens]
     messages[0]['content'] += '\nEach token now has one role-constrained allowed replacement. On each line marked edit, select ALL inventory tokens on that line. Mixed affected/unaffected tokens on one line are unsupported; request clarification instead. A line marked unaffected must select NO tokens. Never omit a canonical observation-key token.'
     messages[1]['content'] = json.dumps(payload, indent=2)
