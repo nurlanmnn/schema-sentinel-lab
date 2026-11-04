@@ -261,7 +261,7 @@ def scan_enum(text, language, symbols):
                  resolution='candidate') for line, found in sorted(lines.items())], warnings, error
 
 
-def locate(repo, detector):
+def locate(repo, detector, *, added_field_policy_anchor=None):
     revision = detector['source_revision']
     entries = inventory(repo, revision)
     record = dict(adapter_version='1.0', producer='independent-tree-sitter-locator/1.11',
@@ -281,6 +281,13 @@ def locate(repo, detector):
         record['issues'].append('presence candidates only; constructor and observation policy requires review')
     if event['category'] == 'field_cardinality_changed':
         record['issues'].append('cardinality candidates only; collection collapse policy requires review')
+    addition = event['category'] == 'field_added'
+    field = event.get('old_name')
+    if addition:
+        field = added_field_policy_anchor or event['new_name']
+        record['issues'].append('addition candidates only; dependent behavior requires review')
+        if added_field_policy_anchor:
+            record['added_field_policy_anchor'] = added_field_policy_anchor
     policy = POLICY.get((detector['change']['schema_path'], event.get('message')))
     ts_policy = TYPESCRIPT_POLICY.get((detector['change']['schema_path'], event.get('message')))
     record['binding_policy'] = dict(scope='declared generated Python/ts-proto modules; bounded import and immutable TS dataflow evidence',
@@ -295,8 +302,8 @@ def locate(repo, detector):
         path, language = entry['path'], entry['language']
         text = command(['git','show',revision+':'+path],repo)
         positions, warnings, error = (scan_enum(text,language,enum['symbols']) if enum else
-                                      scan(text,language,event['old_name'],event=event))
-        if not enum:
+                                      scan(text,language,field,event=event))
+        if not enum and not addition:
             positions, limitations = attach_bindings(text, language, event, policy, positions, error,
                                                     schema_path=detector['change']['schema_path'], source_path=path)
             record.setdefault('binding_limitations', []).extend(dict(path=path, detail=item) for item in limitations)

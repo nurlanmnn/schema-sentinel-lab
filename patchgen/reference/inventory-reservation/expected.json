@@ -1,0 +1,31 @@
+{
+  "source_revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "change_id": "inventory-reservation",
+  "category": "field_added",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        10,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        4,
+        9,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        13,
+        15,
+        20
+      ]
+    }
+  ],
+  "method": "Authored JSON construction and stock eligibility roles on the existing quantity field."
+}

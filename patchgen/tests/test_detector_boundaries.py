@@ -152,3 +152,20 @@ class DescriptorBoundaryTests(unittest.TestCase):
         repeated_int = build('syntax="proto3"; message Packet { repeated int32 numbers=1; }')
         singular_int = build('syntax="proto3"; message Packet { int32 numbers=1; }')
         self.assertTrue(compare(repeated_int, singular_int)[1])
+
+    def test_plain_int32_addition_preserves_other_descriptor_guards(self):
+        old = build('syntax="proto3"; message Packet { int32 total=1; }')
+        new = build('syntax="proto3"; message Packet { int32 total=1; int32 held_count=2; }')
+        events, issues = compare(old, new)
+        self.assertFalse(issues)
+        self.assertEqual([e['category'] for e in events], ['field_added'])
+        self.assertIsNone(events[0]['old_field'])
+        self.assertEqual(events[0]['new_name'], 'held_count')
+        for field in ('optional int32 held_count=2;', 'repeated int32 held_count=2;',
+                      'int32 held_count=2 [json_name="custom"];', 'string held_count=2;'):
+            with self.subTest(field=field):
+                schema = 'syntax="proto3"; message Packet { int32 total=1; ' + field + ' }'
+                self.assertTrue(compare(old, build(schema))[1])
+        changed = copy.deepcopy(new)
+        changed.message_type[0].field[0].options.deprecated = True
+        self.assertTrue(compare(old, changed)[1])

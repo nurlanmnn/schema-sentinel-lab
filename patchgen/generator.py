@@ -131,8 +131,10 @@ STRATEGY_VERSIONS = {'deterministic_inventory_width':'host-inventory-width/1.0',
 INVENTORY_STRATEGIES = {'deterministic_inventory_width': 'width', 'deterministic_inventory_zigzag': 'zigzag',
                         'deterministic_inventory_stock_release': 'stock-release',
                         'deterministic_inventory_presence': 'presence',
-                        'deterministic_inventory_labels': 'labels'}
+                        'deterministic_inventory_labels': 'labels',
+                        'deterministic_inventory_reservation': 'reservation'}
 STRATEGY_VERSIONS['deterministic_inventory_zigzag'] = 'host-inventory-zigzag/1.0'
+STRATEGY_VERSIONS['deterministic_inventory_reservation'] = 'host-inventory-reservation/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_labels'] = 'host-inventory-labels/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_presence'] = 'host-inventory-presence/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_stock_release'] = 'host-stock-release/1.0'
@@ -517,6 +519,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 # Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
 VALIDATION_PROFILES = {
+    'inventory-reservation': ('inventory-reservation', None),
     'inventory-labels': ('inventory-labels', None),
     'inventory-presence': ('inventory-presence', None),
     'inventory-stock-release': ('inventory-stock-release', None),
@@ -532,10 +535,12 @@ VALIDATION_PROFILES = {
     'pubsub-identifier-utf8': ('v2-identifier-bytes', 'utf8'),
 }
 INVENTORY_VALIDATION_CASES = {'inventory-quantity-width': 'width', 'inventory-quantity-zigzag': 'zigzag',
-                              'inventory-labels': ('inventory-labels', None),
+                              'inventory-reservation': ('inventory-reservation', None),
+    'inventory-labels': ('inventory-labels', None),
     'inventory-presence': ('inventory-presence', None),
     'inventory-stock-release': 'stock-release', 'inventory-presence': 'presence',
-                              'inventory-labels': 'labels'}
+                              'inventory-reservation': ('inventory-reservation', None),
+    'inventory-labels': 'labels', 'inventory-reservation': 'reservation'}
 PUBSUB_ARTIFACTS = ('report.json', 'expected.json', 'broker-state.json', 'python.log', 'typescript.log', 'csharp.log')
 
 
@@ -682,7 +687,7 @@ def main():
         (output / 'rename-role-source.py').write_bytes(Path(__file__).with_name('rename_roles.py').read_bytes())
     inventory_migration = INVENTORY_STRATEGIES.get(args.strategy)
     inventory_policy = {'stock-release': 'stock_release.py', 'presence': 'inventory_presence.py',
-                        'labels': 'inventory_labels.py'}.get(
+                        'labels': 'inventory_labels.py', 'reservation': 'inventory_reservation.py'}.get(
         inventory_migration, 'inventory_width.py')
     if inventory_migration:
         (output/f'inventory-{inventory_migration}-source.py').write_bytes(Path(__file__).with_name(inventory_policy).read_bytes())
@@ -769,10 +774,14 @@ def main():
             source = output / 'source'
             report['source_preparation'] = 'explicit snapshot of fixture revision; original checkout untouched'
         verify_source(source,case)
-        pinned_mode = {'field_presence_added': 'presence', 'field_cardinality_changed': 'labels'}.get(case['change']['category'])
+        pinned_mode = {'field_presence_added': 'presence', 'field_cardinality_changed': 'labels',
+                       'field_added': 'reservation'}.get(case['change']['category'])
         if pinned_mode and (inventory_migration != pinned_mode or args.response):
             raise ContractError('this change requires its pinned deterministic strategy')
-        if inventory_migration == 'labels':
+        if inventory_migration == 'reservation':
+            from patchgen.inventory_reservation import propose
+            proposal = propose(case, output)
+        elif inventory_migration == 'labels':
             from patchgen.inventory_labels import propose
             proposal = propose(case, output)
         elif inventory_migration == 'presence':

@@ -210,3 +210,7 @@ See [decision 0030](docs/decisions/0030-inventory-quantity-presence.md).
 display labels into one value. It checks last-label selection and old repeated
 wire inputs across the three runtimes.
 See [decision 0031](docs/decisions/0031-inventory-display-labels.md).
+
+`run_demo.py --case inventory-reservation --local-codegen` adds a reserved
+quantity with a zero default and checks the new availability rule across the
+three runtimes. See [decision 0032](docs/decisions/0032-inventory-reservation.md).

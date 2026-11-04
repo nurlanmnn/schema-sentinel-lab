@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels')
+CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels', 'reservation')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -23,7 +23,7 @@ def varint(value):
     return bytes(result)
 
 
-def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False, labels=()):
+def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False, labels=(), reserved=0):
     bits = 32 if zigzag else 64
     if (not (explicit_presence and quantity is None)
             and (type(quantity) is not int or not -(1 << (bits - 1)) <= quantity < 1 << (bits - 1))):
@@ -38,6 +38,8 @@ def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False, lab
     for label in labels:
         data = label.encode('utf8')
         result += b'\x22' + varint(len(data)) + data
+    if reserved:
+        result += b'\x28' + varint(reserved & ((1 << 64) - 1))
     return base64.b64encode(result).decode()
 
 
@@ -69,9 +71,39 @@ def label_vectors():
             yield f'label-{index}', state, decoded, lists[(index + 3) % len(lists)]
 
 
+def reservation_vectors():
+    maximum = (1 << 31) - 1
+    minimum = -(1 << 31)
+    situations = (
+        ('legacy-positive', 0, 1, 0, True),
+        ('legacy-zero', 0, 0, 0, False),
+        ('legacy-negative', 0, -1, 0, False),
+        ('available', 0, 5, 4, True),
+        ('fully-reserved', 0, 5, 5, False),
+        ('over-reserved', 0, 5, 6, False),
+        ('invalid-negative-hold', 0, 5, -1, False),
+        ('negative-extreme', 0, maximum, minimum, False),
+        ('highest-available', 0, maximum, maximum - 1, True),
+        ('highest-fully-reserved', 0, maximum, maximum, False),
+        ('negative-total', 0, minimum, maximum, False),
+        ('quarantined-legacy', 1, 1, 0, False),
+        ('quarantined-available', 1, 5, 4, False),
+        ('unknown-available', 19, 5, 4, False),
+        ('empty-oversold', 0, 0, 1, False),
+        ('箱-positive', 0, 42, 1, True),
+    )
+    producer_holds = (None, 0, 1, -1, maximum, minimum, 9)
+    for index, (sku, state, total, held, eligible) in enumerate(situations):
+        yield sku, state, total, held, eligible, producer_holds[index % len(producer_holds)]
+
+
 def requests(case='baseline'):
     if case not in CASES:
         raise ValueError('unknown inventory oracle case')
+    if case == 'reservation':
+        return [dict(sku=sku, quantity='2', payload=encode(sku, total, state=state, reserved=held),
+                     **({'reserved_quantity': produced} if produced is not None else {}))
+                for sku, state, total, held, _, produced in reservation_vectors()]
     if case == 'labels':
         return [dict(sku=sku, quantity='2', display_labels=produced,
                      payload=encode(sku, 1, state=state, labels=decoded))
@@ -99,6 +131,10 @@ def requests(case='baseline'):
 
 
 def expected(case):
+    if case == 'reservation':
+        return [dict(fields=dict(sku=sku, quantity=str(total)), in_stock=eligible,
+                     constructed_payload=encode(sku, 2, reserved=produced or 0))
+                for sku, _, total, _, eligible, produced in reservation_vectors()]
     if case == 'labels':
         return [dict(fields=dict(sku=sku, quantity='1', display_labels=decoded[-1] if decoded else ''),
                      in_stock=state == 0,

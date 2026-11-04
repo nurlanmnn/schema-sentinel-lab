@@ -12,7 +12,7 @@ from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, check_results, e
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
-             'proposal/inventory-width-source.py','proposal/inventory-zigzag-source.py','proposal/inventory-stock-release-source.py','proposal/inventory-presence-source.py','proposal/inventory-labels-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py',
+             'proposal/inventory-width-source.py','proposal/inventory-zigzag-source.py','proposal/inventory-stock-release-source.py','proposal/inventory-presence-source.py','proposal/inventory-labels-source.py','proposal/inventory-reservation-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))

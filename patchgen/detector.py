@@ -4,7 +4,7 @@ import hashlib
 import subprocess
 import tempfile
 from pathlib import Path
-from google.protobuf.descriptor_pb2 import FileDescriptorSet
+from google.protobuf.descriptor_pb2 import FieldDescriptorProto, FileDescriptorSet
 from patchgen.adapter import digest
 from patchgen.generator import ContractError, safe_path
 
@@ -99,6 +99,17 @@ def collapses_repeated_string(prior, field, old_file, new_file):
     return normalized == prior
 
 
+def plain_int32_addition(field, old_file, new_file):
+    """Recognize an implicit proto3 scalar with canonical JSON metadata."""
+    if old_file.syntax != 'proto3' or new_file.syntax != 'proto3':
+        return False
+    head, *tail = field.name.split('_')
+    default_json = head + ''.join(part[:1].upper() + part[1:] for part in tail)
+    return field == FieldDescriptorProto(name=field.name, number=field.number,
+                                        label=field.LABEL_OPTIONAL, type=field.TYPE_INT32,
+                                        json_name=default_json)
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
@@ -132,7 +143,11 @@ def compare(old, new):
                         new_name=y.name if y else None,
                         old_field=field_identity(x), new_field=field_identity(y))
             if x is None:
-                unsupported.append(name + ': field added'); continue
+                if plain_int32_addition(y, old, new):
+                    events.append(dict(category='field_added', **base))
+                else:
+                    unsupported.append(name + ': field added')
+                continue
             if y is None:
                 events.append(dict(category='field_removed', **base)); continue
             if x.name != y.name:
