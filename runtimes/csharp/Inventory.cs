@@ -12,7 +12,7 @@ static class InventoryRuntime
             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
             var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
             var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
-            return new { fields, in_stock = entity.Quantity > 0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
+            return new { fields, in_stock = entity.Quantity > 0 && entity.State == Simulation.Inventory.StockState.Unspecified, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
         });
         Console.WriteLine(JsonSerializer.Serialize(results));
     }

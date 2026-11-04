@@ -14,13 +14,15 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14inventory/item.proto\x12\x14simulation.inventory\"9\n\tStockItem\x12\x10\n\x03sku\x18\x01 \x01(\tR\x03sku\x12\x1a\n\x08quantity\x18\x02 \x01(\x05R\x08quantityb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14inventory/item.proto\x12\x14simulation.inventory\"q\n\tStockItem\x12\x10\n\x03sku\x18\x01 \x01(\tR\x03sku\x12\x1a\n\x08quantity\x18\x02 \x01(\x05R\x08quantity\x12\x36\n\x05state\x18\x03 \x01(\x0e\x32 .simulation.inventory.StockStateR\x05state*F\n\nStockState\x12\x1b\n\x17STOCK_STATE_UNSPECIFIED\x10\x00\x12\x1b\n\x17STOCK_STATE_QUARANTINED\x10\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'inventory.item_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
+  _globals['_STOCKSTATE']._serialized_start=161
+  _globals['_STOCKSTATE']._serialized_end=231
   _globals['_STOCKITEM']._serialized_start=46
-  _globals['_STOCKITEM']._serialized_end=103
+  _globals['_STOCKITEM']._serialized_end=159
 # @@protoc_insertion_point(module_scope)

@@ -25,17 +25,28 @@ namespace Simulation.Inventory {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRpbnZlbnRvcnkvaXRlbS5wcm90bxIUc2ltdWxhdGlvbi5pbnZlbnRvcnki",
-            "OQoJU3RvY2tJdGVtEhAKA3NrdRgBIAEoCVIDc2t1EhoKCHF1YW50aXR5GAIg",
-            "ASgFUghxdWFudGl0eWIGcHJvdG8z"));
+            "cQoJU3RvY2tJdGVtEhAKA3NrdRgBIAEoCVIDc2t1EhoKCHF1YW50aXR5GAIg",
+            "ASgFUghxdWFudGl0eRI2CgVzdGF0ZRgDIAEoDjIgLnNpbXVsYXRpb24uaW52",
+            "ZW50b3J5LlN0b2NrU3RhdGVSBXN0YXRlKkYKClN0b2NrU3RhdGUSGwoXU1RP",
+            "Q0tfU1RBVEVfVU5TUEVDSUZJRUQQABIbChdTVE9DS19TVEFURV9RVUFSQU5U",
+            "SU5FRBABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.Inventory.StockState), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  public enum StockState {
+    [pbr::OriginalName("STOCK_STATE_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("STOCK_STATE_QUARANTINED")] Quarantined = 1,
+  }
+
+  #endregion
+
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class StockItem : pb::IMessage<StockItem>
@@ -74,6 +85,7 @@ namespace Simulation.Inventory {
     public StockItem(StockItem other) : this() {
       sku_ = other.sku_;
       quantity_ = other.quantity_;
+      state_ = other.state_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -107,6 +119,18 @@ namespace Simulation.Inventory {
       }
     }
 
+    /// <summary>Field number for the "state" field.</summary>
+    public const int StateFieldNumber = 3;
+    private global::Simulation.Inventory.StockState state_ = global::Simulation.Inventory.StockState.Unspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Simulation.Inventory.StockState State {
+      get { return state_; }
+      set {
+        state_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -124,6 +148,7 @@ namespace Simulation.Inventory {
       }
       if (Sku != other.Sku) return false;
       if (Quantity != other.Quantity) return false;
+      if (State != other.State) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -133,6 +158,7 @@ namespace Simulation.Inventory {
       int hash = 1;
       if (Sku.Length != 0) hash ^= Sku.GetHashCode();
       if (Quantity != 0) hash ^= Quantity.GetHashCode();
+      if (State != global::Simulation.Inventory.StockState.Unspecified) hash ^= State.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -159,6 +185,10 @@ namespace Simulation.Inventory {
         output.WriteRawTag(16);
         output.WriteInt32(Quantity);
       }
+      if (State != global::Simulation.Inventory.StockState.Unspecified) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) State);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -177,6 +207,10 @@ namespace Simulation.Inventory {
         output.WriteRawTag(16);
         output.WriteInt32(Quantity);
       }
+      if (State != global::Simulation.Inventory.StockState.Unspecified) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) State);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -192,6 +226,9 @@ namespace Simulation.Inventory {
       }
       if (Quantity != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Quantity);
+      }
+      if (State != global::Simulation.Inventory.StockState.Unspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -210,6 +247,9 @@ namespace Simulation.Inventory {
       }
       if (other.Quantity != 0) {
         Quantity = other.Quantity;
+      }
+      if (other.State != global::Simulation.Inventory.StockState.Unspecified) {
+        State = other.State;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -234,6 +274,10 @@ namespace Simulation.Inventory {
             Quantity = input.ReadInt32();
             break;
           }
+          case 24: {
+            State = (global::Simulation.Inventory.StockState) input.ReadEnum();
+            break;
+          }
         }
       }
     #endif
@@ -255,6 +299,10 @@ namespace Simulation.Inventory {
           }
           case 16: {
             Quantity = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            State = (global::Simulation.Inventory.StockState) input.ReadEnum();
             break;
           }
         }

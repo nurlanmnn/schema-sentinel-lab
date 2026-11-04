@@ -3,13 +3,47 @@ import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "simulation.inventory";
 
+export enum StockState {
+  STOCK_STATE_UNSPECIFIED = 0,
+  STOCK_STATE_QUARANTINED = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function stockStateFromJSON(object: any): StockState {
+  switch (object) {
+    case 0:
+    case "STOCK_STATE_UNSPECIFIED":
+      return StockState.STOCK_STATE_UNSPECIFIED;
+    case 1:
+    case "STOCK_STATE_QUARANTINED":
+      return StockState.STOCK_STATE_QUARANTINED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return StockState.UNRECOGNIZED;
+  }
+}
+
+export function stockStateToJSON(object: StockState): string {
+  switch (object) {
+    case StockState.STOCK_STATE_UNSPECIFIED:
+      return "STOCK_STATE_UNSPECIFIED";
+    case StockState.STOCK_STATE_QUARANTINED:
+      return "STOCK_STATE_QUARANTINED";
+    case StockState.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface StockItem {
   sku: string;
   quantity: number;
+  state: StockState;
 }
 
 function createBaseStockItem(): StockItem {
-  return { sku: "", quantity: 0 };
+  return { sku: "", quantity: 0, state: 0 };
 }
 
 export const StockItem = {
@@ -19,6 +53,9 @@ export const StockItem = {
     }
     if (message.quantity !== 0) {
       writer.uint32(16).int32(message.quantity);
+    }
+    if (message.state !== 0) {
+      writer.uint32(24).int32(message.state);
     }
     return writer;
   },
@@ -44,6 +81,13 @@ export const StockItem = {
 
           message.quantity = reader.int32();
           continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.state = reader.int32() as any;
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -57,6 +101,7 @@ export const StockItem = {
     return {
       sku: isSet(object.sku) ? globalThis.String(object.sku) : "",
       quantity: isSet(object.quantity) ? globalThis.Number(object.quantity) : 0,
+      state: isSet(object.state) ? stockStateFromJSON(object.state) : 0,
     };
   },
 
@@ -68,6 +113,9 @@ export const StockItem = {
     if (message.quantity !== 0) {
       obj.quantity = Math.round(message.quantity);
     }
+    if (message.state !== 0) {
+      obj.state = stockStateToJSON(message.state);
+    }
     return obj;
   },
 
@@ -78,6 +126,7 @@ export const StockItem = {
     const message = createBaseStockItem();
     message.sku = object.sku ?? "";
     message.quantity = object.quantity ?? 0;
+    message.state = object.state ?? 0;
     return message;
   },
 };

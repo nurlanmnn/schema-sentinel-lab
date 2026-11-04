@@ -3,4 +3,10 @@ package simulation.inventory;
 message StockItem {
   string sku = 1;
   int32 quantity = 2;
+  StockState state = 3;
+}
+
+enum StockState {
+  STOCK_STATE_UNSPECIFIED = 0;
+  STOCK_STATE_QUARANTINED = 1;
 }
