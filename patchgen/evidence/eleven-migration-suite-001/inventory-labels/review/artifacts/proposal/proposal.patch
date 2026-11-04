@@ -1,0 +1,56 @@
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -4,7 +4,7 @@
+   string sku = 1;
+   int32 quantity = 2;
+   StockState state = 3;
+-  repeated string display_labels = 4;
++  string display_labels = 4;
+ }
+ 
+ enum StockState {
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -8,10 +8,10 @@
+ def evaluate(request):
+     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
+     sample = StockItem(sku=request['sku'], quantity=int(request['quantity']),
+-                       display_labels=request.get('display_labels', []))
++                       display_labels=(request.get('display_labels') or [''])[-1])
+     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
+     if 'display_labels' in request:
+-        fields['display_labels'] = list(entity.display_labels)
++        fields['display_labels'] = entity.display_labels
+     return {'fields': fields, 'in_stock': entity.quantity > 0 and entity.state == STOCK_STATE_UNSPECIFIED,
+             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
+ 
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -7,7 +7,7 @@
+   const results = requests.map(request => {
+     const entity = StockItem.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+     const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED,
+-      displayLabels: request.display_labels ?? [] }).finish();
++      displayLabels: request.display_labels?.at(-1) ?? "" }).finish();
+     const fields = { sku: entity.sku, quantity: entity.quantity.toString(), ...(request.display_labels === undefined ? {} : { display_labels: entity.displayLabels }) };
+     return { fields, in_stock: BigInt(entity.quantity) > 0n && entity.state === StockState.STOCK_STATE_UNSPECIFIED, constructed_payload: Buffer.from(sample).toString("base64") };
+   });
+diff --git a/runtimes/csharp/Inventory.cs b/runtimes/csharp/Inventory.cs
+--- a/runtimes/csharp/Inventory.cs
++++ b/runtimes/csharp/Inventory.cs
+@@ -11,10 +11,10 @@
+         var results = requests.Select(request => {
+             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+             var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
+-            sample.DisplayLabels.Add(request.DisplayLabels ?? Array.Empty<string>());
++            sample.DisplayLabels = request.DisplayLabels?.LastOrDefault() ?? "";
+             var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
+             if (request.DisplayLabels is not null)
+-                fields["display_labels"] = entity.DisplayLabels.ToArray();
++                fields["display_labels"] = entity.DisplayLabels;
+             return new { fields, in_stock = entity.Quantity > 0 && entity.State == Simulation.Inventory.StockState.Unspecified, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
+         });
+         Console.WriteLine(JsonSerializer.Serialize(results));

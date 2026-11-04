@@ -1,0 +1,192 @@
+{
+  "revision": "b18692397beb3550917ee7e9ba3456da73bf21ef",
+  "inputs": [
+    {
+      "sku": "label-2",
+      "quantity": "2",
+      "display_labels": [
+        "same",
+        "same"
+      ],
+      "payload": "CgdsYWJlbC0yEAEiBWZpcnN0IgbnrrEtzrI="
+    },
+    {
+      "sku": "label-3",
+      "quantity": "2",
+      "display_labels": [
+        "with\nline",
+        "two"
+      ],
+      "payload": "CgdsYWJlbC0zEAEiB2VhcmxpZXIiAA=="
+    },
+    {
+      "sku": "label-4",
+      "quantity": "2",
+      "display_labels": [
+        "old",
+        "\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb\u03bb"
+      ],
+      "payload": "CgdsYWJlbC00EAEiACIEbGFzdA=="
+    }
+  ],
+  "expected_with_singular_labels": [
+    {
+      "fields": {
+        "sku": "label-2",
+        "quantity": "1",
+        "display_labels": "\u7bb1-\u03b2"
+      },
+      "in_stock": true,
+      "constructed_payload": "CgdsYWJlbC0yEAIiBHNhbWU="
+    },
+    {
+      "fields": {
+        "sku": "label-3",
+        "quantity": "1",
+        "display_labels": ""
+      },
+      "in_stock": true,
+      "constructed_payload": "CgdsYWJlbC0zEAIiA3R3bw=="
+    },
+    {
+      "fields": {
+        "sku": "label-4",
+        "quantity": "1",
+        "display_labels": "last"
+      },
+      "in_stock": true,
+      "constructed_payload": "CgdsYWJlbC00EAIijAHOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOuw=="
+    }
+  ],
+  "runtimes": {
+    "python": {
+      "exit_code": 0,
+      "baseline_compatible": true,
+      "actual": [
+        {
+          "fields": {
+            "sku": "label-2",
+            "quantity": "1",
+            "display_labels": [
+              "first",
+              "\u7bb1-\u03b2"
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC0yEAIiBHNhbWUiBHNhbWU="
+        },
+        {
+          "fields": {
+            "sku": "label-3",
+            "quantity": "1",
+            "display_labels": [
+              "earlier",
+              ""
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC0zEAIiCXdpdGgKbGluZSIDdHdv"
+        },
+        {
+          "fields": {
+            "sku": "label-4",
+            "quantity": "1",
+            "display_labels": [
+              "",
+              "last"
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC00EAIiA29sZCKMAc67zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867"
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    },
+    "typescript": {
+      "exit_code": 0,
+      "baseline_compatible": true,
+      "actual": [
+        {
+          "fields": {
+            "sku": "label-2",
+            "quantity": "1",
+            "display_labels": [
+              "first",
+              "\u7bb1-\u03b2"
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC0yEAIiBHNhbWUiBHNhbWU="
+        },
+        {
+          "fields": {
+            "sku": "label-3",
+            "quantity": "1",
+            "display_labels": [
+              "earlier",
+              ""
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC0zEAIiCXdpdGgKbGluZSIDdHdv"
+        },
+        {
+          "fields": {
+            "sku": "label-4",
+            "quantity": "1",
+            "display_labels": [
+              "",
+              "last"
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC00EAIiA29sZCKMAc67zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867"
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    },
+    "csharp": {
+      "exit_code": 0,
+      "baseline_compatible": true,
+      "actual": [
+        {
+          "fields": {
+            "sku": "label-2",
+            "quantity": "1",
+            "display_labels": [
+              "first",
+              "\u7bb1-\u03b2"
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC0yEAIiBHNhbWUiBHNhbWU="
+        },
+        {
+          "fields": {
+            "sku": "label-3",
+            "quantity": "1",
+            "display_labels": [
+              "earlier",
+              ""
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC0zEAIiCXdpdGgKbGluZSIDdHdv"
+        },
+        {
+          "fields": {
+            "sku": "label-4",
+            "quantity": "1",
+            "display_labels": [
+              "",
+              "last"
+            ]
+          },
+          "in_stock": true,
+          "constructed_payload": "CgdsYWJlbC00EAIiA29sZCKMAc67zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867zrvOu867"
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "strategy": "deterministic_inventory_labels",
+  "model_requests": 0,
+  "decisions": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "edited_lines": [
+        11,
+        14
+      ],
+      "unchanged_candidate_lines": []
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "edited_lines": [
+        10
+      ],
+      "unchanged_candidate_lines": [
+        4,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "edited_lines": [
+        14,
+        17
+      ],
+      "unchanged_candidate_lines": [
+        16,
+        23
+      ]
+    }
+  ]
+}
