@@ -1,0 +1,35 @@
+{
+  "revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "applied": "schema only",
+  "toolchain": {
+    "protoc_version": "libprotoc 25.1",
+    "ts_proto_version": "1.165.0",
+    "ts_proto_options": [
+      "forceLong=string"
+    ],
+    "buf_version": "1.75.0",
+    "sha256": {
+      "protoc": "b6ed65c0d20a9ab88ec6995644f747d557cb9a087eab0152fef5367c34645dc3",
+      "ts-proto-plugin": "29b7513e6485545b535ba9f7a3f2d746336e39b456262bc1a6b1e65ac61d43ea",
+      "ts-proto-build": "0ba82c2d4fccaeead72f4a64a7701adc3a6fe1111d6feb5d2e689fdf87753ada",
+      "package-lock.json": "86df52e5c6979a52dcd6a57b82c79637d33dc69af0fec8dda9704d253a80c7b1"
+    }
+  },
+  "runtimes": {
+    "python": {
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/private/tmp/sentinel-message-rename-trial-001/source/runtimes/python/main.py\", line 109, in <module>\n    from telemetry_runtime import run\n  File \"/private/tmp/sentinel-message-rename-trial-001/source/runtimes/python/telemetry_runtime.py\", line 5, in <module>\n    from telemetry.vehicle_pb2 import VehicleTelemetry\nImportError: cannot import name 'VehicleTelemetry' from 'telemetry.vehicle_pb2' (/private/tmp/sentinel-message-rename-trial-001/source/generated/python/telemetry/vehicle_pb2.py)\n"
+    },
+    "typescript": {
+      "exit_code": 2,
+      "stdout": "\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\ntelemetry.ts(2,10): error TS2305: Module '\"../../generated/ts/telemetry/vehicle\"' has no exported member 'VehicleTelemetry'.\n",
+      "stderr": ""
+    },
+    "csharp": {
+      "exit_code": 1,
+      "stdout": "  Determining projects to restore...\n  All projects are up-to-date for restore.\n/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/Telemetry.cs(11,26): error CS0234: The type or namespace name 'VehicleTelemetry' does not exist in the namespace 'Simulation.Telemetry' (are you missing an assembly reference?) [/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/CsharpApp.csproj]\n/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/Telemetry.cs(12,51): error CS0234: The type or namespace name 'VehicleTelemetry' does not exist in the namespace 'Simulation.Telemetry' (are you missing an assembly reference?) [/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/CsharpApp.csproj]\n\nBuild FAILED.\n\n/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/Telemetry.cs(11,26): error CS0234: The type or namespace name 'VehicleTelemetry' does not exist in the namespace 'Simulation.Telemetry' (are you missing an assembly reference?) [/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/CsharpApp.csproj]\n/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/Telemetry.cs(12,51): error CS0234: The type or namespace name 'VehicleTelemetry' does not exist in the namespace 'Simulation.Telemetry' (are you missing an assembly reference?) [/private/tmp/sentinel-message-rename-trial-001/source/runtimes/csharp/CsharpApp.csproj]\n    0 Warning(s)\n    2 Error(s)\n\nTime Elapsed 00:00:00.51\n",
+      "stderr": ""
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "contract_version": "1.0",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change": {
+    "id": "telemetry-message-rename",
+    "category": "message_renamed",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage GroundSpeedSample {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Rename the generated message type to GroundSpeedSample. Preserve field names, wire bytes, observations, and the strict speeding threshold for the raw telemetry payload.",
+  "affected_files": [
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "language": "csharp",
+      "source_sha256": "b29bea702046e3c2b7dd526e964cf87b42dfb4eac171b9afc70c16736ecb917a",
+      "positions": [
+        {
+          "start_line": 11,
+          "end_line": 11,
+          "reason": "Conservative syntax candidate: member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 12,
+          "end_line": 12,
+          "reason": "Conservative syntax candidate: qualified_name",
+          "resolution": "candidate"
+        }
+      ],
+      "source_context": "using System.Text.Json;\nusing Google.Protobuf;\n\nstatic class TelemetryRuntime\n{\n    public static void Run()\n    {\n        var requests = JsonSerializer.Deserialize<TelemetryRequest[]>(Console.In.ReadToEnd(),\n            new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException(\"Missing requests\");\n        var results = requests.Select(request => {\n            var entity = Simulation.Telemetry.VehicleTelemetry.Parser.ParseFrom(Convert.FromBase64String(request.Payload));\n            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = (float)request.Speed };\n            var fields = new Dictionary<string, object> { [\"vehicle_id\"] = entity.VehicleId, [\"speed_mps\"] = entity.SpeedMps };\n            return new { fields, speeding = entity.SpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };\n        });\n        Console.WriteLine(JsonSerializer.Serialize(results));\n    }\n}\nrecord TelemetryRequest(string Payload, [property: System.Text.Json.Serialization.JsonPropertyName(\"vehicle_id\")] string VehicleId, double Speed);\n"
+    },
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "language": "python",
+      "source_sha256": "aead8cf2bd2c35bb160c1c9f9e89e52e6dfcb483f3eb71c2e6b188fb1ecf3f91",
+      "positions": [
+        {
+          "start_line": 5,
+          "end_line": 5,
+          "reason": "Conservative syntax candidate: dotted_name",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 9,
+          "end_line": 9,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 10,
+          "end_line": 10,
+          "reason": "Conservative syntax candidate: call",
+          "resolution": "candidate"
+        }
+      ],
+      "source_context": "\"\"\"Small telemetry consumer/producer using canonical generated bindings.\"\"\"\nimport base64\nimport json\nimport sys\nfrom telemetry.vehicle_pb2 import VehicleTelemetry\n\n\ndef evaluate(request):\n    entity = VehicleTelemetry.FromString(base64.b64decode(request['payload'], validate=True))\n    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n            'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}\n\n\ndef run():\n    print(json.dumps([evaluate(request) for request in json.load(sys.stdin)]))\n"
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "language": "typescript",
+      "source_sha256": "385d09abf83926b0df87538a59cf19e20afce5b81ba3f3e4270066d41d706c10",
+      "positions": [
+        {
+          "start_line": 2,
+          "end_line": 2,
+          "reason": "Conservative syntax candidate: import_specifier",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 8,
+          "end_line": 8,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 9,
+          "end_line": 9,
+          "reason": "Conservative syntax candidate: member_expression",
+          "resolution": "candidate"
+        }
+      ],
+      "source_context": "import { readFileSync } from \"node:fs\";\nimport { VehicleTelemetry } from \"../../generated/ts/telemetry/vehicle\";\n\ninterface Request { payload: string; vehicle_id: string; speed: number }\nexport function runTelemetry() {\n  const requests: Request[] = JSON.parse(readFileSync(0, \"utf8\"));\n  const results = requests.map(request => {\n    const entity = VehicleTelemetry.decode(new Uint8Array(Buffer.from(request.payload, \"base64\")));\n    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();\n    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };\n    return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n  });\n  console.log(JSON.stringify(results));\n}\n"
+    }
+  ]
+}
