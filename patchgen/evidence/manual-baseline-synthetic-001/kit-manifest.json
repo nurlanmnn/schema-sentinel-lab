@@ -1,0 +1,7 @@
+{
+  "case": "telemetry-units",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "source_sha256": "6e1ebdab1ec94b2584691c7565a2ced07fddf11eeb5fb8666004cfbc8a88a84f",
+  "task_sha256": "4d0728ccba39d9c13e4d088ee204143ace8b92480e41dbb3823e53a0a1c4157e",
+  "setup_sha256": "4bd2ec9fb76227eb44f777dfbb7ce1397a5f1327b52827f7609a396ab011846b"
+}
