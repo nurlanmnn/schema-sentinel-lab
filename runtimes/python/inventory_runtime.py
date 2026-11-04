@@ -2,7 +2,7 @@
 import base64
 import json
 import sys
-from inventory.item_pb2 import STOCK_STATE_UNSPECIFIED, StockItem
+from inventory.item_pb2 import STOCK_STATE_QUARANTINED, STOCK_STATE_UNSPECIFIED, StockItem
 
 
 def evaluate(request):
@@ -12,6 +12,11 @@ def evaluate(request):
     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
     if 'display_labels' in request:
         fields['display_labels'] = list(entity.display_labels)
+    if request.get('include_state'):
+        fields['state_label'] = {
+            STOCK_STATE_UNSPECIFIED: 'UNSPECIFIED',
+            STOCK_STATE_QUARANTINED: 'QUARANTINED',
+        }.get(entity.state, 'UNKNOWN')
     return {'fields': fields, 'in_stock': entity.quantity > 0 and entity.state == STOCK_STATE_UNSPECIFIED,
             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
 
