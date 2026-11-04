@@ -1,0 +1,119 @@
+{
+  "review_version": "1.0",
+  "change_id": "telemetry-speed-quantized",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "validation_passed",
+  "mode": "deterministic_proposal",
+  "strategy": "deterministic_telemetry_quantized",
+  "approval_eligible": true,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "ffb74be00b56598f00ec36e13a38f00d62f78bf4681f66213f7a3482785cd750",
+      "bytes": 10494
+    },
+    "request.json": {
+      "sha256": "d4161053dcb063c810a4813640d9bbff7eeec6e350b86b961eec81acef8681f8",
+      "bytes": 872
+    },
+    "report.json": {
+      "sha256": "5b785e85493c05c71543eb81ba17e615d2a4e3658541346a7933f5ea1eae5137",
+      "bytes": 8557
+    },
+    "provenance.json": {
+      "sha256": "c967ee345f5ba9a5053e7b230046fb7dbbe640750f1c624cfe99b407f2ca463f",
+      "bytes": 1048
+    },
+    "detector.json": {
+      "sha256": "ca28286049eb519f0950f1710954d0a309dc0932556df4708924b88e78bc2f93",
+      "bytes": 2431
+    },
+    "locator.json": {
+      "sha256": "e8ae08d7af249f0ab766a92945ed5d2c09eb525a85d3e010f82925898f2d81d8",
+      "bytes": 14907
+    },
+    "measurement.json": {
+      "sha256": "8619da229efa468100d93b3b8127714340b234927ed5cc5abda371cff47571d4",
+      "bytes": 612
+    },
+    "implementation.json": {
+      "sha256": "65ff4e65596932d44d50bf75743539141edfd586272cb1e18b19ba5966eda238",
+      "bytes": 2299
+    },
+    "proposal/report.json": {
+      "sha256": "ad00dfb12c1c5e78e44a627fe41446ff7f218eea7adbc8c7122fd74acb2a6574",
+      "bytes": 5061
+    },
+    "proposal/assembly.json": {
+      "sha256": "6357f2a02f2d958ef3759073100c0fd6f2599974dd7ba549c072aceffecb12fd",
+      "bytes": 622
+    },
+    "proposal/proposal.json": {
+      "sha256": "d35a713e7207639ecb1bc28aa83e51c0d08da71502479e18cc42601e522a8159",
+      "bytes": 3589
+    },
+    "proposal/proposal.patch": {
+      "sha256": "f06251891ce436291b16bd3293407c58998531949f1edf6be994e9cf2b530a64",
+      "bytes": 3112
+    },
+    "proposal/validated.patch": {
+      "sha256": "315bd269e87bcaaa6dc3a1e45dcb905a7d8e44766734d3766cc5e2968d80dcef",
+      "bytes": 10143
+    },
+    "proposal/telemetry-quantized-source.py": {
+      "sha256": "ed2def87a648c80dc1c9b1e5dd7366b4dcf597501f2e453d4a509f0d6f64abf0",
+      "bytes": 3767
+    },
+    "proposal/validation.log": {
+      "sha256": "cce5d11e68dd12267e61046369e0fbda235c644edb3af10841c877748b6f7163",
+      "bytes": 12121
+    },
+    "proposal/validation-profile.json": {
+      "sha256": "b35b22ca550acc2575d4ec6f6ee4088f1ec021d4ee816531193a92aaa2850a1a",
+      "bytes": 383
+    },
+    "proposal/validation-tests.patch": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "proposal/telemetry/report.json": {
+      "sha256": "916aafb7c97fe97b553ec2cc2dd8947f5a4c3b8972eaa448a37aa3069b4ef951",
+      "bytes": 2727
+    },
+    "proposal/telemetry/expected.json": {
+      "sha256": "0047ab1a9a529dc8fde40c4ee23e56708acbf014676b93f9a1fc8162dba9fa82",
+      "bytes": 3580
+    },
+    "proposal/telemetry/python.json": {
+      "sha256": "98fc12147a9c8e2c0962d91e3763052eef6fec73b4f29efe28e410b44ce75bd9",
+      "bytes": 1951
+    },
+    "proposal/telemetry/typescript.json": {
+      "sha256": "5225e1fcbf5b22d37752f7b4cddc4e5bd428ca551fbbc6ba62c919a4cc416c97",
+      "bytes": 1775
+    },
+    "proposal/telemetry/csharp.json": {
+      "sha256": "e2d05a42c1fd4341f562f6f4e4f266bb8d10cb250c39523fd913182fcf490ecf",
+      "bytes": 1775
+    },
+    "proposal/telemetry-oracle-source.py": {
+      "sha256": "c6296872c8d5bbe96a1c51c841831bad43af0eea5360deb23993626b17e2d63f",
+      "bytes": 7209
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    },
+    "proposal/local-codegen-toolchain.json": {
+      "sha256": "c33b64db86116c6244f441836ca218447a42929e9193667db67102387df25d3e",
+      "bytes": 527
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "status": "validation_passed",
+  "implementation": {
+    "revision": "7a4203bb047ed029b4ff4062f5951beb2e8f9810",
+    "files": {
+      "detector.py": "acb76722a43bb10747b434af3c131735a773ed56afcb579b9c37b7bb2d2f10fa",
+      "locator.py": "6d77a927385263541b3460aea0380c3fac9a4f07c269b2afbe8ee366c2e6bb71",
+      "python_bindings.py": "c4e409a25c2743c5d7f1cfb00951ee315ef829eb65906bed22eb3048bdafa082",
+      "runtime_inventory.py": "77860f657a6a591dd58b82b06c918b843374d1529d520de32c0a61842b467012",
+      "source_spellings.py": "d845778ebc4fef9896c5cf8c35b4cd630695e99c5a4605484deafd17660c19e5",
+      "typescript_bindings.py": "1daf7ea06d89b00b2847feada1563d46235e72347cc2535b05f5e143a936bd47",
+      "binding_analysis.py": "a55a161156878ee8f1da19bd60cd5d16856c72f00486606d450a2dc3ce96204b",
+      "pipeline.py": "44b22b13fe3b46f40ccdf736c5229efae11f92765d70fab9a5645c847829b633",
+      "adapter.py": "19c3c4c74a937da5e8749be0ff229717fae35c588c4c94f0e3fa4138bdc1ec2b",
+      "generator.py": "56f50aac5af98951ae165095b90242758712725f25ebb43a32401f226d389a7f",
+      "anchor_edits.py": "46cfe4788f3eb5e1f9985847c1ad96769bf0fd8b9f0fdc97c9d46ccc7348170d",
+      "feedback_blocks.py": "f0866e712b2e9c1fb79bb2a4b41c7d712e56b47a1575b20ca95e2ae62b543f17",
+      "rename_tokens.py": "1d41bbe66eada8e28067ee6bb1b7ec87586f0733cfd05edd4a179e97ec54fd6d",
+      "rename_roles.py": "f7fde1fae25f69a5c8dd216a201a070a281a25e42501cb3ed8943d647346d923",
+      "type_utf8.py": "7f19829a29e63c8dfebb800ca86a3e422a982fc388fe2f8885c5f2d4c812de43",
+      "remove_name.py": "f3f3a377adc391cb705a4d93d99b7a1706cd54a336af7db8f573accfbb8da74e",
+      "type_precision.py": "5544b2420ee325a60141b8a243c762b3ee14cf6ca7a4912c4848387ccfec7722",
+      "telemetry_units.py": "05deaa6bbce509973f0a2e273236adcd4434310f8cc223a337a79baf2d410315",
+      "inventory_width.py": "102ef9653fef06260320f7f36978518a252ec4f75f6bc0bff556fd2ec6b912d3",
+      "stock_release.py": "837fa9a119c17eef3111fd261d1699eb91b8dc3d6826422b170600849ec65c2b",
+      "inventory_presence.py": "86da553da89202f230e8c212cc26c839e7d2744edf269cf10a586b4e530016b5",
+      "inventory_labels.py": "3078a3277c039091fdedda9da149e8cee793c46c9158a3a472f3845177107e56",
+      "inventory_reservation.py": "a9a3aafa62a61a5504bec5ec02468ba355ced5933607afd8f6fb6c5ec50a667f",
+      "telemetry_quantized.py": "ed2def87a648c80dc1c9b1e5dd7366b4dcf597501f2e453d4a509f0d6f64abf0"
+    }
+  },
+  "measurement": {
+    "expected_sites": 3,
+    "matched_sites": 3,
+    "recall": 1.0,
+    "missed": [],
+    "extra": [
+      {
+        "path": "runtimes/csharp/Telemetry.cs",
+        "line": 13
+      },
+      {
+        "path": "runtimes/csharp/Telemetry.cs",
+        "line": 14
+      },
+      {
+        "path": "runtimes/python/telemetry_runtime.py",
+        "line": 11
+      },
+      {
+        "path": "runtimes/python/telemetry_runtime.py",
+        "line": 12
+      },
+      {
+        "path": "runtimes/typescript/telemetry.ts",
+        "line": 10
+      },
+      {
+        "path": "runtimes/typescript/telemetry.ts",
+        "line": 11
+      }
+    ],
+    "classification_correct": true
+  },
+  "human_approval_required": true,
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof",
+  "proposal_exit_code": 0,
+  "proposal_report": {
+    "status": "validation_passed",
+    "human_approval_required": true,
+    "mode": "deterministic_proposal",
+    "prompt_version": "host-quantized/1.0",
+    "strategy": "deterministic_telemetry_quantized",
+    "generator_sha256": "56f50aac5af98951ae165095b90242758712725f25ebb43a32401f226d389a7f",
+    "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "telemetry_quantized_sha256": "ed2def87a648c80dc1c9b1e5dd7366b4dcf597501f2e453d4a509f0d6f64abf0",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "codegen": "local_pinned",
+    "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+    "validation_profile": {
+      "profile_version": "1.0",
+      "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+      "change_id": "telemetry-speed-quantized",
+      "new_schema_sha256": "9f9957464b5023a2d8f0fa3d1985023c1cddfeb7b11cd8d7c1fe4ba80cdfaf6b",
+      "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allowed_test_paths": [],
+      "telemetry_case": "quantized"
+    },
+    "telemetry_oracle_sha256": "c6296872c8d5bbe96a1c51c841831bad43af0eea5360deb23993626b17e2d63f",
+    "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+    "outcome": "patch",
+    "workspace": "/private/tmp/sentinel-thirteen-suite-001/telemetry-quantized/run/proposal/workspace",
+    "local_codegen_toolchain": {
+      "protoc_version": "libprotoc 25.1",
+      "ts_proto_version": "1.165.0",
+      "ts_proto_options": [
+        "forceLong=string"
+      ],
+      "buf_version": "1.75.0",
+      "sha256": {
+        "protoc": "b6ed65c0d20a9ab88ec6995644f747d557cb9a087eab0152fef5367c34645dc3",
+        "ts-proto-plugin": "29b7513e6485545b535ba9f7a3f2d746336e39b456262bc1a6b1e65ac61d43ea",
+        "ts-proto-build": "0ba82c2d4fccaeead72f4a64a7701adc3a6fe1111d6feb5d2e689fdf87753ada",
+        "package-lock.json": "86df52e5c6979a52dcd6a57b82c79637d33dc69af0fec8dda9704d253a80c7b1"
+      }
+    },
+    "telemetry_validation": {
+      "status": "passed",
+      "case": "quantized",
+      "runtime_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+      "source_dirty": true,
+      "source_sha256": {
+        "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+        "runtimes/python/telemetry_runtime.py": "ae4b08c50561a5eef29d7b6bdb944c6bb052a73f2c01d8721a8be50291615821",
+        "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+        "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+        "runtimes/typescript/telemetry.ts": "d8f3001fc5d1f0038c40df07a9f6966dac423621e6928598a6575b380a6ba083",
+        "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+        "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+        "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+        "runtimes/csharp/Telemetry.cs": "514c173d076d5357d72fc1c37382b983e84322d6cf0f9c649d106612507e5760",
+        "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+        "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+        "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+        "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+        "proto/telemetry/vehicle.proto": "9f9957464b5023a2d8f0fa3d1985023c1cddfeb7b11cd8d7c1fe4ba80cdfaf6b",
+        "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+        "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+        "generated/ts/telemetry/vehicle.ts": "178b644c87648e899843b45e2663caa409717c0c8fbb6a9f8edf4195e0436660",
+        "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+        "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+        "generated/csharp/Telemetry/Vehicle.cs": "8ea1c09451dd34d98b2b706ad9b78d2bd0b788b3b036ff4b91facd2db36f6238",
+        "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+        "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+        "generated/python/telemetry/vehicle_pb2.py": "092dbaa63da5d959c3928e143549153f2a6e8575449dfa267742df4a52c52e7f"
+      },
+      "runtime_cases": 36,
+      "model_requests": 0,
+      "scope": "authored int32 cases; excludes arbitrary wire and mixed versions"
+    },
+    "workflow_elapsed_seconds": 6.047940041986294,
+    "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+  }
+}
