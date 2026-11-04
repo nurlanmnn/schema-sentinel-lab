@@ -1,0 +1,30 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "old_schema_sha256": "37402103a98fc22cd1f7fd98ae0b78ada7ab648e685bf32e28a2fa6d683e359f",
+  "new_schema_sha256": "69a2e290a75a22df1de21108f037fa89fd3e1387704b54f67b0e4c78e05d19a1",
+  "old_descriptor_sha256": "b834ef6fab6ff886e1200932f917a5c6114e8ea476be39c606926d8402080fb4",
+  "new_descriptor_sha256": "2aff58f5a287d3c1300ba69d8a35d1cf4d3e39f7f8dfd050f4a4fedfe338e397",
+  "events": [
+    {
+      "category": "enum_value_added",
+      "enum": "simulation.inventory.StockState",
+      "value": "STOCK_STATE_RELEASED",
+      "number": 2
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "inventory-stock-release",
+    "category": "enum_value_added",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n  STOCK_STATE_RELEASED = 2;\n}\n"
+  },
+  "intended_behavior": "For positive inventory, allow UNSPECIFIED or RELEASED. QUARANTINED and unknown enum values stay blocked. Keep existing producer defaults, decimal quantity JSON, and the positive quantity requirement."
+}

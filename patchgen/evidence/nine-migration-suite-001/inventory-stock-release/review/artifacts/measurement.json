@@ -1,0 +1,17 @@
+{
+  "expected_sites": 4,
+  "matched_sites": 4,
+  "recall": 1.0,
+  "missed": [],
+  "extra": [
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "line": 2
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "line": 9
+    }
+  ],
+  "classification_correct": true
+}

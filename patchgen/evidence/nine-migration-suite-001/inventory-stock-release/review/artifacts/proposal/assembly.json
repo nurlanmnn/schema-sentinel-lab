@@ -1,0 +1,31 @@
+{
+  "strategy": "deterministic_inventory_stock_release",
+  "model_requests": 0,
+  "decisions": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "edited_lines": [
+        5,
+        12
+      ],
+      "unchanged_candidate_lines": []
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "edited_lines": [
+        11
+      ],
+      "unchanged_candidate_lines": [
+        2,
+        9
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "edited_lines": [
+        15
+      ],
+      "unchanged_candidate_lines": []
+    }
+  ]
+}

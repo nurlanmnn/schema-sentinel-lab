@@ -1,0 +1,214 @@
+{
+  "requests": [
+    {
+      "sku": "legacy",
+      "quantity": "-1",
+      "payload": "CgZsZWdhY3kQ////////////AQ=="
+    },
+    {
+      "sku": "legacy",
+      "quantity": "0",
+      "payload": "CgZsZWdhY3k="
+    },
+    {
+      "sku": "legacy",
+      "quantity": "1",
+      "payload": "CgZsZWdhY3kQAQ=="
+    },
+    {
+      "sku": "legacy",
+      "quantity": "2147483647",
+      "payload": "CgZsZWdhY3kQ/////wc="
+    },
+    {
+      "sku": "quarantined",
+      "quantity": "-1",
+      "payload": "CgtxdWFyYW50aW5lZBD///////////8BGAE="
+    },
+    {
+      "sku": "quarantined",
+      "quantity": "0",
+      "payload": "CgtxdWFyYW50aW5lZBgB"
+    },
+    {
+      "sku": "quarantined",
+      "quantity": "1",
+      "payload": "CgtxdWFyYW50aW5lZBABGAE="
+    },
+    {
+      "sku": "quarantined",
+      "quantity": "2147483647",
+      "payload": "CgtxdWFyYW50aW5lZBD/////BxgB"
+    },
+    {
+      "sku": "released",
+      "quantity": "-1",
+      "payload": "CghyZWxlYXNlZBD///////////8BGAI="
+    },
+    {
+      "sku": "released",
+      "quantity": "0",
+      "payload": "CghyZWxlYXNlZBgC"
+    },
+    {
+      "sku": "released",
+      "quantity": "1",
+      "payload": "CghyZWxlYXNlZBABGAI="
+    },
+    {
+      "sku": "released",
+      "quantity": "2147483647",
+      "payload": "CghyZWxlYXNlZBD/////BxgC"
+    },
+    {
+      "sku": "unknown",
+      "quantity": "-1",
+      "payload": "Cgd1bmtub3duEP///////////wEYEw=="
+    },
+    {
+      "sku": "unknown",
+      "quantity": "0",
+      "payload": "Cgd1bmtub3duGBM="
+    },
+    {
+      "sku": "unknown",
+      "quantity": "1",
+      "payload": "Cgd1bmtub3duEAEYEw=="
+    },
+    {
+      "sku": "unknown",
+      "quantity": "2147483647",
+      "payload": "Cgd1bmtub3duEP////8HGBM="
+    }
+  ],
+  "results": [
+    {
+      "fields": {
+        "sku": "legacy",
+        "quantity": "-1"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgZsZWdhY3kQ////////////AQ=="
+    },
+    {
+      "fields": {
+        "sku": "legacy",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgZsZWdhY3k="
+    },
+    {
+      "fields": {
+        "sku": "legacy",
+        "quantity": "1"
+      },
+      "in_stock": true,
+      "constructed_payload": "CgZsZWdhY3kQAQ=="
+    },
+    {
+      "fields": {
+        "sku": "legacy",
+        "quantity": "2147483647"
+      },
+      "in_stock": true,
+      "constructed_payload": "CgZsZWdhY3kQ/////wc="
+    },
+    {
+      "fields": {
+        "sku": "quarantined",
+        "quantity": "-1"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgtxdWFyYW50aW5lZBD///////////8B"
+    },
+    {
+      "fields": {
+        "sku": "quarantined",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgtxdWFyYW50aW5lZA=="
+    },
+    {
+      "fields": {
+        "sku": "quarantined",
+        "quantity": "1"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgtxdWFyYW50aW5lZBAB"
+    },
+    {
+      "fields": {
+        "sku": "quarantined",
+        "quantity": "2147483647"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgtxdWFyYW50aW5lZBD/////Bw=="
+    },
+    {
+      "fields": {
+        "sku": "released",
+        "quantity": "-1"
+      },
+      "in_stock": false,
+      "constructed_payload": "CghyZWxlYXNlZBD///////////8B"
+    },
+    {
+      "fields": {
+        "sku": "released",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "CghyZWxlYXNlZA=="
+    },
+    {
+      "fields": {
+        "sku": "released",
+        "quantity": "1"
+      },
+      "in_stock": true,
+      "constructed_payload": "CghyZWxlYXNlZBAB"
+    },
+    {
+      "fields": {
+        "sku": "released",
+        "quantity": "2147483647"
+      },
+      "in_stock": true,
+      "constructed_payload": "CghyZWxlYXNlZBD/////Bw=="
+    },
+    {
+      "fields": {
+        "sku": "unknown",
+        "quantity": "-1"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cgd1bmtub3duEP///////////wE="
+    },
+    {
+      "fields": {
+        "sku": "unknown",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cgd1bmtub3du"
+    },
+    {
+      "fields": {
+        "sku": "unknown",
+        "quantity": "1"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cgd1bmtub3duEAE="
+    },
+    {
+      "fields": {
+        "sku": "unknown",
+        "quantity": "2147483647"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cgd1bmtub3duEP////8H"
+    }
+  ]
+}
