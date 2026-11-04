@@ -1,0 +1,101 @@
+{
+  "revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "inputs": [
+    {
+      "sku": "legacy",
+      "quantity": "0",
+      "payload": "CgZsZWdhY3k="
+    },
+    {
+      "sku": "legacy",
+      "quantity": "0",
+      "payload": "CgZsZWdhY3kQAA=="
+    }
+  ],
+  "expected_with_presence": [
+    {
+      "fields": {
+        "sku": "legacy",
+        "quantity": null
+      },
+      "in_stock": false,
+      "constructed_payload": "CgZsZWdhY3kQAA=="
+    },
+    {
+      "fields": {
+        "sku": "legacy",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgZsZWdhY3kQAA=="
+    }
+  ],
+  "runtimes": {
+    "python": {
+      "exit_code": 0,
+      "actual": [
+        {
+          "fields": {
+            "sku": "legacy",
+            "quantity": "0"
+          },
+          "in_stock": false,
+          "constructed_payload": "CgZsZWdhY3k="
+        },
+        {
+          "fields": {
+            "sku": "legacy",
+            "quantity": "0"
+          },
+          "in_stock": false,
+          "constructed_payload": "CgZsZWdhY3k="
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    },
+    "typescript": {
+      "exit_code": 0,
+      "actual": [
+        {
+          "fields": {
+            "sku": "legacy",
+            "quantity": "0"
+          },
+          "in_stock": false,
+          "constructed_payload": "CgZsZWdhY3k="
+        },
+        {
+          "fields": {
+            "sku": "legacy",
+            "quantity": "0"
+          },
+          "in_stock": false,
+          "constructed_payload": "CgZsZWdhY3k="
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    },
+    "csharp": {
+      "exit_code": 0,
+      "actual": [
+        {
+          "fields": {
+            "sku": "legacy",
+            "quantity": "0"
+          },
+          "in_stock": false,
+          "constructed_payload": "CgZsZWdhY3k="
+        },
+        {
+          "fields": {
+            "sku": "legacy",
+            "quantity": "0"
+          },
+          "in_stock": false,
+          "constructed_payload": "CgZsZWdhY3k="
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    }
+  }
+}

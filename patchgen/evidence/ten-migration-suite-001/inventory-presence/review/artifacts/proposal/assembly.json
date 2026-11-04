@@ -1,0 +1,36 @@
+{
+  "strategy": "deterministic_inventory_presence",
+  "model_requests": 0,
+  "decisions": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "edited_lines": [
+        10,
+        11,
+        12
+      ],
+      "unchanged_candidate_lines": []
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "edited_lines": [
+        4,
+        9,
+        10,
+        11
+      ],
+      "unchanged_candidate_lines": []
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "edited_lines": [
+        13,
+        14,
+        14,
+        15,
+        20
+      ],
+      "unchanged_candidate_lines": []
+    }
+  ]
+}

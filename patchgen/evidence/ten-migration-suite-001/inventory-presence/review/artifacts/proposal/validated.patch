@@ -1,0 +1,276 @@
+diff --git a/generated/csharp/Inventory/Item.cs b/generated/csharp/Inventory/Item.cs
+index d8edeca..53bd828 100644
+--- a/generated/csharp/Inventory/Item.cs
++++ b/generated/csharp/Inventory/Item.cs
+@@ -25,15 +25,15 @@ namespace Simulation.Inventory {
+       byte[] descriptorData = global::System.Convert.FromBase64String(
+           string.Concat(
+             "ChRpbnZlbnRvcnkvaXRlbS5wcm90bxIUc2ltdWxhdGlvbi5pbnZlbnRvcnki",
+-            "cQoJU3RvY2tJdGVtEhAKA3NrdRgBIAEoCVIDc2t1EhoKCHF1YW50aXR5GAIg",
+-            "ASgFUghxdWFudGl0eRI2CgVzdGF0ZRgDIAEoDjIgLnNpbXVsYXRpb24uaW52",
+-            "ZW50b3J5LlN0b2NrU3RhdGVSBXN0YXRlKkYKClN0b2NrU3RhdGUSGwoXU1RP",
+-            "Q0tfU1RBVEVfVU5TUEVDSUZJRUQQABIbChdTVE9DS19TVEFURV9RVUFSQU5U",
+-            "SU5FRBABYgZwcm90bzM="));
++            "gwEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIfCghxdWFudGl0eRgC",
++            "IAEoBUgAUghxdWFudGl0eYgBARI2CgVzdGF0ZRgDIAEoDjIgLnNpbXVsYXRp",
++            "b24uaW52ZW50b3J5LlN0b2NrU3RhdGVSBXN0YXRlQgsKCV9xdWFudGl0eSpG",
++            "CgpTdG9ja1N0YXRlEhsKF1NUT0NLX1NUQVRFX1VOU1BFQ0lGSUVEEAASGwoX",
++            "U1RPQ0tfU1RBVEVfUVVBUkFOVElORUQQAWIGcHJvdG8z"));
+       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+           new pbr::FileDescriptor[] { },
+           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.Inventory.StockState), }, null, new pbr::GeneratedClrTypeInfo[] {
+-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State" }, null, null, null, null)
++            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State" }, new[]{ "Quantity" }, null, null, null)
+           }));
+     }
+     #endregion
+@@ -56,6 +56,7 @@ namespace Simulation.Inventory {
+   {
+     private static readonly pb::MessageParser<StockItem> _parser = new pb::MessageParser<StockItem>(() => new StockItem());
+     private pb::UnknownFieldSet _unknownFields;
++    private int _hasBits0;
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public static pb::MessageParser<StockItem> Parser { get { return _parser; } }
+@@ -83,6 +84,7 @@ namespace Simulation.Inventory {
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public StockItem(StockItem other) : this() {
++      _hasBits0 = other._hasBits0;
+       sku_ = other.sku_;
+       quantity_ = other.quantity_;
+       state_ = other.state_;
+@@ -109,15 +111,30 @@ namespace Simulation.Inventory {
+ 
+     /// <summary>Field number for the "quantity" field.</summary>
+     public const int QuantityFieldNumber = 2;
++    private readonly static int QuantityDefaultValue = 0;
++
+     private int quantity_;
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public int Quantity {
+-      get { return quantity_; }
++      get { if ((_hasBits0 & 1) != 0) { return quantity_; } else { return QuantityDefaultValue; } }
+       set {
++        _hasBits0 |= 1;
+         quantity_ = value;
+       }
+     }
++    /// <summary>Gets whether the "quantity" field is set</summary>
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public bool HasQuantity {
++      get { return (_hasBits0 & 1) != 0; }
++    }
++    /// <summary>Clears the value of the "quantity" field</summary>
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public void ClearQuantity() {
++      _hasBits0 &= ~1;
++    }
+ 
+     /// <summary>Field number for the "state" field.</summary>
+     public const int StateFieldNumber = 3;
+@@ -157,7 +174,7 @@ namespace Simulation.Inventory {
+     public override int GetHashCode() {
+       int hash = 1;
+       if (Sku.Length != 0) hash ^= Sku.GetHashCode();
+-      if (Quantity != 0) hash ^= Quantity.GetHashCode();
++      if (HasQuantity) hash ^= Quantity.GetHashCode();
+       if (State != global::Simulation.Inventory.StockState.Unspecified) hash ^= State.GetHashCode();
+       if (_unknownFields != null) {
+         hash ^= _unknownFields.GetHashCode();
+@@ -181,7 +198,7 @@ namespace Simulation.Inventory {
+         output.WriteRawTag(10);
+         output.WriteString(Sku);
+       }
+-      if (Quantity != 0) {
++      if (HasQuantity) {
+         output.WriteRawTag(16);
+         output.WriteInt32(Quantity);
+       }
+@@ -203,7 +220,7 @@ namespace Simulation.Inventory {
+         output.WriteRawTag(10);
+         output.WriteString(Sku);
+       }
+-      if (Quantity != 0) {
++      if (HasQuantity) {
+         output.WriteRawTag(16);
+         output.WriteInt32(Quantity);
+       }
+@@ -224,7 +241,7 @@ namespace Simulation.Inventory {
+       if (Sku.Length != 0) {
+         size += 1 + pb::CodedOutputStream.ComputeStringSize(Sku);
+       }
+-      if (Quantity != 0) {
++      if (HasQuantity) {
+         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Quantity);
+       }
+       if (State != global::Simulation.Inventory.StockState.Unspecified) {
+@@ -245,7 +262,7 @@ namespace Simulation.Inventory {
+       if (other.Sku.Length != 0) {
+         Sku = other.Sku;
+       }
+-      if (other.Quantity != 0) {
++      if (other.HasQuantity) {
+         Quantity = other.Quantity;
+       }
+       if (other.State != global::Simulation.Inventory.StockState.Unspecified) {
+diff --git a/generated/python/inventory/item_pb2.py b/generated/python/inventory/item_pb2.py
+index 4422473..05aa6b8 100644
+--- a/generated/python/inventory/item_pb2.py
++++ b/generated/python/inventory/item_pb2.py
+@@ -14,15 +14,15 @@ _sym_db = _symbol_database.Default()
+ 
+ 
+ 
+-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14inventory/item.proto\x12\x14simulation.inventory\"q\n\tStockItem\x12\x10\n\x03sku\x18\x01 \x01(\tR\x03sku\x12\x1a\n\x08quantity\x18\x02 \x01(\x05R\x08quantity\x12\x36\n\x05state\x18\x03 \x01(\x0e\x32 .simulation.inventory.StockStateR\x05state*F\n\nStockState\x12\x1b\n\x17STOCK_STATE_UNSPECIFIED\x10\x00\x12\x1b\n\x17STOCK_STATE_QUARANTINED\x10\x01\x62\x06proto3')
++DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14inventory/item.proto\x12\x14simulation.inventory\"\x83\x01\n\tStockItem\x12\x10\n\x03sku\x18\x01 \x01(\tR\x03sku\x12\x1f\n\x08quantity\x18\x02 \x01(\x05H\x00R\x08quantity\x88\x01\x01\x12\x36\n\x05state\x18\x03 \x01(\x0e\x32 .simulation.inventory.StockStateR\x05stateB\x0b\n\t_quantity*F\n\nStockState\x12\x1b\n\x17STOCK_STATE_UNSPECIFIED\x10\x00\x12\x1b\n\x17STOCK_STATE_QUARANTINED\x10\x01\x62\x06proto3')
+ 
+ _globals = globals()
+ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'inventory.item_pb2', _globals)
+ if _descriptor._USE_C_DESCRIPTORS == False:
+   DESCRIPTOR._options = None
+-  _globals['_STOCKSTATE']._serialized_start=161
+-  _globals['_STOCKSTATE']._serialized_end=231
+-  _globals['_STOCKITEM']._serialized_start=46
+-  _globals['_STOCKITEM']._serialized_end=159
++  _globals['_STOCKSTATE']._serialized_start=180
++  _globals['_STOCKSTATE']._serialized_end=250
++  _globals['_STOCKITEM']._serialized_start=47
++  _globals['_STOCKITEM']._serialized_end=178
+ # @@protoc_insertion_point(module_scope)
+diff --git a/generated/ts/inventory/item.ts b/generated/ts/inventory/item.ts
+index 0612c59..21410e7 100644
+--- a/generated/ts/inventory/item.ts
++++ b/generated/ts/inventory/item.ts
+@@ -38,12 +38,12 @@ export function stockStateToJSON(object: StockState): string {
+ 
+ export interface StockItem {
+   sku: string;
+-  quantity: number;
++  quantity?: number | undefined;
+   state: StockState;
+ }
+ 
+ function createBaseStockItem(): StockItem {
+-  return { sku: "", quantity: 0, state: 0 };
++  return { sku: "", quantity: undefined, state: 0 };
+ }
+ 
+ export const StockItem = {
+@@ -51,7 +51,7 @@ export const StockItem = {
+     if (message.sku !== "") {
+       writer.uint32(10).string(message.sku);
+     }
+-    if (message.quantity !== 0) {
++    if (message.quantity !== undefined) {
+       writer.uint32(16).int32(message.quantity);
+     }
+     if (message.state !== 0) {
+@@ -100,7 +100,7 @@ export const StockItem = {
+   fromJSON(object: any): StockItem {
+     return {
+       sku: isSet(object.sku) ? globalThis.String(object.sku) : "",
+-      quantity: isSet(object.quantity) ? globalThis.Number(object.quantity) : 0,
++      quantity: isSet(object.quantity) ? globalThis.Number(object.quantity) : undefined,
+       state: isSet(object.state) ? stockStateFromJSON(object.state) : 0,
+     };
+   },
+@@ -110,7 +110,7 @@ export const StockItem = {
+     if (message.sku !== "") {
+       obj.sku = message.sku;
+     }
+-    if (message.quantity !== 0) {
++    if (message.quantity !== undefined) {
+       obj.quantity = Math.round(message.quantity);
+     }
+     if (message.state !== 0) {
+@@ -125,7 +125,7 @@ export const StockItem = {
+   fromPartial<I extends Exact<DeepPartial<StockItem>, I>>(object: I): StockItem {
+     const message = createBaseStockItem();
+     message.sku = object.sku ?? "";
+-    message.quantity = object.quantity ?? 0;
++    message.quantity = object.quantity ?? undefined;
+     message.state = object.state ?? 0;
+     return message;
+   },
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+index 2e6e9f1..f8be88a 100644
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -2,7 +2,7 @@ syntax = "proto3";
+ package simulation.inventory;
+ message StockItem {
+   string sku = 1;
+-  int32 quantity = 2;
++  optional int32 quantity = 2;
+   StockState state = 3;
+ }
+ 
+diff --git a/runtimes/csharp/Inventory.cs b/runtimes/csharp/Inventory.cs
+index b15ac4d..e922d6a 100644
+--- a/runtimes/csharp/Inventory.cs
++++ b/runtimes/csharp/Inventory.cs
+@@ -10,11 +10,13 @@ static class InventoryRuntime
+             new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException("Missing requests");
+         var results = requests.Select(request => {
+             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+-            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
+-            var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
+-            return new { fields, in_stock = entity.Quantity > 0 && entity.State == Simulation.Inventory.StockState.Unspecified, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
++            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku };
++            if (request.Quantity is string quantity)
++                sample.Quantity = int.Parse(quantity, CultureInfo.InvariantCulture);
++            var fields = new Dictionary<string, object?> { ["sku"] = entity.Sku, ["quantity"] = entity.HasQuantity ? entity.Quantity.ToString(CultureInfo.InvariantCulture) : null };
++            return new { fields, in_stock = entity.HasQuantity && entity.Quantity > 0 && entity.State == Simulation.Inventory.StockState.Unspecified, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
+         });
+         Console.WriteLine(JsonSerializer.Serialize(results));
+     }
+ }
+-record InventoryRequest(string Payload, string Sku, string Quantity);
++record InventoryRequest(string Payload, string Sku, string? Quantity);
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+index c3db01d..a452e52 100644
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -7,9 +7,11 @@ from inventory.item_pb2 import STOCK_STATE_UNSPECIFIED, StockItem
+ 
+ def evaluate(request):
+     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
+-    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']))
+-    fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
+-    return {'fields': fields, 'in_stock': entity.quantity > 0 and entity.state == STOCK_STATE_UNSPECIFIED,
++    sample = StockItem(sku=request['sku'])
++    if request['quantity'] is not None:
++        sample.quantity = int(request['quantity'])
++    fields = {'sku': entity.sku, 'quantity': str(entity.quantity) if entity.HasField('quantity') else None}
++    return {'fields': fields, 'in_stock': entity.HasField('quantity') and entity.quantity > 0 and entity.state == STOCK_STATE_UNSPECIFIED,
+             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
+ 
+ 
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+index 510a255..0f592e0 100644
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -1,14 +1,14 @@
+ import { readFileSync } from "node:fs";
+ import { StockItem, StockState } from "../../generated/ts/inventory/item";
+ 
+-interface Request { payload: string; sku: string; quantity: string }
++interface Request { payload: string; sku: string; quantity: string | null }
+ export function runInventory() {
+   const requests: Request[] = JSON.parse(readFileSync(0, "utf8"));
+   const results = requests.map(request => {
+     const entity = StockItem.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+-    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED }).finish();
+-    const fields = { sku: entity.sku, quantity: entity.quantity.toString() };
+-    return { fields, in_stock: BigInt(entity.quantity) > 0n && entity.state === StockState.STOCK_STATE_UNSPECIFIED, constructed_payload: Buffer.from(sample).toString("base64") };
++    const sample = StockItem.encode({ sku: request.sku, quantity: request.quantity === null ? undefined : Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED }).finish();
++    const fields = { sku: entity.sku, quantity: entity.quantity?.toString() ?? null };
++    return { fields, in_stock: entity.quantity !== undefined && BigInt(entity.quantity) > 0n && entity.state === StockState.STOCK_STATE_UNSPECIFIED, constructed_payload: Buffer.from(sample).toString("base64") };
+   });
+   console.log(JSON.stringify(results));
+ }
