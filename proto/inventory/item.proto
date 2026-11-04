@@ -4,6 +4,7 @@ message StockItem {
   string sku = 1;
   int32 quantity = 2;
   StockState state = 3;
+  repeated string display_labels = 4;
 }
 
 enum StockState {

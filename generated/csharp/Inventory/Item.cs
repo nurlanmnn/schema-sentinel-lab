@@ -25,15 +25,16 @@ namespace Simulation.Inventory {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRpbnZlbnRvcnkvaXRlbS5wcm90bxIUc2ltdWxhdGlvbi5pbnZlbnRvcnki",
-            "cQoJU3RvY2tJdGVtEhAKA3NrdRgBIAEoCVIDc2t1EhoKCHF1YW50aXR5GAIg",
-            "ASgFUghxdWFudGl0eRI2CgVzdGF0ZRgDIAEoDjIgLnNpbXVsYXRpb24uaW52",
-            "ZW50b3J5LlN0b2NrU3RhdGVSBXN0YXRlKkYKClN0b2NrU3RhdGUSGwoXU1RP",
-            "Q0tfU1RBVEVfVU5TUEVDSUZJRUQQABIbChdTVE9DS19TVEFURV9RVUFSQU5U",
-            "SU5FRBABYgZwcm90bzM="));
+            "mAEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
+            "IAEoBVIIcXVhbnRpdHkSNgoFc3RhdGUYAyABKA4yIC5zaW11bGF0aW9uLmlu",
+            "dmVudG9yeS5TdG9ja1N0YXRlUgVzdGF0ZRIlCg5kaXNwbGF5X2xhYmVscxgE",
+            "IAMoCVINZGlzcGxheUxhYmVscypGCgpTdG9ja1N0YXRlEhsKF1NUT0NLX1NU",
+            "QVRFX1VOU1BFQ0lGSUVEEAASGwoXU1RPQ0tfU1RBVEVfUVVBUkFOVElORUQQ",
+            "AWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.Inventory.StockState), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels" }, null, null, null, null)
           }));
     }
     #endregion
@@ -86,6 +87,7 @@ namespace Simulation.Inventory {
       sku_ = other.sku_;
       quantity_ = other.quantity_;
       state_ = other.state_;
+      displayLabels_ = other.displayLabels_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -131,6 +133,17 @@ namespace Simulation.Inventory {
       }
     }
 
+    /// <summary>Field number for the "display_labels" field.</summary>
+    public const int DisplayLabelsFieldNumber = 4;
+    private static readonly pb::FieldCodec<string> _repeated_displayLabels_codec
+        = pb::FieldCodec.ForString(34);
+    private readonly pbc::RepeatedField<string> displayLabels_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> DisplayLabels {
+      get { return displayLabels_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -149,6 +162,7 @@ namespace Simulation.Inventory {
       if (Sku != other.Sku) return false;
       if (Quantity != other.Quantity) return false;
       if (State != other.State) return false;
+      if(!displayLabels_.Equals(other.displayLabels_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -159,6 +173,7 @@ namespace Simulation.Inventory {
       if (Sku.Length != 0) hash ^= Sku.GetHashCode();
       if (Quantity != 0) hash ^= Quantity.GetHashCode();
       if (State != global::Simulation.Inventory.StockState.Unspecified) hash ^= State.GetHashCode();
+      hash ^= displayLabels_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -189,6 +204,7 @@ namespace Simulation.Inventory {
         output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
+      displayLabels_.WriteTo(output, _repeated_displayLabels_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -211,6 +227,7 @@ namespace Simulation.Inventory {
         output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
+      displayLabels_.WriteTo(ref output, _repeated_displayLabels_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -230,6 +247,7 @@ namespace Simulation.Inventory {
       if (State != global::Simulation.Inventory.StockState.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
+      size += displayLabels_.CalculateSize(_repeated_displayLabels_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -251,6 +269,7 @@ namespace Simulation.Inventory {
       if (other.State != global::Simulation.Inventory.StockState.Unspecified) {
         State = other.State;
       }
+      displayLabels_.Add(other.displayLabels_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -278,6 +297,10 @@ namespace Simulation.Inventory {
             State = (global::Simulation.Inventory.StockState) input.ReadEnum();
             break;
           }
+          case 34: {
+            displayLabels_.AddEntriesFrom(input, _repeated_displayLabels_codec);
+            break;
+          }
         }
       }
     #endif
@@ -303,6 +326,10 @@ namespace Simulation.Inventory {
           }
           case 24: {
             State = (global::Simulation.Inventory.StockState) input.ReadEnum();
+            break;
+          }
+          case 34: {
+            displayLabels_.AddEntriesFrom(ref input, _repeated_displayLabels_codec);
             break;
           }
         }

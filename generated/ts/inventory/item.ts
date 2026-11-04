@@ -40,10 +40,11 @@ export interface StockItem {
   sku: string;
   quantity: number;
   state: StockState;
+  displayLabels: string[];
 }
 
 function createBaseStockItem(): StockItem {
-  return { sku: "", quantity: 0, state: 0 };
+  return { sku: "", quantity: 0, state: 0, displayLabels: [] };
 }
 
 export const StockItem = {
@@ -56,6 +57,9 @@ export const StockItem = {
     }
     if (message.state !== 0) {
       writer.uint32(24).int32(message.state);
+    }
+    for (const v of message.displayLabels) {
+      writer.uint32(34).string(v!);
     }
     return writer;
   },
@@ -88,6 +92,13 @@ export const StockItem = {
 
           message.state = reader.int32() as any;
           continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.displayLabels.push(reader.string());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -102,6 +113,9 @@ export const StockItem = {
       sku: isSet(object.sku) ? globalThis.String(object.sku) : "",
       quantity: isSet(object.quantity) ? globalThis.Number(object.quantity) : 0,
       state: isSet(object.state) ? stockStateFromJSON(object.state) : 0,
+      displayLabels: globalThis.Array.isArray(object?.displayLabels)
+        ? object.displayLabels.map((e: any) => globalThis.String(e))
+        : [],
     };
   },
 
@@ -116,6 +130,9 @@ export const StockItem = {
     if (message.state !== 0) {
       obj.state = stockStateToJSON(message.state);
     }
+    if (message.displayLabels?.length) {
+      obj.displayLabels = message.displayLabels;
+    }
     return obj;
   },
 
@@ -127,6 +144,7 @@ export const StockItem = {
     message.sku = object.sku ?? "";
     message.quantity = object.quantity ?? 0;
     message.state = object.state ?? 0;
+    message.displayLabels = object.displayLabels?.map((e) => e) || [];
     return message;
   },
 };
