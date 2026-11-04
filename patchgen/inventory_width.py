@@ -1,4 +1,4 @@
-"""Bounded signed int32 -> int64 inventory proposal with decimal-string JSON."""
+"""Bounded inventory integer migrations with decimal-string JSON."""
 from tree_sitter import Language, Parser
 from patchgen.locator import FACTORIES, walk
 from patchgen.detector import detect, descriptor, matches_single_event
@@ -6,6 +6,9 @@ from patchgen.type_utf8 import compact
 from patchgen.generator import ContractError, save, unified_diff, validate_output
 
 POLICY = 'Preserve exact signed int64 quantities as canonical decimal strings in JSON; ts-proto forceLong=string; preserve strict >0 stock predicate'
+ZIGZAG_POLICY = 'Preserve signed int32 quantities, decimal-string JSON and strict >0 stock predicate with ZigZag wire encoding'
+MIGRATIONS = {'width': (3, POLICY), 'zigzag': (17, ZIGZAG_POLICY)}
+
 SHAPES = {
     'python': ["sample = StockItem(sku=request['sku'], quantity=int(request['quantity']))",
                "fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}",
@@ -28,20 +31,23 @@ BINDINGS = {
 }
 
 
-def target(case):
+def target(case, migration='width'):
+    if migration not in MIGRATIONS:
+        raise ContractError('unsupported inventory integer migration')
+    new_type, policy = MIGRATIONS[migration]
     c = case['change']
     result = detect(c['old_schema'], c['new_schema'], c['schema_path'], case['source_revision'], c['id'], case['intended_behavior'])
     event = dict(category='field_type_changed', message='simulation.inventory.StockItem', field_number=2,
-                 old_name='quantity', new_name='quantity', old_type=5, new_type=3)
+                 old_name='quantity', new_name='quantity', old_type=5, new_type=new_type)
     if not matches_single_event(result, event):
-        raise ContractError('inventory width policy requires StockItem.quantity int32->int64 field 2')
+        raise ContractError(f'inventory {migration} requires the declared StockItem.quantity type change at field 2')
     file, _ = descriptor(c['new_schema'], c['schema_path'])
     field = next(f for m in file.message_type if m.name == 'StockItem' for f in m.field if f.number == 2)
-    if field.label != 1 or field.proto3_optional or field.HasField('oneof_index') or POLICY not in case['intended_behavior']:
-        raise ContractError('inventory width requires explicit decimal/binding/stock policy and nonoptional singular field')
+    if field.label != 1 or field.proto3_optional or field.HasField('oneof_index') or policy not in case['intended_behavior']:
+        raise ContractError('inventory migration requires explicit policy and a nonoptional singular field')
 
 
-def transform(file):
+def transform(file, migration='width'):
     language = file['language']
     if language not in SHAPES:
         raise ContractError('unsupported inventory language')
@@ -66,6 +72,9 @@ def transform(file):
         if not any(n.type in ('assignment', 'return_statement', 'lexical_declaration', 'local_declaration_statement')
                    and n.start_point.row + 1 in candidates and compact(lines[n.start_point.row]) == compact(expected) for n in nodes):
             raise ContractError('inventory candidates must be executable syntax')
+    if migration == 'zigzag':
+        return raw.decode(), dict(candidate_lines=sorted(candidates), edits=[],
+                                  reason='Generated signed int32 API stays unchanged')
     before, after = {'python': ('', ''),
                      'typescript': ('Number.parseInt(request.quantity, 10)', 'request.quantity'),
                      'csharp': ('int.Parse(request.Quantity, CultureInfo.InvariantCulture)', 'long.Parse(request.Quantity, CultureInfo.InvariantCulture)')}[language]
@@ -81,18 +90,25 @@ def transform(file):
     return raw.decode(), dict(candidate_lines=sorted(candidates), edits=edits)
 
 
-def propose(case, output):
-    target(case)
+def propose(case, output, migration='width'):
+    target(case, migration)
     if len(case['affected_files']) != 3 or {f['language'] for f in case['affected_files']} != set(SHAPES):
-        raise ContractError('inventory width requires exactly three adopted runtime files')
+        raise ContractError('inventory migration requires exactly three adopted runtime files')
     diff = unified_diff(case['change']['schema_path'], case['change']['old_schema'], case['change']['new_schema'])
     for index, file in enumerate(case['affected_files'], 1):
-        updated, evidence = transform(file)
+        updated, evidence = transform(file, migration)
         directory = output / 'deterministic' / f'{index:02d}'
         directory.mkdir(parents=True, exist_ok=False)
         save(directory / 'integer-decisions.json', dict(path=file['path'], **evidence))
         diff += unified_diff(file['path'], file['source_context'], updated)
-    save(output / 'assembly.json', dict(strategy='deterministic_inventory_width', model_requests=0, automatic_repairs=0, policy=POLICY))
+    save(output / 'assembly.json', dict(strategy=f'deterministic_inventory_{migration}', model_requests=0,
+                                       automatic_repairs=0, policy=MIGRATIONS[migration][1]))
+    if migration == 'zigzag':
+        return validate_output(dict(contract_version='1.0', outcome='patch', diff=diff,
+            rationale='Use regenerated ZigZag codecs with the same signed int32 runtime API and stock predicate.',
+            confidence=0, assumptions=['Adopted direct binding shapes and canonical signed int32 input strings.',
+            'Old int32 bytes and new sint32 bytes are not interchangeable. Coordinate deployment and re-encode persisted payloads.',
+            'Confidence is unestimated; zero is a placeholder. Human review required.']))
     return validate_output(dict(contract_version='1.0', outcome='patch', diff=diff,
         rationale='Preserve exact signed quantities using generated decimal-string TS values and C# long parsing; Python int already exact.',
         confidence=0, assumptions=['Adopted direct binding shapes; no general receiver/alias/dataflow proof.',

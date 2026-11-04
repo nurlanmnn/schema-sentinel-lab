@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
+CASES = ('baseline', 'width', 'zigzag')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -22,18 +23,20 @@ def varint(value):
     return bytes(result)
 
 
-def encode(sku, quantity):
-    if type(quantity) is not int or not -(1 << 63) <= quantity < 1 << 63:
-        raise ValueError('quantity outside int64')
+def encode(sku, quantity, *, zigzag=False):
+    bits = 32 if zigzag else 64
+    if type(quantity) is not int or not -(1 << (bits - 1)) <= quantity < 1 << (bits - 1):
+        raise ValueError(f'quantity outside int{bits}')
     raw = sku.encode('utf8')
     result = b'\x0a' + varint(len(raw)) + raw if raw else b''
     if quantity:
-        result += b'\x10' + varint(quantity & ((1 << 64) - 1))
+        encoded = ((quantity << 1) ^ (quantity >> 31)) if zigzag else quantity & ((1 << 64) - 1)
+        result += b'\x10' + varint(encoded)
     return base64.b64encode(result).decode()
 
 
 def requests(case='baseline'):
-    if case not in ('baseline', 'width'):
+    if case not in CASES:
         raise ValueError('unknown inventory oracle case')
     values = [('empty-stock', 0), ('single', 1), ('backorder', -1),
               ('int32-max', (1 << 31) - 1), ('int32-min', -(1 << 31)),
@@ -43,7 +46,11 @@ def requests(case='baseline'):
                    ('safe-max', (1 << 53) - 1), ('safe-edge', 1 << 53),
                    ('unsafe-next', (1 << 53) + 1), ('unsafe-negative', -(1 << 53) - 1),
                    ('int64-max', (1 << 63) - 1), ('int64-min', -(1 << 63))]
-    return [dict(sku=sku, quantity=str(q), payload=encode(sku, q)) for sku, q in values]
+    if case == 'zigzag':
+        values += [('one-byte-min', -64), ('one-byte-max', 63), ('two-byte-negative', -65),
+                   ('two-byte-positive', 64), ('two-byte-min', -8192), ('two-byte-max', 8191),
+                   ('three-byte-negative', -8193), ('three-byte-positive', 8192)]
+    return [dict(sku=sku, quantity=str(q), payload=encode(sku, q, zigzag=case == 'zigzag')) for sku, q in values]
 
 
 def expected(case):
@@ -101,7 +108,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=ROOT)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--case', choices=('baseline', 'width'), default='baseline')
+    parser.add_argument('--case', choices=CASES, default='baseline')
     args = parser.parse_args()
     report = run(args.root, args.output, args.case)
     print(json.dumps(report, indent=2))

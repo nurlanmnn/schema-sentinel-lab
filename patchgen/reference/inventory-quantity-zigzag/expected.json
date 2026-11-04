@@ -1,0 +1,32 @@
+{
+  "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
+  "change_id": "inventory-quantity-zigzag",
+  "category": "field_type_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        13,
+        14,
+        15
+      ]
+    }
+  ],
+  "method": "Authored inventory of producer, observation and stock predicate lines. Regenerated codecs change wire bytes. Application source keeps the same signed int32 API."
+}

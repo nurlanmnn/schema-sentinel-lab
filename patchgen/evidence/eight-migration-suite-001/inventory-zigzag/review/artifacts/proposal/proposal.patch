@@ -1,0 +1,10 @@
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -2,5 +2,5 @@
+ package simulation.inventory;
+ message StockItem {
+   string sku = 1;
+-  int32 quantity = 2;
++  sint32 quantity = 2;
+ }

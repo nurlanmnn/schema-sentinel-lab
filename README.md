@@ -184,6 +184,10 @@ performance or meet the twenty-case benchmark target.
 
 `run_demo.py --case inventory-width --local-codegen` validates exact signed int64
 stock quantities across the three runtimes, including values above JavaScript's
-safe-integer range. The suite now includes seven distinct migrations. See
+safe-integer range. See
 [decision 0020](docs/decisions/0020-inventory-integer-width-migration.md).
-Live LLM evaluation and model reassessment are the next priority.
+`run_demo.py --case inventory-zigzag --local-codegen` changes signed int32 wire
+encoding while preserving decimal-string JSON and stock decisions. It checks
+regenerated producer and consumer bytes across three languages. Coordinate the
+wire change before deploying it. The suite now includes eight distinct migrations.
+See [decision 0028](docs/decisions/0028-inventory-zigzag-wire-migration.md).

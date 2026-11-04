@@ -13,6 +13,15 @@ class InventoryOracleTests(unittest.TestCase):
         self.assertEqual(varint(128), b'\x80\x01')
         self.assertEqual(base64.b64decode(encode('', 0)), b'')
 
+    def test_zigzag_wire_literals_and_legacy_rejection(self):
+        self.assertEqual(base64.b64decode(encode('', -1, zigzag=True)), bytes.fromhex('1001'))
+        self.assertEqual(base64.b64decode(encode('', 64, zigzag=True)), bytes.fromhex('108001'))
+        self.assertEqual(base64.b64decode(encode('', -(1 << 31), zigzag=True)), bytes.fromhex('10ffffffff0f'))
+        with self.assertRaisesRegex(ValueError, 'outside int32'):
+            encode('', 1 << 31, zigzag=True)
+        with self.assertRaisesRegex(ValueError, 'wire/predicate mismatch'):
+            check_results(expected('baseline'), expected('zigzag')[:8])
+
     def test_width_corpus_includes_signed_endpoints_and_unsafe_neighbors(self):
         quantities = {int(r['quantity']) for r in requests('width')}
         self.assertTrue({-(1 << 63), (1 << 63) - 1, (1 << 53) + 1, -(1 << 53) - 1} <= quantities)

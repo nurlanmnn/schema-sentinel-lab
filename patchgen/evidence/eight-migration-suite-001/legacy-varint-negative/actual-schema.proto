@@ -1,0 +1,6 @@
+syntax = "proto3";
+package simulation.inventory;
+message StockItem {
+  string sku = 1;
+  int64 quantity = 2;
+}

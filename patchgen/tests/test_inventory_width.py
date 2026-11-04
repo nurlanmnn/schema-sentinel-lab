@@ -36,6 +36,21 @@ class InventoryWidthTests(unittest.TestCase):
             self.assertEqual(actual, expected)
             self.assertEqual(len(evidence['edits']), 0 if file['language'] == 'python' else 1)
 
+    def test_zigzag_proposes_the_authored_schema_only_patch(self):
+        from tempfile import TemporaryDirectory
+        name = 'inventory-quantity-zigzag'
+        case = fixture()
+        request = json.loads((ROOT/'patchgen/fixtures'/name/'runtime-input.json').read_text())
+        case.update(request)
+        profile, test_patch = load_validation_profile(case, name)
+        self.assertEqual(profile['inventory_case'], 'zigzag')
+        self.assertEqual(test_patch, '')
+        with self.assertRaises(ContractError):
+            load_validation_profile(case, 'inventory-quantity-width')
+        with TemporaryDirectory() as tmp:
+            proposal = propose(case, Path(tmp), 'zigzag')
+        self.assertEqual(proposal['diff'], (ROOT/'patchgen/reference'/name/'expected.patch').read_text())
+
     def test_unknown_policy_type_cardinality_and_optional_rejected(self):
         case = fixture()
         for kind in ('policy', 'unsigned', 'repeated', 'optional'):

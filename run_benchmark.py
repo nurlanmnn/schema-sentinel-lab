@@ -1,4 +1,4 @@
-"""Run seven distinct authored migrations sequentially; preserve every outcome."""
+"""Run distinct authored migrations sequentially; preserve every outcome."""
 import argparse
 import hashlib
 import json
@@ -11,7 +11,7 @@ import run_demo
 ROOT = Path(__file__).resolve().parent
 # Transport variants, negative controls and reference replays are not extra cases.
 CASES = ('pubsub-rename', 'pubsub-removal', 'pubsub-utf8',
-         'telemetry-rename', 'telemetry-precision', 'telemetry-units', 'inventory-width')
+         'telemetry-rename', 'telemetry-precision', 'telemetry-units', 'inventory-width', 'inventory-zigzag')
 
 
 def read(path):
@@ -126,7 +126,7 @@ def execute(output, local_codegen=False):
     report = dict(status='running', mode='deterministic_authored_suite', model_requests=0,
                   human_approval_required=True, human_review_seconds=None, live_model_validation_rate=None,
                   timing_scope='sequential prepared demos including bootstrap; not operational propagation time',
-                  scope='seven small authored migrations; not the twenty-case MVP benchmark; structural classification only',
+                  scope='small authored migrations toward the twenty-case MVP benchmark; structural classification only',
                   missing_measurement_policy='zero matched sites and incorrect classification; all planned cases remain in denominators',
                   implementation_revision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                   implementation_dirty=bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True)),
