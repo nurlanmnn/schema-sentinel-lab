@@ -169,3 +169,22 @@ class DescriptorBoundaryTests(unittest.TestCase):
         changed = copy.deepcopy(new)
         changed.message_type[0].field[0].options.deprecated = True
         self.assertTrue(compare(old, changed)[1])
+
+    def test_enum_symbol_rename_requires_stable_nondefault_number_and_metadata(self):
+        old = build('syntax="proto3"; enum State { UNKNOWN=0; HELD=1; READY=2; }')
+        new = build('syntax="proto3"; enum State { UNKNOWN=0; ON_HOLD=1; READY=2; }')
+        events, issues = compare(old, new)
+        self.assertFalse(issues)
+        self.assertEqual(events, [dict(category='enum_value_renamed', enum='State',
+                                      number=1, old_value='HELD', new_value='ON_HOLD')])
+        for schema in (
+            'syntax="proto3"; enum State { UNSET=0; HELD=1; READY=2; }',
+            'syntax="proto3"; enum State { UNKNOWN=0; ON_HOLD=3; READY=2; }',
+            'syntax="proto3"; enum State { UNKNOWN=0; READY=2; ON_HOLD=1; }',
+            'syntax="proto3"; enum State { UNKNOWN=0; ON_HOLD=1 [deprecated=true]; READY=2; }',
+        ):
+            with self.subTest(schema=schema):
+                self.assertTrue(compare(old, build(schema))[1])
+        alias_old = build('syntax="proto3"; enum State { option allow_alias=true; UNKNOWN=0; HELD=1; HOLD=1; }')
+        alias_new = build('syntax="proto3"; enum State { option allow_alias=true; UNKNOWN=0; ON_HOLD=1; HOLD=1; }')
+        self.assertTrue(compare(alias_old, alias_new)[1])

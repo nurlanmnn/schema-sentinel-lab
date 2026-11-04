@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "d7efa49f9f95da951bc4b7bdd0ca4454f6a41afd",
+  "change_id": "inventory-state-rename",
+  "new_schema_sha256": "c4544466c33ed0eb4f262696bf4e0ec4df27014c5a601fc67af94234739bd2f0",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "inventory_case": "state-rename"
+}

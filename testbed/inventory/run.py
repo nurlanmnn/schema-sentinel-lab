@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels', 'reservation')
+CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels', 'reservation', 'state-rename')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -97,9 +97,20 @@ def reservation_vectors():
         yield sku, state, total, held, eligible, producer_holds[index % len(producer_holds)]
 
 
+def state_rename_vectors():
+    states = (('legacy', 0, 'UNSPECIFIED'), ('held', 1, 'ON_HOLD'),
+              ('unknown', 19, 'UNKNOWN'), ('other', 127, 'UNKNOWN'))
+    return [(sku, state, label, q, q != -1)
+            for sku, state, label in states for q in (-1, 0, 1, (1 << 31) - 1)]
+
+
 def requests(case='baseline'):
     if case not in CASES:
         raise ValueError('unknown inventory oracle case')
+    if case == 'state-rename':
+        return [dict(sku=sku, quantity=str(2 - q), include_state=include,
+                     payload=encode(sku, q, state=state))
+                for sku, state, _, q, include in state_rename_vectors()]
     if case == 'reservation':
         return [dict(sku=sku, quantity='2', payload=encode(sku, total, state=state, reserved=held),
                      **({'reserved_quantity': produced} if produced is not None else {}))
@@ -131,6 +142,10 @@ def requests(case='baseline'):
 
 
 def expected(case):
+    if case == 'state-rename':
+        return [dict(fields=dict(sku=sku, quantity=str(q), **({'state_label': label} if include else {})),
+                     in_stock=state == 0 and q > 0, constructed_payload=encode(sku, 2 - q))
+                for sku, state, label, q, include in state_rename_vectors()]
     if case == 'reservation':
         return [dict(fields=dict(sku=sku, quantity=str(total)), in_stock=eligible,
                      constructed_payload=encode(sku, 2, reserved=produced or 0))

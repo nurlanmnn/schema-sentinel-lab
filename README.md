@@ -219,3 +219,7 @@ three runtimes. See [decision 0032](docs/decisions/0032-inventory-reservation.md
 speed from float32 to a saturated, truncated int32 and checks the resulting
 wire values and threshold decisions across all three runtimes.
 See [decision 0033](docs/decisions/0033-telemetry-speed-quantization.md).
+
+`run_demo.py --case inventory-state-rename --local-codegen` changes the
+opted-in symbolic stock state label to `ON_HOLD` while preserving numeric
+wire values and eligibility. See [decision 0034](docs/decisions/0034-inventory-state-rename.md).

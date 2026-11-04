@@ -110,6 +110,24 @@ def plain_int32_addition(field, old_file, new_file):
                                         json_name=default_json)
 
 
+def renamed_enum_value(prior, enum, old_file, new_file):
+    """Match one nondefault proto3 symbol rename with unchanged numeric identity."""
+    if (old_file.syntax != 'proto3' or new_file.syntax != 'proto3'
+            or len(prior.value) != len(enum.value)
+            or len({value.number for value in prior.value}) != len(prior.value)):
+        return None
+    renamed = [(i, old, new) for i, (old, new) in enumerate(zip(prior.value, enum.value, strict=True))
+               if old.name != new.name]
+    if len(renamed) != 1:
+        return None
+    index, old, new = renamed[0]
+    if old.number == 0 or old.number != new.number:
+        return None
+    normalized = copy.deepcopy(enum)
+    normalized.value[index].name = old.name
+    return (old, new) if normalized == prior else None
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
@@ -177,6 +195,12 @@ def compare(old, new):
     if aa.keys() != bb.keys():
         unsupported.append('enum declaration added/removed')
     for name in sorted(aa.keys() & bb.keys()):
+        rename = renamed_enum_value(aa[name], bb[name], old, new)
+        if rename:
+            prior, current = rename
+            events.append(dict(category='enum_value_renamed', enum=name, number=prior.number,
+                               old_value=prior.name, new_value=current.name))
+            continue
         a = {(v.number,v.name) for v in aa[name].value}
         b = {(v.number,v.name) for v in bb[name].value}
         if a - b or aa[name].options != bb[name].options:

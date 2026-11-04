@@ -11,6 +11,7 @@ from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'inventory-state-rename': ('inventory-state-rename', 'deterministic_inventory_state_rename'),
     'inventory-reservation': ('inventory-reservation', 'deterministic_inventory_reservation'),
     'inventory-labels': ('inventory-labels', 'deterministic_inventory_labels'),
     'inventory-presence': ('inventory-presence', 'deterministic_inventory_presence'),
