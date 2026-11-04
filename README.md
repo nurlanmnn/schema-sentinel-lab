@@ -191,3 +191,7 @@ encoding while preserving decimal-string JSON and stock decisions. It checks
 regenerated producer and consumer bytes across three languages. Coordinate the
 wire change before deploying it. The suite now includes eight distinct migrations.
 See [decision 0028](docs/decisions/0028-inventory-zigzag-wire-migration.md).
+
+The [manual baseline protocol](docs/patch-generation/manual-baseline.md)
+packages the telemetry units task for an independent participant and evaluates
+their patch with the same pinned runtime checks.
