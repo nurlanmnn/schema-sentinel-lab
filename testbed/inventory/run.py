@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence')
+CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -23,7 +23,7 @@ def varint(value):
     return bytes(result)
 
 
-def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False):
+def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False, labels=()):
     bits = 32 if zigzag else 64
     if (not (explicit_presence and quantity is None)
             and (type(quantity) is not int or not -(1 << (bits - 1)) <= quantity < 1 << (bits - 1))):
@@ -35,6 +35,9 @@ def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False):
         result += b'\x10' + varint(encoded)
     if state:
         result += b'\x18' + varint(state)
+    for label in labels:
+        data = label.encode('utf8')
+        result += b'\x22' + varint(len(data)) + data
     return base64.b64encode(result).decode()
 
 
@@ -57,9 +60,22 @@ def decimal_or_null(quantity):
     return None if quantity is None else str(quantity)
 
 
+def label_vectors():
+    lists = ([], ['single'], ['first', '箱-β'], ['earlier', ''],
+             ['', 'last'], ['same', 'same'], ['with\nline', 'two'],
+             ['old', 'λ' * 70])
+    for state in (0, 1):
+        for index, decoded in enumerate(lists):
+            yield f'label-{index}', state, decoded, lists[(index + 3) % len(lists)]
+
+
 def requests(case='baseline'):
     if case not in CASES:
         raise ValueError('unknown inventory oracle case')
+    if case == 'labels':
+        return [dict(sku=sku, quantity='2', display_labels=produced,
+                     payload=encode(sku, 1, state=state, labels=decoded))
+                for sku, state, decoded, produced in label_vectors()]
     if case == 'presence':
         return [dict(sku=sku, quantity=decimal_or_null(produced),
                      payload=encode(sku, decoded, state=state, explicit_presence=True))
@@ -83,6 +99,11 @@ def requests(case='baseline'):
 
 
 def expected(case):
+    if case == 'labels':
+        return [dict(fields=dict(sku=sku, quantity='1', display_labels=decoded[-1] if decoded else ''),
+                     in_stock=state == 0,
+                     constructed_payload=encode(sku, 2, labels=produced[-1:] if produced and produced[-1] else ()))
+                for sku, state, decoded, produced in label_vectors()]
     if case == 'presence':
         return [dict(fields=dict(sku=sku, quantity=decimal_or_null(decoded)),
                      in_stock=state == 0 and decoded is not None and decoded > 0,

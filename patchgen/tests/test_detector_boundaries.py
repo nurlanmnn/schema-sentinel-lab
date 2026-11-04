@@ -134,3 +134,21 @@ class DescriptorBoundaryTests(unittest.TestCase):
             with self.subTest(mutation=mutation):
                 self.assertTrue(compare(old, changed)[1])
         self.assertTrue(compare(new, old)[1])
+
+    def test_string_cardinality_only_accepts_unchanged_proto3_metadata(self):
+        old = build('syntax="proto3"; message Packet { repeated string labels=1; }')
+        new = build('syntax="proto3"; message Packet { string labels=1; }')
+        events, issues = compare(old, new)
+        self.assertFalse(issues)
+        self.assertEqual([e['category'] for e in events], ['field_cardinality_changed'])
+        for schema in (
+            'syntax="proto3"; message Packet { optional string labels=1; }',
+            'syntax="proto3"; message Packet { oneof group { string labels=1; } }',
+            'syntax="proto3"; message Packet { string labels=1 [json_name="custom"]; }',
+            'syntax="proto3"; message Packet { string other=1; }',
+        ):
+            with self.subTest(schema=schema):
+                self.assertTrue(compare(old, build(schema))[1])
+        repeated_int = build('syntax="proto3"; message Packet { repeated int32 numbers=1; }')
+        singular_int = build('syntax="proto3"; message Packet { int32 numbers=1; }')
+        self.assertTrue(compare(repeated_int, singular_int)[1])

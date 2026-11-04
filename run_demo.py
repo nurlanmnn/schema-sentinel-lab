@@ -10,6 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'inventory-labels': ('inventory-labels', 'deterministic_inventory_labels'),
     'inventory-presence': ('inventory-presence', 'deterministic_inventory_presence'),
     'inventory-stock-release': ('inventory-stock-release', 'deterministic_inventory_stock_release'),
     'inventory-zigzag': ('inventory-quantity-zigzag', 'deterministic_inventory_zigzag'),

@@ -1,0 +1,28 @@
+{
+  "source_revision": "b18692397beb3550917ee7e9ba3456da73bf21ef",
+  "change_id": "inventory-labels",
+  "category": "field_cardinality_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        11,
+        14
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        10
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        14,
+        17
+      ]
+    }
+  ],
+  "method": "Authored producer collapse and consumer conversion sites. TypeScript passes through the generated property."
+}

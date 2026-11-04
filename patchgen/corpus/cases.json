@@ -125,8 +125,8 @@
     {
       "id": "inventory-label-cardinality",
       "domain": "inventory",
-      "expected_status": "partial",
-      "expected_category": "ambiguous",
+      "expected_status": "complete",
+      "expected_category": "field_cardinality_changed",
       "behavior": "Adopt one primary label instead of a list; choose the first label and preserve empty lists as an empty string. This is a breaking cardinality change.",
       "new_schema_file": "inventory-label-cardinality.proto",
       "ground_truth": null

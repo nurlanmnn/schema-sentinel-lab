@@ -1,0 +1,10 @@
+{
+  "source_revision": "b18692397beb3550917ee7e9ba3456da73bf21ef",
+  "change": {
+    "id": "inventory-labels",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  string display_labels = 4;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n"
+  },
+  "intended_behavior": "Collapse display labels to the last label. Keep accepting a JSON array for construction and publish at most one label, omitting the empty default. Observe a scalar label and preserve stock eligibility. A missing label list maps to an empty string."
+}

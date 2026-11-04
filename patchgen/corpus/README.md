@@ -22,7 +22,7 @@ and exact source bytes; source/content hashes are retained in production records
 | Speed float to double | field_type_changed | 9 known lines | Coordinate incompatible wire-type rollout |
 | Speed units m/s to km/h | partial, no structural event | blocked | Scale values and threshold; semantics are not inferred |
 | Stock quantity int32 to int64 | field_type_changed | 9 known lines | Exact large integers, including TypeScript representation |
-| Label list to scalar | partial | blocked | Cardinality and first-label policy |
+| Label list to scalar | field_cardinality_changed | candidate only, partial | Cardinality and first-label policy |
 | Add active BACKORDERED enum value | enum_value_added | 9 candidate lines + 2 import extras; partial | Resolve aliases, active predicates and enum behavior before generation |
 | Remove order currency | field_removed | 9 known lines | Explicit USD-only policy and predicate migration |
 | Amount gains optional presence | field_presence_added | candidate only, partial | Preserve absence versus explicit zero |

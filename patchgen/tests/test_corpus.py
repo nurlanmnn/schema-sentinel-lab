@@ -13,7 +13,7 @@ class CorpusTests(unittest.TestCase):
             summary = corpus.run(Path(tmp) / 'run')
             self.assertEqual(summary['scenario_count'], 8)
             self.assertEqual(summary['expectation_matches'], 8)
-            self.assertEqual(summary['detector_complete'], 6)
+            self.assertEqual(summary['detector_complete'], 7)
             self.assertEqual(summary['locator_complete'], 4)
             self.assertEqual(summary['generated_validated_migrations'], 0)
             self.assertFalse(any('error' in r for r in summary['records']))

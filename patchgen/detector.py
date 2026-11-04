@@ -87,6 +87,18 @@ def explicit_presence_field(before, after, old_file, new_file):
     return field.number if normalized == prior else None
 
 
+def collapses_repeated_string(prior, field, old_file, new_file):
+    """Match a proto3 string cardinality change without metadata changes."""
+    if (old_file.syntax != 'proto3' or new_file.syntax != 'proto3'
+            or prior.label != prior.LABEL_REPEATED or field.label != field.LABEL_OPTIONAL
+            or field.type != field.TYPE_STRING or field.HasField('oneof_index')
+            or field.HasField('proto3_optional')):
+        return False
+    normalized = copy.deepcopy(field)
+    normalized.label = prior.LABEL_REPEATED
+    return normalized == prior
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
@@ -135,6 +147,9 @@ def compare(old, new):
                                    old_type_name=x.type_name.lstrip('.'), new_type_name=y.type_name.lstrip('.'), **base))
             if number == presence:
                 events.append(dict(category='field_presence_added', **base))
+                continue
+            if collapses_repeated_string(x, y, old, new):
+                events.append(dict(category='field_cardinality_changed', **base))
                 continue
             if (x.label, x.HasField('oneof_index'), x.oneof_index, x.options, x.default_value) != (y.label, y.HasField('oneof_index'), y.oneof_index, y.options, y.default_value):
                 unsupported.append(name + '.' + x.name + ': cardinality/oneof/options/default changed')
@@ -211,7 +226,7 @@ def compare(old, new):
         bb = {f.number:f for f in after[name].field}
         presence = explicit_presence_field(before[name], after[name], old, new)
         for number in sorted(aa.keys() & bb.keys()):
-            if number == presence:
+            if number == presence or collapses_repeated_string(aa[number], bb[number], old, new):
                 continue
             a, b = copy.deepcopy(aa[number]), copy.deepcopy(bb[number])
             for field in (a,b):

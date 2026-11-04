@@ -205,3 +205,8 @@ policy while the generic enum analysis remains candidate-only.
 quantity to explicit proto3 presence. The tenth suite case checks absent and
 explicit-zero values at both wire and JSON boundaries across the three runtimes.
 See [decision 0030](docs/decisions/0030-inventory-quantity-presence.md).
+
+`run_demo.py --case inventory-labels --local-codegen` collapses repeated
+display labels into one value. It checks last-label selection and old repeated
+wire inputs across the three runtimes.
+See [decision 0031](docs/decisions/0031-inventory-display-labels.md).
