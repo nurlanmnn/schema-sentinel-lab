@@ -12,7 +12,7 @@ from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, VALIDATION_COUNT
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
-             'proposal/inventory-width-source.py','proposal/inventory-zigzag-source.py','proposal/inventory-stock-release-source.py','proposal/inventory-presence-source.py','proposal/inventory-labels-source.py','proposal/inventory-reservation-source.py','proposal/inventory-state-rename-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py','proposal/telemetry-quantized-source.py',
+             'proposal/inventory-width-source.py','proposal/inventory-zigzag-source.py','proposal/inventory-stock-release-source.py','proposal/inventory-presence-source.py','proposal/inventory-labels-source.py','proposal/inventory-reservation-source.py','proposal/inventory-state-rename-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py','proposal/telemetry-quantized-source.py','proposal/telemetry-message-rename-source.py',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
@@ -106,6 +106,12 @@ def check_host_evidence(root, report, available=None):
         if (sha(artifact_path(root, path).read_bytes()) != report.get('telemetry_quantized_sha256')
                 or report.get('validation_profile', {}).get('telemetry_case') != 'quantized'):
             raise ContractError('quantization policy or validation profile mismatch')
+    if report.get('strategy') == 'deterministic_telemetry_message_rename':
+        path = 'proposal/telemetry-message-rename-source.py'
+        required((path,))
+        if (sha(artifact_path(root, path).read_bytes()) != report.get('telemetry_message_rename_sha256')
+                or report.get('validation_profile', {}).get('telemetry_case') != 'message-rename'):
+            raise ContractError('message rename policy or validation profile mismatch')
     if report.get('codegen') == 'local_pinned':
         required(LOCAL_CODEGEN_ARTIFACTS)
         tools = json.loads(artifact_path(root,'proposal/local-codegen-toolchain.json').read_text())

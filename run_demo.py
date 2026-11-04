@@ -18,6 +18,7 @@ CASES = {
     'inventory-stock-release': ('inventory-stock-release', 'deterministic_inventory_stock_release'),
     'inventory-zigzag': ('inventory-quantity-zigzag', 'deterministic_inventory_zigzag'),
     'inventory-width': ('inventory-quantity-width', 'deterministic_inventory_width'),
+    'telemetry-message-rename': ('telemetry-message-rename', 'deterministic_telemetry_message_rename'),
     'telemetry-quantized': ('telemetry-speed-quantized', 'deterministic_telemetry_quantized'),
     'telemetry-units': ('telemetry-speed-units', 'deterministic_telemetry_units'),
     'telemetry-precision': ('telemetry-speed-precision', 'deterministic_telemetry_precision'),

@@ -19,9 +19,9 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits",
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
                           files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
-                                 for name in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','generator.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py')})
+                                 for name in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','generator.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py')})
     save(output/'implementation.json',implementation)
-    for filename in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py'):
+    for filename in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py'):
         (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
     revision=require(case,'source_revision',str,'request')
     if not re.fullmatch(r'[0-9a-f]{40}',revision):
@@ -62,7 +62,10 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits",
     report = dict(status='adapted',implementation=implementation,measurement=metrics,human_approval_required=True,
                   source_revision=case['source_revision'],scope='runtime syntax candidates; no receiver-type or semantic completeness proof')
     try:
-        if strategy == 'deterministic_inventory_state_rename':
+        if strategy == 'deterministic_telemetry_message_rename':
+            from patchgen.telemetry_message_rename import prepare
+            generated, provenance = prepare(source, detector, locator)
+        elif strategy == 'deterministic_inventory_state_rename':
             from patchgen.inventory_state_rename import prepare
             generated, provenance = prepare(source, detector, locator)
         elif strategy == 'deterministic_inventory_reservation':
@@ -118,7 +121,7 @@ def main():
     parser.add_argument('--model',choices=LOCAL_MODELS,default='ministral-3:8b',help='installed local model only; does not download models')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
-    parser.add_argument('--strategy',choices=('deterministic_inventory_state_rename','deterministic_telemetry_quantized','deterministic_inventory_reservation','deterministic_inventory_labels','deterministic_inventory_presence','deterministic_inventory_stock_release','deterministic_inventory_width','deterministic_inventory_zigzag','candidate_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('deterministic_telemetry_message_rename','deterministic_inventory_state_rename','deterministic_telemetry_quantized','deterministic_inventory_reservation','deterministic_inventory_labels','deterministic_inventory_presence','deterministic_inventory_stock_release','deterministic_inventory_width','deterministic_inventory_zigzag','candidate_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
     parser.add_argument('--feedback',type=Path,help='explicit feedback for a separately measured live feedback attempt')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()

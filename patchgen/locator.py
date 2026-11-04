@@ -281,6 +281,9 @@ def locate(repo, detector, *, added_field_policy_anchor=None):
         record['issues'].append('presence candidates only; constructor and observation policy requires review')
     if event['category'] == 'field_cardinality_changed':
         record['issues'].append('cardinality candidates only; collection collapse policy requires review')
+    message_rename = event['category'] == 'message_renamed'
+    if message_rename:
+        record['issues'].append('message symbol candidates only; generated type usage requires review')
     addition = event['category'] == 'field_added'
     field = event.get('old_name')
     if addition:
@@ -303,7 +306,7 @@ def locate(repo, detector, *, added_field_policy_anchor=None):
         text = command(['git','show',revision+':'+path],repo)
         positions, warnings, error = (scan_enum(text,language,enum['symbols']) if enum else
                                       scan(text,language,field,event=event))
-        if not enum and not addition:
+        if not enum and not addition and not message_rename:
             positions, limitations = attach_bindings(text, language, event, policy, positions, error,
                                                     schema_path=detector['change']['schema_path'], source_path=path)
             record.setdefault('binding_limitations', []).extend(dict(path=path, detail=item) for item in limitations)

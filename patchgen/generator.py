@@ -135,6 +135,7 @@ INVENTORY_STRATEGIES = {'deterministic_inventory_width': 'width', 'deterministic
                         'deterministic_inventory_labels': 'labels',
                         'deterministic_inventory_reservation': 'reservation',
                         'deterministic_inventory_state_rename': 'state-rename'}
+STRATEGY_VERSIONS['deterministic_telemetry_message_rename'] = 'host-message-rename/1.0'
 STRATEGY_VERSIONS['deterministic_telemetry_quantized'] = 'host-quantized/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_zigzag'] = 'host-inventory-zigzag/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_state_rename'] = 'host-inventory-state-rename/1.0'
@@ -531,6 +532,7 @@ VALIDATION_PROFILES = {
     'inventory-quantity-width': ('inventory-quantity-width', None),
     'inventory-quantity-zigzag': ('inventory-quantity-zigzag', None),
     'telemetry-speed-units': ('telemetry-speed-units', None),
+    'telemetry-message-rename': ('telemetry-message-rename', None),
     'telemetry-speed-quantized': ('telemetry-speed-quantized', None),
     'telemetry-speed-precision': ('telemetry-speed-precision', None),
     'telemetry-speed-rename': ('telemetry-speed-rename', None),
@@ -553,6 +555,7 @@ TELEMETRY_VALIDATION_CASES = {
     'telemetry-speed-rename': 'rename',
     'telemetry-speed-precision': 'precision',
     'telemetry-speed-units': 'units',
+    'telemetry-message-rename': 'message-rename',
     'telemetry-speed-quantized': 'quantized',
 }
 PUBSUB_ARTIFACTS = ('report.json', 'expected.json', 'broker-state.json', 'python.log', 'typescript.log', 'csharp.log')
@@ -721,9 +724,11 @@ def main():
         (output / 'remove-name-source.py').write_bytes(Path(__file__).with_name('remove_name.py').read_bytes())
     if args.strategy == 'deterministic_telemetry_quantized':
         (output/'telemetry-quantized-source.py').write_bytes(Path(__file__).with_name('telemetry_quantized.py').read_bytes())
+    if args.strategy == 'deterministic_telemetry_message_rename':
+        (output/'telemetry-message-rename-source.py').write_bytes(Path(__file__).with_name('telemetry_message_rename.py').read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
     (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
-    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units','deterministic_telemetry_quantized') else 'live_model'),
+    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units','deterministic_telemetry_quantized','deterministic_telemetry_message_rename') else 'live_model'),
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
@@ -746,6 +751,8 @@ def main():
         report['remove_name_sha256'] = hashlib.sha256(Path(__file__).with_name('remove_name.py').read_bytes()).hexdigest()
     if args.strategy == 'deterministic_telemetry_quantized':
         report['telemetry_quantized_sha256'] = hashlib.sha256((output/'telemetry-quantized-source.py').read_bytes()).hexdigest()
+    if args.strategy == 'deterministic_telemetry_message_rename':
+        report['telemetry_message_rename_sha256'] = hashlib.sha256((output/'telemetry-message-rename-source.py').read_bytes()).hexdigest()
     if inventory_migration:
         report[f'inventory_{inventory_migration}_sha256'] = hashlib.sha256(
             Path(__file__).with_name(inventory_policy).read_bytes()).hexdigest()
@@ -774,6 +781,11 @@ def main():
         if args.strategy == 'deterministic_telemetry_quantized' and (
                 args.response or args.validate and (not validation_profile or validation_profile[0].get('telemetry_case') != 'quantized')):
             raise ContractError('quantized validation requires its deterministic strategy and trusted profile')
+        message_rename = args.strategy == 'deterministic_telemetry_message_rename'
+        if (case['change']['category'] == 'message_renamed' or message_rename) and (
+                not message_rename or args.response
+                or args.validate and (not validation_profile or validation_profile[0].get('telemetry_case') != 'message-rename')):
+            raise ContractError('message rename requires its deterministic strategy and trusted profile')
         if validation_profile:
             report['validation_profile'] = validation_profile[0]
             if validation_profile[0].get('inventory_case'):
@@ -822,6 +834,9 @@ def main():
         elif inventory_migration and not args.response:
             from patchgen.inventory_width import propose
             proposal = propose(case, output, inventory_migration)
+        elif message_rename:
+            from patchgen.telemetry_message_rename import propose
+            proposal = propose(case, output)
         elif args.strategy == 'deterministic_telemetry_quantized':
             from patchgen.telemetry_quantized import propose
             proposal = propose(case, output)

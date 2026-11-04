@@ -1,0 +1,31 @@
+{
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change_id": "telemetry-message-rename",
+  "category": "message_renamed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "lines": [
+        5,
+        9,
+        10
+      ]
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "lines": [
+        2,
+        8,
+        9
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "lines": [
+        11,
+        12
+      ]
+    }
+  ],
+  "method": "Authored imports, decode and construction references to the renamed generated type."
+}

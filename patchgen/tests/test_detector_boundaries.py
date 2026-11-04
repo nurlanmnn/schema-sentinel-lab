@@ -188,3 +188,16 @@ class DescriptorBoundaryTests(unittest.TestCase):
         alias_old = build('syntax="proto3"; enum State { option allow_alias=true; UNKNOWN=0; HELD=1; HOLD=1; }')
         alias_new = build('syntax="proto3"; enum State { option allow_alias=true; UNKNOWN=0; ON_HOLD=1; HOLD=1; }')
         self.assertTrue(compare(alias_old, alias_new)[1])
+
+    def test_standalone_message_rename_preserves_other_structure(self):
+        old = build('syntax="proto3"; message Packet { int32 total=1; }')
+        renamed = build('syntax="proto3"; message Sample { int32 total=1; }')
+        events, issues = compare(old, renamed)
+        self.assertFalse(issues)
+        self.assertEqual(events[0]['category'], 'message_renamed')
+        self.assertEqual(events[0]['new_message'], 'Sample')
+        for schema in ('message Sample { int32 total=2; }',
+                       'message Sample { int32 total=1; } message Other {}',
+                       'message Sample { int32 total=1; } service Rpc { rpc Call(Sample) returns (Sample); }'):
+            with self.subTest(schema=schema):
+                self.assertTrue(compare(old, build('syntax="proto3"; ' + schema))[1])

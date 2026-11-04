@@ -128,10 +128,34 @@ def renamed_enum_value(prior, enum, old_file, new_file):
     return (old, new) if normalized == prior else None
 
 
+def standalone_message_rename(old, new):
+    """Accept one unreferenced top-level proto3 message with identical contents."""
+    if (old.syntax != 'proto3' or new.syntax != 'proto3'
+            or len(old.message_type) != 1 or len(new.message_type) != 1
+            or old.dependency or old.service or old.extension):
+        return None
+    before, after = old.message_type[0], new.message_type[0]
+    if (before.name == after.name or before.nested_type or before.extension
+            or any(field.type_name for field in before.field)):
+        return None
+    left, right = copy.deepcopy(old), copy.deepcopy(new)
+    left.ClearField('source_code_info')
+    right.ClearField('source_code_info')
+    right.message_type[0].name = before.name
+    if left == right:
+        return dict(category='message_renamed', old_name=before.name, new_name=after.name,
+                    old_message=qualified(old.package, before.name),
+                    new_message=qualified(new.package, after.name))
+    return None
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
         return [], ['canonical file/package identity changed']
+    message_rename = standalone_message_rename(old, new)
+    if message_rename:
+        return [message_rename], []
     events, unsupported = [], []
     def messages(items, prefix):
         result = {}

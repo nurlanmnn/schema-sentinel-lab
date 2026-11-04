@@ -223,3 +223,7 @@ See [decision 0033](docs/decisions/0033-telemetry-speed-quantization.md).
 `run_demo.py --case inventory-state-rename --local-codegen` changes the
 opted-in symbolic stock state label to `ON_HOLD` while preserving numeric
 wire values and eligibility. See [decision 0034](docs/decisions/0034-inventory-state-rename.md).
+
+`run_demo.py --case telemetry-message-rename --local-codegen` renames the
+standalone generated telemetry type and validates unchanged raw payloads and
+runtime decisions. See [decision 0035](docs/decisions/0035-telemetry-message-rename.md).

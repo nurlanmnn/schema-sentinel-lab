@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-VALIDATION_COUNTS = {'rename': 24, 'precision': 33, 'units': 24, 'quantized': 36}
+VALIDATION_COUNTS = {'rename': 24, 'precision': 33, 'units': 24, 'quantized': 36, 'message-rename': 24}
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
