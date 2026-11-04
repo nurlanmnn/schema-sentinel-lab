@@ -1,0 +1,31 @@
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+{
+  "status": "validation_passed",
+  "case": "pubsub-removal",
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "mode": "deterministic_proposal",
+  "model_requests": 0,
+  "human_approval_required": true,
+  "timing_scope": "bootstrap plus local pipeline; not propagation or human review time",
+  "implementation_revision": "c49dfcb677b52ae899846e16bb70763e49929bbb",
+  "tools": {
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "buf": "1.75.0",
+    "node": "v24.10.0",
+    "npm": "11.13.0",
+    "dotnet": "8.0.426"
+  },
+  "bootstrap_python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "analysis_python": "Python 3.13.7",
+  "pubsub_validation": {
+    "status": "passed",
+    "case": "removal",
+    "publication_cases": 8,
+    "decoded_deliveries": 24,
+    "topics": 2,
+    "runtimes": 3
+  },
+  "elapsed_seconds": 9.520609416998923
+}
+Details: /private/tmp/sentinel-twelve-suite-001/pubsub-removal/demo.log
+Review: /private/tmp/sentinel-twelve-suite-001/pubsub-removal/review/index.html (human decision pending)

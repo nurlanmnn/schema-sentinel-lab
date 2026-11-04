@@ -1,0 +1,21 @@
+{
+  "expected_sites": 8,
+  "matched_sites": 8,
+  "recall": 1.0,
+  "missed": [],
+  "extra": [
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "line": 14
+    },
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "line": 11
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "line": 10
+    }
+  ],
+  "classification_correct": true
+}

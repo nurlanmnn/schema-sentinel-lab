@@ -1,0 +1,141 @@
+{
+  "revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "inputs": [
+    {
+      "sku": "fully-reserved",
+      "quantity": "2",
+      "payload": "Cg5mdWxseS1yZXNlcnZlZBAFKAU=",
+      "reserved_quantity": 2147483647
+    },
+    {
+      "sku": "over-reserved",
+      "quantity": "2",
+      "payload": "Cg1vdmVyLXJlc2VydmVkEAUoBg==",
+      "reserved_quantity": -2147483648
+    },
+    {
+      "sku": "invalid-negative-hold",
+      "quantity": "2",
+      "payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQBSj///////////8B",
+      "reserved_quantity": 9
+    }
+  ],
+  "expected_with_reservations": [
+    {
+      "fields": {
+        "sku": "fully-reserved",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg5mdWxseS1yZXNlcnZlZBACKP////8H"
+    },
+    {
+      "fields": {
+        "sku": "over-reserved",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg1vdmVyLXJlc2VydmVkEAIogICAgPj/////AQ=="
+    },
+    {
+      "fields": {
+        "sku": "invalid-negative-hold",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQAigJ"
+    }
+  ],
+  "runtimes": {
+    "python": {
+      "exit_code": 0,
+      "actual": [
+        {
+          "fields": {
+            "sku": "fully-reserved",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "Cg5mdWxseS1yZXNlcnZlZBAC"
+        },
+        {
+          "fields": {
+            "sku": "over-reserved",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "Cg1vdmVyLXJlc2VydmVkEAI="
+        },
+        {
+          "fields": {
+            "sku": "invalid-negative-hold",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQAg=="
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    },
+    "typescript": {
+      "exit_code": 0,
+      "actual": [
+        {
+          "fields": {
+            "sku": "fully-reserved",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "Cg5mdWxseS1yZXNlcnZlZBAC"
+        },
+        {
+          "fields": {
+            "sku": "over-reserved",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "Cg1vdmVyLXJlc2VydmVkEAI="
+        },
+        {
+          "fields": {
+            "sku": "invalid-negative-hold",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQAg=="
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    },
+    "csharp": {
+      "exit_code": 0,
+      "actual": [
+        {
+          "fields": {
+            "sku": "fully-reserved",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "Cg5mdWxseS1yZXNlcnZlZBAC"
+        },
+        {
+          "fields": {
+            "sku": "over-reserved",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "Cg1vdmVyLXJlc2VydmVkEAI="
+        },
+        {
+          "fields": {
+            "sku": "invalid-negative-hold",
+            "quantity": "5"
+          },
+          "in_stock": true,
+          "constructed_payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQAg=="
+        }
+      ],
+      "oracle_error": "inventory value/wire/predicate mismatch at case 0"
+    }
+  }
+}

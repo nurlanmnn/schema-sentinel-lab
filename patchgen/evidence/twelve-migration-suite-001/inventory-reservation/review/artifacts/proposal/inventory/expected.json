@@ -1,0 +1,227 @@
+{
+  "requests": [
+    {
+      "sku": "legacy-positive",
+      "quantity": "2",
+      "payload": "Cg9sZWdhY3ktcG9zaXRpdmUQAQ=="
+    },
+    {
+      "sku": "legacy-zero",
+      "quantity": "2",
+      "payload": "CgtsZWdhY3ktemVybw==",
+      "reserved_quantity": 0
+    },
+    {
+      "sku": "legacy-negative",
+      "quantity": "2",
+      "payload": "Cg9sZWdhY3ktbmVnYXRpdmUQ////////////AQ==",
+      "reserved_quantity": 1
+    },
+    {
+      "sku": "available",
+      "quantity": "2",
+      "payload": "CglhdmFpbGFibGUQBSgE",
+      "reserved_quantity": -1
+    },
+    {
+      "sku": "fully-reserved",
+      "quantity": "2",
+      "payload": "Cg5mdWxseS1yZXNlcnZlZBAFKAU=",
+      "reserved_quantity": 2147483647
+    },
+    {
+      "sku": "over-reserved",
+      "quantity": "2",
+      "payload": "Cg1vdmVyLXJlc2VydmVkEAUoBg==",
+      "reserved_quantity": -2147483648
+    },
+    {
+      "sku": "invalid-negative-hold",
+      "quantity": "2",
+      "payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQBSj///////////8B",
+      "reserved_quantity": 9
+    },
+    {
+      "sku": "negative-extreme",
+      "quantity": "2",
+      "payload": "ChBuZWdhdGl2ZS1leHRyZW1lEP////8HKICAgID4/////wE="
+    },
+    {
+      "sku": "highest-available",
+      "quantity": "2",
+      "payload": "ChFoaWdoZXN0LWF2YWlsYWJsZRD/////Byj+////Bw==",
+      "reserved_quantity": 0
+    },
+    {
+      "sku": "highest-fully-reserved",
+      "quantity": "2",
+      "payload": "ChZoaWdoZXN0LWZ1bGx5LXJlc2VydmVkEP////8HKP////8H",
+      "reserved_quantity": 1
+    },
+    {
+      "sku": "negative-total",
+      "quantity": "2",
+      "payload": "Cg5uZWdhdGl2ZS10b3RhbBCAgICA+P////8BKP////8H",
+      "reserved_quantity": -1
+    },
+    {
+      "sku": "quarantined-legacy",
+      "quantity": "2",
+      "payload": "ChJxdWFyYW50aW5lZC1sZWdhY3kQARgB",
+      "reserved_quantity": 2147483647
+    },
+    {
+      "sku": "quarantined-available",
+      "quantity": "2",
+      "payload": "ChVxdWFyYW50aW5lZC1hdmFpbGFibGUQBRgBKAQ=",
+      "reserved_quantity": -2147483648
+    },
+    {
+      "sku": "unknown-available",
+      "quantity": "2",
+      "payload": "ChF1bmtub3duLWF2YWlsYWJsZRAFGBMoBA==",
+      "reserved_quantity": 9
+    },
+    {
+      "sku": "empty-oversold",
+      "quantity": "2",
+      "payload": "Cg5lbXB0eS1vdmVyc29sZCgB"
+    },
+    {
+      "sku": "\u7bb1-positive",
+      "quantity": "2",
+      "payload": "CgznrrEtcG9zaXRpdmUQKigB",
+      "reserved_quantity": 0
+    }
+  ],
+  "results": [
+    {
+      "fields": {
+        "sku": "legacy-positive",
+        "quantity": "1"
+      },
+      "in_stock": true,
+      "constructed_payload": "Cg9sZWdhY3ktcG9zaXRpdmUQAg=="
+    },
+    {
+      "fields": {
+        "sku": "legacy-zero",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "CgtsZWdhY3ktemVybxAC"
+    },
+    {
+      "fields": {
+        "sku": "legacy-negative",
+        "quantity": "-1"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg9sZWdhY3ktbmVnYXRpdmUQAigB"
+    },
+    {
+      "fields": {
+        "sku": "available",
+        "quantity": "5"
+      },
+      "in_stock": true,
+      "constructed_payload": "CglhdmFpbGFibGUQAij///////////8B"
+    },
+    {
+      "fields": {
+        "sku": "fully-reserved",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg5mdWxseS1yZXNlcnZlZBACKP////8H"
+    },
+    {
+      "fields": {
+        "sku": "over-reserved",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg1vdmVyLXJlc2VydmVkEAIogICAgPj/////AQ=="
+    },
+    {
+      "fields": {
+        "sku": "invalid-negative-hold",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChVpbnZhbGlkLW5lZ2F0aXZlLWhvbGQQAigJ"
+    },
+    {
+      "fields": {
+        "sku": "negative-extreme",
+        "quantity": "2147483647"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChBuZWdhdGl2ZS1leHRyZW1lEAI="
+    },
+    {
+      "fields": {
+        "sku": "highest-available",
+        "quantity": "2147483647"
+      },
+      "in_stock": true,
+      "constructed_payload": "ChFoaWdoZXN0LWF2YWlsYWJsZRAC"
+    },
+    {
+      "fields": {
+        "sku": "highest-fully-reserved",
+        "quantity": "2147483647"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChZoaWdoZXN0LWZ1bGx5LXJlc2VydmVkEAIoAQ=="
+    },
+    {
+      "fields": {
+        "sku": "negative-total",
+        "quantity": "-2147483648"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg5uZWdhdGl2ZS10b3RhbBACKP///////////wE="
+    },
+    {
+      "fields": {
+        "sku": "quarantined-legacy",
+        "quantity": "1"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChJxdWFyYW50aW5lZC1sZWdhY3kQAij/////Bw=="
+    },
+    {
+      "fields": {
+        "sku": "quarantined-available",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChVxdWFyYW50aW5lZC1hdmFpbGFibGUQAiiAgICA+P////8B"
+    },
+    {
+      "fields": {
+        "sku": "unknown-available",
+        "quantity": "5"
+      },
+      "in_stock": false,
+      "constructed_payload": "ChF1bmtub3duLWF2YWlsYWJsZRACKAk="
+    },
+    {
+      "fields": {
+        "sku": "empty-oversold",
+        "quantity": "0"
+      },
+      "in_stock": false,
+      "constructed_payload": "Cg5lbXB0eS1vdmVyc29sZBAC"
+    },
+    {
+      "fields": {
+        "sku": "\u7bb1-positive",
+        "quantity": "42"
+      },
+      "in_stock": true,
+      "constructed_payload": "CgznrrEtcG9zaXRpdmUQAg=="
+    }
+  ]
+}

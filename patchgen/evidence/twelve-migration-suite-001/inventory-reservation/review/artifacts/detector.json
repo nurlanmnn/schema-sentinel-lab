@@ -1,0 +1,43 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "old_schema_sha256": "37402103a98fc22cd1f7fd98ae0b78ada7ab648e685bf32e28a2fa6d683e359f",
+  "new_schema_sha256": "0389019da074d3143d1f2e93e33c67233cc788f75366613517ef10553947e07b",
+  "old_descriptor_sha256": "b834ef6fab6ff886e1200932f917a5c6114e8ea476be39c606926d8402080fb4",
+  "new_descriptor_sha256": "681ddf354476a47218a31cde9bbee5259aea22d3600847342a40cec3315d3465",
+  "events": [
+    {
+      "category": "field_added",
+      "message": "simulation.inventory.StockItem",
+      "field_number": 5,
+      "old_name": null,
+      "new_name": "reserved_quantity",
+      "old_field": null,
+      "new_field": {
+        "name": "reserved_quantity",
+        "number": 5,
+        "type": 5,
+        "type_name": "",
+        "label": 1,
+        "json_name": "reservedQuantity",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      }
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "inventory-reservation",
+    "category": "field_added",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  int32 reserved_quantity = 5;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n"
+  },
+  "intended_behavior": "Add reserved quantity with an implicit zero default. Producers accept an optional int32 reserved_quantity and keep quantity as a decimal string. Stock is eligible only when state is unspecified, reserved quantity is nonnegative, and total quantity exceeds reserved quantity. Preserve the existing observation shape."
+}
