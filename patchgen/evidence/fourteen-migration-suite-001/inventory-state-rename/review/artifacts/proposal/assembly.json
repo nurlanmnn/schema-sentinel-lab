@@ -1,0 +1,45 @@
+{
+  "strategy": "deterministic_inventory_state_rename",
+  "model_requests": 0,
+  "decisions": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "edited_lines": [
+        5,
+        18
+      ],
+      "unchanged_candidate_lines": [
+        17,
+        19,
+        20
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "edited_lines": [
+        8
+      ],
+      "unchanged_candidate_lines": [
+        2,
+        5,
+        6,
+        7,
+        16,
+        21,
+        23
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "edited_lines": [
+        22
+      ],
+      "unchanged_candidate_lines": [
+        4,
+        20,
+        21,
+        25
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "revision": "e3eb37fcecacd14424d8960ac5eb87628ec2bb66",
+  "files": {
+    "detector.py": "6f5b4e60f1d006e402c5d13d941a2721402c3d7ec96663ff16d39b00a1660faa",
+    "locator.py": "6d77a927385263541b3460aea0380c3fac9a4f07c269b2afbe8ee366c2e6bb71",
+    "python_bindings.py": "c4e409a25c2743c5d7f1cfb00951ee315ef829eb65906bed22eb3048bdafa082",
+    "runtime_inventory.py": "77860f657a6a591dd58b82b06c918b843374d1529d520de32c0a61842b467012",
+    "source_spellings.py": "d845778ebc4fef9896c5cf8c35b4cd630695e99c5a4605484deafd17660c19e5",
+    "typescript_bindings.py": "1daf7ea06d89b00b2847feada1563d46235e72347cc2535b05f5e143a936bd47",
+    "binding_analysis.py": "a55a161156878ee8f1da19bd60cd5d16856c72f00486606d450a2dc3ce96204b",
+    "pipeline.py": "8d4ec86b4ce6dad62d40f4de50da1915fe9088eef77302d2d5a22728271f4210",
+    "adapter.py": "19c3c4c74a937da5e8749be0ff229717fae35c588c4c94f0e3fa4138bdc1ec2b",
+    "generator.py": "27381390816de2ff422c1587299d9c310d696f7b62133b18dc7e4a1a69b58179",
+    "anchor_edits.py": "46cfe4788f3eb5e1f9985847c1ad96769bf0fd8b9f0fdc97c9d46ccc7348170d",
+    "feedback_blocks.py": "f0866e712b2e9c1fb79bb2a4b41c7d712e56b47a1575b20ca95e2ae62b543f17",
+    "rename_tokens.py": "1d41bbe66eada8e28067ee6bb1b7ec87586f0733cfd05edd4a179e97ec54fd6d",
+    "rename_roles.py": "f7fde1fae25f69a5c8dd216a201a070a281a25e42501cb3ed8943d647346d923",
+    "type_utf8.py": "7f19829a29e63c8dfebb800ca86a3e422a982fc388fe2f8885c5f2d4c812de43",
+    "remove_name.py": "f3f3a377adc391cb705a4d93d99b7a1706cd54a336af7db8f573accfbb8da74e",
+    "type_precision.py": "5544b2420ee325a60141b8a243c762b3ee14cf6ca7a4912c4848387ccfec7722",
+    "telemetry_units.py": "05deaa6bbce509973f0a2e273236adcd4434310f8cc223a337a79baf2d410315",
+    "inventory_width.py": "102ef9653fef06260320f7f36978518a252ec4f75f6bc0bff556fd2ec6b912d3",
+    "stock_release.py": "837fa9a119c17eef3111fd261d1699eb91b8dc3d6826422b170600849ec65c2b",
+    "inventory_presence.py": "86da553da89202f230e8c212cc26c839e7d2744edf269cf10a586b4e530016b5",
+    "inventory_labels.py": "3078a3277c039091fdedda9da149e8cee793c46c9158a3a472f3845177107e56",
+    "inventory_reservation.py": "a9a3aafa62a61a5504bec5ec02468ba355ced5933607afd8f6fb6c5ec50a667f",
+    "telemetry_quantized.py": "ed2def87a648c80dc1c9b1e5dd7366b4dcf597501f2e453d4a509f0d6f64abf0",
+    "inventory_state_rename.py": "92a8fd8271e6742c2ec279f13b797e067f572c961513b7489f559c927fba5e25"
+  }
+}
