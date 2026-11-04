@@ -198,5 +198,10 @@ their patch with the same pinned runtime checks.
 
 `run_demo.py --case inventory-stock-release --local-codegen` adds a released
 stock enum state and updates all three consumers' eligibility checks. Quarantined
-and unknown values remain blocked. The nine-case suite includes this pinned
+and unknown values remain blocked. The suite includes this pinned
 policy while the generic enum analysis remains candidate-only.
+
+`run_demo.py --case inventory-presence --local-codegen` migrates inventory
+quantity to explicit proto3 presence. The tenth suite case checks absent and
+explicit-zero values at both wire and JSON boundaries across the three runtimes.
+See [decision 0030](docs/decisions/0030-inventory-quantity-presence.md).

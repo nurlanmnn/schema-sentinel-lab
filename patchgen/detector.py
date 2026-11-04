@@ -64,6 +64,29 @@ def oneof_structure(message, renamed_fields):
     return result
 
 
+def explicit_presence_field(before, after, old_file, new_file):
+    """Prove a single added trailing synthetic group with no other field change."""
+    if old_file.syntax != 'proto3' or new_file.syntax != 'proto3':
+        return None
+    index = len(before.oneof_decl)
+    if len(after.oneof_decl) != index + 1:
+        return None
+    members = [f for f in after.field if f.HasField('oneof_index') and f.oneof_index == index]
+    if len(members) != 1:
+        return None
+    field = members[0]
+    prior = next((f for f in before.field if f.number == field.number), None)
+    if (prior is None or prior.HasField('proto3_optional') or prior.HasField('oneof_index')
+            or not field.proto3_optional or field.label != field.LABEL_OPTIONAL
+            or field.type in (field.TYPE_MESSAGE, field.TYPE_GROUP)
+            or after.oneof_decl[index].HasField('options')):
+        return None
+    normalized = copy.deepcopy(field)
+    normalized.ClearField('proto3_optional')
+    normalized.ClearField('oneof_index')
+    return field.number if normalized == prior else None
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
@@ -85,7 +108,11 @@ def compare(old, new):
         aa, bb = {f.number:f for f in a.field}, {f.number:f for f in b.field}
         renamed_fields = {number for number in aa.keys() & bb.keys()
                           if aa[number].name != bb[number].name}
-        if oneof_structure(a, renamed_fields) != oneof_structure(b, renamed_fields) or a.options != b.options:
+        presence = explicit_presence_field(a, b, old, new)
+        groups = oneof_structure(b, renamed_fields)
+        if presence is not None:
+            groups = groups[:-1]
+        if oneof_structure(a, renamed_fields) != groups or a.options != b.options:
             unsupported.append(name + ': message options/oneofs changed')
         for number in sorted(aa.keys() | bb.keys()):
             x, y = aa.get(number), bb.get(number)
@@ -106,6 +133,9 @@ def compare(old, new):
             if (x.type, x.type_name) != (y.type, y.type_name):
                 events.append(dict(category='field_type_changed', old_type=x.type, new_type=y.type,
                                    old_type_name=x.type_name.lstrip('.'), new_type_name=y.type_name.lstrip('.'), **base))
+            if number == presence:
+                events.append(dict(category='field_presence_added', **base))
+                continue
             if (x.label, x.HasField('oneof_index'), x.oneof_index, x.options, x.default_value) != (y.label, y.HasField('oneof_index'), y.oneof_index, y.options, y.default_value):
                 unsupported.append(name + '.' + x.name + ': cardinality/oneof/options/default changed')
     def enums(file):
@@ -179,7 +209,10 @@ def compare(old, new):
             unsupported.append(name + ': unsupported message structure change')
         aa = {f.number:f for f in before[name].field}
         bb = {f.number:f for f in after[name].field}
+        presence = explicit_presence_field(before[name], after[name], old, new)
         for number in sorted(aa.keys() & bb.keys()):
+            if number == presence:
+                continue
             a, b = copy.deepcopy(aa[number]), copy.deepcopy(bb[number])
             for field in (a,b):
                 for key in ('name','json_name','type','type_name'):

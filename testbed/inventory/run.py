@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = ('baseline', 'width', 'zigzag', 'stock-release')
+CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -23,13 +23,14 @@ def varint(value):
     return bytes(result)
 
 
-def encode(sku, quantity, *, zigzag=False, state=0):
+def encode(sku, quantity, *, zigzag=False, state=0, explicit_presence=False):
     bits = 32 if zigzag else 64
-    if type(quantity) is not int or not -(1 << (bits - 1)) <= quantity < 1 << (bits - 1):
+    if (not (explicit_presence and quantity is None)
+            and (type(quantity) is not int or not -(1 << (bits - 1)) <= quantity < 1 << (bits - 1))):
         raise ValueError(f'quantity outside int{bits}')
     raw = sku.encode('utf8')
     result = b'\x0a' + varint(len(raw)) + raw if raw else b''
-    if quantity:
+    if quantity or (explicit_presence and quantity == 0):
         encoded = ((quantity << 1) ^ (quantity >> 31)) if zigzag else quantity & ((1 << 64) - 1)
         result += b'\x10' + varint(encoded)
     if state:
@@ -44,9 +45,25 @@ def stock_vectors():
             for sku, state, eligible in states for quantity in (-1, 0, 1, (1 << 31) - 1)]
 
 
+def presence_vectors():
+    states = [('legacy', 0), ('quarantined', 1), ('unknown', 19), ('positive-edge', 0)]
+    for sku, state in states:
+        values = (None, 0, (1 << 31) - 1, -(1 << 31)) if sku == 'positive-edge' else (None, 0, 1, -1)
+        for index, decoded in enumerate(values):
+            yield sku, state, decoded, values[(index + 1) % len(values)]
+
+
+def decimal_or_null(quantity):
+    return None if quantity is None else str(quantity)
+
+
 def requests(case='baseline'):
     if case not in CASES:
         raise ValueError('unknown inventory oracle case')
+    if case == 'presence':
+        return [dict(sku=sku, quantity=decimal_or_null(produced),
+                     payload=encode(sku, decoded, state=state, explicit_presence=True))
+                for sku, state, decoded, produced in presence_vectors()]
     if case == 'stock-release':
         return [dict(sku=sku, quantity=str(q), payload=encode(sku, q, state=state))
                 for sku, q, state, _ in stock_vectors()]
@@ -66,6 +83,11 @@ def requests(case='baseline'):
 
 
 def expected(case):
+    if case == 'presence':
+        return [dict(fields=dict(sku=sku, quantity=decimal_or_null(decoded)),
+                     in_stock=state == 0 and decoded is not None and decoded > 0,
+                     constructed_payload=encode(sku, produced, explicit_presence=True))
+                for sku, state, decoded, produced in presence_vectors()]
     if case == 'stock-release':
         return [dict(fields=dict(sku=sku, quantity=str(q)), in_stock=eligible,
                      constructed_payload=encode(sku, q))
@@ -80,7 +102,7 @@ def check_results(actual, wanted):
     for index, (got, want) in enumerate(zip(actual, wanted, strict=True)):
         if (not isinstance(got, dict) or got != want or type(got.get('in_stock')) is not bool
                 or not isinstance(got.get('fields'), dict)
-                or type(got['fields'].get('quantity')) is not str):
+                or type(got['fields'].get('quantity')) is not type(want['fields']['quantity'])):
             raise ValueError(f'inventory value/wire/predicate mismatch at case {index}')
 
 

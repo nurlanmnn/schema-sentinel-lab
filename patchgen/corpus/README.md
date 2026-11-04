@@ -25,7 +25,7 @@ and exact source bytes; source/content hashes are retained in production records
 | Label list to scalar | partial | blocked | Cardinality and first-label policy |
 | Add active BACKORDERED enum value | enum_value_added | 9 candidate lines + 2 import extras; partial | Resolve aliases, active predicates and enum behavior before generation |
 | Remove order currency | field_removed | 9 known lines | Explicit USD-only policy and predicate migration |
-| Amount gains optional presence | partial | blocked | Preserve absence versus explicit zero |
+| Amount gains optional presence | field_presence_added | candidate only, partial | Preserve absence versus explicit zero |
 
 The supported locator rows contain 36 known lines across four scenarios and
 three domains. Two scenarios use the same telemetry sites. Recovery of these

@@ -129,8 +129,10 @@ BENCHMARK_CASES = ('entity-name-rename', 'v2-identifier-bytes', 'unused-enum-add
 
 STRATEGY_VERSIONS = {'deterministic_inventory_width':'host-inventory-width/1.0','exact_edits':'2.0','file_content':'2.1','line_edits':'2.3','migration_edits':'2.4','candidate_edits':'2.5','syntax_rename':'2.6','syntax_rename_roles':'2.7','deterministic_rename_roles':'host-rename/1.0','deterministic_telemetry_units':'host-units/1.0','deterministic_telemetry_precision':'host-precision/1.0','deterministic_utf8_v2':'host-utf8/1.0','deterministic_remove_name_v1':'host-remove/1.0'}
 INVENTORY_STRATEGIES = {'deterministic_inventory_width': 'width', 'deterministic_inventory_zigzag': 'zigzag',
-                        'deterministic_inventory_stock_release': 'stock-release'}
+                        'deterministic_inventory_stock_release': 'stock-release',
+                        'deterministic_inventory_presence': 'presence'}
 STRATEGY_VERSIONS['deterministic_inventory_zigzag'] = 'host-inventory-zigzag/1.0'
+STRATEGY_VERSIONS['deterministic_inventory_presence'] = 'host-inventory-presence/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_stock_release'] = 'host-stock-release/1.0'
 STRATEGY_VERSIONS['candidate_blocks']='2.8'
 STRATEGY_VERSIONS['candidate_feedback_blocks']='2.9-feedback'
@@ -513,6 +515,7 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 # Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
 VALIDATION_PROFILES = {
+    'inventory-presence': ('inventory-presence', None),
     'inventory-stock-release': ('inventory-stock-release', None),
     'inventory-quantity-width': ('inventory-quantity-width', None),
     'inventory-quantity-zigzag': ('inventory-quantity-zigzag', None),
@@ -526,7 +529,8 @@ VALIDATION_PROFILES = {
     'pubsub-identifier-utf8': ('v2-identifier-bytes', 'utf8'),
 }
 INVENTORY_VALIDATION_CASES = {'inventory-quantity-width': 'width', 'inventory-quantity-zigzag': 'zigzag',
-                              'inventory-stock-release': 'stock-release'}
+                              'inventory-presence': ('inventory-presence', None),
+    'inventory-stock-release': 'stock-release', 'inventory-presence': 'presence'}
 PUBSUB_ARTIFACTS = ('report.json', 'expected.json', 'broker-state.json', 'python.log', 'typescript.log', 'csharp.log')
 
 
@@ -672,7 +676,8 @@ def main():
     if args.strategy in ('syntax_rename_roles','deterministic_rename_roles'):
         (output / 'rename-role-source.py').write_bytes(Path(__file__).with_name('rename_roles.py').read_bytes())
     inventory_migration = INVENTORY_STRATEGIES.get(args.strategy)
-    inventory_policy = 'stock_release.py' if inventory_migration == 'stock-release' else 'inventory_width.py'
+    inventory_policy = {'stock-release': 'stock_release.py', 'presence': 'inventory_presence.py'}.get(
+        inventory_migration, 'inventory_width.py')
     if inventory_migration:
         (output/f'inventory-{inventory_migration}-source.py').write_bytes(Path(__file__).with_name(inventory_policy).read_bytes())
     if args.strategy == 'deterministic_telemetry_units':
@@ -758,7 +763,12 @@ def main():
             source = output / 'source'
             report['source_preparation'] = 'explicit snapshot of fixture revision; original checkout untouched'
         verify_source(source,case)
-        if inventory_migration == 'stock-release' and not args.response:
+        if case['change']['category'] == 'field_presence_added' and (inventory_migration != 'presence' or args.response):
+            raise ContractError('presence generation requires the pinned deterministic strategy')
+        if inventory_migration == 'presence':
+            from patchgen.inventory_presence import propose
+            proposal = propose(case, output)
+        elif inventory_migration == 'stock-release' and not args.response:
             from patchgen.stock_release import propose
             proposal = propose(case, output)
         elif inventory_migration and not args.response:

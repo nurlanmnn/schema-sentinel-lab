@@ -1,0 +1,34 @@
+{
+  "source_revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "change_id": "inventory-presence",
+  "category": "field_presence_added",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        4,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        13,
+        14,
+        15,
+        20
+      ]
+    }
+  ],
+  "method": "Authored producer input and serialization, consumer observation and eligibility sites."
+}

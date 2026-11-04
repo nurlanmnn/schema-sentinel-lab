@@ -219,8 +219,8 @@
     {
       "id": "orders-amount-presence",
       "domain": "orders",
-      "expected_status": "partial",
-      "expected_category": "ambiguous",
+      "expected_status": "complete",
+      "expected_category": "field_presence_added",
       "behavior": "Distinguish absent pending amounts from explicit zero amounts; constructors and observations must preserve presence. Do not equate absence to zero.",
       "new_schema_file": "orders-amount-presence.proto",
       "ground_truth": null

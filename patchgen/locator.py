@@ -277,6 +277,8 @@ def locate(repo, detector):
         enum = enum_symbols(detector)
         record['enum_analysis'] = enum
         record['issues'].append('enum candidates only; consumer behavior/exhaustiveness analysis unsupported')
+    if event['category'] == 'field_presence_added':
+        record['issues'].append('presence candidates only; constructor and observation policy requires review')
     policy = POLICY.get((detector['change']['schema_path'], event.get('message')))
     ts_policy = TYPESCRIPT_POLICY.get((detector['change']['schema_path'], event.get('message')))
     record['binding_policy'] = dict(scope='declared generated Python/ts-proto modules; bounded import and immutable TS dataflow evidence',

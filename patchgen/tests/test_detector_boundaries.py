@@ -111,3 +111,26 @@ class DescriptorBoundaryTests(unittest.TestCase):
         record = detect(old, new, 'model.proto', 'a'*40, 'rename', 'Rename only the second field')
         self.assertEqual(record['status'], 'partial')
         self.assertTrue(any('oneofs' in issue for issue in record['unsupported']))
+
+    def test_clean_implicit_scalar_to_optional_keeps_existing_oneofs(self):
+        old = build('syntax="proto3"; message Packet { oneof group { string name=1; } optional string code=2; int32 count=3; }')
+        new = build('syntax="proto3"; message Packet { oneof group { string name=1; } optional string code=2; optional int32 count=3; }')
+        events, issues = compare(old, new)
+        self.assertFalse(issues)
+        self.assertEqual([e['category'] for e in events], ['field_presence_added'])
+        self.assertFalse(events[0]['old_field']['proto3_optional'])
+        self.assertTrue(events[0]['new_field']['proto3_optional'])
+        for mutation in ('group_options', 'real_group', 'second_member', 'field_metadata'):
+            changed = copy.deepcopy(new)
+            message = changed.message_type[0]
+            if mutation == 'group_options':
+                message.oneof_decl[-1].options.SetInParent()
+            elif mutation == 'real_group':
+                message.oneof_decl[0].name = 'other'
+            elif mutation == 'second_member':
+                message.field[0].oneof_index = message.field[-1].oneof_index
+            else:
+                message.field[-1].json_name = 'custom'
+            with self.subTest(mutation=mutation):
+                self.assertTrue(compare(old, changed)[1])
+        self.assertTrue(compare(new, old)[1])
