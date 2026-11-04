@@ -13,6 +13,7 @@ import sys
 import threading
 import time
 import urllib.request
+from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
 
 PROMPT_VERSION = '2.3'
 OPTIONS = {'temperature': 0, 'seed': 42, 'num_ctx': 16384, 'num_predict': 8192}
@@ -133,6 +134,7 @@ INVENTORY_STRATEGIES = {'deterministic_inventory_width': 'width', 'deterministic
                         'deterministic_inventory_presence': 'presence',
                         'deterministic_inventory_labels': 'labels',
                         'deterministic_inventory_reservation': 'reservation'}
+STRATEGY_VERSIONS['deterministic_telemetry_quantized'] = 'host-quantized/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_zigzag'] = 'host-inventory-zigzag/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_reservation'] = 'host-inventory-reservation/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_labels'] = 'host-inventory-labels/1.0'
@@ -526,6 +528,7 @@ VALIDATION_PROFILES = {
     'inventory-quantity-width': ('inventory-quantity-width', None),
     'inventory-quantity-zigzag': ('inventory-quantity-zigzag', None),
     'telemetry-speed-units': ('telemetry-speed-units', None),
+    'telemetry-speed-quantized': ('telemetry-speed-quantized', None),
     'telemetry-speed-precision': ('telemetry-speed-precision', None),
     'telemetry-speed-rename': ('telemetry-speed-rename', None),
     'entity-name-removal': ('entity-name-removal', None),
@@ -534,13 +537,20 @@ VALIDATION_PROFILES = {
     'pubsub-name-rename': ('entity-name-rename', 'rename'),
     'pubsub-identifier-utf8': ('v2-identifier-bytes', 'utf8'),
 }
-INVENTORY_VALIDATION_CASES = {'inventory-quantity-width': 'width', 'inventory-quantity-zigzag': 'zigzag',
-                              'inventory-reservation': ('inventory-reservation', None),
-    'inventory-labels': ('inventory-labels', None),
-    'inventory-presence': ('inventory-presence', None),
-    'inventory-stock-release': 'stock-release', 'inventory-presence': 'presence',
-                              'inventory-reservation': ('inventory-reservation', None),
-    'inventory-labels': 'labels', 'inventory-reservation': 'reservation'}
+INVENTORY_VALIDATION_CASES = {
+    'inventory-quantity-width': 'width',
+    'inventory-quantity-zigzag': 'zigzag',
+    'inventory-stock-release': 'stock-release',
+    'inventory-presence': 'presence',
+    'inventory-labels': 'labels',
+    'inventory-reservation': 'reservation',
+}
+TELEMETRY_VALIDATION_CASES = {
+    'telemetry-speed-rename': 'rename',
+    'telemetry-speed-precision': 'precision',
+    'telemetry-speed-units': 'units',
+    'telemetry-speed-quantized': 'quantized',
+}
 PUBSUB_ARTIFACTS = ('report.json', 'expected.json', 'broker-state.json', 'python.log', 'typescript.log', 'csharp.log')
 
 
@@ -551,10 +561,12 @@ def load_validation_profile(case, name):
     profile = json.loads((directory / 'validation-profile.json').read_text())
     patch = (directory / 'validation-tests.patch').read_text()
     oracle_case, pubsub_case = VALIDATION_PROFILES[name]
-    allowed = ['testbed/tests/e2e_test.py','testbed/tests/test_evidence.py'] if oracle_case not in INVENTORY_VALIDATION_CASES and oracle_case not in ('v2-identifier-bytes','telemetry-speed-rename','telemetry-speed-precision','telemetry-speed-units') else []
+    dedicated_oracle = (oracle_case == 'v2-identifier-bytes' or oracle_case in INVENTORY_VALIDATION_CASES
+                        or oracle_case in TELEMETRY_VALIDATION_CASES)
+    allowed = [] if dedicated_oracle else ['testbed/tests/e2e_test.py', 'testbed/tests/test_evidence.py']
     if profile.get('inventory_case') != INVENTORY_VALIDATION_CASES.get(name):
         raise ContractError('trusted profile has wrong inventory selection')
-    if (profile.get('telemetry_case') != ({'telemetry-speed-rename':'rename','telemetry-speed-precision':'precision','telemetry-speed-units':'units'}.get(name))):
+    if (profile.get('telemetry_case') != TELEMETRY_VALIDATION_CASES.get(name)):
         raise ContractError('trusted profile has wrong telemetry selection')
     if not pubsub_case and ('pubsub_case' in profile or 'oracle_case' in profile):
         raise ContractError('historical profile cannot select a different oracle or transport')
@@ -628,10 +640,12 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
                         or result.get('runtime_revision') != case['source_revision']):
                     raise ContractError('inventory validation did not retain passing evidence')
             elif validation_profile and validation_profile[0].get('telemetry_case'):
+                mode = validation_profile[0]['telemetry_case']
                 command([str(python), str(output/'telemetry-oracle-source.py'), '--root', str(workspace),
-                         '--case', validation_profile[0]['telemetry_case'], '--output', str(output/'telemetry')], workspace,log)
+                         '--case', mode, '--output', str(output/'telemetry')], workspace,log)
                 result = json.loads((output/'telemetry/report.json').read_text())
-                if (result.get('status') != 'passed' or result.get('runtime_cases') != (33 if validation_profile[0]['telemetry_case']=='precision' else 24)
+                if (result.get('status') != 'passed' or result.get('runtime_cases') != TELEMETRY_COUNTS[mode]
+                        or result.get('case') != mode
                         or result.get('runtime_revision') != case['source_revision']):
                     raise ContractError('telemetry validation did not retain passing evidence')
             elif oracle_case in BENCHMARK_CASES:
@@ -700,9 +714,11 @@ def main():
         (output / 'type-utf8-source.py').write_bytes(Path(__file__).with_name('type_utf8.py').read_bytes())
     if args.strategy == 'deterministic_remove_name_v1':
         (output / 'remove-name-source.py').write_bytes(Path(__file__).with_name('remove_name.py').read_bytes())
+    if args.strategy == 'deterministic_telemetry_quantized':
+        (output/'telemetry-quantized-source.py').write_bytes(Path(__file__).with_name('telemetry_quantized.py').read_bytes())
     (output / 'oracle-source.py').write_bytes(Path(__file__).with_name('oracle.py').read_bytes())
     (output / 'benchmark-oracle-source.py').write_bytes(Path(__file__).with_name('benchmark_oracle.py').read_bytes())
-    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units') else 'live_model'),
+    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units','deterministic_telemetry_quantized') else 'live_model'),
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
@@ -723,6 +739,8 @@ def main():
         report['type_utf8_sha256'] = hashlib.sha256(Path(__file__).with_name('type_utf8.py').read_bytes()).hexdigest()
     if args.strategy == 'deterministic_remove_name_v1':
         report['remove_name_sha256'] = hashlib.sha256(Path(__file__).with_name('remove_name.py').read_bytes()).hexdigest()
+    if args.strategy == 'deterministic_telemetry_quantized':
+        report['telemetry_quantized_sha256'] = hashlib.sha256((output/'telemetry-quantized-source.py').read_bytes()).hexdigest()
     if inventory_migration:
         report[f'inventory_{inventory_migration}_sha256'] = hashlib.sha256(
             Path(__file__).with_name(inventory_policy).read_bytes()).hexdigest()
@@ -748,6 +766,9 @@ def main():
         if inventory_migration and args.validate and (
                 not validation_profile or validation_profile[0].get('inventory_case') != inventory_migration):
             raise ContractError('inventory validation requires the matching trusted profile')
+        if args.strategy == 'deterministic_telemetry_quantized' and (
+                args.response or args.validate and (not validation_profile or validation_profile[0].get('telemetry_case') != 'quantized')):
+            raise ContractError('quantized validation requires its deterministic strategy and trusted profile')
         if validation_profile:
             report['validation_profile'] = validation_profile[0]
             if validation_profile[0].get('inventory_case'):
@@ -793,6 +814,9 @@ def main():
         elif inventory_migration and not args.response:
             from patchgen.inventory_width import propose
             proposal = propose(case, output, inventory_migration)
+        elif args.strategy == 'deterministic_telemetry_quantized':
+            from patchgen.telemetry_quantized import propose
+            proposal = propose(case, output)
         elif args.strategy == 'deterministic_telemetry_units' and not args.response:
             from patchgen.telemetry_units import propose
             proposal = propose(case, output)

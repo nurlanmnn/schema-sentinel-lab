@@ -7,6 +7,7 @@ import socket
 import subprocess
 import sys
 import time
+from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
@@ -16,6 +17,7 @@ CASES = {
     'inventory-stock-release': ('inventory-stock-release', 'deterministic_inventory_stock_release'),
     'inventory-zigzag': ('inventory-quantity-zigzag', 'deterministic_inventory_zigzag'),
     'inventory-width': ('inventory-quantity-width', 'deterministic_inventory_width'),
+    'telemetry-quantized': ('telemetry-speed-quantized', 'deterministic_telemetry_quantized'),
     'telemetry-units': ('telemetry-speed-units', 'deterministic_telemetry_units'),
     'telemetry-precision': ('telemetry-speed-precision', 'deterministic_telemetry_precision'),
     'telemetry-rename': ('telemetry-speed-rename', 'deterministic_rename_roles'),
@@ -112,7 +114,7 @@ def execute(case, output, local_codegen=False):
                 report['inventory_validation'] = {key:result[key] for key in ('status','case','runtime_cases')}
             if case.startswith('telemetry-'):
                 result = pipeline.get('proposal_report',{}).get('telemetry_validation',{})
-                if result.get('status') != 'passed' or result.get('runtime_cases') != (33 if case=='telemetry-precision' else 24):
+                if result.get('status') != 'passed' or result.get('runtime_cases') != TELEMETRY_COUNTS[case.removeprefix('telemetry-')]:
                     raise RuntimeError('Telemetry demo lacks passing behavior evidence.')
                 report['telemetry_validation'] = {key:result[key] for key in ('status','case','runtime_cases')}
             if case.startswith('pubsub-'):

@@ -13,10 +13,41 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
+VALIDATION_COUNTS = {'rename': 24, 'precision': 33, 'units': 24, 'quantized': 36}
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
+def quantized_vectors():
+    # Producer speed and expected integer are independent of the incoming wire value.
+    return (
+        ('stopped', -0.99, 0, 0), ('reverse', -1.99, -1, -1),
+        ('threshold', 30.99, 30, 30), ('above', 31.01, 31, 31),
+        ('trunc-positive', 1.99, 1, -2), ('trunc-negative', -29.99, -29, 2),
+        ('clip-positive', 1e300, 2147483647, 2147483647),
+        ('clip-negative', -1e300, -2147483648, -2147483648),
+        ('edge-positive', 2147483646.75, 2147483646, 29),
+        ('edge-negative', -2147483647.75, -2147483647, 32),
+        ('車-α', 42.75, 42, 42), ('', 0.125, 0, -30),
+    )
+
+
+def encode_quantized(vehicle, speed):
+    encoded = vehicle.encode('utf8')
+    wire = b'\x0a' + bytes([len(encoded)]) + encoded if encoded else b''
+    if speed:
+        wire += b'\x10'
+        unsigned = speed & ((1 << 64) - 1)
+        while unsigned >= 128:
+            wire += bytes([(unsigned & 127) | 128])
+            unsigned >>= 7
+        wire += bytes([unsigned])
+    return base64.b64encode(wire).decode()
+
+
 def requests(case="baseline"):
+    if case == 'quantized':
+        return [dict(vehicle_id=vehicle, speed=request, payload=encode_quantized(vehicle, decoded))
+                for vehicle, request, _, decoded in quantized_vectors()]
     # Baseline values are exactly representable float32; precision adds binary64 inputs.
     # Strict >30 boundary is intentional.
     values = [('stopped', 0.0), ('below', 29.5), ('boundary', 30.0), ('above', 30.5),
@@ -35,7 +66,11 @@ def requests(case="baseline"):
 
 
 def expected(case):
-    if case not in ('baseline', 'rename', 'precision', 'units'):
+    if case == 'quantized':
+        return [dict(fields=dict(vehicle_id=vehicle, speed_mps=decoded),
+                     speeding=decoded > 30, constructed_payload=encode_quantized(vehicle, constructed))
+                for vehicle, _, constructed, decoded in quantized_vectors()]
+    if case != 'baseline' and case not in VALIDATION_COUNTS:
         raise ValueError('unknown telemetry oracle case')
     key = {'rename':'ground_speed_mps','units':'speed_kph'}.get(case,'speed_mps')
     return [dict(fields=dict(vehicle_id=r['vehicle_id'], **{key:struct.unpack('<f',struct.pack('<f',r['speed']*3.6))[0] if case=='units' else r['speed']}),
@@ -49,7 +84,9 @@ def check_results(actual, wanted):
         # bool equals 0/1 in Python; enforce types as well as values.
         if (not isinstance(got, dict) or got != want or type(got.get('speeding')) is not bool
                 or not isinstance(got.get('fields'), dict)
-                or any(type(v) is bool for v in got['fields'].values())):
+                or any(type(v) is bool for v in got['fields'].values())
+                or (type(want['fields'].get('speed_mps')) is int
+                    and type(got['fields'].get('speed_mps')) is not int)):
             raise ValueError(f'telemetry wire/units/threshold mismatch at case {index}')
 
 
@@ -63,7 +100,7 @@ def run(root, output, case):
                        for pattern in ('runtimes/**/*.*', 'proto/**/*.proto', 'generated/**/*.*')
                        for p in root.glob(pattern) if p.is_file() and not any(
                            part in ('node_modules','dist','bin','obj','__pycache__') for part in p.relative_to(root).parts)},
-        runtime_cases=0, model_requests=0, scope='authored '+('float64' if case=='precision' else 'float32')+' cases; not arbitrary wire, units or mixed-version safety')
+        runtime_cases=0, model_requests=0, scope='authored '+{'precision':'float64', 'quantized':'int32'}.get(case,'float32')+' cases; excludes arbitrary wire and mixed versions')
     wanted = expected(case)
     (output/'expected.json').write_text(json.dumps(dict(requests=requests(case), results=wanted),indent=2)+'\n')
     python = root/'.venv'/('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
@@ -93,7 +130,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,default=ROOT)
     parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--case',choices=('baseline','rename','precision','units'),default='baseline')
+    parser.add_argument('--case',choices=('baseline', *VALIDATION_COUNTS),default='baseline')
     args = parser.parse_args()
     report = run(args.root,args.output,args.case)
     print(json.dumps(report,indent=2))

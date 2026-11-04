@@ -214,3 +214,8 @@ See [decision 0031](docs/decisions/0031-inventory-display-labels.md).
 `run_demo.py --case inventory-reservation --local-codegen` adds a reserved
 quantity with a zero default and checks the new availability rule across the
 three runtimes. See [decision 0032](docs/decisions/0032-inventory-reservation.md).
+
+`run_demo.py --case telemetry-quantized --local-codegen` changes telemetry
+speed from float32 to a saturated, truncated int32 and checks the resulting
+wire values and threshold decisions across all three runtimes.
+See [decision 0033](docs/decisions/0033-telemetry-speed-quantization.md).

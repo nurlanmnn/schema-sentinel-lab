@@ -1,7 +1,7 @@
 """Negative checks for the independent telemetry evaluator."""
 import copy
 import unittest
-from testbed.telemetry.run import check_results, expected, requests
+from testbed.telemetry.run import check_results, encode_quantized, expected, requests
 
 
 class TelemetryOracleTests(unittest.TestCase):
@@ -28,5 +28,19 @@ class TelemetryOracleTests(unittest.TestCase):
                 actual.pop()
             else:
                 actual[0]['speeding'] = 0
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                check_results(actual, wanted)
+
+    def test_quantization_rejects_rounding_and_fractional_observations(self):
+        wanted = expected('quantized')
+        check_results(wanted, wanted)
+        self.assertFalse(wanted[2]['speeding'])
+        self.assertTrue(wanted[3]['speeding'])
+        for mutation in ('rounding', 'float'):
+            actual = copy.deepcopy(wanted)
+            if mutation == 'rounding':
+                actual[2]['constructed_payload'] = encode_quantized('threshold', 31)
+            else:
+                actual[2]['fields']['speed_mps'] = 30.0
             with self.subTest(mutation=mutation), self.assertRaises(ValueError):
                 check_results(actual, wanted)

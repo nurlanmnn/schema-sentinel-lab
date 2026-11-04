@@ -8,11 +8,11 @@ import re
 import shutil
 from patchgen.generator import ContractError, INVENTORY_STRATEGIES, PUBSUB_ARTIFACTS
 from testbed.inventory.run import ARTIFACTS as INVENTORY_FILES, check_results as inventory_check, expected as inventory_expected, requests as inventory_requests
-from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, check_results, expected, requests
+from testbed.telemetry.run import ARTIFACTS as TELEMETRY_FILES, VALIDATION_COUNTS, check_results, expected, requests
 
 ARTIFACTS = ('input.json','request.json','report.json','provenance.json','detector.json','locator.json',
              'measurement.json','implementation.json','proposal/report.json','proposal/assembly.json',
-             'proposal/inventory-width-source.py','proposal/inventory-zigzag-source.py','proposal/inventory-stock-release-source.py','proposal/inventory-presence-source.py','proposal/inventory-labels-source.py','proposal/inventory-reservation-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py',
+             'proposal/inventory-width-source.py','proposal/inventory-zigzag-source.py','proposal/inventory-stock-release-source.py','proposal/inventory-presence-source.py','proposal/inventory-labels-source.py','proposal/inventory-reservation-source.py','proposal/proposal.json','proposal/proposal.patch','proposal/validated.patch','proposal/type-precision-source.py','proposal/telemetry-units-source.py','proposal/telemetry-quantized-source.py',
              'proposal/validation.log','proposal/validation-profile.json','proposal/validation-tests.patch')
 PUBSUB_REVIEW_ARTIFACTS = tuple('proposal/pubsub/' + name for name in PUBSUB_ARTIFACTS) + tuple(
     'proposal/pubsub-harness/testbed/pubsub/' + name for name in ('run.py', 'broker.py', 'topics.json'))
@@ -100,6 +100,12 @@ def check_host_evidence(root, report, available=None):
         required(('proposal/telemetry-units-source.py',))
         if sha(artifact_path(root,'proposal/telemetry-units-source.py').read_bytes()) != report.get('telemetry_units_sha256'):
             raise ContractError('units policy source hash mismatch')
+    if report.get('strategy') == 'deterministic_telemetry_quantized':
+        path = 'proposal/telemetry-quantized-source.py'
+        required((path,))
+        if (sha(artifact_path(root, path).read_bytes()) != report.get('telemetry_quantized_sha256')
+                or report.get('validation_profile', {}).get('telemetry_case') != 'quantized'):
+            raise ContractError('quantization policy or validation profile mismatch')
     if report.get('codegen') == 'local_pinned':
         required(LOCAL_CODEGEN_ARTIFACTS)
         tools = json.loads(artifact_path(root,'proposal/local-codegen-toolchain.json').read_text())
@@ -132,11 +138,11 @@ def check_host_evidence(root, report, available=None):
     if report.get('validation_profile',{}).get('telemetry_case'):
         required(TELEMETRY_ARTIFACTS)
         mode = report['validation_profile']['telemetry_case']
-        if mode not in ('rename','precision','units'):
+        if mode not in VALIDATION_COUNTS:
             raise ContractError('unknown telemetry review mode')
         result = json.loads(artifact_path(root,'proposal/telemetry/report.json').read_text())
         if (result != report.get('telemetry_validation') or result.get('status') != 'passed'
-                or result.get('case') != mode or result.get('runtime_cases') != (33 if mode=='precision' else 24)
+                or result.get('case') != mode or result.get('runtime_cases') != VALIDATION_COUNTS[mode]
                 or result.get('runtime_revision') != report.get('source_revision')
                 or sha(artifact_path(root,'proposal/telemetry-oracle-source.py').read_bytes()) != report.get('telemetry_oracle_sha256')):
             raise ContractError('telemetry review has inconsistent validation evidence')
