@@ -10,6 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
+    'inventory-stock-release': ('inventory-stock-release', 'deterministic_inventory_stock_release'),
     'inventory-zigzag': ('inventory-quantity-zigzag', 'deterministic_inventory_zigzag'),
     'inventory-width': ('inventory-quantity-width', 'deterministic_inventory_width'),
     'telemetry-units': ('telemetry-speed-units', 'deterministic_telemetry_units'),
@@ -104,7 +105,7 @@ def execute(case, output, local_codegen=False):
                 result = pipeline.get('proposal_report',{}).get('inventory_validation',{})
                 if (result.get('status') != 'passed' or result.get('runtime_cases') != 48
                         or result.get('case') != case.removeprefix('inventory-')):
-                    raise RuntimeError('Inventory demo lacks passing exact integer evidence.')
+                    raise RuntimeError('Inventory demo lacks passing evidence for its pinned oracle.')
                 report['inventory_validation'] = {key:result[key] for key in ('status','case','runtime_cases')}
             if case.startswith('telemetry-'):
                 result = pipeline.get('proposal_report',{}).get('telemetry_validation',{})

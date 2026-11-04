@@ -1,4 +1,4 @@
-"""Independent signed-integer wire oracle; imports no generated bindings."""
+"""Independent inventory wire and eligibility oracle; imports no generated bindings."""
 import argparse
 import base64
 import hashlib
@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = ('baseline', 'width', 'zigzag')
+CASES = ('baseline', 'width', 'zigzag', 'stock-release')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -23,7 +23,7 @@ def varint(value):
     return bytes(result)
 
 
-def encode(sku, quantity, *, zigzag=False):
+def encode(sku, quantity, *, zigzag=False, state=0):
     bits = 32 if zigzag else 64
     if type(quantity) is not int or not -(1 << (bits - 1)) <= quantity < 1 << (bits - 1):
         raise ValueError(f'quantity outside int{bits}')
@@ -32,12 +32,24 @@ def encode(sku, quantity, *, zigzag=False):
     if quantity:
         encoded = ((quantity << 1) ^ (quantity >> 31)) if zigzag else quantity & ((1 << 64) - 1)
         result += b'\x10' + varint(encoded)
+    if state:
+        result += b'\x18' + varint(state)
     return base64.b64encode(result).decode()
+
+
+def stock_vectors():
+    states = [('legacy', 0, True), ('quarantined', 1, False),
+              ('released', 2, True), ('unknown', 19, False)]
+    return [(sku, quantity, state, eligible and quantity > 0)
+            for sku, state, eligible in states for quantity in (-1, 0, 1, (1 << 31) - 1)]
 
 
 def requests(case='baseline'):
     if case not in CASES:
         raise ValueError('unknown inventory oracle case')
+    if case == 'stock-release':
+        return [dict(sku=sku, quantity=str(q), payload=encode(sku, q, state=state))
+                for sku, q, state, _ in stock_vectors()]
     values = [('empty-stock', 0), ('single', 1), ('backorder', -1),
               ('int32-max', (1 << 31) - 1), ('int32-min', -(1 << 31)),
               ('箱-α', 42), ('', 7), ('long-' + 'x' * 128, 123)]
@@ -54,6 +66,10 @@ def requests(case='baseline'):
 
 
 def expected(case):
+    if case == 'stock-release':
+        return [dict(fields=dict(sku=sku, quantity=str(q)), in_stock=eligible,
+                     constructed_payload=encode(sku, q))
+                for sku, q, _, eligible in stock_vectors()]
     return [dict(fields=dict(sku=r['sku'], quantity=r['quantity']),
                  in_stock=int(r['quantity']) > 0, constructed_payload=r['payload']) for r in requests(case)]
 
@@ -65,7 +81,7 @@ def check_results(actual, wanted):
         if (not isinstance(got, dict) or got != want or type(got.get('in_stock')) is not bool
                 or not isinstance(got.get('fields'), dict)
                 or type(got['fields'].get('quantity')) is not str):
-            raise ValueError(f'inventory integer/wire/predicate mismatch at case {index}')
+            raise ValueError(f'inventory value/wire/predicate mismatch at case {index}')
 
 
 def run(root, output, case):
@@ -79,7 +95,7 @@ def run(root, output, case):
                        for p in root.glob(pattern) if p.is_file() and not any(
                            part in ('node_modules', 'dist', 'bin', 'obj', '__pycache__') for part in p.relative_to(root).parts)},
         runtime_cases=0, model_requests=0,
-        scope='authored valid canonical decimal inputs and signed integer wire cases; not arbitrary input or mixed-version safety')
+        scope='authored decimal quantity, wire and eligibility cases; excludes arbitrary input and mixed versions')
     wanted = expected(case)
     (output / 'expected.json').write_text(json.dumps(dict(requests=requests(case), results=wanted), indent=2) + '\n')
     python = root / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')

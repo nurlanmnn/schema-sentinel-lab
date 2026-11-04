@@ -11,7 +11,8 @@ import run_demo
 ROOT = Path(__file__).resolve().parent
 # Transport variants, negative controls and reference replays are not extra cases.
 CASES = ('pubsub-rename', 'pubsub-removal', 'pubsub-utf8',
-         'telemetry-rename', 'telemetry-precision', 'telemetry-units', 'inventory-width', 'inventory-zigzag')
+         'telemetry-rename', 'telemetry-precision', 'telemetry-units', 'inventory-width', 'inventory-zigzag',
+         'inventory-stock-release')
 
 
 def read(path):

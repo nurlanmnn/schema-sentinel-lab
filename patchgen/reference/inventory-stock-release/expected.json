@@ -1,0 +1,27 @@
+{
+  "source_revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
+  "change_id": "inventory-stock-release",
+  "category": "enum_value_added",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        5,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        15
+      ]
+    }
+  ],
+  "method": "Authored consumer eligibility checks and the Python enum constant import needed to extend the allow-list. Existing producer default is unchanged."
+}
