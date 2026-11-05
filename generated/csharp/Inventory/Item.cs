@@ -25,18 +25,17 @@ namespace Simulation.Inventory {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRpbnZlbnRvcnkvaXRlbS5wcm90bxIUc2ltdWxhdGlvbi5pbnZlbnRvcnki",
-            "9gEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
+            "0wEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
             "IAEoBVIIcXVhbnRpdHkSNgoFc3RhdGUYAyABKA4yIC5zaW11bGF0aW9uLmlu",
             "dmVudG9yeS5TdG9ja1N0YXRlUgVzdGF0ZRIlCg5kaXNwbGF5X2xhYmVscxgE",
-            "IAMoCVINZGlzcGxheUxhYmVscxIhCgpiaW5fY291bnRzGAYgAygFQgIQAFIJ",
-            "YmluQ291bnRzEhwKCXdhcmVob3VzZRgHIAEoCVIJd2FyZWhvdXNlEhsKCWRy",
-            "b3Bfem9uZRgIIAEoCVIIZHJvcFpvbmUqRgoKU3RvY2tTdGF0ZRIbChdTVE9D",
-            "S19TVEFURV9VTlNQRUNJRklFRBAAEhsKF1NUT0NLX1NUQVRFX1FVQVJBTlRJ",
-            "TkVEEAFiBnByb3RvMw=="));
+            "IAMoCVINZGlzcGxheUxhYmVscxIcCgl3YXJlaG91c2UYByABKAlSCXdhcmVo",
+            "b3VzZRIbCglkcm9wX3pvbmUYCCABKAlSCGRyb3Bab25lKkYKClN0b2NrU3Rh",
+            "dGUSGwoXU1RPQ0tfU1RBVEVfVU5TUEVDSUZJRUQQABIbChdTVE9DS19TVEFU",
+            "RV9RVUFSQU5USU5FRBABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.Inventory.StockState), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels", "BinCounts", "Warehouse", "DropZone" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels", "Warehouse", "DropZone" }, null, null, null, null)
           }));
     }
     #endregion
@@ -90,7 +89,6 @@ namespace Simulation.Inventory {
       quantity_ = other.quantity_;
       state_ = other.state_;
       displayLabels_ = other.displayLabels_.Clone();
-      binCounts_ = other.binCounts_.Clone();
       warehouse_ = other.warehouse_;
       dropZone_ = other.dropZone_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -149,17 +147,6 @@ namespace Simulation.Inventory {
       get { return displayLabels_; }
     }
 
-    /// <summary>Field number for the "bin_counts" field.</summary>
-    public const int BinCountsFieldNumber = 6;
-    private static readonly pb::FieldCodec<int> _repeated_binCounts_codec
-        = pb::FieldCodec.ForInt32(48);
-    private readonly pbc::RepeatedField<int> binCounts_ = new pbc::RepeatedField<int>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<int> BinCounts {
-      get { return binCounts_; }
-    }
-
     /// <summary>Field number for the "warehouse" field.</summary>
     public const int WarehouseFieldNumber = 7;
     private string warehouse_ = "";
@@ -203,7 +190,6 @@ namespace Simulation.Inventory {
       if (Quantity != other.Quantity) return false;
       if (State != other.State) return false;
       if(!displayLabels_.Equals(other.displayLabels_)) return false;
-      if(!binCounts_.Equals(other.binCounts_)) return false;
       if (Warehouse != other.Warehouse) return false;
       if (DropZone != other.DropZone) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -217,7 +203,6 @@ namespace Simulation.Inventory {
       if (Quantity != 0) hash ^= Quantity.GetHashCode();
       if (State != global::Simulation.Inventory.StockState.Unspecified) hash ^= State.GetHashCode();
       hash ^= displayLabels_.GetHashCode();
-      hash ^= binCounts_.GetHashCode();
       if (Warehouse.Length != 0) hash ^= Warehouse.GetHashCode();
       if (DropZone.Length != 0) hash ^= DropZone.GetHashCode();
       if (_unknownFields != null) {
@@ -251,7 +236,6 @@ namespace Simulation.Inventory {
         output.WriteEnum((int) State);
       }
       displayLabels_.WriteTo(output, _repeated_displayLabels_codec);
-      binCounts_.WriteTo(output, _repeated_binCounts_codec);
       if (Warehouse.Length != 0) {
         output.WriteRawTag(58);
         output.WriteString(Warehouse);
@@ -283,7 +267,6 @@ namespace Simulation.Inventory {
         output.WriteEnum((int) State);
       }
       displayLabels_.WriteTo(ref output, _repeated_displayLabels_codec);
-      binCounts_.WriteTo(ref output, _repeated_binCounts_codec);
       if (Warehouse.Length != 0) {
         output.WriteRawTag(58);
         output.WriteString(Warehouse);
@@ -312,7 +295,6 @@ namespace Simulation.Inventory {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       size += displayLabels_.CalculateSize(_repeated_displayLabels_codec);
-      size += binCounts_.CalculateSize(_repeated_binCounts_codec);
       if (Warehouse.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Warehouse);
       }
@@ -341,7 +323,6 @@ namespace Simulation.Inventory {
         State = other.State;
       }
       displayLabels_.Add(other.displayLabels_);
-      binCounts_.Add(other.binCounts_);
       if (other.Warehouse.Length != 0) {
         Warehouse = other.Warehouse;
       }
@@ -377,11 +358,6 @@ namespace Simulation.Inventory {
           }
           case 34: {
             displayLabels_.AddEntriesFrom(input, _repeated_displayLabels_codec);
-            break;
-          }
-          case 50:
-          case 48: {
-            binCounts_.AddEntriesFrom(input, _repeated_binCounts_codec);
             break;
           }
           case 58: {
@@ -421,11 +397,6 @@ namespace Simulation.Inventory {
           }
           case 34: {
             displayLabels_.AddEntriesFrom(ref input, _repeated_displayLabels_codec);
-            break;
-          }
-          case 50:
-          case 48: {
-            binCounts_.AddEntriesFrom(ref input, _repeated_binCounts_codec);
             break;
           }
           case 58: {

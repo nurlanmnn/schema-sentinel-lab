@@ -41,13 +41,12 @@ export interface StockItem {
   quantity: number;
   state: StockState;
   displayLabels: string[];
-  binCounts: number[];
   warehouse: string;
   dropZone: string;
 }
 
 function createBaseStockItem(): StockItem {
-  return { sku: "", quantity: 0, state: 0, displayLabels: [], binCounts: [], warehouse: "", dropZone: "" };
+  return { sku: "", quantity: 0, state: 0, displayLabels: [], warehouse: "", dropZone: "" };
 }
 
 export const StockItem = {
@@ -64,11 +63,6 @@ export const StockItem = {
     for (const v of message.displayLabels) {
       writer.uint32(34).string(v!);
     }
-    writer.uint32(50).fork();
-    for (const v of message.binCounts) {
-      writer.int32(v);
-    }
-    writer.ldelim();
     if (message.warehouse !== "") {
       writer.uint32(58).string(message.warehouse);
     }
@@ -113,23 +107,6 @@ export const StockItem = {
 
           message.displayLabels.push(reader.string());
           continue;
-        case 6:
-          if (tag === 48) {
-            message.binCounts.push(reader.int32());
-
-            continue;
-          }
-
-          if (tag === 50) {
-            const end2 = reader.uint32() + reader.pos;
-            while (reader.pos < end2) {
-              message.binCounts.push(reader.int32());
-            }
-
-            continue;
-          }
-
-          break;
         case 7:
           if (tag !== 58) {
             break;
@@ -161,9 +138,6 @@ export const StockItem = {
       displayLabels: globalThis.Array.isArray(object?.displayLabels)
         ? object.displayLabels.map((e: any) => globalThis.String(e))
         : [],
-      binCounts: globalThis.Array.isArray(object?.binCounts)
-        ? object.binCounts.map((e: any) => globalThis.Number(e))
-        : [],
       warehouse: isSet(object.warehouse) ? globalThis.String(object.warehouse) : "",
       dropZone: isSet(object.dropZone) ? globalThis.String(object.dropZone) : "",
     };
@@ -183,9 +157,6 @@ export const StockItem = {
     if (message.displayLabels?.length) {
       obj.displayLabels = message.displayLabels;
     }
-    if (message.binCounts?.length) {
-      obj.binCounts = message.binCounts.map((e) => Math.round(e));
-    }
     if (message.warehouse !== "") {
       obj.warehouse = message.warehouse;
     }
@@ -204,7 +175,6 @@ export const StockItem = {
     message.quantity = object.quantity ?? 0;
     message.state = object.state ?? 0;
     message.displayLabels = object.displayLabels?.map((e) => e) || [];
-    message.binCounts = object.binCounts?.map((e) => e) || [];
     message.warehouse = object.warehouse ?? "";
     message.dropZone = object.dropZone ?? "";
     return message;
