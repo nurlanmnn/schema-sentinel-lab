@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-c084c3e9-c553-4354-9aa2-d5c3d1948d2d",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 4,\n      \"end_line\": 4,\n      \"replacement_lines\": [\n        \"interface Request { payload: string; sku: string; quantity: string }\"\n      ]\n    },\n    {\n      \"start_line\": 9,\n      \"end_line\": 9,\n      \"replacement_lines\": [\n        \"    const sample = StockItem.encode({ sku: request.sku, quantity: request.quantity }).finish();\"\n      ]\n    },\n    {\n      \"start_line\": 10,\n      \"end_line\": 10,\n      \"replacement_lines\": [\n        \"    const fields = { sku: entity.sku, quantity: entity.quantity.toString() };\"\n      ]\n    },\n    {\n      \"start_line\": 11,\n      \"end_line\": 11,\n      \"replacement_lines\": [\n        \"    return { fields, in_stock: entity.quantity > 0n, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\"\n      ]\n    }\n  ],\n  \"rationale\": \"The schema change widens quantity from int32 to int64. With ts-proto forceLong=string, the generated StockItem.quantity is a string. Line 9 must pass the canonical decimal string directly instead of converting to number (which would lose precision for >2^53 values). Line 11 must compare the string quantity as BigInt to preserve strict >0 predicate for 64-bit values. Lines 4 and 10 are unaffected but included in edits to satisfy the constraint that every candidate marked edit must be covered by an edit; they are replaced with identical content.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"ts-proto is configured with forceLong=string for int64 fields\",\n    \"request.quantity is already a valid canonical decimal string (no leading zeros except '0', optional leading '-')\",\n    \"entity.quantity from decode() is a string per forceLong=string\",\n    \"BigInt comparison with string coerces correctly per ES2020\",\n    \"No other files require changes per the task scope\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 4,\n      \"decision\": \"edit\",\n      \"reason\": \"Conservative syntax candidate for property signature; Request.quantity remains string as canonical decimal input per intended behavior. No type change needed but must be covered by edit per constraints.\"\n    },\n    {\n      \"line\": 9,\n      \"decision\": \"edit\",\n      \"reason\": \"Encodes quantity field; must pass string directly to StockItem.encode() because generated field is string (forceLong=string). Number.parseInt would truncate >2^53 values.\"\n    },\n    {\n      \"line\": 10,\n      \"decision\": \"edit\",\n      \"reason\": \"Reads entity.quantity (string) and calls .toString() which is idempotent; preserves canonical decimal string output. Covered by edit per constraints.\"\n    },\n    {\n      \"line\": 11,\n      \"decision\": \"edit\",\n      \"reason\": \"Compares quantity > 0; must use BigInt(entity.quantity) > 0n or entity.quantity > 0n (coercion) to correctly handle 64-bit values. BigInt wrapper removed as redundant since string > 0n coerces per spec.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918135,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2301,
+    "completion_tokens": 742,
+    "total_tokens": 3043,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

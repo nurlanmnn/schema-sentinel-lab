@@ -1,0 +1,34 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field name in the VehicleTelemetry constructor must be updated from speed_mps to ground_speed_mps to match the new schema bindings."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Both the observation key and the attribute access on the entity must be updated to ground_speed_mps."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "The attribute access on the entity used for the speeding threshold check must be updated to ground_speed_mps."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], ground_speed_mps=request['speed'])\n"
+    },
+    {
+      "before": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n",
+      "after": "    fields = {'vehicle_id': entity.vehicle_id, 'ground_speed_mps': entity.ground_speed_mps}\n"
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': fields, 'speeding': entity.ground_speed_mps > 30.0,\n"
+    }
+  ],
+  "rationale": "The schema change renames the field 'speed_mps' to 'ground_speed_mps' while maintaining the same wire index (2) and type (float32). The runtime code uses generated bindings for VehicleTelemetry, so all references to the attribute 'speed_mps' must be updated to 'ground_speed_mps'. Additionally, the intended behavior specifies that the runtime observation key (the key in the 'fields' dictionary) must also change to 'ground_speed_mps'.",
+  "confidence": 1.0,
+  "assumptions": []
+}

@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-a340efad-e30b-4afc-aef2-a48dbb0c8663",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Remove 'name' from the observation fields dictionary for v1 entities as per intended behavior.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Remove 'Name' assignment from v1 Entity construction as the field is now reserved.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId, [\\\"name\\\"] = decoded.Name };\\n\",\n      \"after\": \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId };\\n\"\n    },\n    {\n      \"before\": \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\", Name = \\\"Sensor B\\\" }\\n\",\n      \"after\": \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\" }\\n\"\n    }\n  ],\n  \"rationale\": \"The 'name' field has been removed and reserved in the v1 schema. Consequently, it must be removed from the v1 construction logic (C002) and the decoded observation dictionary (C001) in the C# runtime. The v2 logic remains untouched, and the entity_id is preserved.\",\n  \"confidence\": 1,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919412,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 3091,
+    "completion_tokens": 352,
+    "total_tokens": 3443,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 640
+    }
+  }
+}

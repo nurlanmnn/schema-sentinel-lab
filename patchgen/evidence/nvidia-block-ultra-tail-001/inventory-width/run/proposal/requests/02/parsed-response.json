@@ -1,0 +1,26 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The schema change widens quantity from int32 to int64. While Python's int type handles arbitrary precision, the request['quantity'] value is documented as a canonical decimal string for int64. The current code uses int() which works correctly, but the generated protobuf code may have changed to enforce int64 semantics. This candidate requires clarification on whether the protobuf binding now expects explicit int64 handling or if Python's arbitrary-precision int is sufficient."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "The entity.quantity field is already being converted to string via str(entity.quantity). This correctly produces canonical decimal string representation for both int32 and int64 values in Python. No change needed as Python's str() on int preserves exact signed decimal representation regardless of width."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "The predicate entity.quantity > 0 works identically for both int32 and int64 in Python. The strict > 0 stock predicate is preserved. No change needed as Python's comparison operators handle arbitrary-precision integers correctly."
+    }
+  },
+  "edits": [],
+  "rationale": "Candidate C001 requires clarification on whether the protobuf binding change from int32 to int64 affects how the quantity field should be constructed in Python. The current int() conversion works for canonical decimal strings of any width, but the generated protobuf code may have changed validation or type expectations. Candidates C002 and C003 are unaffected because Python's str() and comparison operators already handle int64 correctly without source changes.",
+  "confidence": 0.7,
+  "assumptions": [
+    "Python's arbitrary-precision int type correctly handles int64 range",
+    "Protobuf Python bindings accept Python int for int64 fields",
+    "Canonical decimal string format is identical for int32 and int64",
+    "Request quantity values are guaranteed to be valid canonical decimal strings within int64 range"
+  ]
+}

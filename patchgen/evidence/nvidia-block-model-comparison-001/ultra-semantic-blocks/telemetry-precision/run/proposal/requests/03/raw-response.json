@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-90060a09-57f2-4140-88ef-d37c65da928e",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"no_change\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"TypeScript number is IEEE 754 binary64, matching the new double wire type. The generated encode() method already accepts number and will serialize full double precision. No producer narrowing to remove.\"\n    },\n    \"C002\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"entity.speedMps is already typed as number by generated bindings. The observation key 'speed_mps' and value pass through unchanged precision. No type or key change needed.\"\n    },\n    \"C003\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"Comparison uses literal 30.0 (binary64) against binary64 entity.speedMps. Threshold semantics are preserved. Both branches of the conditional expression remain valid.\"\n    }\n  },\n  \"edits\": [],\n  \"rationale\": \"All three candidates are unaffected. The TypeScript runtime uses number (binary64) throughout, which already matches the widened double wire type. Generated bindings will be regenerated from the new schema, and the existing source code correctly preserves input precision, observation keys, and the strict >30.0 threshold without modification.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"Regenerated TypeScript bindings will type speedMps as number for double field\",\n    \"No other files in this runtime require edits for this schema change\",\n    \"Coordinated rollout ensures sender and receiver use matching schema versions\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918985,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 1980,
+    "completion_tokens": 355,
+    "total_tokens": 2335,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-3231f42a-538d-4436-a498-df9e3d40beb6",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The field 'name' is renamed to 'display_name' in the schema and the runtime observation key must be updated to 'display_name'. The C# binding property changes from 'Name' to 'DisplayName'.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The C# binding property 'Name' for Simulation.V1.Entity is renamed to 'DisplayName'.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId, [\\\"name\\\"] = decoded.Name };\\n\",\n      \"after\": \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId, [\\\"display_name\\\"] = decoded.DisplayName };\\n\"\n    },\n    {\n      \"before\": \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\", Name = \\\"Sensor B\\\" }\\n\",\n      \"after\": \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\", DisplayName = \\\"Sensor B\\\" }\\n\"\n    }\n  ],\n  \"rationale\": \"The schema change renames 'name' to 'display_name' for v1 Entity. According to the intended behavior, the runtime observation key (used in the 'fields' dictionary) must become 'display_name'. In C#, the regenerated protobuf bindings will change the property 'Name' to 'DisplayName'. Both the observation dictionary and the object initialization are updated to reflect these changes.\",\n  \"confidence\": 1.0,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919344,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 3074,
+    "completion_tokens": 414,
+    "total_tokens": 3488,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 640
+    }
+  }
+}

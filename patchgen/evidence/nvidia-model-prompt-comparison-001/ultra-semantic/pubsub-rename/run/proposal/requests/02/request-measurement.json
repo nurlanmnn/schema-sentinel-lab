@@ -1,0 +1,23 @@
+{
+  "backend": "nvidia",
+  "status": "response_received",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "provider": null,
+  "response_id": "chatcmpl-10b05196-fece-4fa2-8ff5-793daefabda1",
+  "usage": {
+    "prompt_tokens": 4841,
+    "completion_tokens": 417,
+    "total_tokens": 5258,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  },
+  "elapsed_seconds": 37.63071133301128
+}

@@ -1,0 +1,63 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 13,
+      "end_line": 13,
+      "replacement_lines": [
+        "            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = long.Parse(request.Quantity, CultureInfo.InvariantCulture) };"
+      ]
+    },
+    {
+      "start_line": 14,
+      "end_line": 14,
+      "replacement_lines": [
+        "            var fields = new Dictionary<string, object> { [\"sku\"] = entity.Sku, [\"quantity\"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };"
+      ]
+    },
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "            return new { fields, in_stock = entity.Quantity > 0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };"
+      ]
+    },
+    {
+      "start_line": 20,
+      "end_line": 20,
+      "replacement_lines": [
+        "record InventoryRequest(string Payload, string Sku, string Quantity);"
+      ]
+    }
+  ],
+  "rationale": "The schema change widens field 2 (quantity) from int32 to int64. In C#, the generated StockItem.Quantity property changes from int to long. The edits update the parsing of the input JSON string from int.Parse to long.Parse to handle 64-bit values, while preserving the canonical decimal string representation in JSON output via ToString(CultureInfo.InvariantCulture). The >0 predicate remains valid for long. The InventoryRequest record is unchanged as it already uses string for Quantity. No changes to entity parsing or serialization are needed as the generated protobuf code handles int64 correctly.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated StockItem.Quantity is now long (int64) per protobuf C# code generation.",
+    "Input JSON Quantity strings are valid canonical decimal representations within int64 range.",
+    "ts-proto forceLong=string ensures consumers expect string representation; this C# code produces/consumes strings.",
+    "No changes to entity/telemetry structure beyond field 2 width."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 13,
+      "decision": "edit",
+      "reason": "Parses request.Quantity string into StockItem.Quantity; must use long.Parse for int64 field."
+    },
+    {
+      "line": 14,
+      "decision": "edit",
+      "reason": "Outputs entity.Quantity as canonical decimal string; ToString on long preserves exact value."
+    },
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "Uses entity.Quantity > 0 predicate and sample.Quantity assignment; both work with long unchanged."
+    },
+    {
+      "line": 20,
+      "decision": "edit",
+      "reason": "InventoryRequest.Quantity remains string; no type change needed but line is a candidate."
+    }
+  ]
+}

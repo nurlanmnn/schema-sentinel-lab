@@ -1,0 +1,75 @@
+{
+  "review_version": "1.0",
+  "change_id": "pubsub-name-removal",
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "failed",
+  "mode": "live_model",
+  "strategy": "candidate_semantic_blocks",
+  "approval_eligible": false,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "3a1a66c80c692c07c6c13f7fd57fd4b1c7d361b337938a972f56a67a20857725",
+      "bytes": 17554
+    },
+    "request.json": {
+      "sha256": "d10f420d0e134b11935416c744e60ce89431fc2f4e5a64d91776d97043f40427",
+      "bytes": 1019
+    },
+    "report.json": {
+      "sha256": "c8c3c13776d1e3857de787db2a34130d17b79740ec0377e59c4b0ef1ed687a2d",
+      "bytes": 5807
+    },
+    "provenance.json": {
+      "sha256": "023d9984e86d21149f4e190edd8e45ffe0a60b032cff83ab43f18addc06337af",
+      "bytes": 1048
+    },
+    "detector.json": {
+      "sha256": "d64b5541becbe9cbd07235667e4a0b18ac884d15c9a6eaaa1634a8614ca068c4",
+      "bytes": 2189
+    },
+    "locator.json": {
+      "sha256": "b2e9664dd6f2781f22d7d576f2ade03807a20c35ed773fb26800411394827252",
+      "bytes": 7843
+    },
+    "measurement.json": {
+      "sha256": "3a8c08d80c0c84763fdae8d33b671ccd8741c6c7203814a40c990db93d2ca898",
+      "bytes": 130
+    },
+    "implementation.json": {
+      "sha256": "4fa10e2e169da5c016d4ead17201cb46426d04cff6ec1ca07f8877daa81f1344",
+      "bytes": 2886
+    },
+    "proposal/report.json": {
+      "sha256": "2d0be676eb2aa974674a72983f89bcb6bfd9c9d7d04437d9cf5fa38d099a5848",
+      "bytes": 2327
+    },
+    "proposal/nvidia-client-source.py": {
+      "sha256": "946f53e23b6fa0050873569d5316ec427097061d455e2f1e61509911f18b6449",
+      "bytes": 6401
+    },
+    "proposal/pubsub-harness/testbed/pubsub/run.py": {
+      "sha256": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+      "bytes": 12892
+    },
+    "proposal/pubsub-harness/testbed/pubsub/broker.py": {
+      "sha256": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+      "bytes": 6550
+    },
+    "proposal/pubsub-harness/testbed/pubsub/topics.json": {
+      "sha256": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3",
+      "bytes": 221
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

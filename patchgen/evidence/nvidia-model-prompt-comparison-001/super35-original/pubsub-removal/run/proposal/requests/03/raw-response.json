@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-1ec9c565-f22d-4cb7-838d-0fc726222fd3",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 13,\n      \"end_line\": 13,\n      \"replacement_lines\": [\n        \"  const fields = { entity_id: entity.entityId };\"\n      ]\n    },\n    {\n      \"start_line\": 83,\n      \"end_line\": 83,\n      \"replacement_lines\": [\n        \"    ? EntityV1.encode({ entityId: \\\"ts_303\\\" }).finish()\"\n      ]\n    }\n  ],\n  \"rationale\": \"Remove Entity.name references from the TypeScript runtime: the v1 read path no longer copies the deleted name field into decoded observations, and the v1 construction payload omits name. v2 is untouched and remains entity_id-only.\",\n  \"confidence\": 0.97,\n  \"assumptions\": [\n    \"Generated TypeScript bindings for v1 expose entityId but no longer expose name after buf generate.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 13,\n      \"decision\": \"edit\",\n      \"reason\": \"Decoded observation construction reads EntityV1.name for v1; must remove the name spread so decoded v1 observations do not reference the removed field.\"\n    },\n    {\n      \"line\": 83,\n      \"decision\": \"edit\",\n      \"reason\": \"V1 construction payload sets name: \\\"Sensor C\\\"; must remove name to match the reserved v1 schema field 2.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918484,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 4094,
+    "completion_tokens": 329,
+    "total_tokens": 4423,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

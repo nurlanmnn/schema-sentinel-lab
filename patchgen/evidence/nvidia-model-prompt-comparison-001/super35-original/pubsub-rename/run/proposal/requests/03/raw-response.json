@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-06ba0e79-f6fc-4036-aac6-34d720144670",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 13,\n      \"end_line\": 13,\n      \"replacement_lines\": [\n        \"  const fields = { entity_id: entity.entityId, ...(version === \\\"v1\\\" ? { display_name: (entity as EntityV1).displayName } : {} ) };\"\n      ]\n    },\n    {\n      \"start_line\": 83,\n      \"end_line\": 83,\n      \"replacement_lines\": [\n        \"    ? EntityV1.encode({ entityId: \\\"ts_303\\\", displayName: \\\"Sensor C\\\" }).finish()\"\n      ]\n    }\n  ],\n  \"rationale\": \"Renamed v1 Entity.name field to display_name on wire field 2. TypeScript generated bindings expose camelCase displayName while the wire field remains 2. Updated the runtime observation key and the v1 test construction site to use display_name/displayName respectively. Preserved entity_id, all wire values, and v2 behavior.\",\n  \"confidence\": 0.94,\n  \"assumptions\": [\n    \"Generated TypeScript bindings rename proto field name to displayName in camelCase.\",\n    \"Wire field number 2 is unchanged, so existing encoded data decodes correctly under the new field name.\",\n    \"Only runtimes/typescript/main.ts is in scope; no other language files or generated bindings are edited.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 13,\n      \"decision\": \"edit\",\n      \"reason\": \"Line constructs the runtime observation fields object and reads v1 Entity.name; must be migrated to display_name/displayName.\"\n    },\n    {\n      \"line\": 83,\n      \"decision\": \"edit\",\n      \"reason\": \"Line constructs a v1 Entity for local execution and passes the removed name field; must use displayName.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918474,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 4074,
+    "completion_tokens": 415,
+    "total_tokens": 4489,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

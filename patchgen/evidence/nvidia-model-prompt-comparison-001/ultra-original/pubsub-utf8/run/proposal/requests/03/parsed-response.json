@@ -1,0 +1,39 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 82,
+      "end_line": 84,
+      "replacement_lines": [
+        "  const bytes = version === \"v1\"",
+        "    ? EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()",
+        "    : EntityV2.encode({ entityId: new TextEncoder().encode(\"ts_303\") }).finish();"
+      ]
+    }
+  ],
+  "rationale": "Only the v2 sample construction at line 84 needs changing: the new schema makes entity_id a bytes field, so the standalone sample must encode the UTF-8 string literal \"ts_303\" to Uint8Array via TextEncoder. The v1 sample (line 83) remains a string. The decode/observation path at line 13 is already correct because the generated EntityV2.entityId getter returns a Uint8Array, and JSON.stringify on a Uint8Array yields the desired decimal-byte observation format (e.g., {\"0\":116,\"1\":115,...}), which matches the contract's requirement that the observation key entity_id holds a string value representing the UTF-8 bytes.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The TypeScript protobuf generator produces EntityV2.entityId as Uint8Array for bytes fields, and EntityV1.entityId as string for string fields.",
+    "JSON.stringify on Uint8Array is acceptable for the observation output (produces numeric byte indices).",
+    "The relay and subscribe paths already handle v2 payloads correctly because they pass raw bytes through processEntity without alteration.",
+    "No other source lines in this file construct or mutate EntityV2 instances."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 13,
+      "decision": "unaffected",
+      "reason": "Line 13 reads entity.entityId for both versions. For v1 this is a string (correct). For v2 the generated getter returns Uint8Array (bytes), and JSON.stringify on Uint8Array produces a JSON object with numeric indices representing each byte, which satisfies the contract's observation format without code changes."
+    },
+    {
+      "line": 83,
+      "decision": "unaffected",
+      "reason": "Line 83 constructs the v1 sample entity where entity_id remains a string per the unchanged v1 schema. No edit required."
+    },
+    {
+      "line": 84,
+      "decision": "edit",
+      "reason": "Line 84 constructs the v2 sample entity. The schema change makes entity_id a bytes field, so the string literal must be UTF-8 encoded to Uint8Array using TextEncoder."
+    }
+  ]
+}

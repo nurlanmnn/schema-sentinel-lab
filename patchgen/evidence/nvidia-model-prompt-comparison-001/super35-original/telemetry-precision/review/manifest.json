@@ -1,0 +1,67 @@
+{
+  "review_version": "1.0",
+  "change_id": "telemetry-speed-precision",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "failed",
+  "mode": "live_model",
+  "strategy": "candidate_edits",
+  "approval_eligible": false,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "0faf27092d2a909e455354e99d8be0566a97135246eeb4816c52130f5ce238e4",
+      "bytes": 10651
+    },
+    "request.json": {
+      "sha256": "60b84e534e8b04b34525f458e1b719b9f937ab939a3230992b12d951a62e3624",
+      "bytes": 1029
+    },
+    "report.json": {
+      "sha256": "90e200b481c67ab1680bebd344db33494a8d7bc8a3c99579d6b5901c22471a29",
+      "bytes": 5232
+    },
+    "provenance.json": {
+      "sha256": "e92c94b34be2bfc40c3c01f4b2cd08a6fdfd2a5471551cb756a57add39062090",
+      "bytes": 1048
+    },
+    "detector.json": {
+      "sha256": "a46893a9a72f992da5b1b33529e399942005c6bf949142c245a522aa71c78932",
+      "bytes": 2588
+    },
+    "locator.json": {
+      "sha256": "bdaff2c8d49b6a3525562235d62327fb6325ca3e00114e36a245a3a788c6776f",
+      "bytes": 14907
+    },
+    "measurement.json": {
+      "sha256": "a573b72f31d06d3991b7f856915447b5c06663add1379cab368f5ebd6e962bbe",
+      "bytes": 130
+    },
+    "implementation.json": {
+      "sha256": "2f53b4c74bc3265237fb791050eca2772f7e0d48a9e0469b89c48ac1e9250762",
+      "bytes": 2886
+    },
+    "proposal/report.json": {
+      "sha256": "5e4ef20008099e291472cc1fa77711807ac699fb51af744b5def279e6d8cdbad",
+      "bytes": 1776
+    },
+    "proposal/nvidia-client-source.py": {
+      "sha256": "1f662d6f05239f4a5dad5f587b52e0e2da487630f28184fae4e202d8e7d72c82",
+      "bytes": 5963
+    },
+    "proposal/telemetry-oracle-source.py": {
+      "sha256": "c1b9c54e2cae1fcdef3628a819ce4462dde1c900b5582e58cfa6b2518885f8d8",
+      "bytes": 7326
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

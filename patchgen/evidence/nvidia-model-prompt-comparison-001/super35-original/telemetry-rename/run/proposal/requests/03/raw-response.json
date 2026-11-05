@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-54e819e0-4fa6-458d-ad13-24ab918f568a",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 9,\n      \"end_line\": 9,\n      \"replacement_lines\": [\n        \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, groundSpeedMps: request.speed }).finish();\"\n      ]\n    },\n    {\n      \"start_line\": 10,\n      \"end_line\": 10,\n      \"replacement_lines\": [\n        \"    const fields = { vehicle_id: entity.vehicleId, ground_speed_mps: entity.groundSpeedMps };\"\n      ]\n    },\n    {\n      \"start_line\": 11,\n      \"end_line\": 11,\n      \"replacement_lines\": [\n        \"    return { fields, speeding: entity.groundSpeedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\"\n      ]\n    }\n  ],\n  \"rationale\": \"Renamed VehicleTelemetry speedMps to groundSpeedMps across the encoder object key, decoder field access, speeding threshold check, and output runtime observation key, while preserving vehicleId and strict threshold greater than 30.0 m/s.\",\n  \"confidence\": 0.99,\n  \"assumptions\": [\n    \"The generated TypeScript bindings expose groundSpeedMps corresponding to proto field ground_speed_mps.\",\n    \"Tests are not to be edited.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 9,\n      \"decision\": \"edit\",\n      \"reason\": \"Encoder object key uses speedMps for wire field 2; rename to groundSpeedMps per schema change.\"\n    },\n    {\n      \"line\": 10,\n      \"decision\": \"edit\",\n      \"reason\": \"Decoder field access uses entity.speedMps and output key speed_mps; both must migrate to groundSpeedMps/ground_speed_mps.\"\n    },\n    {\n      \"line\": 11,\n      \"decision\": \"edit\",\n      \"reason\": \"Speeding threshold reads entity.speedMps; must read entity.groundSpeedMps while keeping threshold > 30.0.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918509,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2349,
+    "completion_tokens": 480,
+    "total_tokens": 2829,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

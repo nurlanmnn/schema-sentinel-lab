@@ -1,0 +1,22 @@
+[
+  {
+    "case": "inventory-width",
+    "profile": "inventory-quantity-width",
+    "strategy": "deterministic_inventory_width",
+    "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
+    "structural_category": "field_type_changed",
+    "expected_sites": 9,
+    "fixture_sha256": "164f0bf693c40b14b91223ceed6c90e425084d393f82b5710a9d466ffb5c1201",
+    "ground_truth_sha256": "c7020a27617157240a74da2f6663909d5d84e6bcea78c902ccd022ba124038a7"
+  },
+  {
+    "case": "telemetry-quantized",
+    "profile": "telemetry-speed-quantized",
+    "strategy": "deterministic_telemetry_quantized",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "structural_category": "field_type_changed",
+    "expected_sites": 3,
+    "fixture_sha256": "d4161053dcb063c810a4813640d9bbff7eeec6e350b86b961eec81acef8681f8",
+    "ground_truth_sha256": "098c1f3c6facbe97f408dd4baf6f069ee7f43919f65456d4c68a2a18ef4502f3"
+  }
+]

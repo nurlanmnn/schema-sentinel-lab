@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-5d1fea1d-9b8f-4b50-a562-b1e52b2a02b9",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 9,\n      \"end_line\": 9,\n      \"replacement_lines\": [\n        \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: Math.trunc(Math.max(-2147483648, Math.min(2147483647, request.speed))) }).finish();\"\n      ]\n    },\n    {\n      \"start_line\": 11,\n      \"end_line\": 11,\n      \"replacement_lines\": [\n        \"    return { fields, speeding: entity.speedMps > 30, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\"\n      ]\n    }\n  ],\n  \"rationale\": \"Convert float request.speed to a clamped truncated int32 speedMps when encoding, matching the new protobuf int32 field. Keep the existing strict threshold comparison on the decoded integer speedMps.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"request.speed is finite; non-finite input is out of scope because the intended behavior applies to finite speeds only.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 9,\n      \"decision\": \"edit\",\n      \"reason\": \"Encoding site must convert request.speed to the new int32 speed_mps field using clamp-to-range then truncate-toward-zero semantics.\"\n    },\n    {\n      \"line\": 10,\n      \"decision\": \"unaffected\",\n      \"reason\": \"entity.speedMps now holds the decoded int32 speed; no conversion is needed when reading it into fields.\"\n    },\n    {\n      \"line\": 11,\n      \"decision\": \"edit\",\n      \"reason\": \"Speeding check must compare decoded integer speedMps to the existing strict threshold >30.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918568,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2303,
+    "completion_tokens": 427,
+    "total_tokens": 2730,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

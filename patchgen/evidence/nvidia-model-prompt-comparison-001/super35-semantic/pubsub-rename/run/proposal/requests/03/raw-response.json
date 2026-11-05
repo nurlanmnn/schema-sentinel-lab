@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-56519748-aa0b-4e09-82c7-9bcb2e50592c",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\"outcome\":\"patch\",\"edits\":[{\"start_line\":13,\"end_line\":13,\"replacement_lines\":[\"  const fields = { entity_id: entity.entityId, ...(version === \\\"v1\\\" ? { display_name: (entity as EntityV1).displayName } : {}) };\"}]},{\"start_line\":83,\"end_line\":83,\"replacement_lines\":[\"    ? EntityV1.encode({ entityId: \\\"ts_303\\\", displayName: \\\"Sensor C\\\" }).finish()\"]}],\"rationale\":\"Renamed the v1 Entity.name field to display_name while preserving wire field 2. Updated the TypeScript observation construction to emit runtime key display_name and updated the v1 encode sample to construct displayName. v2 code and all other logic remain unchanged, preserving entity_id and all string values across subscribers.\", \"confidence\": 0.97, \"assumptions\": [\"Generated TypeScript bindings expose protobuf field name as displayName and accessor entityId for entity_id.\"], \"candidate_reviews\":[{\"line\":13,\"decision\":\"edit\",\"reason\":\"Member expression/pair uses the old runtime key name and must become display_name.\"},{\"line\":83,\"decision\":\"edit\",\"reason\":\"Pair constructs the old field name in a v1 message literal and must become displayName.\"},{\"line\":1,\"decision\":\"unaffected\",\"reason\":\"Import statement unrelated to the renamed field.\"},{\"line\":2,\"decision\":\"unaffected\",\"reason\":\"V1 entity import unchanged; field access updates are local.\"},{\"line\":3,\"decision\":\"unaffected\",\"reason\":\"V2 entity import unaffected because v2 schema is unchanged.\"},{\"line\":8,\"decision\":\"unaffected\",\"reason\":\"Function signature does not reference the field name.\"},{\"line\":12,\"decision\":\"unaffected\",\"reason\":\"Decoding uses generated bindings and does not hardcode field names.\"},{\"line\":14,\"decision\":\"unaffected\",\"reason\":\"Logging observes the fields object produced by the edited line.\"},{\"line\":34,\"decision\":\"unaffected\",\"reason\":\"Subscription topic registration is unrelated to field naming.\"},{\"line\":39,\"decision\":\"unaffected\",\"reason\":\"Payload decoding delegates to processEntity.\"},{\"line\":57,\"decision\":\"unaffected\",\"reason\":\"Relay processing calls processEntity; no direct field access.\"},{\"line\":63,\"decision\":\"unaffected\",\"reason\":\"Encoding the decoded entity for downstream relay preserves wire bytes.\"},{\"line\":82,\"decision\":\"unaffected\",\"reason\":\"Version selection logic is unchanged.\"},{\"line\":84,\"decision\":\"unaffected\",\"reason\":\"V2 encode path remains unchanged per contract.\"},{\"line\":85,\"decision\":\"unaffected\",\"reason\":\"Process entity invocation is unchanged.\"}]}\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918580,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 4293,
+    "completion_tokens": 621,
+    "total_tokens": 4914,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

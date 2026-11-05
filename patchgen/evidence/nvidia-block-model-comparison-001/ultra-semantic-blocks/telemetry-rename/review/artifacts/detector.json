@@ -1,0 +1,53 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "old_schema_sha256": "e3bd750f620e4d2ff57e6d206386f6e1bd3a7708bd6d624326dcba04c924bb2f",
+  "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+  "old_descriptor_sha256": "e40605ee4dd492d170ab342a46d99528564f2f50a93b40c82513743c46ebcb7b",
+  "new_descriptor_sha256": "b96a349374cd9d8de0f55aa14f142ed8408c1f96e5a26978c3ca292e427d9541",
+  "events": [
+    {
+      "category": "field_renamed",
+      "message": "simulation.telemetry.VehicleTelemetry",
+      "field_number": 2,
+      "old_name": "speed_mps",
+      "new_name": "ground_speed_mps",
+      "old_field": {
+        "name": "speed_mps",
+        "number": 2,
+        "type": 2,
+        "type_name": "",
+        "label": 1,
+        "json_name": "speedMps",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      },
+      "new_field": {
+        "name": "ground_speed_mps",
+        "number": 2,
+        "type": 2,
+        "type_name": "",
+        "label": 1,
+        "json_name": "groundSpeedMps",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      }
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "telemetry-speed-rename",
+    "category": "field_renamed",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float ground_speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Rename VehicleTelemetry.speed_mps to ground_speed_mps on wire field 2. Keep float32 meters per second and strict speeding threshold greater than 30.0 m/s. Runtime observation key becomes ground_speed_mps. Preserve vehicle_id and producer wire bytes. Entity v1/v2 behavior is unchanged. Do not edit tests."
+}

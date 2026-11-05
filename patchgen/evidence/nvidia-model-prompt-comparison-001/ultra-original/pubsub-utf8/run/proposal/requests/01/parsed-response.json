@@ -1,0 +1,65 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };"
+      ]
+    },
+    {
+      "start_line": 21,
+      "end_line": 21,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) };"
+      ]
+    },
+    {
+      "start_line": 67,
+      "end_line": 67,
+      "replacement_lines": [
+        "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }"
+      ]
+    },
+    {
+      "start_line": 68,
+      "end_line": 68,
+      "replacement_lines": [
+        "        : new Simulation.V2.Entity { EntityId = Google.Protobuf.ByteString.CopyFromUtf8(\"cs_202\") };"
+      ]
+    }
+  ],
+  "rationale": "Lines 15 (v1 decoding) is unaffected - v1 EntityId remains string per spec. Line 21 (v2 decoding) requires edit: EntityId becomes ByteString, must decode via UTF-8 to string for observations. Lines 67-68 (construction) require edits: v1 unchanged (string), v2 must encode \"cs_202\" via UTF-8 to ByteString. The relay at line 81 forces v1 only, so no v2 relay changes needed. Generated bindings are excluded from edits.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Simulation.V2.Entity.EntityId is now ByteString in generated code",
+    "ByteString.CopyFromUtf8 and ByteString.ToByteArray are available",
+    "v1 EntityId remains string type",
+    "Observations output must be string key/value pairs",
+    "Sample identifier \"cs_202\" preserved identically across versions",
+    "Relay endpoint only processes v1 messages (hardcoded at line 81)"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "unaffected",
+      "reason": "v1 decoding: EntityId remains string per schema change (only v2 changes). Field access decoded.EntityId returns string, correctly assigned to fields[\"entity_id\"] as string. No edit needed."
+    },
+    {
+      "line": 21,
+      "decision": "edit",
+      "reason": "v2 decoding: EntityId is now ByteString (bytes in proto). Must convert to UTF-8 string for observations output. Requires System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray())."
+    },
+    {
+      "line": 67,
+      "decision": "unaffected",
+      "reason": "v1 construction: EntityId remains string per schema change. Assignment EntityId = \"cs_202\" is correct for v1. No edit needed, but line covered by edit range spanning lines 67-68 for atomic version-branch replacement."
+    },
+    {
+      "line": 68,
+      "decision": "edit",
+      "reason": "v2 construction: EntityId is now ByteString. Must encode \"cs_202\" via UTF-8 using Google.Protobuf.ByteString.CopyFromUtf8(\"cs_202\"). This ensures identical round-trip for valid UTF-8 per spec."
+    }
+  ]
+}

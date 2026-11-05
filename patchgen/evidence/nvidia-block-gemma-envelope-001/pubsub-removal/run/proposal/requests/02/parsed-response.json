@@ -1,0 +1,26 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Remove the assignment of the 'name' field to the fields dictionary for v1 entities as per the intended behavior."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Remove the assignment of the 'name' field during v1 entity construction as per the intended behavior."
+    }
+  },
+  "edits": [
+    {
+      "before": "    if version == \"v1\":\n        fields[\"name\"] = entity.name\n",
+      "after": ""
+    },
+    {
+      "before": "        if args.version == \"v1\":\n            entity.name = \"Sensor A\"\n",
+      "after": ""
+    }
+  ],
+  "rationale": "The intended behavior requires removing Entity.name from v1 construction, reads, and decoded observations. C001 handles the read/observation part in process_entity, and C002 handles the construction part in the main block. Both are removed to comply with the schema change where field 2 is now reserved.",
+  "confidence": 1.0,
+  "assumptions": []
+}

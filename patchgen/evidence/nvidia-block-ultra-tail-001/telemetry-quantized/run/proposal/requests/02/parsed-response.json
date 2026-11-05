@@ -1,0 +1,35 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Constructing a VehicleTelemetry message to send; the speed field is now int32 on the wire. Must quantize finite request['speed'] (float) to int32 meters per second with clamp and truncation toward zero before assignment."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "Reading the decoded entity.speed_mps; after regeneration this is already an int value. The observation returns the integer speed as required, no source change needed."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "Comparing decoded entity.speed_mps (now int) against float literal 30.0. Must change the threshold to integer 30 to match the intended strict >30 comparison on the integer wire value."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    speed = request['speed']\n    if not (isinstance(speed, float) and (speed != speed or speed == float('inf') or speed == float('-inf'))):\n        v = int(speed)\n        if v > 2147483647:\n            v = 2147483647\n        elif v < -2147483648:\n            v = -2147483648\n        speed_mps = v\n    else:\n        speed_mps = 0\n    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=speed_mps)\n"
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': fields, 'speeding': entity.speed_mps > 30,\n"
+    }
+  ],
+  "rationale": "C001 quantizes the outgoing speed: finite floats are truncated toward zero via int(), then clamped to int32 range; non-finite values become 0. C003 changes the comparison from 30.0 to 30 so the strict >30 threshold applies to the decoded integer speed_mps. C002 simply reads the already-integer field and requires no change.",
+  "confidence": 0.95,
+  "assumptions": [
+    "request['speed'] is always a JSON number (float) per the existing contract.",
+    "Non-finite speed values are treated as 0 per typical quantization fallback.",
+    "The generated protobuf binding exposes speed_mps as a Python int after regeneration.",
+    "No other code paths construct VehicleTelemetry messages with speed_mps."
+  ]
+}

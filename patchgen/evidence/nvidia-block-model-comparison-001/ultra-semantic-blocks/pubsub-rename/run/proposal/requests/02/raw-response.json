@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-a1179508-0f58-4bbb-9795-257867deee45",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"In v1, the proto field is renamed from 'name' to 'display_name' on wire field 2. The generated Python accessor becomes 'display_name'. The observation key must change from 'name' to 'display_name' per intended_behavior.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"In the CLI demo path for v1, the code constructs an Entity and sets the 'name' attribute. With regenerated bindings, the attribute is 'display_name'.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    if version == \\\"v1\\\":\\n        fields[\\\"name\\\"] = entity.name\\n\",\n      \"after\": \"    if version == \\\"v1\\\":\\n        fields[\\\"display_name\\\"] = entity.display_name\\n\"\n    },\n    {\n      \"before\": \"        entity = module.Entity(entity_id=\\\"py_101\\\")\\n        if args.version == \\\"v1\\\":\\n            entity.name = \\\"Sensor A\\\"\\n\",\n      \"after\": \"        entity = module.Entity(entity_id=\\\"py_101\\\")\\n        if args.version == \\\"v1\\\":\\n            entity.display_name = \\\"Sensor A\\\"\\n\"\n    }\n  ],\n  \"rationale\": \"Two edits update the Python runtime to use the regenerated v1 accessor 'display_name' (wire field 2) and the observation key 'display_name'. v2 is unchanged. The subscribe path reuses process_entity so both schema-version topics are handled.\",\n  \"confidence\": 0.99,\n  \"assumptions\": [\n    \"Regenerated Python bindings expose the field as 'display_name'.\",\n    \"No other source files need changes for this runtime.\",\n    \"The in-memory pub/sub delivers base64-encoded protobuf bytes for both entity.v1 and entity.v2 topics.\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918792,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2908,
+    "completion_tokens": 447,
+    "total_tokens": 3355,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

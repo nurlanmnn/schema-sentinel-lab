@@ -1,0 +1,34 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "The Request interface defines JSON input fields as strings. Since the JSON input quantity is already a canonical decimal string per intended_behavior, no type change is needed here. The string type remains correct for both int32 and int64 producer inputs."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Number.parseInt returns a JavaScript number (double), which cannot precisely represent all int64 values. The new schema uses int64 quantity, and ts-proto with forceLong=string generates Long fields. Must use BigInt for exact int64 construction to preserve canonical decimal semantics."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "entity.quantity is a Long (from ts-proto forceLong=string). Calling .toString() on Long produces the canonical decimal string representation, which matches intended_behavior exactly. No change needed for the observation output."
+    },
+    "C004": {
+      "decision": "unaffected",
+      "reason": "BigInt(entity.quantity) correctly converts Long to BigInt for the strict >0 stock predicate. Long implements valueOf/toString for BigInt conversion. The predicate logic and constructed_payload serialization remain valid after C002 fix."
+    }
+  },
+  "edits": [
+    {
+      "before": "    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10) }).finish();\n",
+      "after": "    const sample = StockItem.encode({ sku: request.sku, quantity: BigInt(request.quantity) }).finish();\n"
+    }
+  ],
+  "rationale": "The schema change widens quantity from int32 to int64. The ts-proto generated code with forceLong=string uses Long objects for int64 fields. The Request.quantity input is already a canonical decimal string per intended_behavior. Number.parseInt loses precision for values >2^53; BigInt(request.quantity) preserves exact int64 semantics. The observation output (C003) and stock predicate (C004) already work correctly with Long values. Only the construction site (C002) needs fixing to pass a BigInt (which ts-proto accepts for int64 encode) instead of a lossy number.",
+  "confidence": 0.95,
+  "assumptions": [
+    "ts-proto generated StockItem.encode accepts BigInt for int64 fields (standard behavior with forceLong=string)",
+    "Request.quantity input strings are valid canonical decimal integers (no leading +, no leading zeros except '0', no non-digit chars)",
+    "Consumers migrate before out-of-int32 producers as stated in intended_behavior"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "v1 Entity.entity_id remains a string."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "v2 Entity.entity_id is now bytes and must be UTF-8 decoded for the observation dictionary."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "v1 Entity.entity_id remains a string."
+    },
+    "C004": {
+      "decision": "edit",
+      "reason": "v2 Entity.entity_id is now bytes and must be UTF-8 encoded from the sample string."
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields = new() { [\"entity_id\"] = decoded.EntityId };\n",
+      "after": "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId) };\n"
+    },
+    {
+      "before": "        : new Simulation.V2.Entity { EntityId = \"cs_202\" };\n",
+      "after": "        : new Simulation.V2.Entity { EntityId = Google.Protobuf.ByteString.CopyFromUtf8(\"cs_202\") };\n"
+    }
+  ],
+  "rationale": "The schema change for v2 Entity.entity_id from string to bytes requires updating the runtime to handle the type change. In C# Protobuf bindings, 'bytes' maps to 'ByteString'. For observations, the value must be decoded from UTF-8 back to a string. For construction of the sample entity, the string 'cs_202' must be encoded to ByteString using UTF-8. v1 behavior remains untouched as requested.",
+  "confidence": 1.0,
+  "assumptions": [
+    "The generated bindings for Simulation.V2.Entity now use ByteString for EntityId."
+  ]
+}

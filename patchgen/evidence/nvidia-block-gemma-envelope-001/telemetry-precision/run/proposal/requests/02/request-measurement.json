@@ -1,0 +1,18 @@
+{
+  "backend": "nvidia",
+  "status": "response_received",
+  "model": "google/gemma-4-31b-it",
+  "json_fence_removed": true,
+  "provider": null,
+  "response_id": "chatcmpl-f6fd5475-889a-4f2a-8bd3-23481479f095",
+  "usage": {
+    "prompt_tokens": 2101,
+    "completion_tokens": 320,
+    "total_tokens": 2421,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 37.61950575001538
+}

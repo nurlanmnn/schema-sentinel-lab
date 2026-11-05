@@ -1,0 +1,50 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 10,
+      "end_line": 10,
+      "replacement_lines": [
+        "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], ground_speed_mps=request['speed'])"
+      ]
+    },
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "    fields = {'vehicle_id': entity.vehicle_id, 'ground_speed_mps': entity.ground_speed_mps}"
+      ]
+    },
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "    return {'fields': fields, 'speeding': entity.ground_speed_mps > 30.0,"
+      ]
+    }
+  ],
+  "rationale": "Renamed field references from 'speed_mps' to 'ground_speed_mps' in construction, field extraction, and speeding threshold check to match the protobuf schema change. The wire field number (2) and type (float32) remain unchanged, so serialization/deserialization logic is unaffected. The runtime observation key in the output dict is updated to 'ground_speed_mps' as specified.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The regenerated protobuf bindings expose 'ground_speed_mps' as the Python attribute for field 2.",
+    "The input request dict key 'speed' is intentional and maps to the new field name.",
+    "The speeding threshold logic (> 30.0) is preserved exactly as specified."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": "Constructor keyword argument 'speed_mps' must be renamed to 'ground_speed_mps' to match the updated protobuf schema field name."
+    },
+    {
+      "line": 11,
+      "decision": "edit",
+      "reason": "Field access 'entity.speed_mps' and dict key 'speed_mps' must be renamed to 'ground_speed_mps' for consistency with the schema change and runtime observation key requirement."
+    },
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Field access 'entity.speed_mps' in the speeding threshold comparison must be renamed to 'ground_speed_mps' to use the correct field after schema change."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-6f77126f-3493-462a-aca3-b75d4377ebe7",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 33,\n      \"end_line\": 33,\n      \"replacement_lines\": [\n        \"        fields[\\\"display_name\\\"] = entity.display_name\"\n      ]\n    },\n    {\n      \"start_line\": 117,\n      \"end_line\": 117,\n      \"replacement_lines\": [\n        \"            entity.display_name = \\\"Sensor A\\\"\"\n      ]\n    }\n  ],\n  \"rationale\": \"Renamed v1 Entity.name to display_name on wire field 2. Updated the runtime observation key to display_name and migrated both the read path (process_entity) and construction path (__main__) to the new generated field name. Empty/Unicode/escaped values are preserved transparently because proto3 string round-trips unchanged and serialization uses the same wire field number.\",\n  \"confidence\": 0.97,\n  \"assumptions\": [\n    \"Generated Python bindings have been regenerated from the new schema so entity.display_name exists.\",\n    \"V2 bindings are unchanged and their code path does not reference name/display_name in this file.\",\n    \"The JSON observation key is runtime-only and does not affect wire compatibility.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 33,\n      \"decision\": \"edit\",\n      \"reason\": \"Reads entity.name for v1 observation; must read entity.display_name after the rename.\"\n    },\n    {\n      \"line\": 117,\n      \"decision\": \"edit\",\n      \"reason\": \"Constructs entity.name for v1; must set entity.display_name after the rename.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918467,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 4622,
+    "completion_tokens": 363,
+    "total_tokens": 4985,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

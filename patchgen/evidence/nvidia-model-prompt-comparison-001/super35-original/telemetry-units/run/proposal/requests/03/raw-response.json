@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-264c9109-abee-4e8c-832d-0531b710c51e",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 9,\n      \"end_line\": 11,\n      \"replacement_lines\": [\n        \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedKph: request.speed * 3.6 }).finish();\",\n        \"    const fields = { vehicle_id: entity.vehicleId, speed_kph: entity.speedKph };\",\n        \"    return { fields, speeding: entity.speedKph > 108.0, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\"\n      ]\n    }\n  ],\n  \"rationale\": \"Renamed field speed_mps to speed_kph per schema change. Request.speed remains mps, so producer scales by 3.6 before float32 serialization. Decoded entity field read as speedKph. Threshold changed to >108.0 kph. vehicle_id preserved.\",\n  \"confidence\": 0.96,\n  \"assumptions\": [\n    \"ts-proto generated bindings expose speedKph accessor and encode key speedKph.\",\n    \"Runtime observation key speed_kph maps to JSON object key speed_kph.\",\n    \"Strict threshold applies to decoded float32 speedKph values.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 9,\n      \"decision\": \"edit\",\n      \"reason\": \"Encoder object key speedMps must migrate to speedKph with unit conversion.\"\n    },\n    {\n      \"line\": 10,\n      \"decision\": \"edit\",\n      \"reason\": \"Field access entity.speedMps must become entity.speedKph and key speed_mps becomes speed_kph.\"\n    },\n    {\n      \"line\": 11,\n      \"decision\": \"edit\",\n      \"reason\": \"Speeding threshold changes from entity.speedMps > 30.0 to entity.speedKph > 108.0.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918534,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2387,
+    "completion_tokens": 438,
+    "total_tokens": 2825,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

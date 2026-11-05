@@ -1,0 +1,28 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field 'name' in v1 Entity is renamed to 'display_name'. The observation key must be updated to 'display_name' and the property access on EntityV1 must use the regenerated binding 'displayName'."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The v1 Entity construction in the test/fallback block must use the regenerated 'displayName' property instead of 'name'."
+    }
+  },
+  "edits": [
+    {
+      "before": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n",
+      "after": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { display_name: (entity as EntityV1).displayName } : {}) };\n"
+    },
+    {
+      "before": "    ? EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()\n",
+      "after": "    ? EntityV1.encode({ entityId: \"ts_303\", displayName: \"Sensor C\" }).finish()\n"
+    }
+  ],
+  "rationale": "The schema change renames 'name' to 'display_name' in v1. According to the intended behavior, the TypeScript bindings regenerate this as 'displayName'. I updated the observation key to 'display_name' and the property access to 'displayName' in both the processing logic and the sample encoding block to maintain consistency with the new schema and bindings.",
+  "confidence": 1,
+  "assumptions": [
+    "The regenerated TypeScript bindings for 'display_name' follow the specified camelCase convention 'displayName'."
+  ]
+}

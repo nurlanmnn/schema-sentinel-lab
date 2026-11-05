@@ -1,0 +1,51 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, GroundSpeedMps = request.Speed };"
+      ]
+    },
+    {
+      "start_line": 13,
+      "end_line": 13,
+      "replacement_lines": [
+        "            var fields = new Dictionary<string, object> { [\"vehicle_id\"] = entity.VehicleId, [\"ground_speed_mps\"] = entity.GroundSpeedMps };"
+      ]
+    },
+    {
+      "start_line": 14,
+      "end_line": 14,
+      "replacement_lines": [
+        "            return new { fields, speeding = entity.GroundSpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };"
+      ]
+    }
+  ],
+  "rationale": "Renamed property references from SpeedMps to GroundSpeedMps to match the proto field rename from speed_mps to ground_speed_mps. Updated the dictionary key from \"speed_mps\" to \"ground_speed_mps\" to reflect the new runtime observation key. Preserved the strict >30.0 m/s speeding threshold and all other behavior.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Protobuf C# generation maps field 'ground_speed_mps' to property 'GroundSpeedMps' (PascalCase)",
+    "The TelemetryRequest.Speed field continues to provide the speed value in m/s",
+    "Entity v1/v2 behavior refers to protobuf wire compatibility which is unchanged (same field number 2, same float type)",
+    "No changes needed to the TelemetryRequest record or JSON deserialization"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Constructs VehicleTelemetry using old property name SpeedMps; must be renamed to GroundSpeedMps to match generated protobuf code"
+    },
+    {
+      "line": 13,
+      "decision": "edit",
+      "reason": "Dictionary uses old key \"speed_mps\" and accesses entity.SpeedMps; both must change to \"ground_speed_mps\" and entity.GroundSpeedMps"
+    },
+    {
+      "line": 14,
+      "decision": "edit",
+      "reason": "Speeding check uses entity.SpeedMps; must change to entity.GroundSpeedMps for consistency with renamed property"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "outcome": "no_change",
+  "edits": [],
+  "rationale": "The TypeScript runtime file uses the generated protobuf bindings (ts-proto) which handle the wire encoding/decoding. The schema change from float to double in the .proto file will cause the generated TypeScript bindings to use `number` for both (since TypeScript only has `number` for binary64). The source code uses `entity.speedMps` and `speedMps` property names which are determined by the generated bindings, not the wire type. No changes to this hand-written runtime file are needed; regeneration of the generated bindings from the updated .proto will handle the wire format change automatically. The strict >30 threshold and observation key `speed_mps` are preserved as-is.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated TypeScript bindings (ts-proto) will be regenerated from the updated .proto file",
+    "ts-proto maps both float and double to TypeScript `number` (binary64)",
+    "The property names `vehicleId` and `speedMps` in the generated bindings remain unchanged"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 9,
+      "decision": "unaffected",
+      "reason": "Line 9 constructs an object for encoding with property `speedMps` (camelCase per ts-proto convention). The wire type change from float32 to float64 is handled by the generated encoder; the source value `request.speed` is already a TypeScript `number` (binary64). No producer narrowing exists here to remove."
+    },
+    {
+      "line": 10,
+      "decision": "unaffected",
+      "reason": "Line 10 reads `entity.speedMps` from the decoded message. The generated decoder will produce a `number` (binary64) regardless of wire type (float/double). The observation key `speed_mps` and value are preserved correctly."
+    },
+    {
+      "line": 11,
+      "decision": "unaffected",
+      "reason": "Line 11 uses `entity.speedMps > 30.0` for the speeding threshold. The comparison uses the decoded `number` value directly with the strict >30 threshold. No precision loss or type change affects this logic."
+    }
+  ]
+}

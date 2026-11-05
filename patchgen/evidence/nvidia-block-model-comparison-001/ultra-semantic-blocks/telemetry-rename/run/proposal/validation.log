@@ -1,0 +1,193 @@
+$ git worktree add --detach /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace 32e39a2fa9e6aeeab326afa6708868191785dad5
+Preparing worktree (detached HEAD 32e39a2)
+HEAD is now at 32e39a2 Add buildable three-language telemetry baseline and independent behavior oracle
+
+exit=0; elapsed_seconds=0.463825
+$ git apply --check /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.012704
+$ git apply /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/proposal.patch
+
+exit=0; elapsed_seconds=0.011846
+Pinned local generation completed: protoc 25.1, ts-proto 1.165.0, Buf descriptors
+$ /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python run_local.py
+Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python" -m venv "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/.venv"
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/.venv/bin/python" -m pip install -r runtimes/python/requirements.txt
+Collecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))
+  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)
+Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-4.25.8
+
+[notice] A new release of pip is available: 25.2 -> 26.3
+[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/.venv/bin/python -m pip install --upgrade pip
+
+> /opt/homebrew/bin/npm ci --prefix runtimes/typescript
+
+added 14 packages, and audited 15 packages in 461ms
+
+found 0 vulnerabilities
+
+> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj
+  Determining projects to restore...
+  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 101 ms).
+
+> /opt/homebrew/bin/npm run build --prefix runtimes/typescript
+
+> schema-sentinel-typescript-service@0.1.0 build
+> tsc --project tsconfig.json
+
+
+> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CsharpApp -> /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/runtimes/csharp/bin/Release/net8.0/CsharpApp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.71
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/.venv/bin/python" -m unittest discover -s testbed/tests -p test_*.py -v
+test_final_payload_change_fails (test_evidence.EvidenceTests.test_final_payload_change_fails) ... ok
+test_intermediate_misdecode_fails_even_when_final_payload_matches (test_evidence.EvidenceTests.test_intermediate_misdecode_fails_even_when_final_payload_matches) ... ok
+test_matching_decoders (test_evidence.EvidenceTests.test_matching_decoders) ... ok
+test_missing_runtime_fails (test_evidence.EvidenceTests.test_missing_runtime_fails) ... ok
+test_trace_fails_separately (test_evidence.EvidenceTests.test_trace_fails_separately) ... ok
+test_cleanup_stops_a_running_child_process (test_local_runner.LocalRunnerTests.test_cleanup_stops_a_running_child_process) ... ok
+test_macos_and_linux_use_the_bin_interpreter (test_local_runner.LocalRunnerTests.test_macos_and_linux_use_the_bin_interpreter) ... ok
+test_missing_tools_fail_before_installation (test_local_runner.LocalRunnerTests.test_missing_tools_fail_before_installation) ... ok
+test_occupied_port_does_not_start_or_stop_other_programs (test_local_runner.LocalRunnerTests.test_occupied_port_does_not_start_or_stop_other_programs) ... ok
+test_python_server_starts_without_reverse_dns (test_local_runner.LocalRunnerTests.test_python_server_starts_without_reverse_dns) ... ok
+test_windows_uses_the_scripts_interpreter (test_local_runner.LocalRunnerTests.test_windows_uses_the_scripts_interpreter) ... ok
+test_bad_requests_and_capacity (test_pubsub.BrokerTests.test_bad_requests_and_capacity) ... ok
+test_fanout_isolation_independent_fifo_and_poll_redelivery (test_pubsub.BrokerTests.test_fanout_isolation_independent_fifo_and_poll_redelivery) ... ok
+test_independent_wire_encoder_known_bytes (test_pubsub.BrokerTests.test_independent_wire_encoder_known_bytes) ... ok
+test_invalid_ack_does_not_mutate_and_duplicate_rejects (test_pubsub.BrokerTests.test_invalid_ack_does_not_mutate_and_duplicate_rejects) ... ok
+test_migration_expectations_are_explicit_and_independent_of_wire_bytes (test_pubsub.BrokerTests.test_migration_expectations_are_explicit_and_independent_of_wire_bytes) ... ok
+test_no_history_replay (test_pubsub.BrokerTests.test_no_history_replay) ... ok
+test_observation_shape_rejected_before_queue_mutation (test_pubsub.BrokerTests.test_observation_shape_rejected_before_queue_mutation) ... ok
+test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject (test_pubsub.EvidenceTests.test_corrupt_evidence_missing_duplicated_reordered_and_wrong_fields_reject) ... ok
+test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads (test_pubsub.EvidenceTests.test_malformed_probe_requires_actual_nonzero_exits_no_acks_and_pending_heads) ... ok
+test_real_http_malformed_routes_types_and_success (test_pubsub.HttpBrokerTests.test_real_http_malformed_routes_types_and_success) ... ok
+test_valid_and_boundary (test_telemetry.TelemetryOracleTests.test_valid_and_boundary) ... ok
+test_wrong_units_threshold_key_or_construction_rejected (test_telemetry.TelemetryOracleTests.test_wrong_units_threshold_key_or_construction_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.521s
+
+OK
+
+> "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/.venv/bin/python" testbed/scripts/run-local.py
+
+Round-trip tests
+Route: Python -> TypeScript -> C#
+
+[PASS] 1/4 - Standard text
+  Input: entity_id="roundtrip-001", name="Sensor A"
+  Encoded request (25 bytes, hex):
+    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
+    08 53 65 6e 73 6f 72 20 41
+  Decoded by each service:
+    Python [PASS]: entity_id="roundtrip-001", name="Sensor A"
+    TypeScript [PASS]: entity_id="roundtrip-001", name="Sensor A"
+    C# [PASS]: entity_id="roundtrip-001", name="Sensor A"
+  Encoded response (25 bytes, hex):
+    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
+    08 53 65 6e 73 6f 72 20 41
+  Decoded response [PASS]: entity_id="roundtrip-001", name="Sensor A"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 2/4 - Empty strings
+  Input: entity_id="", name=""
+  Encoded request (0 bytes, hex):
+    (empty)
+  Decoded by each service:
+    Python [PASS]: entity_id="", name=""
+    TypeScript [PASS]: entity_id="", name=""
+    C# [PASS]: entity_id="", name=""
+  Encoded response (0 bytes, hex):
+    (empty)
+  Decoded response [PASS]: entity_id="", name=""
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 3/4 - Unicode
+  Input: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Encoded request (36 bytes, hex):
+    0a 0f 65 6e 74 69 74 79 2d e9 9b aa 2d f0 9f 9a
+    80 12 11 43 61 66 c3 a9 20 2f 20 ce 94 20 2f 20
+    f0 9f 9a 80
+  Decoded by each service:
+    Python [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+    TypeScript [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+    C# [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Encoded response (36 bytes, hex):
+    0a 0f 65 6e 74 69 74 79 2d e9 9b aa 2d f0 9f 9a
+    80 12 11 43 61 66 c3 a9 20 2f 20 ce 94 20 2f 20
+    f0 9f 9a 80
+  Decoded response [PASS]: entity_id="entity-雪-🚀", name="Café / Δ / 🚀"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+[PASS] 4/4 - Escaped text
+  Input: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Encoded request (51 bytes, hex):
+    0a 0a 65 6e 74 69 74 79 2d 30 30 34 12 25 71 75
+    6f 74 65 73 20 22 20 61 6e 64 20 6e 65 77 6c 69
+    6e 65 0a 20 61 6e 64 20 62 61 63 6b 73 6c 61 73
+    68 20 5c
+  Decoded by each service:
+    Python [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+    TypeScript [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+    C# [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Encoded response (51 bytes, hex):
+    0a 0a 65 6e 74 69 74 79 2d 30 30 34 12 25 71 75
+    6f 74 65 73 20 22 20 61 6e 64 20 6e 65 77 6c 69
+    6e 65 0a 20 61 6e 64 20 62 61 63 6b 73 6c 61 73
+    68 20 5c
+  Decoded response [PASS]: entity_id="entity-004", name="quotes \" and newline\n and backslash \\"
+  Service order [PASS]: Python -> TypeScript -> C#
+
+PASS: 4/4 round-trip cases passed.
+
+exit=0; elapsed_seconds=5.252821
+$ /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace/.venv/bin/python /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/telemetry-oracle-source.py --root /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/workspace --case rename --output /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-rename/run/proposal/telemetry
+{
+  "status": "passed",
+  "case": "rename",
+  "runtime_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "source_dirty": true,
+  "source_sha256": {
+    "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+    "runtimes/python/telemetry_runtime.py": "40e861d49ca641c7c20dcd0354231036b7ad0105bf91edf276c18fd1f2f61a27",
+    "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+    "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+    "runtimes/typescript/telemetry.ts": "e651bc8ecfd8fc69a6df59f137686b7e55f6d3ca3e50e9697fa62239e9f1a69d",
+    "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+    "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+    "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+    "runtimes/csharp/Telemetry.cs": "9e5ce886746bbd38ed53ceb1ab1f51d915b905e450ec7714626bc7197b1a4cd2",
+    "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+    "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+    "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+    "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+    "proto/telemetry/vehicle.proto": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+    "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+    "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+    "generated/ts/telemetry/vehicle.ts": "bb0aef3210e1299a2fb01446cb95d367cea1ba2455968a11a6e15afa525e07cc",
+    "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+    "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+    "generated/csharp/Telemetry/Vehicle.cs": "638c2f6a6c7f2c8bfebf7601e7de6bb9a3e9dbb1a8053b8cb4958a4268a9a442",
+    "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+    "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+    "generated/python/telemetry/vehicle_pb2.py": "03d658ac8349f5aa4fe92a08edf3065ac2315f229b79d062cd4c89c23dbef4ff"
+  },
+  "runtime_cases": 24,
+  "model_requests": 0,
+  "scope": "authored float32 cases; excludes arbitrary wire and mixed versions"
+}
+
+exit=0; elapsed_seconds=0.658226

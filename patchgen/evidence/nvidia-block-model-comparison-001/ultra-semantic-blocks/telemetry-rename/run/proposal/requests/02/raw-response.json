@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-363f51b9-2e04-465d-bca4-d7a9615f3e4a",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Constructor uses old field name speed_mps; generated binding uses ground_speed_mps per new schema wire field 2\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Dictionary key and attribute access use old field name speed_mps; observation key must become ground_speed_mps per intended behavior\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Attribute access entity.speed_mps must use new field name ground_speed_mps; threshold comparison logic unchanged at > 30.0\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\\n\",\n      \"after\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], ground_speed_mps=request['speed'])\\n\"\n    },\n    {\n      \"before\": \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\\n\",\n      \"after\": \"    fields = {'vehicle_id': entity.vehicle_id, 'ground_speed_mps': entity.ground_speed_mps}\\n\"\n    },\n    {\n      \"before\": \"    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\\n\",\n      \"after\": \"    return {'fields': fields, 'speeding': entity.ground_speed_mps > 30.0,\\n\"\n    }\n  ],\n  \"rationale\": \"Renamed protobuf field speed_mps to ground_speed_mps on wire field 2. Updated all three runtime references: constructor parameter, dictionary key/attribute access for observation, and speeding threshold comparison. Preserved float32 meters-per-second semantics and strict >30.0 threshold. VehicleTelemetry.vehicle_id and wire encoding unchanged.\",\n  \"confidence\": 0.98,\n  \"assumptions\": [\n    \"Generated Python binding exposes ground_speed_mps attribute matching new schema field name\",\n    \"Request input key 'speed' maps to ground_speed_mps value as before\",\n    \"Wire format compatibility maintained for field 2 float type\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918951,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 1952,
+    "completion_tokens": 512,
+    "total_tokens": 2464,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

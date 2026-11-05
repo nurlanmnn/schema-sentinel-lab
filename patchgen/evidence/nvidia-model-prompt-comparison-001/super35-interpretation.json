@@ -1,0 +1,205 @@
+{
+  "status": "provider_identity_unverified",
+  "model_patch_validation_rate": null,
+  "note": "Historical failed labels reflect the former runner; outputs were rejected before edit/runtime evaluation and must not count as model-quality failures.",
+  "responses": [
+    {
+      "path": "super35-semantic/pubsub-rename/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-rename/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-rename/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-utf8/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-utf8/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-utf8/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-removal/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-removal/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-semantic/pubsub-removal/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-units/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-units/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-units/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-rename/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-rename/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-rename/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-precision/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-precision/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-precision/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-utf8/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-utf8/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-utf8/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-rename/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-rename/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-rename/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-removal/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-removal/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/pubsub-removal/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-quantized/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-quantized/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/telemetry-quantized/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/inventory-width/run/proposal/requests/03/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/inventory-width/run/proposal/requests/02/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    },
+    {
+      "path": "super35-original/inventory-width/run/proposal/requests/01/raw-response.json",
+      "requested": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "returned": "private/nvidia/nemotron-3.5-super-120b-a12b",
+      "quality_comparable": false
+    }
+  ]
+}

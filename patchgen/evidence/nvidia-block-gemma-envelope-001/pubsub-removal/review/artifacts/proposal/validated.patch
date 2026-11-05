@@ -1,0 +1,364 @@
+diff --git a/generated/csharp/V1/Entity.cs b/generated/csharp/V1/Entity.cs
+index 9d7d89d..c3fdf9f 100644
+--- a/generated/csharp/V1/Entity.cs
++++ b/generated/csharp/V1/Entity.cs
+@@ -24,13 +24,13 @@ namespace Simulation.V1 {
+     static EntityReflection() {
+       byte[] descriptorData = global::System.Convert.FromBase64String(
+           string.Concat(
+-            "Cg92MS9lbnRpdHkucHJvdG8SDXNpbXVsYXRpb24udjEiOQoGRW50aXR5EhsK",
+-            "CWVudGl0eV9pZBgBIAEoCVIIZW50aXR5SWQSEgoEbmFtZRgCIAEoCVIEbmFt",
+-            "ZWIGcHJvdG8z"));
++            "Cg92MS9lbnRpdHkucHJvdG8SDXNpbXVsYXRpb24udjEiMQoGRW50aXR5EhsK",
++            "CWVudGl0eV9pZBgBIAEoCVIIZW50aXR5SWRKBAgCEANSBG5hbWViBnByb3Rv",
++            "Mw=="));
+       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+           new pbr::FileDescriptor[] { },
+           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.V1.Entity), global::Simulation.V1.Entity.Parser, new[]{ "EntityId", "Name" }, null, null, null, null)
++            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.V1.Entity), global::Simulation.V1.Entity.Parser, new[]{ "EntityId" }, null, null, null, null)
+           }));
+     }
+     #endregion
+@@ -73,7 +73,6 @@ namespace Simulation.V1 {
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public Entity(Entity other) : this() {
+       entityId_ = other.entityId_;
+-      name_ = other.name_;
+       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+     }
+ 
+@@ -95,18 +94,6 @@ namespace Simulation.V1 {
+       }
+     }
+ 
+-    /// <summary>Field number for the "name" field.</summary>
+-    public const int NameFieldNumber = 2;
+-    private string name_ = "";
+-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+-    public string Name {
+-      get { return name_; }
+-      set {
+-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+-      }
+-    }
+-
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public override bool Equals(object other) {
+@@ -123,7 +110,6 @@ namespace Simulation.V1 {
+         return true;
+       }
+       if (EntityId != other.EntityId) return false;
+-      if (Name != other.Name) return false;
+       return Equals(_unknownFields, other._unknownFields);
+     }
+ 
+@@ -132,7 +118,6 @@ namespace Simulation.V1 {
+     public override int GetHashCode() {
+       int hash = 1;
+       if (EntityId.Length != 0) hash ^= EntityId.GetHashCode();
+-      if (Name.Length != 0) hash ^= Name.GetHashCode();
+       if (_unknownFields != null) {
+         hash ^= _unknownFields.GetHashCode();
+       }
+@@ -155,10 +140,6 @@ namespace Simulation.V1 {
+         output.WriteRawTag(10);
+         output.WriteString(EntityId);
+       }
+-      if (Name.Length != 0) {
+-        output.WriteRawTag(18);
+-        output.WriteString(Name);
+-      }
+       if (_unknownFields != null) {
+         _unknownFields.WriteTo(output);
+       }
+@@ -173,10 +154,6 @@ namespace Simulation.V1 {
+         output.WriteRawTag(10);
+         output.WriteString(EntityId);
+       }
+-      if (Name.Length != 0) {
+-        output.WriteRawTag(18);
+-        output.WriteString(Name);
+-      }
+       if (_unknownFields != null) {
+         _unknownFields.WriteTo(ref output);
+       }
+@@ -190,9 +167,6 @@ namespace Simulation.V1 {
+       if (EntityId.Length != 0) {
+         size += 1 + pb::CodedOutputStream.ComputeStringSize(EntityId);
+       }
+-      if (Name.Length != 0) {
+-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+-      }
+       if (_unknownFields != null) {
+         size += _unknownFields.CalculateSize();
+       }
+@@ -208,9 +182,6 @@ namespace Simulation.V1 {
+       if (other.EntityId.Length != 0) {
+         EntityId = other.EntityId;
+       }
+-      if (other.Name.Length != 0) {
+-        Name = other.Name;
+-      }
+       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+     }
+ 
+@@ -230,10 +201,6 @@ namespace Simulation.V1 {
+             EntityId = input.ReadString();
+             break;
+           }
+-          case 18: {
+-            Name = input.ReadString();
+-            break;
+-          }
+         }
+       }
+     #endif
+@@ -253,10 +220,6 @@ namespace Simulation.V1 {
+             EntityId = input.ReadString();
+             break;
+           }
+-          case 18: {
+-            Name = input.ReadString();
+-            break;
+-          }
+         }
+       }
+     }
+diff --git a/generated/python/v1/entity_pb2.py b/generated/python/v1/entity_pb2.py
+index aababf8..86a9896 100644
+--- a/generated/python/v1/entity_pb2.py
++++ b/generated/python/v1/entity_pb2.py
+@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
+ 
+ 
+ 
+-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fv1/entity.proto\x12\rsimulation.v1\"9\n\x06\x45ntity\x12\x1b\n\tentity_id\x18\x01 \x01(\tR\x08\x65ntityId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04nameb\x06proto3')
++DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fv1/entity.proto\x12\rsimulation.v1\"1\n\x06\x45ntity\x12\x1b\n\tentity_id\x18\x01 \x01(\tR\x08\x65ntityIdJ\x04\x08\x02\x10\x03R\x04nameb\x06proto3')
+ 
+ _globals = globals()
+ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+@@ -22,5 +22,5 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'v1.entity_pb2', _globals)
+ if _descriptor._USE_C_DESCRIPTORS == False:
+   DESCRIPTOR._options = None
+   _globals['_ENTITY']._serialized_start=34
+-  _globals['_ENTITY']._serialized_end=91
++  _globals['_ENTITY']._serialized_end=83
+ # @@protoc_insertion_point(module_scope)
+diff --git a/generated/ts/v1/entity.ts b/generated/ts/v1/entity.ts
+index 0e866c2..4fe1fe7 100644
+--- a/generated/ts/v1/entity.ts
++++ b/generated/ts/v1/entity.ts
+@@ -5,11 +5,10 @@ export const protobufPackage = "simulation.v1";
+ 
+ export interface Entity {
+   entityId: string;
+-  name: string;
+ }
+ 
+ function createBaseEntity(): Entity {
+-  return { entityId: "", name: "" };
++  return { entityId: "" };
+ }
+ 
+ export const Entity = {
+@@ -17,9 +16,6 @@ export const Entity = {
+     if (message.entityId !== "") {
+       writer.uint32(10).string(message.entityId);
+     }
+-    if (message.name !== "") {
+-      writer.uint32(18).string(message.name);
+-    }
+     return writer;
+   },
+ 
+@@ -37,13 +33,6 @@ export const Entity = {
+ 
+           message.entityId = reader.string();
+           continue;
+-        case 2:
+-          if (tag !== 18) {
+-            break;
+-          }
+-
+-          message.name = reader.string();
+-          continue;
+       }
+       if ((tag & 7) === 4 || tag === 0) {
+         break;
+@@ -54,10 +43,7 @@ export const Entity = {
+   },
+ 
+   fromJSON(object: any): Entity {
+-    return {
+-      entityId: isSet(object.entityId) ? globalThis.String(object.entityId) : "",
+-      name: isSet(object.name) ? globalThis.String(object.name) : "",
+-    };
++    return { entityId: isSet(object.entityId) ? globalThis.String(object.entityId) : "" };
+   },
+ 
+   toJSON(message: Entity): unknown {
+@@ -65,9 +51,6 @@ export const Entity = {
+     if (message.entityId !== "") {
+       obj.entityId = message.entityId;
+     }
+-    if (message.name !== "") {
+-      obj.name = message.name;
+-    }
+     return obj;
+   },
+ 
+@@ -77,7 +60,6 @@ export const Entity = {
+   fromPartial<I extends Exact<DeepPartial<Entity>, I>>(object: I): Entity {
+     const message = createBaseEntity();
+     message.entityId = object.entityId ?? "";
+-    message.name = object.name ?? "";
+     return message;
+   },
+ };
+diff --git a/proto/v1/entity.proto b/proto/v1/entity.proto
+index dcf1934..377f35a 100644
+--- a/proto/v1/entity.proto
++++ b/proto/v1/entity.proto
+@@ -4,5 +4,6 @@ package simulation.v1;
+ 
+ message Entity {
+   string entity_id = 1;
+-  string name = 2;
++  reserved 2;
++  reserved "name";
+ }
+diff --git a/runtimes/csharp/main.cs b/runtimes/csharp/main.cs
+index e62faa1..1ffeafd 100644
+--- a/runtimes/csharp/main.cs
++++ b/runtimes/csharp/main.cs
+@@ -12,7 +12,7 @@ static (IMessage Entity, Dictionary<string, string> Fields) ProcessEntity(byte[]
+     {
+         var decoded = Simulation.V1.Entity.Parser.ParseFrom(rawBytes);
+         entity = decoded;
+-        fields = new() { ["entity_id"] = decoded.EntityId, ["name"] = decoded.Name };
++        fields = new() { ["entity_id"] = decoded.EntityId };
+     }
+     else if (version == "v2")
+     {
+@@ -64,7 +64,7 @@ if (!args.Contains("--serve"))
+ {
+     var version = args.Contains("--v2") ? "v2" : "v1";
+     IMessage entity = version == "v1"
+-        ? new Simulation.V1.Entity { EntityId = "cs_202", Name = "Sensor B" }
++        ? new Simulation.V1.Entity { EntityId = "cs_202" }
+         : new Simulation.V2.Entity { EntityId = "cs_202" };
+     ProcessEntity(entity.ToByteArray(), version);
+     return 0;
+diff --git a/runtimes/python/main.py b/runtimes/python/main.py
+index 5d093a5..487c5a8 100644
+--- a/runtimes/python/main.py
++++ b/runtimes/python/main.py
+@@ -29,8 +29,6 @@ def process_entity(raw_bytes: bytes, version: str):
+         raise ValueError(f"Unsupported schema version: {version}")
+     entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+     fields = {"entity_id": entity.entity_id}
+-    if version == "v1":
+-        fields["name"] = entity.name
+     print(json.dumps({"runtime": "python", "version": version, "fields": fields}, ensure_ascii=True), flush=True)
+     return entity, fields
+ 
+@@ -113,6 +111,4 @@ if __name__ == "__main__":
+     else:
+         module = importlib.import_module(f"{args.version}.entity_pb2")
+         entity = module.Entity(entity_id="py_101")
+-        if args.version == "v1":
+-            entity.name = "Sensor A"
+         process_entity(entity.SerializeToString(), args.version)
+diff --git a/runtimes/typescript/main.ts b/runtimes/typescript/main.ts
+index 67a51db..21d7101 100644
+--- a/runtimes/typescript/main.ts
++++ b/runtimes/typescript/main.ts
+@@ -10,7 +10,7 @@ export function processEntity(rawBytes: Uint8Array, version: string) {
+   // Plain Uint8Array selects the bounds-checked Reader rather than BufferReader.string clamping.
+   rawBytes = new Uint8Array(rawBytes);
+   const entity = version === "v1" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);
+-  const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
++  const fields = { entity_id: entity.entityId };
+   console.log(JSON.stringify({ runtime: "typescript", version, fields }));
+   return { entity, fields };
+ }
+@@ -80,7 +80,7 @@ if (process.argv.includes("--subscribe")) {
+ } else {
+   const version = process.argv.includes("--v2") ? "v2" : "v1";
+   const bytes = version === "v1"
+-    ? EntityV1.encode({ entityId: "ts_303", name: "Sensor C" }).finish()
++    ? EntityV1.encode({ entityId: "ts_303" }).finish()
+     : EntityV2.encode({ entityId: "ts_303" }).finish();
+   processEntity(bytes, version);
+ }
+diff --git a/testbed/tests/e2e_test.py b/testbed/tests/e2e_test.py
+index 672533c..fc57cf7 100644
+--- a/testbed/tests/e2e_test.py
++++ b/testbed/tests/e2e_test.py
+@@ -10,10 +10,10 @@ from v1.entity_pb2 import Entity
+ 
+ RUNTIMES = ['python', 'typescript', 'csharp']
+ CASES = [
+-    {'entity_id': 'roundtrip-001', 'name': 'Sensor A'},
+-    {'entity_id': '', 'name': ''},
+-    {'entity_id': 'entity-雪-🚀', 'name': 'Café / Δ / 🚀'},
+-    {'entity_id': 'entity-004', 'name': 'quotes " and newline\n and backslash \\'},
++    {'entity_id': 'roundtrip-001'},
++    {'entity_id': ''},
++    {'entity_id': 'entity-雪-🚀'},
++    {'entity_id': 'quotes \" and newline\n and backslash \\'},
+ ]
+ CASE_NAMES = ['Standard text', 'Empty strings', 'Unicode', 'Escaped text']
+ RUNTIME_NAMES = {'python': 'Python', 'typescript': 'TypeScript', 'csharp': 'C#'}
+@@ -37,7 +37,7 @@ def validate_evidence(expected, received, observations, trace):
+     assert [item['runtime'] for item in observations] == RUNTIMES, 'missing or reordered decoder observations'
+     for item in observations:
+         assert item['fields'] == expected, f"{item['runtime']} decoded different stable fields: {item['fields']!r}"
+-    actual = {'entity_id': received.entity_id, 'name': received.name}
++    actual = {'entity_id': received.entity_id}
+     assert actual == expected, f'final stable fields changed: {actual!r}'
+     # The service trace is intentionally changing transport metadata, not an Entity field.
+     assert trace == RUNTIMES, f'incorrect service trace: {trace!r}'
+@@ -71,7 +71,7 @@ def main():
+             runtime = RUNTIME_NAMES[observation['runtime']]
+             print(f'    {runtime} [PASS]: {format_fields(observation["fields"])}')
+         print_encoded('Encoded response', returned_bytes)
+-        print(f'  Decoded response [PASS]: {format_fields({"entity_id": received.entity_id, "name": received.name})}')
++        print(f'  Decoded response [PASS]: {format_fields({"entity_id": received.entity_id})}')
+         print('  Service order [PASS]: ' + ' -> '.join(RUNTIME_NAMES[runtime] for runtime in trace) + '\n')
+     print(f'PASS: {len(CASES)}/{len(CASES)} round-trip cases passed.')
+ 
+diff --git a/testbed/tests/test_evidence.py b/testbed/tests/test_evidence.py
+index 6c6d3c7..f11e1e2 100644
+--- a/testbed/tests/test_evidence.py
++++ b/testbed/tests/test_evidence.py
+@@ -5,7 +5,7 @@ from e2e_test import Entity, RUNTIMES, validate_evidence
+ 
+ class EvidenceTests(unittest.TestCase):
+     def setUp(self):
+-        self.fields = {'entity_id': '001', 'name': 'Sensor A'}
++        self.fields = {'entity_id': '001'}
+         self.message = Entity(**self.fields)
+         self.observations = [{'runtime': runtime, 'fields': dict(self.fields)} for runtime in RUNTIMES]
+ 
+@@ -14,7 +14,7 @@ class EvidenceTests(unittest.TestCase):
+ 
+     def test_intermediate_misdecode_fails_even_when_final_payload_matches(self):
+         observations = copy.deepcopy(self.observations)
+-        observations[1]['fields']['name'] = 'wrong'
++        observations[1]['fields']['entity_id'] = 'wrong'
+         with self.assertRaisesRegex(AssertionError, 'typescript decoded'):
+             validate_evidence(self.fields, self.message, observations, RUNTIMES)
+ 
+@@ -24,7 +24,7 @@ class EvidenceTests(unittest.TestCase):
+ 
+     def test_final_payload_change_fails(self):
+         with self.assertRaisesRegex(AssertionError, 'final stable fields'):
+-            validate_evidence(self.fields, Entity(entity_id='wrong', name='Sensor A'), self.observations, RUNTIMES)
++            validate_evidence(self.fields, Entity(entity_id='wrong'), self.observations, RUNTIMES)
+ 
+     def test_trace_fails_separately(self):
+         with self.assertRaisesRegex(AssertionError, 'incorrect service trace'):

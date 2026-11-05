@@ -1,0 +1,41 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "This is v1 Entity processing. The v1 schema still uses string entity_id, so decoded.EntityId returns string. No change needed for v1 behavior."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "This is v2 Entity processing. The v2 schema now uses bytes entity_id, so decoded.EntityId returns ByteString. Must UTF-8 decode to string for the observation field while preserving the exact entity_id key with string value."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "This constructs a v1 Entity for the standalone sample. v1 schema still uses string entity_id, so EntityId = \"cs_202\" remains correct as string literal."
+    },
+    "C004": {
+      "decision": "edit",
+      "reason": "This constructs a v2 Entity for the standalone sample. v2 schema now uses bytes entity_id, so EntityId must be assigned a ByteString. Preserve the same logical identifier \"cs_202\" by UTF-8 encoding the string literal to ByteString."
+    }
+  },
+  "edits": [
+    {
+      "before": "        var decoded = Simulation.V2.Entity.Parser.ParseFrom(rawBytes);\n        entity = decoded;\n        fields = new() { [\"entity_id\"] = decoded.EntityId };\n",
+      "after": "        var decoded = Simulation.V2.Entity.Parser.ParseFrom(rawBytes);\n        entity = decoded;\n        fields = new() { [\"entity_id\"] = decoded.EntityId.ToStringUtf8() };\n"
+    },
+    {
+      "before": "        : new Simulation.V2.Entity { EntityId = \"cs_202\" };\n",
+      "after": "        : new Simulation.V2.Entity { EntityId = ByteString.CopyFromUtf8(\"cs_202\") };\n"
+    }
+  ],
+  "rationale": "Only v2 Entity.entity_id changes from string to bytes. For observations, the decoded ByteString must be UTF-8 decoded to string (ByteString.ToStringUtf8()) to preserve the entity_id observation key with string value. For construction, the string literal must be UTF-8 encoded to ByteString (ByteString.CopyFromUtf8()). v1 paths remain unchanged since v1 schema still uses string. The standalone sample identifier \"cs_202\" is preserved in both versions. All three subscribers independently decode both schema versions via ProcessEntity.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated C# bindings for v2 Entity.EntityId now return Google.Protobuf.ByteString",
+    "ByteString.ToStringUtf8() performs UTF-8 decoding matching the intended behavior",
+    "ByteString.CopyFromUtf8(string) performs UTF-8 encoding matching the intended behavior",
+    "The observation contract requires entity_id key with string value (not base64 or raw bytes)",
+    "No changes to v1 schema or generated bindings",
+    "Pub/sub delivery payload remains base64-encoded protobuf bytes as before"
+  ]
+}

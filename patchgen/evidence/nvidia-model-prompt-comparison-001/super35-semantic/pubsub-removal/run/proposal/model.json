@@ -1,0 +1,13 @@
+{
+  "backend": "nvidia",
+  "model": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+  "options": {
+    "temperature": 1,
+    "top_p": 0.95,
+    "max_tokens": 4096,
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    }
+  },
+  "response_contract": "JSON object; schema checked by host"
+}

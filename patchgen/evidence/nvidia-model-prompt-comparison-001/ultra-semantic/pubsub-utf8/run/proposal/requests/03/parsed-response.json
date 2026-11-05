@@ -1,0 +1,44 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 13,
+      "end_line": 13,
+      "replacement_lines": [
+        "  const fields = { entity_id: new TextDecoder().decode(entity.entityId), ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };"
+      ]
+    },
+    {
+      "start_line": 83,
+      "end_line": 84,
+      "replacement_lines": [
+        "    ? EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()",
+        "    : EntityV2.encode({ entityId: new TextEncoder().encode(\"ts_303\") }).finish();"
+      ]
+    }
+  ],
+  "rationale": "Changed v2 entity_id from string to bytes: decode uses TextDecoder().decode() for observations, encode uses TextEncoder().encode() for construction. v1 remains unchanged. Sample identifier \"ts_303\" preserved in both runtimes.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated TypeScript bindings for EntityV2.entityId now return Uint8Array (bytes) instead of string",
+    "TextEncoder/TextDecoder are available in Node.js runtime",
+    "v1 Entity.entity_id remains string in both schema and generated code"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 13,
+      "decision": "edit",
+      "reason": "Observation construction for entity_id must decode v2 bytes to UTF-8 string while v1 string passes through unchanged"
+    },
+    {
+      "line": 83,
+      "decision": "edit",
+      "reason": "v2 EntityV2.encode construction requires entityId as Uint8Array (bytes), not string"
+    },
+    {
+      "line": 84,
+      "decision": "edit",
+      "reason": "v2 EntityV2.encode construction requires entityId as Uint8Array (bytes), not string"
+    }
+  ]
+}

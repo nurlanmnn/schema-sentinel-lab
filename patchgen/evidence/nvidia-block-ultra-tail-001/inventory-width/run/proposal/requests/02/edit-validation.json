@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "path": "runtimes/python/inventory_runtime.py",
+  "error": "diff must be nonempty only for patch outcome"
+}

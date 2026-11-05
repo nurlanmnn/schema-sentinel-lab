@@ -1,0 +1,58 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 27,
+      "end_line": 35,
+      "replacement_lines": [
+        "def process_entity(raw_bytes: bytes, version: str):",
+        "    if version not in (\"v1\", \"v2\"):",
+        "        raise ValueError(f\"Unsupported schema version: {version}\")",
+        "    entity = importlib.import_module(f\"{version}.entity_pb2\").Entity.FromString(raw_bytes)",
+        "    if version == \"v2\":",
+        "        entity_id_observation = entity.entity_id.decode('utf-8')",
+        "    else:",
+        "        entity_id_observation = entity.entity_id",
+        "    fields = {\"entity_id\": entity_id_observation}",
+        "    if version == \"v1\":",
+        "        fields[\"name\"] = entity.name",
+        "    print(json.dumps({\"runtime\": \"python\", \"version\": version, \"fields\": fields}, ensure_ascii=True), flush=True)",
+        "    return entity, fields"
+      ]
+    },
+    {
+      "start_line": 114,
+      "end_line": 118,
+      "replacement_lines": [
+        "        module = importlib.import_module(f\"{args.version}.entity_pb2\")",
+        "        if args.version == \"v2\":",
+        "            entity = module.Entity(entity_id=\"py_101\".encode('utf-8'))",
+        "        else:",
+        "            entity = module.Entity(entity_id=\"py_101\")",
+        "        if args.version == \"v1\":",
+        "            entity.name = \"Sensor A\"",
+        "        process_entity(entity.SerializeToString(), args.version)"
+      ]
+    }
+  ],
+  "rationale": "Changed v2 entity_id handling from string to bytes with UTF-8 encoding/decoding. In process_entity(), decode v2 bytes to string for observation output while keeping v1 as string. In main block, encode 'py_101' to UTF-8 bytes when constructing v2 Entity. Both changes preserve the observation key 'entity_id' with string value and maintain v1 behavior unchanged.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated protobuf bindings for v2 now expect bytes for entity_id field",
+    "Valid UTF-8 round-trip is guaranteed by the test cases",
+    "Observation output must remain a JSON string value for entity_id",
+    "The standalone sample identifier 'py_101' is valid UTF-8"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 31,
+      "decision": "edit",
+      "reason": "Line accesses entity.entity_id directly for observation output. For v2 this is now bytes and must be UTF-8 decoded to string; for v1 it remains string. Edit wraps this in version-conditional decode."
+    },
+    {
+      "line": 115,
+      "decision": "edit",
+      "reason": "Line constructs Entity with entity_id=\"py_101\" string literal. For v2 the field is now bytes, so the literal must be UTF-8 encoded. Edit makes construction version-conditional with explicit encode for v2."
+    }
+  ]
+}

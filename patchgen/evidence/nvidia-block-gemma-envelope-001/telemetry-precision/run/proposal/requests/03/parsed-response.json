@@ -1,0 +1,21 @@
+{
+  "outcome": "no_change",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "TypeScript 'number' type represents 64-bit floats; no textual change needed for the widening of speedMps."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "The observation key 'speed_mps' and the mapping to entity.speedMps remain correct regardless of float32 vs float64."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "The threshold check (entity.speedMps > 30.0) is numerically compatible with both float32 and float64."
+    }
+  },
+  "edits": [],
+  "rationale": "The schema change widens 'speed_mps' from float32 to float64. In TypeScript, the 'number' type is used for both single and double precision floating point values. Since the source code already uses 'number' for the input (Request.speed) and the generated bindings for the protobuf message, no textual changes are required to support the increased precision. The observation key and threshold logic remain identical.",
+  "confidence": 1.0,
+  "assumptions": []
+}

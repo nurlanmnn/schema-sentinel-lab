@@ -1,0 +1,8 @@
+pubsub-rename: failed; actual model requests=3
+pubsub-removal: failed; actual model requests=3
+pubsub-utf8: failed; actual model requests=3
+telemetry-rename: failed; actual model requests=3
+telemetry-precision: failed; actual model requests=3
+telemetry-units: failed; actual model requests=3
+inventory-width: failed; actual model requests=3
+telemetry-quantized: failed; actual model requests=3

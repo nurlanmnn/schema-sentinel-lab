@@ -1,0 +1,10 @@
+{
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change": {
+    "id": "telemetry-speed-quantized",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed truncated to integer meters per second.\n  int32 speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Quantize finite request.speed to signed int32 meters per second. Clamp to the int32 range then truncate toward zero. Observe integer speed_mps, and compare decoded integer speed to the existing strict >30 threshold. Coordinate the incompatible wire change."
+}

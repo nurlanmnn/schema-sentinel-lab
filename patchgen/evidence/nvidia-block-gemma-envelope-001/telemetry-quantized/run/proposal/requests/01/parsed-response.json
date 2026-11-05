@@ -1,0 +1,32 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field SpeedMps changed from float to int32. The request.Speed (double) must now be clamped to int32 range and truncated toward zero."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "The line remains syntactically correct as it merely assigns the value of entity.SpeedMps to the dictionary, regardless of whether it is a float or int32."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "The comparison entity.SpeedMps > 30.0 is against a double; it should be compared as an integer against 30 to match the new schema type and intended behavior."
+    }
+  },
+  "edits": [
+    {
+      "before": "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = (float)request.Speed };\n",
+      "after": "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = (int)Math.Clamp(request.Speed, int.MinValue, int.MaxValue) };\n"
+    },
+    {
+      "before": "            return new { fields, speeding = entity.SpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };\n",
+      "after": "            return new { fields, speeding = entity.SpeedMps > 30, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };\n"
+    }
+  ],
+  "rationale": "The schema change converted `speed_mps` from `float` to `int32`. In C#, casting a `double` to `int` performs truncation toward zero. To prevent overflow exceptions during this cast, `Math.Clamp` is used to ensure the value fits within the `int32` range. The comparison for 'speeding' is updated from a float literal (30.0) to an integer literal (30) to align with the new field type.",
+  "confidence": 1.0,
+  "assumptions": [
+    "Math.Clamp is available (standard in .NET Core 2.0+ / .NET 5+)."
+  ]
+}

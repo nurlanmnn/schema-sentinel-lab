@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-868e906a-bc59-4b1b-bb0f-153ffdbd9598",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Remove the conditional addition of the 'name' field to the fields object for v1 entities.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Remove the 'name' property from the object passed to EntityV1.encode.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"  const fields = { entity_id: entity.entityId, ...(version === \\\"v1\\\" ? { name: (entity as EntityV1).name } : {}) };\\n\",\n      \"after\": \"  const fields = { entity_id: entity.entityId };\\n\"\n    },\n    {\n      \"before\": \"    ? EntityV1.encode({ entityId: \\\"ts_303\\\", name: \\\"Sensor C\\\" }).finish()\\n\",\n      \"after\": \"    ? EntityV1.encode({ entityId: \\\"ts_303\\\" }).finish()\\n\"\n    }\n  ],\n  \"rationale\": \"The intended behavior is to remove Entity.name from v1 construction, reads, and decoded observations. C001 handles the decoded observation mapping by removing the conditional 'name' field from the fields object. C002 handles the v1 construction by removing the 'name' property from the encode call. This ensures that v1 entities only contain entity_id, matching the new schema while preserving v2 behavior.\",\n  \"confidence\": 1,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919435,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 3169,
+    "completion_tokens": 378,
+    "total_tokens": 3547,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 896
+    }
+  }
+}

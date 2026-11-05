@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-fc282b23-c714-4dc6-bc19-ebb38e8acec1",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"no_change\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"Python float supports binary64 natively; the assignment to speed_mps already preserves full input precision from request['speed'] through to the generated protobuf field, which now expects double per the new schema.\"\n    },\n    \"C002\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"Reading entity.speed_mps returns a Python float (binary64) from the generated bindings; the observation key and value remain unchanged and preserve decoded precision.\"\n    },\n    \"C003\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"The threshold comparison uses a float literal 30.0; Python float is binary64, matching the widened field. The strict >30 semantics are preserved exactly.\"\n    }\n  },\n  \"edits\": [],\n  \"rationale\": \"Python's float type is IEEE 754 binary64, so no source changes are required to widen the wire field from float32 to float64. The generated protobuf bindings already handle the wire encoding/decoding for the new double type. All three candidate locations correctly preserve input precision, observation key, and the strict >30.0 threshold without any producer-side narrowing.\",\n  \"confidence\": 0.99,\n  \"assumptions\": [\n    \"Regenerated Python bindings map the protobuf double field to native Python float (binary64).\",\n    \"No downstream consumers require float32-specific rounding behavior; the schema change specifies coordinated rollout.\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918981,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 1923,
+    "completion_tokens": 360,
+    "total_tokens": 2283,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

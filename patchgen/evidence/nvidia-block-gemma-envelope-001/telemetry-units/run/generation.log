@@ -1,0 +1,82 @@
+Generating 1/3: runtimes/csharp/Telemetry.cs
+Generating 2/3: runtimes/python/telemetry_runtime.py
+Generating 3/3: runtimes/typescript/telemetry.ts
+{
+  "status": "validation_passed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "3.1-semantic-blocks",
+  "strategy": "candidate_semantic_blocks",
+  "backend": "nvidia",
+  "generator_sha256": "34bc47537f6b54a9cd864f9f2394328663d13d9125976fb65bb34e40fbade97b",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "anchor_edits_sha256": "050c2d79455f323d4cc88b68ff80feaa124122cb73e9d328c423b6b45db083dc",
+  "nvidia_client_sha256": "f0ffdba3046db60f4ce7ad88e0dd3daca019fa97159346d89f4641c91b9975a1",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "change_id": "telemetry-speed-units",
+    "new_schema_sha256": "858ff2a455dd02877212827e95535d6c127c647e4f95f842809eeb1eb4cd19c5",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "telemetry_case": "units"
+  },
+  "telemetry_oracle_sha256": "c1b9c54e2cae1fcdef3628a819ce4462dde1c900b5582e58cfa6b2518885f8d8",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "outcome": "patch",
+  "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/telemetry-units/run/proposal/workspace",
+  "local_codegen_toolchain": {
+    "protoc_version": "libprotoc 25.1",
+    "ts_proto_version": "1.165.0",
+    "ts_proto_options": [
+      "forceLong=string"
+    ],
+    "buf_version": "1.75.0",
+    "sha256": {
+      "protoc": "b6ed65c0d20a9ab88ec6995644f747d557cb9a087eab0152fef5367c34645dc3",
+      "ts-proto-plugin": "29b7513e6485545b535ba9f7a3f2d746336e39b456262bc1a6b1e65ac61d43ea",
+      "ts-proto-build": "0ba82c2d4fccaeead72f4a64a7701adc3a6fe1111d6feb5d2e689fdf87753ada",
+      "package-lock.json": "86df52e5c6979a52dcd6a57b82c79637d33dc69af0fec8dda9704d253a80c7b1"
+    }
+  },
+  "telemetry_validation": {
+    "status": "passed",
+    "case": "units",
+    "runtime_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+    "source_dirty": true,
+    "source_sha256": {
+      "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+      "runtimes/python/telemetry_runtime.py": "29316118628f820a05ba8bd3b36157edebea73a1de781b07056db13384d8a0fb",
+      "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+      "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+      "runtimes/typescript/telemetry.ts": "90535b98eb4dc9de6427a052135775e1afee4801338868483458f2116ffd5385",
+      "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+      "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+      "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+      "runtimes/csharp/Telemetry.cs": "c285e3a49fc7638760b824ee1c383bbe4dfe5d0c5bf4acd7f41629da1e3d4bc4",
+      "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+      "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+      "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+      "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+      "proto/telemetry/vehicle.proto": "858ff2a455dd02877212827e95535d6c127c647e4f95f842809eeb1eb4cd19c5",
+      "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+      "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+      "generated/ts/telemetry/vehicle.ts": "afba36b971c2694b5b9d2ba441ff9d9d2468eaeb30737544cfc470247fd98a11",
+      "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+      "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+      "generated/csharp/Telemetry/Vehicle.cs": "11f7a96b6bd2920a60d926cf66979162b0f0ceed6acab656f3141bebb2c16c7d",
+      "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+      "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+      "generated/python/telemetry/vehicle_pb2.py": "35a75fe6811991b26388cfe4a8200bc00f8be4a92c8e51e1a637631f6391494d"
+    },
+    "runtime_cases": 24,
+    "model_requests": 0,
+    "scope": "authored float32 cases; excludes arbitrary wire and mixed versions"
+  },
+  "workflow_elapsed_seconds": 281.27857362502255,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

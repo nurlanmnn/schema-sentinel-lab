@@ -1,0 +1,39 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The generated protobuf binding will have speed_kph field instead of speed_mps. The producer must set speed_kph using the converted value (request['speed'] * 3.6) before float32 serialization, as the input request.speed remains in meters per second."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The decoded entity will expose speed_kph instead of speed_mps. The observation key must become speed_kph to match the new schema field name, and we expose the exact decoded float32 value as a JSON number."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "The speeding threshold must be converted from 30.0 m/s to 108.0 kph (30.0 * 3.6) and use strict greater-than comparison (> 108.0) on the decoded speed_kph value, preserving the vehicle_id and speeding decisions on adopted cases."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)\n"
+    },
+    {
+      "before": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n",
+      "after": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}\n"
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,\n"
+    }
+  ],
+  "rationale": "All three required candidates must be edited to align with the protobuf schema change from speed_mps to speed_kph. The producer scales input speed (m/s) by 3.6 before float32 serialization. The consumer reads decoded speed_kph directly for observations and threshold comparison. The threshold 30.0 m/s becomes 108.0 kph with strict > comparison. Wire field 2 remains float32; exact decoded float32 values are exposed as JSON numbers.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated Python protobuf binding exposes speed_kph field after schema regeneration",
+    "Coordinated rollout ensures producer and consumer use same schema version",
+    "Input request['speed'] remains in meters per second as stated",
+    "No changes needed to vehicle_id field (field 1 unchanged)"
+  ]
+}

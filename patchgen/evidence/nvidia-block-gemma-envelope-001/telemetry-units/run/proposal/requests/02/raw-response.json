@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-b3495ef6-2696-45c6-b90b-0e80b78cbb62",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Field renamed to speed_kph and input speed (mps) must be scaled by 3.6 before serialization.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Observation key and entity field renamed to speed_kph.\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Threshold updated to 108.0 and entity field renamed to speed_kph.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\\n\",\n      \"after\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)\\n\"\n    },\n    {\n      \"before\": \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\\n\",\n      \"after\": \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}\\n\"\n    },\n    {\n      \"before\": \"    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\\n\",\n      \"after\": \"    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,\\n\"\n    }\n  ],\n  \"rationale\": \"The schema change renames 'speed_mps' to 'speed_kph'. Per intended behavior, producers must scale the input meters per second value by 3.6 before placing it in the new 'speed_kph' field. The observation output key is updated to 'speed_kph' and the speeding threshold is updated from 30.0 mps to 108.0 kph (30 * 3.6).\",\n  \"confidence\": 1.0,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919894,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2175,
+    "completion_tokens": 512,
+    "total_tokens": 2687,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

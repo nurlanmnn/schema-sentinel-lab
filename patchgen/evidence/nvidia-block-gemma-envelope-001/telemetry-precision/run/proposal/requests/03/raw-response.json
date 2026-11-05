@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-a61cd1b4-d1f9-4ecc-a503-b9745a0d8228",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"no_change\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"TypeScript 'number' type represents 64-bit floats; no textual change needed for the widening of speedMps.\"\n    },\n    \"C002\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"The observation key 'speed_mps' and the mapping to entity.speedMps remain correct regardless of float32 vs float64.\"\n    },\n    \"C003\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"The threshold check (entity.speedMps > 30.0) is numerically compatible with both float32 and float64.\"\n    }\n  },\n  \"edits\": [],\n  \"rationale\": \"The schema change widens 'speed_mps' from float32 to float64. In TypeScript, the 'number' type is used for both single and double precision floating point values. Since the source code already uses 'number' for the input (Request.speed) and the generated bindings for the protobuf message, no textual changes are required to support the increased precision. The observation key and threshold logic remain identical.\",\n  \"confidence\": 1.0,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919683,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2148,
+    "completion_tokens": 310,
+    "total_tokens": 2458,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

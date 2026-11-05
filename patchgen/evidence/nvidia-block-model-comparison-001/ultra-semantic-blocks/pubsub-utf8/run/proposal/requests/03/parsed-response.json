@@ -1,0 +1,36 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The observation field `entity_id` must remain a string for v2 after the schema change to bytes. The decoded `entity.entityId` for v2 is now Uint8Array (bytes), requiring UTF-8 decode to string. v1 remains string (unaffected)."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "This line constructs a v1 Entity where `entityId` remains string per the unchanged v1 schema. The sample identifier \"ts_303\" is preserved as a string literal."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "This line constructs a v2 Entity where `entity_id` changed from string to bytes. The sample identifier \"ts_303\" must be UTF-8 encoded to Uint8Array for the generated bindings. The observation pipeline will decode it back to string for the output key."
+    }
+  },
+  "edits": [
+    {
+      "before": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n",
+      "after": "  const fields = { entity_id: version === \"v2\" ? new TextDecoder().decode(entity.entityId) : entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n"
+    },
+    {
+      "before": "    : EntityV2.encode({ entityId: \"ts_303\" }).finish();\n",
+      "after": "    : EntityV2.encode({ entityId: new TextEncoder().encode(\"ts_303\") }).finish();\n"
+    }
+  ],
+  "rationale": "Changed v2 entity_id from string to bytes per schema. For observations (C001), decode v2 bytes to UTF-8 string to keep output key entity_id as string; v1 unchanged. For sample construction (C003), encode the standalone identifier \"ts_303\" as UTF-8 bytes for v2 encode(); v1 sample (C002) remains string. All three subscribers independently decode both versions. No changes to tests, bindings, or v1 relay behavior.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated TS bindings for v2 Entity.entity_id expose Uint8Array (bytes) for both decode output and encode input.",
+    "TextEncoder/TextDecoder are available in the Node.js runtime (global).",
+    "The sample identifier \"ts_303\" is valid UTF-8 and round-trips identically.",
+    "Arbitrary non-UTF-8 bytes and mixed-version interoperability are out of scope.",
+    "Observation key 'entity_id' must be a string in JSON output for both versions."
+  ]
+}

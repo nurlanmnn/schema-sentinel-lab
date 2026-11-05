@@ -1,0 +1,34 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 32,
+      "end_line": 33,
+      "replacement_lines": []
+    },
+    {
+      "start_line": 116,
+      "end_line": 117,
+      "replacement_lines": []
+    }
+  ],
+  "rationale": "Removed Entity.name usage in v1 paths: decoding observations (line 33) and construction (line 117). Preserved entity_id reads, three-service order, four round-trip cases, and negative validation assertions. Reserved field 2 and name 'name' per schema change; legacy payload decoding retains entity_id automatically via generated bindings. v2 behavior unchanged.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated Python bindings for v1 still have entity.name attribute but it will be empty/unset for new messages; reading it is safe but unnecessary and violates removal requirement.",
+    "Constructing v1 Entity without name is valid per new schema (field reserved).",
+    "No other references to entity.name exist in this file."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 33,
+      "decision": "edit",
+      "reason": "Reads entity.name for v1 decoded observations; must be removed per field removal."
+    },
+    {
+      "line": 117,
+      "decision": "edit",
+      "reason": "Sets entity.name during v1 construction; must be removed per field removal."
+    }
+  ]
+}

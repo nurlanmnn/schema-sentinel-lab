@@ -1,0 +1,267 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-tree-sitter-locator/1.11",
+  "scan_manifest_version": "1.1",
+  "runtime_inventory": [
+    {
+      "path": "runtimes/csharp/CsharpApp.csproj",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "80e17844c509f394b81fa2b0210b6b1885b95a05",
+      "disposition": "auxiliary"
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "e62faa1821051715906d685bea6a931a50b89463",
+      "language": "csharp",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "5d093a5a875dabedf0cf6e7291efbdd1a03c0191",
+      "language": "python",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/python/requirements.txt",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "6012b6b55e8cd7a3e6bdc121320fea5c5feb73c3",
+      "disposition": "auxiliary"
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "67a51dbc9bd4f68d4818040863c551681d46ce87",
+      "language": "typescript",
+      "disposition": "source"
+    },
+    {
+      "path": "runtimes/typescript/package-lock.json",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "ec65d718e168f3541b633896125dd9e9f2ebaf8d",
+      "disposition": "auxiliary"
+    },
+    {
+      "path": "runtimes/typescript/package.json",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "36f6342024edbc9ca062c11e4fb870fd01a9b5e4",
+      "disposition": "auxiliary"
+    },
+    {
+      "path": "runtimes/typescript/tsconfig.json",
+      "mode": "100644",
+      "object_type": "blob",
+      "object_id": "d62e501a598f2f21dfd114542861fd584ee060e9",
+      "disposition": "auxiliary"
+    }
+  ],
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "change_id": "pubsub-name-removal",
+  "old_schema_sha256": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+  "status": "complete",
+  "files": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "language": "csharp",
+      "source_sha256": "8084ef7bd1429ac4d62c149ef1391ca3ee26f3c9d7d88607cfca5c76c304927b",
+      "positions": [
+        {
+          "start_line": 15,
+          "end_line": 15,
+          "reason": "Conservative syntax candidate: literal-key/reflection candidate, member_access_expression",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 67,
+          "end_line": 67,
+          "reason": "Conservative syntax candidate: assignment_expression",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "language": "python",
+      "source_sha256": "db2d3f5f58b509875d0ab99ea33dbc92a4a2a139bee663ffd7706e980ece8611",
+      "positions": [
+        {
+          "start_line": 33,
+          "end_line": 33,
+          "reason": "Conservative syntax candidate: attribute, literal-key/reflection candidate",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 117,
+          "end_line": 117,
+          "reason": "Conservative syntax candidate: attribute",
+          "resolution": "candidate"
+        }
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "language": "typescript",
+      "source_sha256": "f5ed93a4e5fe64761c45ec557e87a61d17817132dfbda0249eaa5a2022eef0ba",
+      "positions": [
+        {
+          "start_line": 13,
+          "end_line": 13,
+          "reason": "Conservative syntax candidate: member_expression, pair",
+          "resolution": "candidate"
+        },
+        {
+          "start_line": 83,
+          "end_line": 83,
+          "reason": "Conservative syntax candidate: pair",
+          "resolution": "candidate"
+        }
+      ]
+    }
+  ],
+  "scanned": [
+    {
+      "path": "runtimes/csharp/main.cs",
+      "source_sha256": "8084ef7bd1429ac4d62c149ef1391ca3ee26f3c9d7d88607cfca5c76c304927b",
+      "language": "csharp"
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "source_sha256": "db2d3f5f58b509875d0ab99ea33dbc92a4a2a139bee663ffd7706e980ece8611",
+      "language": "python"
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "source_sha256": "f5ed93a4e5fe64761c45ec557e87a61d17817132dfbda0249eaa5a2022eef0ba",
+      "language": "typescript"
+    }
+  ],
+  "issues": [],
+  "resolution_scope": "syntax candidates; binding evidence is separate and bounded; conservative cross-version matches",
+  "binding_policy": {
+    "scope": "declared generated Python/ts-proto modules; bounded import and immutable TS dataflow evidence",
+    "python_module": "v1.entity_pb2",
+    "python_symbol": "Entity",
+    "typescript_module": "generated/ts/v1/entity",
+    "typescript_symbol": "Entity",
+    "assumptions": [
+      "Generated module imports follow the declared policy; no runtime monkeypatching.",
+      "No cross-function value capture, branch merge, annotation/cast or whole-program type proof; TS follows const only."
+    ],
+    "dynamic_subscript_scope": "possible same-file named literal keys or entity/decoded receiver spelling; unknown arbitrary receivers/compound keys unsupported"
+  },
+  "binding_limitations": [
+    {
+      "path": "runtimes/python/main.py",
+      "detail": {
+        "line": 101,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "detail": {
+        "line": 28,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "detail": {
+        "line": 32,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "detail": {
+        "line": 79,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/python/main.py",
+      "detail": {
+        "line": 90,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 44,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 9,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 10,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 20,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 26,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 35,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 31,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 48,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 53,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "detail": {
+        "line": 56,
+        "reason": "control flow unsupported for binding evidence"
+      }
+    }
+  ]
+}

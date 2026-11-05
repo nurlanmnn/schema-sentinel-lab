@@ -1,0 +1,44 @@
+{
+  "status": "stopped_provider_identity_mismatch",
+  "design": "2 models x 2 prompts x 8 authored migrations",
+  "interpretation": "development comparison; prompts informed by prior failures; one sample per cell; no held-out generalization claim",
+  "automatic_repairs": 0,
+  "human_approval_required": true,
+  "results": [
+    {
+      "label": "ultra-original",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "strategy": "candidate_edits",
+      "exit_code": 1,
+      "elapsed_seconds": 222.74691887502559,
+      "status": "completed",
+      "passed": 2,
+      "planned": 8,
+      "model_requests": 24
+    },
+    {
+      "label": "ultra-semantic",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "strategy": "candidate_semantic_edits",
+      "exit_code": 1,
+      "elapsed_seconds": 287.64133816596586,
+      "status": "completed",
+      "passed": 4,
+      "planned": 8,
+      "model_requests": 24
+    },
+    {
+      "label": "super35-original",
+      "model": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "strategy": "candidate_edits",
+      "exit_code": 1,
+      "elapsed_seconds": 108.86423591698986,
+      "status": "completed",
+      "passed": 0,
+      "planned": 8,
+      "model_requests": 24
+    }
+  ],
+  "stop_reason": "Super35 request returned private/nvidia/nemotron-3.5-super-120b-a12b; undocumented alias not accepted; not a model quality score.",
+  "interrupted_cohort": "super35-semantic"
+}

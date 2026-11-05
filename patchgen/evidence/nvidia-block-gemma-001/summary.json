@@ -1,0 +1,272 @@
+{
+  "status": "stopped_response_envelope_incompatibility",
+  "mode": "live_model",
+  "model": "google/gemma-4-31b-it",
+  "strategy": "candidate_semantic_blocks",
+  "backend": "nvidia",
+  "prompt_version": "3.1-semantic-blocks",
+  "options": {
+    "temperature": 0.5,
+    "top_p": 1,
+    "seed": 0,
+    "max_tokens": 4096
+  },
+  "planned_cases": 8,
+  "automatic_repairs": 0,
+  "human_approval_required": true,
+  "implementation_revision": "63a0469c6697373b8e6bf9bfe8c1984182fb7e2b",
+  "implementation_dirty": true,
+  "scope": "authored migrations eligible for actual model-generated runtime edits",
+  "benchmark_coverage": {
+    "pubsub-rename": "eligible",
+    "pubsub-removal": "eligible",
+    "pubsub-utf8": "eligible",
+    "telemetry-rename": "eligible",
+    "telemetry-precision": "eligible",
+    "telemetry-units": "eligible",
+    "inventory-width": "eligible",
+    "inventory-zigzag": "schema_only",
+    "inventory-stock-release": "requires_pinned_policy",
+    "inventory-presence": "requires_pinned_policy",
+    "inventory-labels": "requires_pinned_policy",
+    "inventory-reservation": "requires_pinned_policy",
+    "telemetry-quantized": "eligible",
+    "inventory-state-rename": "requires_pinned_policy",
+    "telemetry-message-rename": "requires_pinned_policy",
+    "telemetry-tag-move": "schema_only",
+    "telemetry-json-key": "requires_pinned_policy",
+    "inventory-packed-bins": "schema_only",
+    "inventory-routing-oneof": "requires_pinned_policy",
+    "inventory-state-retirement": "requires_pinned_policy"
+  },
+  "benchmark_cases": 20,
+  "timing_scope": "per-request wall time includes local model load; prepared pipeline wall time separate; not propagation/human baseline",
+  "results": [
+    {
+      "case": "pubsub-rename",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 41.88548308296595,
+      "model_requests": 3,
+      "generation_seconds": 40.94620220910292,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/csharp/main.cs: Expecting value: line 1 column 1 (char 0); runtimes/python/main.py: Expecting value: line 1 column 1 (char 0); runtimes/typescript/main.ts: Expecting value: line 1 column 1 (char 0)",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/csharp/main.cs",
+            "error": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 10.210600959020667
+          },
+          "request_sha256": "e2edb7d3ca8a3a8642b751333d68cf6322cae9b23cfe8616c4b4ff73d097251b",
+          "serving_counts": {
+            "id": "chatcmpl-270c0a30-c7d0-49f2-a106-a1b2d13cde58",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3074,
+              "completion_tokens": 400,
+              "total_tokens": 3474,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/python/main.py",
+            "error": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 17.121960125048645
+          },
+          "request_sha256": "8bc925143dc23d4d8c8f8b7ccef47d40bad883fc731cae5261c3186d0f348322",
+          "serving_counts": {
+            "id": "chatcmpl-f45565da-ef22-4f31-9ec3-6a056f8d1bda",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3180,
+              "completion_tokens": 323,
+              "total_tokens": 3503,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 896
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/typescript/main.ts",
+            "error": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 13.61364112503361
+          },
+          "request_sha256": "b5be3e72079d508309c5a98094d056fe317433950aafb6d9eac2e9f886618ef2",
+          "serving_counts": {
+            "id": "chatcmpl-f33b4cb9-b1e4-449b-aa76-30366622f166",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3152,
+              "completion_tokens": 421,
+              "total_tokens": 3573,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 896
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "pubsub-removal",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 112.05150054197293,
+      "model_requests": 3,
+      "generation_seconds": 110.78269508399535,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/csharp/main.cs: Expecting value: line 1 column 1 (char 0); runtimes/python/main.py: Expecting value: line 1 column 1 (char 0); runtimes/typescript/main.ts: Expecting value: line 1 column 1 (char 0)",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/csharp/main.cs",
+            "error": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 13.127057333942503
+          },
+          "request_sha256": "41ff279b4b267f4401602ddc0c0d866c4dc53ae89a2760d1560060aaa2336650",
+          "serving_counts": {
+            "id": "chatcmpl-8025a12d-9497-4303-ac18-94683401e294",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3091,
+              "completion_tokens": 355,
+              "total_tokens": 3446,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/python/main.py",
+            "error": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 46.737624083063565
+          },
+          "request_sha256": "578c7232738339c7b1319e56f86c8e132a9c989d2a6e716a9bb8553304ae861a",
+          "serving_counts": {
+            "id": "chatcmpl-93dde247-f8af-48e6-a0d7-47f6215b17e8",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3197,
+              "completion_tokens": 304,
+              "total_tokens": 3501,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/typescript/main.ts",
+            "error": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 50.91801366698928
+          },
+          "request_sha256": "c91ae9f1309342175008ced7e3aa9a5f0a56105c80bb4feaf05630da4c876ed2",
+          "serving_counts": {
+            "id": "chatcmpl-705958e5-0b8b-4eee-a6fc-2eec7bbeb761",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3169,
+              "completion_tokens": 382,
+              "total_tokens": 3551,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    }
+  ],
+  "model_patch_validation_rate": null,
+  "stop_reason": "Gemma returned fenced JSON. Preserve strict-envelope failures separately from the fresh bounded-parser evaluation."
+}

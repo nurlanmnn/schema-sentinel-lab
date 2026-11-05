@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-ca70d5f5-5105-471a-b056-e6e1c014f5ba",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The field name in the VehicleTelemetry constructor must be updated from speed_mps to ground_speed_mps to match the new schema bindings.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Both the observation key and the attribute access on the entity must be updated to ground_speed_mps.\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The attribute access on the entity used for the speeding threshold check must be updated to ground_speed_mps.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\\n\",\n      \"after\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], ground_speed_mps=request['speed'])\\n\"\n    },\n    {\n      \"before\": \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\\n\",\n      \"after\": \"    fields = {'vehicle_id': entity.vehicle_id, 'ground_speed_mps': entity.ground_speed_mps}\\n\"\n    },\n    {\n      \"before\": \"    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\\n\",\n      \"after\": \"    return {'fields': fields, 'speeding': entity.ground_speed_mps > 30.0,\\n\"\n    }\n  ],\n  \"rationale\": \"The schema change renames the field 'speed_mps' to 'ground_speed_mps' while maintaining the same wire index (2) and type (float32). The runtime code uses generated bindings for VehicleTelemetry, so all references to the attribute 'speed_mps' must be updated to 'ground_speed_mps'. Additionally, the intended behavior specifies that the runtime observation key (the key in the 'fields' dictionary) must also change to 'ground_speed_mps'.\",\n  \"confidence\": 1.0,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919570,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2138,
+    "completion_tokens": 532,
+    "total_tokens": 2670,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

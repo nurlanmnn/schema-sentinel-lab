@@ -1,0 +1,26 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The field 'name' is renamed to 'display_name' in the schema and the runtime observation key must be updated to 'display_name'. The C# binding property changes from 'Name' to 'DisplayName'."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The C# binding property 'Name' for Simulation.V1.Entity is renamed to 'DisplayName'."
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };\n",
+      "after": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"display_name\"] = decoded.DisplayName };\n"
+    },
+    {
+      "before": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }\n",
+      "after": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", DisplayName = \"Sensor B\" }\n"
+    }
+  ],
+  "rationale": "The schema change renames 'name' to 'display_name' for v1 Entity. According to the intended behavior, the runtime observation key (used in the 'fields' dictionary) must become 'display_name'. In C#, the regenerated protobuf bindings will change the property 'Name' to 'DisplayName'. Both the observation dictionary and the object initialization are updated to reflect these changes.",
+  "confidence": 1.0,
+  "assumptions": []
+}

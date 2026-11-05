@@ -1,0 +1,51 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 10,
+      "end_line": 10,
+      "replacement_lines": [
+        "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)"
+      ]
+    },
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}"
+      ]
+    },
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,"
+      ]
+    }
+  ],
+  "rationale": "Migrate Python runtime to use speed_kph field per schema change. Constructor keyword argument changed from speed_mps to speed_kph with 3.6x scaling. Deserialized field access updated from speed_mps to speed_kph. Speeding threshold converted from 30.0 m/s to 108.0 kph (30.0 * 3.6). Output field renamed from speed_mps to speed_kph. All changes preserve vehicle_id and speeding decisions on adopted cases.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Request speed input remains in meters per second as specified in intended_behavior",
+    "Generated protobuf bindings have been regenerated with new schema (speed_kph field)",
+    "Coordinated rollout ensures producer/consumer version alignment",
+    "Float32 wire format (field 2) unchanged, only semantic units converted"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": "Constructor keyword argument speed_mps renamed to speed_kph per schema; input speed in m/s requires *3.6 scaling before float32 serialization"
+    },
+    {
+      "line": 11,
+      "decision": "edit",
+      "reason": "Deserialized field access entity.speed_mps renamed to entity.speed_kph per schema; output field key updated to speed_kph for runtime observation key"
+    },
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Speeding threshold comparison updated from 30.0 m/s to 108.0 kph (30.0 * 3.6) per intended_behavior; field access changed to entity.speed_kph"
+    }
+  ]
+}

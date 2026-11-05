@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-604a8c7e-ce17-43af-ab9a-f0890a8e9ad2",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The v1 Entity message field was renamed from 'name' to 'display_name' on wire field 2. The generated C# property will change from 'Name' to 'DisplayName' per the intended_behavior. The observation key must become 'display_name'. This line constructs the v1 fields dictionary and must be updated to use decoded.DisplayName and the new key.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"This line constructs a test Entity instance for the --serve path. The generated C# property for v1 is now 'DisplayName' instead of 'Name' due to the proto field rename. The initialization must use the new property name.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId, [\\\"name\\\"] = decoded.Name };\\n\",\n      \"after\": \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId, [\\\"display_name\\\"] = decoded.DisplayName };\\n\"\n    },\n    {\n      \"before\": \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\", Name = \\\"Sensor B\\\" }\\n\",\n      \"after\": \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\", DisplayName = \\\"Sensor B\\\" }\\n\"\n    }\n  ],\n  \"rationale\": \"The v1 proto field 'name' (wire field 2) was renamed to 'display_name'. Regenerated C# bindings will expose this as the 'DisplayName' property. Both the observation dictionary construction (C001) and the test entity creation (C002) must use the new property name. The observation key changes from 'name' to 'display_name' as specified. v2 Entity is unchanged and requires no edits. All three subscribers decode both schema versions independently; this runtime handles v1 via the updated generated property.\",\n  \"confidence\": 0.98,\n  \"assumptions\": [\n    \"Protobuf code generation for C# maps 'display_name' to 'DisplayName' property (standard PascalCase).\",\n    \"The regenerated Simulation.V1.Entity class has been installed and is available.\",\n    \"No other source files in this runtime reference the old 'Name' property.\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918785,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2888,
+    "completion_tokens": 540,
+    "total_tokens": 3428,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

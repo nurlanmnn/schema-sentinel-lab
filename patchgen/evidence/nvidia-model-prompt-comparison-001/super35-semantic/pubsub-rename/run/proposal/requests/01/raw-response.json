@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-ffe93b09-f35c-436b-8b8b-57f3d3413a82",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 15,\n      \"end_line\": 15,\n      \"replacement_lines\": [\n        \"        fields = new() { [\\\"entity_id\\\"] = decoded.EntityId, [\\\"display_name\\\"] = decoded.DisplayName };\"\n      ]\n    },\n    {\n      \"start_line\": 67,\n      \"end_line\": 67,\n      \"replacement_lines\": [\n        \"        ? new Simulation.V1.Entity { EntityId = \\\"cs_202\\\", DisplayName = \\\"Sensor B\\\" }\"\n      ]\n    }\n  ],\n  \"rationale\": \"Rename v1 Entity.name to display_name on wire field 2. Updated C# reads in ProcessEntity and entity construction at lines 15 and 67. v2 is unchanged. All subscribers independently decode both schema-version topics.\",\n  \"confidence\": 0.97,\n  \"assumptions\": [\n    \"Regenerated C# bindings expose Simulation.V1.Entity.DisplayName for field 2.\",\n    \"Only runtimes/csharp/main.cs is being edited here; other language files are handled separately.\",\n    \"Tests are not edited per instructions.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 15,\n      \"decision\": \"edit\",\n      \"reason\": \"References decoded.Name on v1 Entity; must become decoded.DisplayName after schema rename.\"\n    },\n    {\n      \"line\": 67,\n      \"decision\": \"edit\",\n      \"reason\": \"Constructs v1 Entity with Name; must use DisplayName after schema rename.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918572,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 4468,
+    "completion_tokens": 358,
+    "total_tokens": 4826,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

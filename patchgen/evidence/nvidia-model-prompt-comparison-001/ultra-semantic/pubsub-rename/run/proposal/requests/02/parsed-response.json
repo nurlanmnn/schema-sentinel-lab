@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 33,
+      "end_line": 33,
+      "replacement_lines": [
+        "        fields[\"display_name\"] = entity.display_name"
+      ]
+    },
+    {
+      "start_line": 117,
+      "end_line": 117,
+      "replacement_lines": [
+        "            entity.display_name = \"Sensor A\""
+      ]
+    }
+  ],
+  "rationale": "Renamed the v1 Entity field from 'name' to 'display_name' on wire field 2. Updated the observation key in process_entity (line 33) and the construction in the __main__ block (line 117) to use the new Python attribute 'display_name'. This preserves all values including empty/Unicode/escaped text and entity_id. The runtime observation key becomes 'display_name' as required. v2 code paths are unaffected.",
+  "confidence": 0.98,
+  "assumptions": [
+    "Protobuf Python bindings regenerate with 'display_name' attribute for v1 Entity",
+    "Wire format unchanged (field number 2)",
+    "No other v1-specific references to 'name' exist in this file"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 33,
+      "decision": "edit",
+      "reason": "This line reads entity.name for v1 and stores it under key 'name' in the observation fields. After the rename, the generated attribute is 'display_name' and the observation key must become 'display_name'."
+    },
+    {
+      "line": 117,
+      "decision": "edit",
+      "reason": "This line constructs a v1 Entity and sets entity.name. After the rename, the generated attribute is 'display_name', so the assignment must use entity.display_name."
+    }
+  ]
+}

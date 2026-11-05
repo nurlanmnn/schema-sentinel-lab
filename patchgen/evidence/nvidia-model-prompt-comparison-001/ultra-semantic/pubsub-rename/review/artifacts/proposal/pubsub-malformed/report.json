@@ -1,0 +1,56 @@
+{
+  "status": "expected_rejection_observed",
+  "mode": "actual_local_pubsub",
+  "case": "rename",
+  "scenario": "malformed",
+  "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-model-prompt-comparison-001/ultra-semantic/pubsub-rename/run/proposal/workspace",
+  "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+  "human_approval_required": true,
+  "generated_patch_approval": false,
+  "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "runtime_git_status": [
+    " M generated/csharp/V1/Entity.cs",
+    " M generated/python/v1/entity_pb2.py",
+    " M generated/ts/v1/entity.ts",
+    " M proto/v1/entity.proto",
+    " M runtimes/csharp/main.cs",
+    " M runtimes/python/main.py",
+    " M runtimes/typescript/main.ts",
+    " M testbed/tests/e2e_test.py",
+    " M testbed/tests/test_evidence.py"
+  ],
+  "tools": {
+    "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "node": "v24.10.0",
+    "dotnet": "8.0.426"
+  },
+  "runtime_source_sha256": {
+    "runtimes/python/main.py": "74202229a8ef534def81bb2005294ff742732280e2165c0ae2664ff9527c07a0",
+    "runtimes/typescript/main.ts": "7b553ffe1c6508b25ffcfc4a0f117fcbc141b071dacca3439704830899a56751",
+    "runtimes/csharp/main.cs": "d1c85dc894b64906a0c1c7676289cb706356804f08e252313c6aa7df133cfc93",
+    "proto/v1/entity.proto": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+    "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+  },
+  "harness_source_sha256": {
+    "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+    "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+    "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+  },
+  "publication_cases": 1,
+  "decoded_deliveries": 0,
+  "subscriber_exit_codes": {
+    "python": 1,
+    "typescript": 1,
+    "csharp": -6
+  },
+  "decoder_failures": {
+    "python": true,
+    "typescript": true,
+    "csharp": true
+  },
+  "negative_control": true,
+  "meaning": "all three actual processes rejected truncated protobuf; not successful delivery or migration",
+  "elapsed_seconds": 0.787306374986656,
+  "children_stopped": true,
+  "broker_stopped": true
+}

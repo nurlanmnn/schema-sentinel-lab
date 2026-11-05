@@ -22,3 +22,21 @@ Keep prompts, transport source, raw outputs, host resolutions, validation
 results, and review bundles in fresh evidence directories. Stop after the two
 follow-up cohorts and report outcomes and limitations rather than adding an
 unbounded succession of prompt variants.
+
+## Observed outcome
+
+The final development comparison is complete:
+
+- Ultra original line prompt 2.5: 2/8 validated.
+- Ultra semantic line prompt 3.0: 4/8 validated.
+- Ultra semantic block prompt 3.1: 5/8 validated, combining six initial completed
+  cases with two fresh case attempts after one HTTP 502 interruption.
+- Google Gemma 31B through NVIDIA, semantic block prompt 3.1 and bounded JSON
+  envelope parsing: 6/8 validated. Its initial strict-envelope attempt is kept
+  separately and incomplete.
+
+Recommend explicit Gemma/3.1 selection for the next accuracy-focused evaluation;
+Ultra/3.1 is faster in this sample. Keep CLI defaults unchanged and require all
+validation gates. Do not claim statistical significance, held-out reliability,
+full twenty-case live coverage, or human acceptance. See
+`patchgen/evidence/nvidia-evaluation-001/summary.md` for the comparison and limits.

@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-bb13a458-5d08-424b-9e88-cf31b043321a",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 10,\n      \"end_line\": 10,\n      \"replacement_lines\": [\n        \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=float(request['speed']))\"\n      ]\n    },\n    {\n      \"start_line\": 11,\n      \"end_line\": 11,\n      \"replacement_lines\": [\n        \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': float(entity.speed_mps)}\"\n      ]\n    },\n    {\n      \"start_line\": 12,\n      \"end_line\": 12,\n      \"replacement_lines\": [\n        \"    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\"\n      ]\n    }\n  ],\n  \"rationale\": \"Change speed_mps from float32 to double on wire field 2; Python generated bindings represent double as float. Remove explicit narrowing by wrapping read speed as float construction, preserve input precision through serialization, keep the speed_mps key and vehicle_id, and maintain strict >30 threshold using Python float binary64.\",\n  \"confidence\": 0.97,\n  \"assumptions\": [\n    \"Generated Python bindings will regenerate with double field support; no manual changes to vehicle_pb2.py are needed.\",\n    \"request['speed'] may arrive as int, float, or string; float() preserves numeric precision for binary64 and matches Python float semantics.\",\n    \"No changes are needed to tests, schema, commands, or other source files per the contract.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 10,\n      \"decision\": \"edit\",\n      \"reason\": \"Constructor keyword speed_mps is the canonical field; replacing request['speed'] with float(request['speed']) removes explicit producer narrowing and preserves input precision through serialization.\"\n    },\n    {\n      \"line\": 11,\n      \"decision\": \"edit\",\n      \"reason\": \"Reflection candidate reads entity.speed_mps into the observation key; wrapping with float() preserves Python binary64 precision and keeps the speed_mps key unchanged.\"\n    },\n    {\n      \"line\": 12,\n      \"decision\": \"edit\",\n      \"reason\": \"Threshold comparison uses entity.speed_mps > 30.0; already strict >30 and compatible with Python float, so the line remains unchanged except for inclusion in the edit range due to candidate proximity.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918518,
+  "model": "private/nvidia/nemotron-3.5-super-120b-a12b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2350,
+    "completion_tokens": 547,
+    "total_tokens": 2897,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

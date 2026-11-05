@@ -1,0 +1,63 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };"
+      ]
+    },
+    {
+      "start_line": 21,
+      "end_line": 21,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) };"
+      ]
+    },
+    {
+      "start_line": 67,
+      "end_line": 67,
+      "replacement_lines": [
+        "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }"
+      ]
+    },
+    {
+      "start_line": 68,
+      "end_line": 68,
+      "replacement_lines": [
+        "        : new Simulation.V2.Entity { EntityId = Google.Protobuf.ByteString.CopyFromUtf8(\"cs_202\") };"
+      ]
+    }
+  ],
+  "rationale": "Change v2 Entity.entity_id from string to bytes while preserving v1 behavior. In C#, the generated protobuf property changes from string to ByteString. For v2 decoding (line 21), convert ByteString to UTF-8 string for observations. For v2 construction (line 68), encode the string literal to ByteString using UTF-8. V1 code paths (lines 15, 67) remain unchanged as they still use string EntityId.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Protobuf C# generation changes EntityId from string to ByteString for v2 only",
+    "Observation output requires string value for entity_id key",
+    "Sample identifier 'cs_202' is valid UTF-8 and must round-trip identically",
+    "V1 schema unchanged, so Simulation.V1.Entity.EntityId remains string"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "V1 path accesses decoded.EntityId which remains string; line kept for context but no semantic change needed"
+    },
+    {
+      "line": 21,
+      "decision": "edit",
+      "reason": "V2 path accesses decoded.EntityId which becomes ByteString; must convert to UTF-8 string for observations dictionary"
+    },
+    {
+      "line": 67,
+      "decision": "edit",
+      "reason": "V1 construction uses string literal for EntityId; remains valid as V1 schema unchanged"
+    },
+    {
+      "line": 68,
+      "decision": "edit",
+      "reason": "V2 construction must encode string literal to ByteString using UTF-8 per new schema"
+    }
+  ]
+}

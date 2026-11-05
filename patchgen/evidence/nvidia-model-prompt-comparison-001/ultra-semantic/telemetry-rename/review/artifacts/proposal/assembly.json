@@ -1,0 +1,8 @@
+{
+  "strategy": "candidate_semantic_edits",
+  "schema_origin": "supplied new_schema, copied by host",
+  "file_count": 3,
+  "confidence_aggregation": "minimum of subjective per-file estimates; not calibrated",
+  "model_requests": 3,
+  "automatic_repairs": 0
+}

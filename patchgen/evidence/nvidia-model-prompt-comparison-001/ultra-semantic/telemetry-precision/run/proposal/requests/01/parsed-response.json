@@ -1,0 +1,37 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = request.Speed };"
+      ]
+    }
+  ],
+  "rationale": "The proto field speed_mps changed from float to double, so the generated C# property SpeedMps is now double. The explicit cast (float)request.Speed narrowed the input precision; removing the cast preserves the full binary64 precision through serialization. The dictionary assignment (line 13) and comparison (line 14) already work with double and remain unchanged. The request.Speed is already double (line 19).",
+  "confidence": 0.95,
+  "assumptions": [
+    "The protobuf code generator produces SpeedMps as double when the schema uses double.",
+    "The Threshold comparison > 30.0 uses double literal and is correct for meters per second.",
+    "TelemetryRequest.Speed is double as shown on line 19.",
+    "No other producer/consumer narrowing is required."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Contains the explicit narrowing cast (float)request.Speed that must be removed to preserve input precision when assigning to the now-double SpeedMps property."
+    },
+    {
+      "line": 13,
+      "decision": "unaffected",
+      "reason": "Dictionary stores entity.SpeedMps (now double) into object; no type change needed. The observation key 'speed_mps' and value remain correct."
+    },
+    {
+      "line": 14,
+      "decision": "unaffected",
+      "reason": "Comparison entity.SpeedMps > 30.0 already uses double; threshold semantics unchanged. The constructed_payload serialization will now encode double on the wire, matching the new schema."
+    }
+  ]
+}

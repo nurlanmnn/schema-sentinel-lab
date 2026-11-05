@@ -1,0 +1,218 @@
+{
+  "Ultra / original 2.5": {
+    "passed": 2,
+    "evaluated": 8,
+    "results": [
+      {
+        "case": "pubsub-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-removal",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "expected an indented block after 'if' statement on line 32 (main.py, line 33)"
+      },
+      {
+        "case": "pubsub-utf8",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/main.cs: line edit makes no change; runtimes/typescript/main.ts: candidate decision/edit coverage mismatch"
+      },
+      {
+        "case": "telemetry-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-precision",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Telemetry.cs: line edit makes no change"
+      },
+      {
+        "case": "telemetry-units",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/typescript/telemetry.ts: line edit makes no change"
+      },
+      {
+        "case": "inventory-width",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Inventory.cs: line edit makes no change; runtimes/python/inventory_runtime.py: line edit makes no change; runtimes/typescript/inventory.ts: line edit makes no change"
+      },
+      {
+        "case": "telemetry-quantized",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Telemetry.cs: line edit makes no change"
+      }
+    ]
+  },
+  "Ultra / semantic 3.0": {
+    "passed": 4,
+    "evaluated": 8,
+    "results": [
+      {
+        "case": "pubsub-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-removal",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-utf8",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/main.cs: line edit makes no change"
+      },
+      {
+        "case": "telemetry-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-precision",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-units",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/typescript/telemetry.ts: line edit makes no change"
+      },
+      {
+        "case": "inventory-width",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Inventory.cs: line edit makes no change; runtimes/python/inventory_runtime.py: line edit makes no change"
+      },
+      {
+        "case": "telemetry-quantized",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Telemetry.cs: line edit makes no change; runtimes/python/telemetry_runtime.py: line edit makes no change; runtimes/typescript/telemetry.ts: line edit makes no change"
+      }
+    ]
+  },
+  "Ultra / semantic blocks 3.1": {
+    "passed": 5,
+    "evaluated": 8,
+    "results": [
+      {
+        "case": "pubsub-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-removal",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-utf8",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: proposal/workspace/.venv\"\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/pubsub-utf8/run/proposal/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.3\n[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/pubsub-utf8/run/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 676ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-model-comparison-001/ultra-semantic-blocks/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 104 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\nmain.ts(13,75): error TS2345: Argument of type 'string | Uint8Array<ArrayBufferLike>' is not assignable to parameter of type 'AllowSharedBufferSource | undefined'.\n  Type 'string' is not assignable to type 'AllowSharedBufferSource | undefined'.\n\nCommand failed (exit 2). See the output above.\n"
+      },
+      {
+        "case": "telemetry-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-precision",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-units",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "inventory-width",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/python/inventory_runtime.py: diff must be nonempty only for patch outcome"
+      },
+      {
+        "case": "telemetry-quantized",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Telemetry.cs: line edit makes no change"
+      }
+    ]
+  },
+  "Gemma / semantic blocks 3.1": {
+    "passed": 6,
+    "evaluated": 8,
+    "results": [
+      {
+        "case": "pubsub-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-removal",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-utf8",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "command failed (1): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: stall --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 454ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 97 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\n\n> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release\n  Determining projects to restore...\n  All projects are up-to-date for restore.\n/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/main.cs(21,78): error CS1503: Argument 1: cannot convert from 'Google.Protobuf.ByteString' to 'byte[]' [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]\n\nBuild FAILED.\n\n/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/main.cs(21,78): error CS1503: Argument 1: cannot convert from 'Google.Protobuf.ByteString' to 'byte[]' [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]\n    0 Warning(s)\n    1 Error(s)\n\nTime Elapsed 00:00:00.52\n\nCommand failed (exit 1). See the output above.\n"
+      },
+      {
+        "case": "telemetry-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-precision",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-units",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "inventory-width",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/typescript/inventory.ts: Extra data: line 41 column 1 (char 2358)"
+      },
+      {
+        "case": "telemetry-quantized",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      }
+    ]
+  }
+}

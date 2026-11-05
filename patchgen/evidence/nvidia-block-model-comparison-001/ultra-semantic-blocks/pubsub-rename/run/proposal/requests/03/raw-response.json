@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-6132dbc2-040d-455b-9096-c819e25ac54f",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The v1 schema field 'name' (wire field 2) has been renamed to 'display_name' in the proto definition. The regenerated TypeScript bindings will expose this as 'displayName' (camelCase). The observation key must change from 'name' to 'display_name' per intended_behavior. The spread expression for v1 must reference the new accessor and use the new observation key.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The test encoding for v1 uses the old field name 'name' in the object literal passed to EntityV1.encode. Regenerated bindings expect 'displayName' (camelCase for 'display_name'). This must be updated to match the new schema while preserving the same wire field 2 and value.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"  const fields = { entity_id: entity.entityId, ...(version === \\\"v1\\\" ? { name: (entity as EntityV1).name } : {}) };\\n\",\n      \"after\": \"  const fields = { entity_id: entity.entityId, ...(version === \\\"v1\\\" ? { display_name: (entity as EntityV1).displayName } : {}) };\\n\"\n    },\n    {\n      \"before\": \"    ? EntityV1.encode({ entityId: \\\"ts_303\\\", name: \\\"Sensor C\\\" }).finish()\\n\",\n      \"after\": \"    ? EntityV1.encode({ entityId: \\\"ts_303\\\", displayName: \\\"Sensor C\\\" }).finish()\\n\"\n    }\n  ],\n  \"rationale\": \"Both candidates require edits because the v1 proto field 'name' (wire field 2) is renamed to 'display_name'. The regenerated TypeScript bindings will use camelCase accessor 'displayName'. Candidate C001 updates the observation field key from 'name' to 'display_name' and the property access from '.name' to '.displayName'. Candidate C002 updates the test encoding object literal property from 'name' to 'displayName'. The wire format (field 2) and value 'Sensor C' are preserved. v2 code paths are untouched as intended.\",\n  \"confidence\": 0.98,\n  \"assumptions\": [\n    \"Regenerated TypeScript bindings for simulation.v1.Entity will have property 'displayName' (camelCase) for proto field 'display_name'.\",\n    \"The observation contract requires the JSON key 'display_name' (snake_case) for the renamed field.\",\n    \"No other references to the old 'name' field exist in this source file.\",\n    \"The test value 'Sensor C' and entityId 'ts_303' are preserved exactly.\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918804,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2950,
+    "completion_tokens": 634,
+    "total_tokens": 3584,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

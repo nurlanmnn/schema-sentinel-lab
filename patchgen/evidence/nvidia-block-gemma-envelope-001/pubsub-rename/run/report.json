@@ -1,0 +1,208 @@
+{
+  "status": "validation_passed",
+  "implementation": {
+    "revision": "a463ca9790efd6a164f0ac2790da89267bf8b9b2",
+    "files": {
+      "detector.py": "bb73c2c8215fdd3423e0250af68e20856f116eda047167f05ee065a54c645c2a",
+      "locator.py": "cd72f3a7539cdd810274be0a6ae9849061b13aced9ff28663eaed1daf61bb799",
+      "python_bindings.py": "c4e409a25c2743c5d7f1cfb00951ee315ef829eb65906bed22eb3048bdafa082",
+      "runtime_inventory.py": "77860f657a6a591dd58b82b06c918b843374d1529d520de32c0a61842b467012",
+      "source_spellings.py": "d845778ebc4fef9896c5cf8c35b4cd630695e99c5a4605484deafd17660c19e5",
+      "typescript_bindings.py": "1daf7ea06d89b00b2847feada1563d46235e72347cc2535b05f5e143a936bd47",
+      "binding_analysis.py": "a55a161156878ee8f1da19bd60cd5d16856c72f00486606d450a2dc3ce96204b",
+      "pipeline.py": "dc306aab88e65ffd704d4c3fb7fda76ae7f7f3ec1c95de4ad08f5b941fd2d93b",
+      "adapter.py": "19c3c4c74a937da5e8749be0ff229717fae35c588c4c94f0e3fa4138bdc1ec2b",
+      "generator.py": "34bc47537f6b54a9cd864f9f2394328663d13d9125976fb65bb34e40fbade97b",
+      "anchor_edits.py": "050c2d79455f323d4cc88b68ff80feaa124122cb73e9d328c423b6b45db083dc",
+      "feedback_blocks.py": "f0866e712b2e9c1fb79bb2a4b41c7d712e56b47a1575b20ca95e2ae62b543f17",
+      "rename_tokens.py": "1d41bbe66eada8e28067ee6bb1b7ec87586f0733cfd05edd4a179e97ec54fd6d",
+      "rename_roles.py": "f7fde1fae25f69a5c8dd216a201a070a281a25e42501cb3ed8943d647346d923",
+      "type_utf8.py": "7f19829a29e63c8dfebb800ca86a3e422a982fc388fe2f8885c5f2d4c812de43",
+      "remove_name.py": "f3f3a377adc391cb705a4d93d99b7a1706cd54a336af7db8f573accfbb8da74e",
+      "type_precision.py": "5544b2420ee325a60141b8a243c762b3ee14cf6ca7a4912c4848387ccfec7722",
+      "telemetry_units.py": "05deaa6bbce509973f0a2e273236adcd4434310f8cc223a337a79baf2d410315",
+      "inventory_width.py": "102ef9653fef06260320f7f36978518a252ec4f75f6bc0bff556fd2ec6b912d3",
+      "stock_release.py": "837fa9a119c17eef3111fd261d1699eb91b8dc3d6826422b170600849ec65c2b",
+      "inventory_presence.py": "86da553da89202f230e8c212cc26c839e7d2744edf269cf10a586b4e530016b5",
+      "inventory_labels.py": "3078a3277c039091fdedda9da149e8cee793c46c9158a3a472f3845177107e56",
+      "inventory_reservation.py": "a9a3aafa62a61a5504bec5ec02468ba355ced5933607afd8f6fb6c5ec50a667f",
+      "telemetry_quantized.py": "ed2def87a648c80dc1c9b1e5dd7366b4dcf597501f2e453d4a509f0d6f64abf0",
+      "inventory_state_rename.py": "92a8fd8271e6742c2ec279f13b797e067f572c961513b7489f559c927fba5e25",
+      "telemetry_message_rename.py": "b2be507cd24ffa02d5fb279c1d55a5e6e4d13996c1a260b2ca693f7fe2c0a7d4",
+      "telemetry_metadata.py": "e80dccb6b2ad8926e6e5c1f8f7b2f235aef999286b157caa71638735ad33f08b",
+      "inventory_evolution.py": "bddbb42e15f17486207fad433d8ed6cc8f4edfd8c46faff44e640993c0a89a62",
+      "openrouter_client.py": "5ff353cc7827be1a75937bd3f79628c85a5f031356c596b2f78ab7437fb8ed5a",
+      "nvidia_client.py": "f0ffdba3046db60f4ce7ad88e0dd3daca019fa97159346d89f4641c91b9975a1"
+    }
+  },
+  "measurement": {
+    "expected_sites": 6,
+    "matched_sites": 6,
+    "recall": 1.0,
+    "missed": [],
+    "extra": [],
+    "classification_correct": true
+  },
+  "human_approval_required": true,
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "scope": "runtime syntax candidates; no receiver-type or semantic completeness proof",
+  "proposal_exit_code": 0,
+  "proposal_report": {
+    "status": "validation_passed",
+    "human_approval_required": true,
+    "mode": "live_model",
+    "prompt_version": "3.1-semantic-blocks",
+    "strategy": "candidate_semantic_blocks",
+    "backend": "nvidia",
+    "generator_sha256": "34bc47537f6b54a9cd864f9f2394328663d13d9125976fb65bb34e40fbade97b",
+    "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+    "anchor_edits_sha256": "050c2d79455f323d4cc88b68ff80feaa124122cb73e9d328c423b6b45db083dc",
+    "nvidia_client_sha256": "f0ffdba3046db60f4ce7ad88e0dd3daca019fa97159346d89f4641c91b9975a1",
+    "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+    "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+    "codegen": "local_pinned",
+    "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+    "validation_profile": {
+      "profile_version": "1.0",
+      "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "change_id": "pubsub-name-rename",
+      "new_schema_sha256": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+      "test_patch_sha256": "61b770b50e767493e7423a9d911240ada810544f107168db0b2fbb0c331a6d1f",
+      "allowed_test_paths": [
+        "testbed/tests/e2e_test.py",
+        "testbed/tests/test_evidence.py"
+      ],
+      "model_editable": false,
+      "origin": "independent evaluator expectations; excluded from generation",
+      "oracle_case": "entity-name-rename",
+      "pubsub_case": "rename",
+      "pubsub_negative_control": "truncated_v1_decoder_logs"
+    },
+    "pubsub_harness_sha256": {
+      "run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+      "broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+      "topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+    },
+    "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+    "outcome": "patch",
+    "workspace": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-rename/run/proposal/workspace",
+    "local_codegen_toolchain": {
+      "protoc_version": "libprotoc 25.1",
+      "ts_proto_version": "1.165.0",
+      "ts_proto_options": [
+        "forceLong=string"
+      ],
+      "buf_version": "1.75.0",
+      "sha256": {
+        "protoc": "b6ed65c0d20a9ab88ec6995644f747d557cb9a087eab0152fef5367c34645dc3",
+        "ts-proto-plugin": "29b7513e6485545b535ba9f7a3f2d746336e39b456262bc1a6b1e65ac61d43ea",
+        "ts-proto-build": "0ba82c2d4fccaeead72f4a64a7701adc3a6fe1111d6feb5d2e689fdf87753ada",
+        "package-lock.json": "86df52e5c6979a52dcd6a57b82c79637d33dc69af0fec8dda9704d253a80c7b1"
+      }
+    },
+    "pubsub_validation": {
+      "status": "passed",
+      "mode": "actual_local_pubsub",
+      "case": "rename",
+      "scenario": "valid",
+      "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-rename/run/proposal/workspace",
+      "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+      "human_approval_required": true,
+      "generated_patch_approval": false,
+      "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "runtime_git_status": [
+        " M generated/csharp/V1/Entity.cs",
+        " M generated/python/v1/entity_pb2.py",
+        " M generated/ts/v1/entity.ts",
+        " M proto/v1/entity.proto",
+        " M runtimes/csharp/main.cs",
+        " M runtimes/python/main.py",
+        " M runtimes/typescript/main.ts",
+        " M testbed/tests/e2e_test.py",
+        " M testbed/tests/test_evidence.py"
+      ],
+      "tools": {
+        "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+        "node": "v24.10.0",
+        "dotnet": "8.0.426"
+      },
+      "runtime_source_sha256": {
+        "runtimes/python/main.py": "74202229a8ef534def81bb2005294ff742732280e2165c0ae2664ff9527c07a0",
+        "runtimes/typescript/main.ts": "7b553ffe1c6508b25ffcfc4a0f117fcbc141b071dacca3439704830899a56751",
+        "runtimes/csharp/main.cs": "d1c85dc894b64906a0c1c7676289cb706356804f08e252313c6aa7df133cfc93",
+        "proto/v1/entity.proto": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+        "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+      },
+      "harness_source_sha256": {
+        "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+        "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+        "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+      },
+      "publication_cases": 8,
+      "decoded_deliveries": 24,
+      "topics": 2,
+      "runtimes": 3,
+      "elapsed_seconds": 0.8192034170497209,
+      "children_stopped": true,
+      "broker_stopped": true
+    },
+    "pubsub_negative_control": {
+      "status": "expected_rejection_observed",
+      "mode": "actual_local_pubsub",
+      "case": "rename",
+      "scenario": "malformed",
+      "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-block-gemma-envelope-001/pubsub-rename/run/proposal/workspace",
+      "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+      "human_approval_required": true,
+      "generated_patch_approval": false,
+      "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+      "runtime_git_status": [
+        " M generated/csharp/V1/Entity.cs",
+        " M generated/python/v1/entity_pb2.py",
+        " M generated/ts/v1/entity.ts",
+        " M proto/v1/entity.proto",
+        " M runtimes/csharp/main.cs",
+        " M runtimes/python/main.py",
+        " M runtimes/typescript/main.ts",
+        " M testbed/tests/e2e_test.py",
+        " M testbed/tests/test_evidence.py"
+      ],
+      "tools": {
+        "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+        "node": "v24.10.0",
+        "dotnet": "8.0.426"
+      },
+      "runtime_source_sha256": {
+        "runtimes/python/main.py": "74202229a8ef534def81bb2005294ff742732280e2165c0ae2664ff9527c07a0",
+        "runtimes/typescript/main.ts": "7b553ffe1c6508b25ffcfc4a0f117fcbc141b071dacca3439704830899a56751",
+        "runtimes/csharp/main.cs": "d1c85dc894b64906a0c1c7676289cb706356804f08e252313c6aa7df133cfc93",
+        "proto/v1/entity.proto": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+        "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+      },
+      "harness_source_sha256": {
+        "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+        "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+        "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+      },
+      "publication_cases": 1,
+      "decoded_deliveries": 0,
+      "subscriber_exit_codes": {
+        "python": 1,
+        "typescript": 1,
+        "csharp": -6
+      },
+      "decoder_failures": {
+        "python": true,
+        "typescript": true,
+        "csharp": true
+      },
+      "negative_control": true,
+      "meaning": "all three actual processes rejected truncated protobuf; not successful delivery or migration",
+      "elapsed_seconds": 0.8012941249180585,
+      "children_stopped": true,
+      "broker_stopped": true
+    },
+    "workflow_elapsed_seconds": 65.48296283301897,
+    "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+  }
+}

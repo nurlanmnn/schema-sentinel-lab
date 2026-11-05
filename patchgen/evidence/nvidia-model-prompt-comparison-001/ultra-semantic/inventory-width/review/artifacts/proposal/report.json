@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "human_approval_required": true,
+  "mode": "live_model",
+  "prompt_version": "3.0-semantic",
+  "strategy": "candidate_semantic_edits",
+  "backend": "nvidia",
+  "generator_sha256": "cb881df5bfff9e5ec3edc0ce48c2b6afabc424d870b0ed830780477768b1ae75",
+  "oracle_sha256": "f342e7f5ad9722449072240029fb61a4f6f2eb99716af26d12f93081aa93fffe",
+  "nvidia_client_sha256": "1f662d6f05239f4a5dad5f587b52e0e2da487630f28184fae4e202d8e7d72c82",
+  "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
+  "benchmark_oracle_sha256": "08050860c285c4bc47ccc398eef9a3bdf8ca7f37e58b041773eb5ed8b29faf3c",
+  "codegen": "local_pinned",
+  "local_codegen_sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+  "validation_profile": {
+    "profile_version": "1.0",
+    "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
+    "change_id": "inventory-quantity-width",
+    "new_schema_sha256": "d868049b9de1b1ef2015ca13170ed7872ffd57251e82847ca014f026766df774",
+    "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "allowed_test_paths": [],
+    "inventory_case": "width"
+  },
+  "inventory_oracle_sha256": "bc9171af49983991f4e1eff575d79635c0d44c8c48cb6d46041e9e75362b3eee",
+  "generation_scope": "runtime code only; schema copied from input; tests supplied independently",
+  "error": "file proposal rejected: runtimes/csharp/Inventory.cs: line edit makes no change; runtimes/python/inventory_runtime.py: line edit makes no change",
+  "workflow_elapsed_seconds": 25.71061650000047,
+  "timing_scope": "single prepared-fixture run; not schema propagation performance or human baseline"
+}

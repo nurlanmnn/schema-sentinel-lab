@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Generated TypeScript binding uses camelCase accessor `groundSpeedMps` for proto field `ground_speed_mps`. The encode call uses old property `speedMps` which must be renamed to match the new schema."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Generated TypeScript binding uses camelCase accessor `groundSpeedMps` for proto field `ground_speed_mps`. The observation key must change from `speed_mps` to `ground_speed_mps` and the property access must change from `speedMps` to `groundSpeedMps`."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "Generated TypeScript binding uses camelCase accessor `groundSpeedMps` for proto field `ground_speed_mps`. The speeding predicate must read `entity.groundSpeedMps` instead of `entity.speedMps` to use the decoded value."
+    }
+  },
+  "edits": [
+    {
+      "before": "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();\n",
+      "after": "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, groundSpeedMps: request.speed }).finish();\n"
+    },
+    {
+      "before": "    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };\n",
+      "after": "    const fields = { vehicle_id: entity.vehicleId, ground_speed_mps: entity.groundSpeedMps };\n"
+    },
+    {
+      "before": "    return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n",
+      "after": "    return { fields, speeding: entity.groundSpeedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n"
+    }
+  ],
+  "rationale": "The proto field `speed_mps` was renamed to `ground_speed_mps` on wire field 2. The generated TypeScript bindings use camelCase property names (`groundSpeedMps`). All three candidate sites must be updated: the encode call property name, the observation object key and property access, and the speeding threshold predicate property access. The float32 value is preserved as a JavaScript number (double precision) and the strict >30.0 threshold is unchanged.",
+  "confidence": 0.98,
+  "assumptions": [
+    "TypeScript generated bindings follow standard protobuf.js camelCase convention for field accessors",
+    "The schema change only renames the field; wire format (field number 2, float32) is unchanged",
+    "No other fields or messages are affected"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "outcome": "no_change",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "Python float supports binary64 natively; the assignment to speed_mps already preserves full input precision from request['speed'] through to the generated protobuf field, which now expects double per the new schema."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "Reading entity.speed_mps returns a Python float (binary64) from the generated bindings; the observation key and value remain unchanged and preserve decoded precision."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "The threshold comparison uses a float literal 30.0; Python float is binary64, matching the widened field. The strict >30 semantics are preserved exactly."
+    }
+  },
+  "edits": [],
+  "rationale": "Python's float type is IEEE 754 binary64, so no source changes are required to widen the wire field from float32 to float64. The generated protobuf bindings already handle the wire encoding/decoding for the new double type. All three candidate locations correctly preserve input precision, observation key, and the strict >30.0 threshold without any producer-side narrowing.",
+  "confidence": 0.99,
+  "assumptions": [
+    "Regenerated Python bindings map the protobuf double field to native Python float (binary64).",
+    "No downstream consumers require float32-specific rounding behavior; the schema change specifies coordinated rollout."
+  ]
+}

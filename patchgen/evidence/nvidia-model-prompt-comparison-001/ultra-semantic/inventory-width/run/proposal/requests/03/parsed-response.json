@@ -1,0 +1,41 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 9,
+      "end_line": 9,
+      "replacement_lines": [
+        "    const sample = StockItem.encode({ sku: request.sku, quantity: request.quantity }).finish();"
+      ]
+    }
+  ],
+  "rationale": "The schema change widens field 2 (quantity) from int32 to int64. The ts-proto forceLong=string configuration means int64 fields are represented as canonical decimal strings in generated TypeScript. The Request interface already declares quantity as string (line 4). The encoder call on line 9 was incorrectly converting the string to a JS number via Number.parseInt, which would lose precision for values >2^53-1. The fix passes the canonical decimal string directly to the encoder, preserving exact int64 precision. Line 10 (entity.quantity.toString()) and line 11 (BigInt(entity.quantity) > 0n) already correctly handle the decoded string value and require no changes.",
+  "confidence": 0.95,
+  "assumptions": [
+    "ts-proto generated StockItem.encode accepts canonical decimal string for int64 field when forceLong=string",
+    "Request.quantity input is validated as canonical decimal string before reaching runInventory",
+    "No other code paths construct StockItem with numeric quantity"
+  ],
+  "candidate_reviews": [
+    {
+      "line": 4,
+      "decision": "unaffected",
+      "reason": "Request interface already correctly declares quantity as string, matching the int64 canonical decimal string representation. No change needed."
+    },
+    {
+      "line": 9,
+      "decision": "edit",
+      "reason": "Encoder call incorrectly converts canonical decimal string to JS number via Number.parseInt, losing precision for int64 values. Must pass string directly."
+    },
+    {
+      "line": 10,
+      "decision": "unaffected",
+      "reason": "entity.quantity is already a canonical decimal string (forceLong=string). Calling .toString() on it is idempotent and correct for JSON output."
+    },
+    {
+      "line": 11,
+      "decision": "unaffected",
+      "reason": "BigInt(entity.quantity) correctly parses the canonical decimal string to a bigint for the strict >0 predicate. No change needed."
+    }
+  ]
+}

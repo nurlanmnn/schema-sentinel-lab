@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-9161c9f2-ded8-4b99-9828-0f1dee5b7354",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Generated TypeScript binding uses camelCase accessor `groundSpeedMps` for proto field `ground_speed_mps`. The encode call uses old property `speedMps` which must be renamed to match the new schema.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Generated TypeScript binding uses camelCase accessor `groundSpeedMps` for proto field `ground_speed_mps`. The observation key must change from `speed_mps` to `ground_speed_mps` and the property access must change from `speedMps` to `groundSpeedMps`.\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Generated TypeScript binding uses camelCase accessor `groundSpeedMps` for proto field `ground_speed_mps`. The speeding predicate must read `entity.groundSpeedMps` instead of `entity.speedMps` to use the decoded value.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();\\n\",\n      \"after\": \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, groundSpeedMps: request.speed }).finish();\\n\"\n    },\n    {\n      \"before\": \"    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };\\n\",\n      \"after\": \"    const fields = { vehicle_id: entity.vehicleId, ground_speed_mps: entity.groundSpeedMps };\\n\"\n    },\n    {\n      \"before\": \"    return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\\n\",\n      \"after\": \"    return { fields, speeding: entity.groundSpeedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\\n\"\n    }\n  ],\n  \"rationale\": \"The proto field `speed_mps` was renamed to `ground_speed_mps` on wire field 2. The generated TypeScript bindings use camelCase property names (`groundSpeedMps`). All three candidate sites must be updated: the encode call property name, the observation object key and property access, and the speeding threshold predicate property access. The float32 value is preserved as a JavaScript number (double precision) and the strict >30.0 threshold is unchanged.\",\n  \"confidence\": 0.98,\n  \"assumptions\": [\n    \"TypeScript generated bindings follow standard protobuf.js camelCase convention for field accessors\",\n    \"The schema change only renames the field; wire format (field number 2, float32) is unchanged\",\n    \"No other fields or messages are affected\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793918959,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2009,
+    "completion_tokens": 672,
+    "total_tokens": 2681,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

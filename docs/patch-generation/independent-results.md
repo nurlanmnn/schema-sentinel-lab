@@ -354,3 +354,25 @@ passes the existing UTF-8 pub/sub proposal, 24 valid deliveries and actual
 truncated-decoder rejection with the explicit local codegen path.
 `demo-telemetry-rename-regression-001` passes the earlier rename with the current
 host evaluator. Final suites: 124 patchgen tests, 23 testbed tests.
+
+## NVIDIA hosted model and prompt development comparison (5 November 2026)
+
+An explicit NVIDIA transport now supports locally stored credentials, exact model
+identity checks, provider failure stop rules, retained raw outputs, and optional
+single JSON-fence envelope parsing. Model fallback remains disabled.
+
+On the eight eligible live migrations, Ultra scored 2/8 with original prompt 2.5,
+4/8 with semantic line prompt 3.0, and 5/8 with semantic block prompt 3.1. Google
+Gemma 31B through NVIDIA scored 6/8 with the semantic block prompt and bounded
+JSON-envelope support. Gemma still failed bytes compilation and integer-width
+response formatting. Super 3.5 returned an unverified model identifier and is
+unscored. One Ultra HTTP 502 was followed by one separate provider retry.
+
+These are development results informed by prior failures, with one sample per
+case/configuration and model-specific sampling options. Twelve deterministic
+cases remain outside this live route; no full twenty-case live result, human
+acceptance, or unseen-case reliability is claimed. All 268 patch-generation
+tests passed. No generated patch was merged. The human baseline remains deferred.
+
+Comparison, raw failures and successful reviews:
+`patchgen/evidence/nvidia-evaluation-001/summary.md`.

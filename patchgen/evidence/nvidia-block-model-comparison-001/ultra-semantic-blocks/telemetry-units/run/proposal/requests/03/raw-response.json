@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-c28b94e5-ed12-49c6-824b-f0d937ffd757",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The encoding side uses the producer's request.speed which is in m/s per intended_behavior. The new schema field is speed_kph (km/h). The generated TypeScript accessor will be speedKph. Must scale by 3.6 before encoding and use the new accessor name.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The observation reads entity.speedMps (old accessor). New schema has speed_kph with accessor speedKph. Must read the decoded value via speedKph, which is already in km/h per wire, and expose it under key speed_kph as per intended_behavior.\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"The speeding decision uses entity.speedMps > 30.0 (m/s threshold). New units are km/h; strict threshold becomes >108.0 km/h. Must compare the decoded km/h value (entity.speedKph) against 108.0.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();\\n\",\n      \"after\": \"    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedKph: request.speed * 3.6 }).finish();\\n\"\n    },\n    {\n      \"before\": \"    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };\\n\",\n      \"after\": \"    const fields = { vehicle_id: entity.vehicleId, speed_kph: entity.speedKph };\\n\"\n    },\n    {\n      \"before\": \"    return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\\n\",\n      \"after\": \"    return { fields, speeding: entity.speedKph > 108.0, constructed_payload: Buffer.from(sample).toString(\\\"base64\\\") };\\n\"\n    }\n  ],\n  \"rationale\": \"All three required candidates involve the renamed field speed_mps -> speed_kph with unit change m/s -> km/h. Producer side (C001) scales request.speed (m/s) by 3.6 before encoding into speedKph. Consumer side (C002) reads decoded speedKph (km/h) and exposes as speed_kph. Decision side (C003) compares decoded km/h value against 108.0. Generated TypeScript accessors follow proto3 camelCase: speed_kph -> speedKph. Wire field 2 remains float32; decoded values are exposed as JSON numbers (double precision) per intended_behavior.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"Generated TypeScript bindings use camelCase accessors: speed_kph -> speedKph, vehicle_id -> vehicleId.\",\n    \"request.speed is in meters per second as stated in intended_behavior.\",\n    \"Coordinated rollout ensures all producers/consumers use new schema simultaneously.\",\n    \"No other files need changes; entity v1/v2 unchanged.\",\n    \"Float32 wire encoding/decoding preserves exact bit pattern; observations show decoded float32 as JSON numbers.\"\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793919016,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2047,
+    "completion_tokens": 777,
+    "total_tokens": 2824,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}
