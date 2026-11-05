@@ -33,6 +33,21 @@ def options_for(model):
     return dict(OPTIONS)
 
 
+def parse_content(content):
+    """Accept raw JSON or one complete JSON fence; never extract JSON from prose."""
+    if not isinstance(content, str):
+        raise ProviderError('Model content must be text')
+    stripped = content.strip()
+    normalized = False
+    if stripped.startswith('```json\n') and stripped.endswith('\n```'):
+        stripped = stripped[len('```json\n'):-len('\n```')]
+        normalized = True
+    value = json.loads(stripped)
+    if not isinstance(value, dict):
+        raise ProviderError('Model response must be a JSON object')
+    return value, normalized
+
+
 def credential():
     token = os.environ.get('NVIDIA_API_KEY', '').strip()
     if not token and KEY_FILE.is_file():
@@ -85,7 +100,8 @@ def request_model(messages, model, output):
         choices = raw.get('choices')
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict) or choices[0].get('finish_reason') != 'stop':
             raise ProviderError('Nemotron response was incomplete, refused, or truncated.')
-        value = json.loads(choices[0]['message']['content'])
+        value, normalized = parse_content(choices[0]['message']['content'])
+        measurement['json_fence_removed'] = normalized
         if not isinstance(value, dict):
             raise ProviderError('Nemotron response must be a JSON object.')
         measurement.update(status='response_received', provider=raw.get('provider'),

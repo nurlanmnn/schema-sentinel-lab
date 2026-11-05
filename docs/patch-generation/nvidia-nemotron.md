@@ -97,3 +97,16 @@ This final follow-up has two cohorts and sixteen case attempts, no automatic
 repairs. Model comparison includes different provider-recommended sampling
 options, so any outcome difference is between configurations, not parameter
 count alone. No Chinese-developed model is added to the allowlist.
+
+### Bounded JSON envelope support
+
+Gemma's first benchmark requests returned a single Markdown `json` fence around
+otherwise JSON-formatted content. The strict-envelope cohort was stopped and
+retained separately at `nvidia-block-gemma-001`; it is incomplete and not a model
+quality comparison. The transport now accepts raw JSON or exactly one complete
+outer `json` fence, stripping only that wrapper. It never extracts JSON from prose,
+accepts trailing text, repairs JSON, or changes edits. Raw content is retained and
+`json_fence_removed` is recorded per request. Host edit, compilation and semantic
+gates remain unchanged. A fresh final eight-case cohort is recorded separately at
+`nvidia-block-gemma-envelope-001`. The adapter and sampling configuration are part
+of the evaluated configuration; this is not a controlled prompt-only comparison.

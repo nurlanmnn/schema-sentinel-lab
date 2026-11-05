@@ -145,6 +145,19 @@ class NvidiaTests(unittest.TestCase):
             self.assertEqual(row['status'], 'provider_unavailable')
             self.assertFalse(row['generated_patch_validated'])
 
+    def test_single_json_fence_is_retained_raw_and_parsed_without_changing_payload(self):
+        content = '```json\n{"outcome":"no_change"}\n```'
+        with tempfile.TemporaryDirectory() as temporary, service(raw=response(content)):
+            output = Path(temporary)/'request'
+            value = client.request_model([dict(role='user', content='{"prompt_version":"test"}')], client.MODEL, output)
+            self.assertEqual(value, {'outcome': 'no_change'})
+            raw = json.loads((output/'raw-response.json').read_text())
+            self.assertEqual(raw['choices'][0]['message']['content'], content)
+            self.assertTrue(json.loads((output/'request-measurement.json').read_text())['json_fence_removed'])
+        for invalid in ('Explanation: {"outcome":"no_change"}', '```json\n{}\n``` extra', '```json\n{}\n```\n```json\n{}\n```'):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                client.parse_content(invalid)
+
     def test_unapproved_model_stops_before_http(self):
         with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}')) as calls:
             with self.assertRaisesRegex(client.ProviderError, 'only'):
