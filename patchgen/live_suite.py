@@ -1,4 +1,4 @@
-"""Measure actual local LLM proposals on six fixed independently validated migrations."""
+"""Measure actual local LLM proposals on migrations supported by the live route."""
 import argparse
 import hashlib
 import json
@@ -12,6 +12,16 @@ from run_demo import check_output
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ('pubsub-rename','pubsub-removal','pubsub-utf8','telemetry-rename','telemetry-precision','telemetry-units')
+ADDITIONAL_CASES = ('inventory-width', 'telemetry-quantized')
+SCHEMA_ONLY_CASES = ('inventory-zigzag', 'telemetry-tag-move', 'inventory-packed-bins')
+
+
+def benchmark_plan(entries):
+    return {entry['case']: (
+        'eligible' if entry['case'] in CASES + ADDITIONAL_CASES else
+        'schema_only' if entry['case'] in SCHEMA_ONLY_CASES else
+        'requires_pinned_policy'
+    ) for entry in entries}
 
 
 def collect(target, exit_code, elapsed):
@@ -25,7 +35,8 @@ def collect(target, exit_code, elapsed):
                       error=proposal.get('error',pipeline.get('error')),mode=proposal.get('mode'))
         result['generated_patch_validated'] = bool(exit_code==0 and pipeline['status']=='validation_passed'
             and proposal.get('mode')=='live_model' and (target/'review/index.html').is_file())
-        result['runtime_validation'] = proposal.get('telemetry_validation',proposal.get('pubsub_validation'))
+        result['runtime_validation'] = proposal.get('inventory_validation',
+            proposal.get('telemetry_validation', proposal.get('pubsub_validation')))
     requests=[]
     for directory in sorted((target/'run/proposal/requests').glob('*')):
         item = {'request':directory.name}
@@ -42,14 +53,17 @@ def collect(target, exit_code, elapsed):
         if 'measurement' in item:item['measurement']={key:value for key,value in item['measurement'].items() if key!='memory_samples'}
         requests.append(item)
     result['requests']=requests
+    result['generated_patch_validated'] &= result['model_requests'] > 0
     return result
 
 
-def execute(output,model,strategy='candidate_edits'):
+def execute(output,model,strategy='candidate_edits', *, full_benchmark=False):
     if strategy not in ('candidate_edits','candidate_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     output=check_output(output);output.mkdir(parents=True)
-    entries=[e for e in manifest() if e['case'] in CASES]
+    available = manifest()
+    plan = benchmark_plan(available) if full_benchmark else {name: 'eligible' for name in CASES}
+    entries = [entry for entry in available if plan.get(entry['case']) == 'eligible']
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
     report=dict(status='running',mode='live_model',model=model,strategy=strategy,
@@ -57,7 +71,9 @@ def execute(output,model,strategy='candidate_edits'):
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
                 implementation_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                 implementation_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True)),
-                scope='six authored migrations with actual model-generated runtime edits; not broad model quality or twenty-case MVP',
+                scope='authored migrations eligible for actual model-generated runtime edits',
+                benchmark_coverage=plan,
+                benchmark_cases=len(available),
                 timing_scope='per-request wall time includes local model load; prepared pipeline wall time separate; not propagation/human baseline',results=[])
     def save():(output/'summary.json').write_text(json.dumps(report,indent=2)+'\n')
     save()
@@ -84,10 +100,12 @@ def execute(output,model,strategy='candidate_edits'):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--full-benchmark', action='store_true',
+                        help='record eligibility across the complete deterministic benchmark and run its supported live cases')
     parser.add_argument('--model',choices=LOCAL_MODELS,default='ministral-3:8b')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_blocks'),default='candidate_edits')
     args=parser.parse_args()
-    return execute(args.output,args.model,args.strategy)
+    return execute(args.output,args.model,args.strategy, full_benchmark=args.full_benchmark)
 
 
 if __name__=='__main__':raise SystemExit(main())
