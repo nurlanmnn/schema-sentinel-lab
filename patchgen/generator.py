@@ -135,6 +135,10 @@ INVENTORY_STRATEGIES = {'deterministic_inventory_width': 'width', 'deterministic
                         'deterministic_inventory_labels': 'labels',
                         'deterministic_inventory_reservation': 'reservation',
                         'deterministic_inventory_state_rename': 'state-rename'}
+INVENTORY_EVOLUTION_STRATEGIES = {f'deterministic_inventory_{mode.replace("-", "_")}': mode
+                                  for mode in ('packed-bins', 'routing-oneof', 'state-retirement')}
+INVENTORY_STRATEGIES.update(INVENTORY_EVOLUTION_STRATEGIES)
+STRATEGY_VERSIONS.update({strategy: 'host-inventory-evolution/1.0' for strategy in INVENTORY_EVOLUTION_STRATEGIES})
 STRATEGY_VERSIONS['deterministic_telemetry_metadata'] = 'host-telemetry-metadata/1.0'
 STRATEGY_VERSIONS['deterministic_telemetry_message_rename'] = 'host-message-rename/1.0'
 STRATEGY_VERSIONS['deterministic_telemetry_quantized'] = 'host-quantized/1.0'
@@ -525,6 +529,9 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
 
 # Explicit evaluator-owned profiles; the request cannot choose arbitrary checks.
 VALIDATION_PROFILES = {
+    'inventory-packed-bins': ('inventory-packed-bins', None),
+    'inventory-routing-oneof': ('inventory-routing-oneof', None),
+    'inventory-state-retirement': ('inventory-state-retirement', None),
     'inventory-state-rename': ('inventory-state-rename', None),
     'inventory-reservation': ('inventory-reservation', None),
     'inventory-labels': ('inventory-labels', None),
@@ -551,6 +558,9 @@ INVENTORY_VALIDATION_CASES = {
     'inventory-stock-release': 'stock-release',
     'inventory-presence': 'presence',
     'inventory-labels': 'labels',
+    'inventory-packed-bins': 'packed-bins',
+    'inventory-routing-oneof': 'routing-oneof',
+    'inventory-state-retirement': 'state-retirement',
     'inventory-state-rename': 'state-rename',
     'inventory-reservation': 'reservation',
 }
@@ -716,6 +726,8 @@ def main():
                         'labels': 'inventory_labels.py', 'reservation': 'inventory_reservation.py',
                         'state-rename': 'inventory_state_rename.py'}.get(
         inventory_migration, 'inventory_width.py')
+    if args.strategy in INVENTORY_EVOLUTION_STRATEGIES:
+        inventory_policy = 'inventory_evolution.py'
     if inventory_migration:
         (output/f'inventory-{inventory_migration}-source.py').write_bytes(Path(__file__).with_name(inventory_policy).read_bytes())
     if args.strategy == 'deterministic_telemetry_units':
@@ -828,10 +840,15 @@ def main():
             report['source_preparation'] = 'explicit snapshot of fixture revision; original checkout untouched'
         verify_source(source,case)
         pinned_mode = {'field_presence_added': 'presence', 'field_cardinality_changed': 'labels',
-                       'field_added': 'reservation', 'enum_value_renamed': 'state-rename'}.get(case['change']['category'])
+                       'field_added': 'reservation', 'enum_value_renamed': 'state-rename',
+                       'field_packing_changed': 'packed-bins', 'fields_grouped_in_oneof': 'routing-oneof',
+                       'enum_value_retired': 'state-retirement'}.get(case['change']['category'])
         if pinned_mode and (inventory_migration != pinned_mode or args.response):
             raise ContractError('this change requires its pinned deterministic strategy')
-        if inventory_migration == 'state-rename':
+        if args.strategy in INVENTORY_EVOLUTION_STRATEGIES:
+            from patchgen.inventory_evolution import propose
+            proposal = propose(case, output, inventory_migration)
+        elif inventory_migration == 'state-rename':
             from patchgen.inventory_state_rename import propose
             proposal = propose(case, output)
         elif inventory_migration == 'reservation':

@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "d7efa49f9f95da951bc4b7bdd0ca4454f6a41afd",
+  "change_id": "inventory-state-retirement",
+  "new_schema_sha256": "dfc25d09dcdf20bc03d7571918420b98d7842f048ee7f8a7033dda588a851310",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "inventory_case": "state-retirement"
+}

@@ -8,7 +8,8 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels', 'reservation', 'state-rename')
+CASES = ('baseline', 'width', 'zigzag', 'stock-release', 'presence', 'labels', 'reservation', 'state-rename',
+         'packed-bins', 'routing-oneof', 'state-retirement')
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -104,10 +105,55 @@ def state_rename_vectors():
             for sku, state, label in states for q in (-1, 0, 1, (1 << 31) - 1)]
 
 
+def append_wire(payload, suffix):
+    return base64.b64encode(base64.b64decode(payload) + suffix).decode()
+
+
+def counts_wire(counts, packed):
+    items = [varint(count & ((1 << 64) - 1)) for count in counts]
+    if packed and items:
+        data = b''.join(items)
+        return b'\x32' + varint(len(data)) + data
+    return b''.join(b'\x30' + item for item in items)
+
+
+def bin_vectors():
+    bins = ((), (0,), (1, 2, 1), (127, 128), (-1,), (2147483647, -2147483648),
+            (8, 0, -3, 8), (42, 17))
+    for packed in (False, True):
+        for index, decoded in enumerate(bins):
+            yield f'bins-{index}', decoded, bins[1 + index % (len(bins) - 1)], packed
+
+
+def destination_wire(warehouse, drop_zone):
+    output = bytearray()
+    for tag, value in ((0x3a, warehouse), (0x42, drop_zone)):
+        if value:
+            data = value.encode('utf8')
+            output.extend(bytes([tag]) + varint(len(data)) + data)
+    return bytes(output)
+
+
+def routing_vectors():
+    incoming = (('', ''), ('north', ''), ('', 'dock-7'), ('箱-α', ''))
+    outgoing = (('warehouse', 'preferred'), ('warehouse', ''), ('', 'dock-8'), ('', ''))
+    for index, (warehouse, drop_zone) in enumerate(incoming):
+        for requested_warehouse, requested_drop_zone in outgoing:
+            yield f'route-{index}', warehouse, drop_zone, requested_warehouse, requested_drop_zone
+
+
 def requests(case='baseline'):
     if case not in CASES:
         raise ValueError('unknown inventory oracle case')
-    if case == 'state-rename':
+    if case == 'packed-bins':
+        return [dict(sku=sku, quantity='2', bin_counts=list(produced),
+                     payload=append_wire(encode(sku, 1), counts_wire(decoded, packed)))
+                for sku, decoded, produced, packed in bin_vectors()]
+    if case == 'routing-oneof':
+        return [dict(sku=sku, quantity='2', include_route=True, warehouse=out_wh, drop_zone=out_dz,
+                     payload=append_wire(encode(sku, 1), destination_wire(in_wh, in_dz)))
+                for sku, in_wh, in_dz, out_wh, out_dz in routing_vectors()]
+    if case in ('state-rename', 'state-retirement'):
         return [dict(sku=sku, quantity=str(2 - q), include_state=include,
                      payload=encode(sku, q, state=state))
                 for sku, state, _, q, include in state_rename_vectors()]
@@ -142,8 +188,16 @@ def requests(case='baseline'):
 
 
 def expected(case):
-    if case == 'state-rename':
-        return [dict(fields=dict(sku=sku, quantity=str(q), **({'state_label': label} if include else {})),
+    if case == 'packed-bins':
+        return [dict(fields=dict(sku=sku, quantity='1', bin_counts=list(decoded)), in_stock=True,
+                     constructed_payload=append_wire(encode(sku, 2), counts_wire(produced, True)))
+                for sku, decoded, produced, _ in bin_vectors()]
+    if case == 'routing-oneof':
+        return [dict(fields=dict(sku=sku, quantity='1', warehouse=in_wh, drop_zone=in_dz), in_stock=True,
+                     constructed_payload=append_wire(encode(sku, 2), destination_wire('' if out_dz else out_wh, out_dz)))
+                for sku, in_wh, in_dz, out_wh, out_dz in routing_vectors()]
+    if case in ('state-rename', 'state-retirement'):
+        return [dict(fields=dict(sku=sku, quantity=str(q), **({'state_label': 'UNKNOWN' if case == 'state-retirement' and state == 1 else label} if include else {})),
                      in_stock=state == 0 and q > 0, constructed_payload=encode(sku, 2 - q))
                 for sku, state, label, q, include in state_rename_vectors()]
     if case == 'reservation':
@@ -174,7 +228,8 @@ def check_results(actual, wanted):
     for index, (got, want) in enumerate(zip(actual, wanted, strict=True)):
         if (not isinstance(got, dict) or got != want or type(got.get('in_stock')) is not bool
                 or not isinstance(got.get('fields'), dict)
-                or type(got['fields'].get('quantity')) is not type(want['fields']['quantity'])):
+                or type(got['fields'].get('quantity')) is not type(want['fields']['quantity'])
+                or any(type(count) is not int for count in got['fields'].get('bin_counts', []))):
             raise ValueError(f'inventory value/wire/predicate mismatch at case {index}')
 
 

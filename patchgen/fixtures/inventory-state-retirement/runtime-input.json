@@ -1,0 +1,10 @@
+{
+  "source_revision": "d7efa49f9f95da951bc4b7bdd0ca4454f6a41afd",
+  "change": {
+    "id": "inventory-state-retirement",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  reserved 1;\n  reserved \"STOCK_STATE_QUARANTINED\";\n}\n"
+  },
+  "intended_behavior": "Reserve quarantined state name and value. Report historical value 1 as UNKNOWN and keep it ineligible."
+}

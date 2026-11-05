@@ -12,7 +12,10 @@ ROOT = Path(__file__).resolve().parent
 # Transport variants, negative controls and reference replays are not extra cases.
 CASES = ('pubsub-rename', 'pubsub-removal', 'pubsub-utf8',
          'telemetry-rename', 'telemetry-precision', 'telemetry-units', 'inventory-width', 'inventory-zigzag',
-         'inventory-stock-release', 'inventory-presence', 'inventory-labels', 'inventory-reservation', 'telemetry-quantized', 'inventory-state-rename', 'telemetry-message-rename')
+         'inventory-stock-release', 'inventory-presence', 'inventory-labels', 'inventory-reservation',
+         'telemetry-quantized', 'inventory-state-rename', 'telemetry-message-rename',
+         'telemetry-tag-move', 'telemetry-json-key', 'inventory-packed-bins',
+         'inventory-routing-oneof', 'inventory-state-retirement')
 
 
 def read(path):
@@ -113,7 +116,7 @@ def render_summary(report, entries):
         lines.append(f"| {name} | {row['status']} | {category} | {matched}/{entry['expected_sites']} | {extras} | {evidence} |")
     lines += ['', 'All planned cases remain in completed-suite denominators. Missing measurements count as zero matched sites and incorrect classification.',
               '', 'Timings include bootstrap and prepared-fixture work. Live model performance and human review time are unmeasured.',
-              'These are small authored migrations, not the twenty-case MVP benchmark. Structural classification does not infer units.',
+              'These are authored migrations in a local testbed. Structural classification does not infer units.',
               '', '[Machine-readable summary](summary.json) · [Pinned manifest](manifest.json)', '']
     return '\n'.join(lines)
 
@@ -127,7 +130,7 @@ def execute(output, local_codegen=False):
     report = dict(status='running', mode='deterministic_authored_suite', model_requests=0,
                   human_approval_required=True, human_review_seconds=None, live_model_validation_rate=None,
                   timing_scope='sequential prepared demos including bootstrap; not operational propagation time',
-                  scope='small authored migrations toward the twenty-case MVP benchmark; structural classification only',
+                  scope='twenty authored migrations in the local testbed; structural classification only',
                   missing_measurement_policy='zero matched sites and incorrect classification; all planned cases remain in denominators',
                   implementation_revision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                   implementation_dirty=bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True)),

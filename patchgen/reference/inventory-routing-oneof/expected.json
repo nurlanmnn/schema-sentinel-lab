@@ -1,0 +1,32 @@
+{
+  "source_revision": "1b96fa988852e92bb06e4661091215b61bf31382",
+  "change_id": "inventory-routing-oneof",
+  "category": "fields_grouped_in_oneof",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        12,
+        17,
+        18
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        18,
+        22
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        16,
+        17,
+        22,
+        23
+      ]
+    }
+  ],
+  "method": "Authored generated-field construction and observation roles, or retired symbol references."
+}

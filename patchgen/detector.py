@@ -175,12 +175,59 @@ def standalone_field_metadata_change(old, new):
         if len(reservations) != 1:
             return None
         del after.reserved_range[reservations[0]]
+    elif (prior.label == prior.LABEL_REPEATED and prior.type == prior.TYPE_INT32
+          and prior.options.HasField('packed') and field.options.HasField('packed')
+          and prior.options.packed != field.options.packed):
+        event.update(category='field_packing_changed', old_packed=prior.options.packed,
+                     new_packed=field.options.packed)
+        field.options.packed = prior.options.packed
     elif prior.json_name != field.json_name:
         event.update(category='field_json_name_changed')
         field.json_name = prior.json_name
     else:
         return None
     return event if left == right else None
+
+
+def standalone_string_oneof(old, new):
+    """Match two implicit proto3 strings moved into one new real oneof."""
+    if (old.syntax != 'proto3' or new.syntax != 'proto3'
+            or len(old.message_type) != 1 or len(new.message_type) != 1):
+        return None
+    left, right = copy.deepcopy(old), copy.deepcopy(new)
+    for file in (left, right):
+        file.ClearField('source_code_info')
+    before, after = left.message_type[0], right.message_type[0]
+    if before.oneof_decl or len(after.oneof_decl) != 1 or after.oneof_decl[0].HasField('options'):
+        return None
+    members = [field for field in after.field if field.HasField('oneof_index')]
+    if len(members) != 2 or any(f.type != f.TYPE_STRING or f.label != f.LABEL_OPTIONAL
+                               or f.HasField('proto3_optional') or f.oneof_index != 0 for f in members):
+        return None
+    event = dict(category='fields_grouped_in_oneof', message=qualified(old.package, before.name),
+                 old_name=members[0].name, new_name=members[0].name,
+                 member_names=[f.name for f in members], member_numbers=[f.number for f in members],
+                 oneof=after.oneof_decl[0].name)
+    for field in members:
+        field.ClearField('oneof_index')
+    after.ClearField('oneof_decl')
+    return event if left == right else None
+
+
+def retired_enum_value(old, new):
+    """Recognize removal of one nondefault value with name and number reserved."""
+    remaining = {value.name for value in new.value}
+    removed = [(index, value) for index, value in enumerate(old.value) if value.name not in remaining]
+    if len(removed) != 1 or len(new.value) != len(old.value) - 1:
+        return None
+    index, value = removed[0]
+    if index == 0 or value.number == 0 or sum(v.number == value.number for v in old.value) != 1:
+        return None
+    expected = copy.deepcopy(old)
+    del expected.value[index]
+    expected.reserved_name.append(value.name)
+    expected.reserved_range.add(start=value.number, end=value.number)
+    return value if expected == new else None
 
 
 def compare(old, new):
@@ -193,6 +240,9 @@ def compare(old, new):
     metadata_change = standalone_field_metadata_change(old, new)
     if metadata_change:
         return [metadata_change], []
+    oneof = standalone_string_oneof(old, new)
+    if oneof:
+        return [oneof], []
     events, unsupported = [], []
     def messages(items, prefix):
         result = {}
@@ -261,6 +311,11 @@ def compare(old, new):
             prior, current = rename
             events.append(dict(category='enum_value_renamed', enum=name, number=prior.number,
                                old_value=prior.name, new_value=current.name))
+            continue
+        retired = retired_enum_value(aa[name], bb[name]) if old.syntax == new.syntax == 'proto3' else None
+        if retired:
+            events.append(dict(category='enum_value_retired', enum=name, number=retired.number,
+                               old_value=retired.name))
             continue
         a = {(v.number,v.name) for v in aa[name].value}
         b = {(v.number,v.name) for v in bb[name].value}

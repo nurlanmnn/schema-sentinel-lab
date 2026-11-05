@@ -179,8 +179,8 @@ python3.13 run_benchmark.py --local-codegen --output patchgen/evidence/NEW-suite
 The suite retains every case and reports structural classification, candidate-site
 recall, runtime validation and prepared-demo timing. See
 [decision 0018](docs/decisions/0018-six-migration-suite.md) for prerequisites,
-denominators and limits. These deterministic cases do not establish live model
-performance or meet the twenty-case benchmark target.
+denominators and limits. The twenty authored cases measure the deterministic path. Live model results
+and human timing are evaluated separately.
 
 `run_demo.py --case inventory-width --local-codegen` validates exact signed int64
 stock quantities across the three runtimes, including values above JavaScript's
@@ -227,3 +227,7 @@ wire values and eligibility. See [decision 0034](docs/decisions/0034-inventory-s
 `run_demo.py --case telemetry-message-rename --local-codegen` renames the
 standalone generated telemetry type and validates unchanged raw payloads and
 runtime decisions. See [decision 0035](docs/decisions/0035-telemetry-message-rename.md).
+
+The [twenty-case benchmark decision](docs/decisions/0036-twenty-migration-benchmark.md)
+describes the wire-tag move, JSON key override, packed inventory counts,
+destination oneof, and enum retirement, including their rollout constraints.

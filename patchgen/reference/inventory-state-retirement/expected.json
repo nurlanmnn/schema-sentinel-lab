@@ -1,0 +1,27 @@
+{
+  "source_revision": "d7efa49f9f95da951bc4b7bdd0ca4454f6a41afd",
+  "change_id": "inventory-state-retirement",
+  "category": "enum_value_retired",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        5,
+        18
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        8
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        22
+      ]
+    }
+  ],
+  "method": "Authored generated-field construction and observation roles, or retired symbol references."
+}

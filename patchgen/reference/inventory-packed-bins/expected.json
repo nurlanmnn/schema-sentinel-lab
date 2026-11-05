@@ -1,0 +1,29 @@
+{
+  "source_revision": "ba9ebb103102b1c513091e083ab8149eeb4460dd",
+  "change_id": "inventory-packed-bins",
+  "category": "field_packing_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        11,
+        17
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        17,
+        22
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        16,
+        23
+      ]
+    }
+  ],
+  "method": "Authored generated-field construction and observation roles, or retired symbol references."
+}
