@@ -1,4 +1,5 @@
 """Versioned fixture -> local Ollama proposal -> isolated, fixed validation gate."""
+from patchgen.nvidia_client import MODEL as NVIDIA_MODEL
 import argparse
 import ast
 import difflib
@@ -472,10 +473,12 @@ def request_model(messages, model, endpoint, output):
 
 
 def generate(case, model, endpoint, output, strategy='line_edits', backend='ollama'):
-    if backend == 'openrouter':
-        from patchgen.openrouter_client import credential, request_model as cloud_request, OPTIONS as cloud_options
-        if model != OPENROUTER_MODEL or strategy not in ('candidate_edits', 'candidate_blocks'):
-            raise ContractError('OpenRouter requires the free Gemma model and a supported live editing strategy')
+    if backend in ('openrouter', 'nvidia'):
+        from importlib import import_module
+        transport = import_module('patchgen.' + backend + '_client')
+        credential, cloud_request, cloud_options = transport.credential, transport.request_model, transport.OPTIONS
+        if model != transport.MODEL or strategy not in ('candidate_edits', 'candidate_blocks'):
+            raise ContractError('Cloud backend requires its selected model and a supported live editing strategy')
         credential()
         def request(messages, selected_model, unused_endpoint, directory):
             return cloud_request(messages, selected_model, directory)
@@ -721,7 +724,7 @@ def main():
     parser.add_argument('--prepare-source',action='store_true',help='explicitly snapshot fixture revision into output/source before generation')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--model',default='ministral-3:8b')
-    parser.add_argument('--backend', choices=('ollama','openrouter'), default='ollama')
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default='ollama')
     parser.add_argument('--strategy',choices=tuple(STRATEGY_VERSIONS),default='line_edits')
     parser.add_argument('--validation-profile',choices=tuple(VALIDATION_PROFILES),help='explicit independent test migration; never sent to the model')
     parser.add_argument('--endpoint',default='http://127.0.0.1:11434')
@@ -797,16 +800,16 @@ def main():
             Path(__file__).with_name(inventory_policy).read_bytes()).hexdigest()
     if metadata_strategy:
         report['telemetry_metadata_sha256'] = hashlib.sha256((output/'telemetry-metadata-source.py').read_bytes()).hexdigest()
-    if args.backend == 'openrouter':
-        raw = Path(__file__).with_name('openrouter_client.py').read_bytes()
-        (output/'openrouter-client-source.py').write_bytes(raw)
-        report['openrouter_client_sha256'] = hashlib.sha256(raw).hexdigest()
+    if args.backend in ('openrouter', 'nvidia'):
+        raw = Path(__file__).with_name(args.backend + '_client.py').read_bytes()
+        (output/(args.backend + '-client-source.py')).write_bytes(raw)
+        report[args.backend + '_client_sha256'] = hashlib.sha256(raw).hexdigest()
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
-        if args.backend == 'openrouter' and (args.response or args.feedback
-                or args.model != OPENROUTER_MODEL or args.strategy not in ('candidate_edits','candidate_blocks')):
-            raise ContractError('cloud backend requires an explicit free Gemma live request')
+        if args.backend in ('openrouter', 'nvidia') and (args.response or args.feedback
+                or args.model != {'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}[args.backend] or args.strategy not in ('candidate_edits','candidate_blocks')):
+            raise ContractError('cloud backend requires an explicit request to its selected model')
         if bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks') or args.feedback and args.response:
             raise ContractError('feedback strategy requires explicit live feedback and cannot use offline replay')
         if args.feedback:

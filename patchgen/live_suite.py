@@ -1,4 +1,5 @@
 """Measure actual local LLM proposals on migrations supported by the live route."""
+from patchgen.nvidia_client import MODEL as NVIDIA_MODEL
 import argparse
 import hashlib
 import json
@@ -48,7 +49,7 @@ def collect(target, exit_code, elapsed):
         result['generation_seconds']+=item.get('measurement',{}).get('elapsed_seconds',0)
         if (directory/'raw-response.json').is_file():
             raw=json.loads((directory/'raw-response.json').read_text())
-            fields = ('id','model','provider','usage') if result.get('backend') == 'openrouter' else (
+            fields = ('id','model','provider','usage') if result.get('backend') in ('openrouter', 'nvidia') else (
                 'done','done_reason','prompt_eval_count','eval_count','total_duration','load_duration','prompt_eval_duration','eval_duration')
             item['serving_counts']={key:raw.get(key) for key in fields}
         # Full memory samples remain in their original request-measurement artifacts.
@@ -68,10 +69,12 @@ def collect(target, exit_code, elapsed):
 def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None):
     if strategy not in ('candidate_edits','candidate_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
-    if backend == 'openrouter':
-        from patchgen.openrouter_client import credential
-        if model != OPENROUTER_MODEL:
-            raise ValueError('OpenRouter evaluation requires the free Gemma model')
+    if backend in ('openrouter', 'nvidia'):
+        from importlib import import_module
+        transport = import_module('patchgen.' + backend + '_client')
+        credential = transport.credential
+        if model != transport.MODEL:
+            raise ValueError('Cloud evaluation requires its selected model')
         credential()
     elif backend != 'ollama' or model not in LOCAL_MODELS:
         raise ValueError('unsupported local backend or model')
@@ -88,8 +91,8 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
     options = OPTIONS
-    if backend == 'openrouter':
-        from patchgen.openrouter_client import OPTIONS as options
+    if backend in ('openrouter', 'nvidia'):
+        options = transport.OPTIONS
     report=dict(status='running',mode='live_model',model=model,strategy=strategy,backend=backend,
                 prompt_version=STRATEGY_VERSIONS[strategy],options=options,
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
@@ -129,13 +132,13 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--full-benchmark', action='store_true',
                         help='record eligibility across the complete deterministic benchmark and run its supported live cases')
-    parser.add_argument('--backend', choices=('ollama','openrouter'), default='ollama')
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL), default=None)
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default='ollama')
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,NVIDIA_MODEL), default=None)
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_blocks'),default='candidate_edits')
     args=parser.parse_args()
-    model = args.model or (OPENROUTER_MODEL if args.backend == 'openrouter' else 'ministral-3:8b')
+    model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(args.backend, 'ministral-3:8b'))
     try:
         return execute(args.output,model,args.strategy, full_benchmark=args.full_benchmark,
                        backend=args.backend,cases=args.case)

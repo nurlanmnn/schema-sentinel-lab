@@ -1,4 +1,5 @@
 """One-command independent descriptor -> syntax candidates -> adapter workflow."""
+from patchgen.nvidia_client import MODEL as NVIDIA_MODEL
 import argparse
 import hashlib
 import json
@@ -19,9 +20,9 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits",
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
                           files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
-                                 for name in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','generator.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py')})
+                                 for name in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','generator.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py','nvidia_client.py')})
     save(output/'implementation.json',implementation)
-    for filename in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py'):
+    for filename in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py','nvidia_client.py'):
         (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
     revision=require(case,'source_revision',str,'request')
     if not re.fullmatch(r'[0-9a-f]{40}',revision):
@@ -124,8 +125,8 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL),default=None,help='explicit model identifier')
-    parser.add_argument('--backend', choices=('ollama','openrouter'),default='ollama')
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,NVIDIA_MODEL),default=None,help='explicit model identifier')
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'),default='ollama')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
     parser.add_argument('--strategy',choices=(*INVENTORY_EVOLUTION_STRATEGIES,'deterministic_telemetry_metadata','deterministic_telemetry_message_rename','deterministic_inventory_state_rename','deterministic_telemetry_quantized','deterministic_inventory_reservation','deterministic_inventory_labels','deterministic_inventory_presence','deterministic_inventory_stock_release','deterministic_inventory_width','deterministic_inventory_zigzag','candidate_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
@@ -133,11 +134,13 @@ def main():
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
-        args.model = args.model or (OPENROUTER_MODEL if args.backend == 'openrouter' else 'ministral-3:8b')
-        if args.backend == 'openrouter':
-            from patchgen.openrouter_client import credential
-            if not args.generate or args.response or args.feedback or args.model != OPENROUTER_MODEL:
-                raise ContractError('OpenRouter requires an explicit free Gemma generation run')
+        args.model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(args.backend, 'ministral-3:8b'))
+        if args.backend in ('openrouter', 'nvidia'):
+            from importlib import import_module
+            transport = import_module('patchgen.' + args.backend + '_client')
+            credential = transport.credential
+            if not args.generate or args.response or args.feedback or args.model != transport.MODEL:
+                raise ContractError('Cloud backend requires an explicit generation run for its selected model')
             credential()
         if (bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks')
                 or args.feedback and (not args.generate or args.response)):

@@ -1,0 +1,115 @@
+{
+  "review_version": "1.0",
+  "change_id": "telemetry-speed-units",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "failed",
+  "mode": "live_model",
+  "strategy": "candidate_edits",
+  "approval_eligible": false,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "920c7ff6fa81ddcd611ee05bd8309a728a10cbf39be16483707ecd9a4840b8fe",
+      "bytes": 10688
+    },
+    "request.json": {
+      "sha256": "e47e84c03a38e07317625752859d8b353d25f0cb313c7f8a574c0e592975b1b0",
+      "bytes": 1077
+    },
+    "report.json": {
+      "sha256": "1632510ef5f95b12af6b037bc5a2dc394e68e9d5f97bc933bbba161489953bd1",
+      "bytes": 7061
+    },
+    "provenance.json": {
+      "sha256": "f8a77b84a9cdb848a0ce0b34746158beefb9f88c831756ec5ac7d3deec93cec8",
+      "bytes": 1048
+    },
+    "detector.json": {
+      "sha256": "d4ab4fb09341b4fbf708ee99b6dfa1fe8ff3576d6186a23f59b04e7cc1048480",
+      "bytes": 2530
+    },
+    "locator.json": {
+      "sha256": "535d837f79c4102bf8f61fb987b15684aa91953c22ae429e86fed380e0d6a157",
+      "bytes": 14897
+    },
+    "measurement.json": {
+      "sha256": "a573b72f31d06d3991b7f856915447b5c06663add1379cab368f5ebd6e962bbe",
+      "bytes": 130
+    },
+    "implementation.json": {
+      "sha256": "b482810e1e4bdaa1e857543278b8d872da34843887469684861ee79f580c6418",
+      "bytes": 2886
+    },
+    "proposal/report.json": {
+      "sha256": "1da3936c31178b1d83b563c19f1fb170dc854670eceee15a4539ce8aa10e2c53",
+      "bytes": 3603
+    },
+    "proposal/assembly.json": {
+      "sha256": "d974f49fd483315d052ac8ee6384356aa4ad3ee471459eff333cb9944fe3b437",
+      "bytes": 250
+    },
+    "proposal/proposal.json": {
+      "sha256": "5a12bba3379eb9855fb9b36a15f757616bb0f968cba8aaaf9e6c562f182c168c",
+      "bytes": 6525
+    },
+    "proposal/proposal.patch": {
+      "sha256": "7fc3a73d40a88d0e13e0e0797553ac1b67648528641f4b53d470a3847d52c303",
+      "bytes": 3706
+    },
+    "proposal/nvidia-client-source.py": {
+      "sha256": "7b27f934b38739f788fee2c5a7e75cac8479dd9ddcc0e1bbc259b2f7c23df82a",
+      "bytes": 5901
+    },
+    "proposal/validation.log": {
+      "sha256": "65ca8d4079c19e3385df09d5f50369c0914ef8b16e8920f3c70a81c90360820a",
+      "bytes": 13042
+    },
+    "proposal/validation-profile.json": {
+      "sha256": "bf8fc10cd3b6d96b5bc033ff900d6214bba7464de2dfe5d2763564ca8d3df12c",
+      "bytes": 375
+    },
+    "proposal/validation-tests.patch": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "proposal/telemetry/report.json": {
+      "sha256": "098c9d5f413653f4079eef43d844a9b966f58cce3e67cc397295cb4cf8bdce03",
+      "bytes": 2789
+    },
+    "proposal/telemetry/expected.json": {
+      "sha256": "7baec437d6bee429f791d73b26fc2ab8ff5318165021960aa24109f695cf89c6",
+      "bytes": 2279
+    },
+    "proposal/telemetry/python.json": {
+      "sha256": "1ac7a3767d5a96889c894816ce44edf78f99fd744caf8c00ee924b8cbf1b99fe",
+      "bytes": 1428
+    },
+    "proposal/telemetry/typescript.json": {
+      "sha256": "a63469b63d55151dc42e6220181dc118f8888fac18e97be996eb6049e7d137da",
+      "bytes": 1221
+    },
+    "proposal/telemetry/csharp.json": {
+      "sha256": "f30cf46c3bf4a329405d225033bdb246c5d45d2d6bd30fdba8a8248c4e9d15f4",
+      "bytes": 1154
+    },
+    "proposal/telemetry-oracle-source.py": {
+      "sha256": "c1b9c54e2cae1fcdef3628a819ce4462dde1c900b5582e58cfa6b2518885f8d8",
+      "bytes": 7326
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    },
+    "proposal/local-codegen-toolchain.json": {
+      "sha256": "c33b64db86116c6244f441836ca218447a42929e9193667db67102387df25d3e",
+      "bytes": 527
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

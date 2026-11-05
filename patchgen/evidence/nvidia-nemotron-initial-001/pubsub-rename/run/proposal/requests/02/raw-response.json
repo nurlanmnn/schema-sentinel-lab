@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-2d6d483d-f317-415e-927f-0f88c8870723",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"edits\": [\n    {\n      \"start_line\": 33,\n      \"end_line\": 33,\n      \"replacement_lines\": [\n        \"        fields[\\\"display_name\\\"] = entity.display_name\"\n      ]\n    },\n    {\n      \"start_line\": 117,\n      \"end_line\": 117,\n      \"replacement_lines\": [\n        \"            entity.display_name = \\\"Sensor A\\\"\"\n      ]\n    }\n  ],\n  \"rationale\": \"The schema rename changes v1 Entity.name to display_name on the same wire field 2. Both Python read (line 33) and construction (line 117) sites must use the new generated attribute display_name. The observation key becomes display_name per spec. Regenerated bindings will provide display_name; v2 is unchanged.\",\n  \"confidence\": 0.98,\n  \"assumptions\": [\n    \"Generated Python bindings expose the renamed field as display_name (snake_case matching proto field).\",\n    \"No other source files outside the provided affected_files require edits for this rename.\"\n  ],\n  \"candidate_reviews\": [\n    {\n      \"line\": 33,\n      \"decision\": \"edit\",\n      \"reason\": \"Reads v1 entity.name for observation fields; must become entity.display_name to match regenerated bindings and new observation key.\"\n    },\n    {\n      \"line\": 117,\n      \"decision\": \"edit\",\n      \"reason\": \"Constructs v1 entity setting entity.name; must become entity.display_name to match regenerated bindings.\"\n    }\n  ]\n}",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793917613,
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 4622,
+    "completion_tokens": 349,
+    "total_tokens": 4971,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+    }
+  }
+}

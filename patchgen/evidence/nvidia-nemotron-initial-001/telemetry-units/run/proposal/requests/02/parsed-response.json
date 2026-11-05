@@ -1,0 +1,51 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 10,
+      "end_line": 10,
+      "replacement_lines": [
+        "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)"
+      ]
+    },
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}"
+      ]
+    },
+    {
+      "start_line": 12,
+      "end_line": 12,
+      "replacement_lines": [
+        "    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,"
+      ]
+    }
+  ],
+  "rationale": "Renamed field speed_mps to speed_kph in protobuf schema; updated construction and reads to use new field name. Converted input speed (m/s) to km/h using factor 3.6 before serialization. Adjusted speeding threshold from 30 m/s to 108 km/h (equivalent). Changed runtime observation key from speed_mps to speed_kph.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Input request['speed'] remains in meters per second per intended_behavior.",
+    "Generated protobuf bindings expose speed_kph field after schema regeneration.",
+    "Wire format field 2 stays float32; no changes to serialization logic needed.",
+    "VehicleTelemetry entity decoded from payload uses new schema (coordinated rollout)."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": "Constructor uses old field name speed_mps; must migrate to speed_kph with unit conversion."
+    },
+    {
+      "line": 11,
+      "decision": "edit",
+      "reason": "Reads entity.speed_mps and returns speed_mps key; must use new field speed_kph and key."
+    },
+    {
+      "line": 12,
+      "decision": "edit",
+      "reason": "Speeding threshold uses entity.speed_mps > 30.0; must use entity.speed_kph > 108.0."
+    }
+  ]
+}

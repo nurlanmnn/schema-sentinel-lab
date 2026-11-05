@@ -1,0 +1,14 @@
+{
+  "adapter_version": "1.0",
+  "detector_verification": "schema hashes, descriptor hashes and supported event recomputed; not independent analysis",
+  "candidate_verification": "syntax candidates and scan warnings recomputed from pinned source; not independent analysis",
+  "detector_producer": "independent-descriptor-detector/1.1",
+  "locator_producer": "independent-tree-sitter-locator/1.11",
+  "detector_sha256": "c778139993b5963824b13ad631c6add81a3587470f46a724f3c02f5843f04671",
+  "locator_sha256": "9cc4bfcd240696ff1c08d56b2ba08326092a45dbb9be85b5dcfcad7db01364d8",
+  "scan_verification": "exact runtime tree inventory and supported source manifest",
+  "binding_verification": "positive claims recomputed under declared repository Python/ts-proto policies; not independent analysis",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "site_resolution": "candidate; optional bounded binding evidence",
+  "integration_scope": "validated supplied records; syntax scan is bounded and does not prove complete impact coverage"
+}

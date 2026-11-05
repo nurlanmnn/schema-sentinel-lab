@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-nemotron-initial-001/pubsub-rename/run/proposal/workspace/runtimes/python/main.py", line 108, in <module>
+    subscribe()
+    ~~~~~~~~~^^
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-nemotron-initial-001/pubsub-rename/run/proposal/workspace/runtimes/python/main.py", line 97, in subscribe
+    _, fields = process_entity(base64.b64decode(delivery['payload'], validate=True), delivery['version'])
+                ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-nemotron-initial-001/pubsub-rename/run/proposal/workspace/runtimes/python/main.py", line 30, in process_entity
+    entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+google.protobuf.message.DecodeError: Error parsing message
