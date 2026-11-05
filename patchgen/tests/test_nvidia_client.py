@@ -109,6 +109,30 @@ class NvidiaTests(unittest.TestCase):
                     client.request_model([dict(role='user', content='{"prompt_version":"test"}')],
                                          client.MODEL, Path(temporary)/'request')
 
+    def test_second_allowed_model_and_substitution_gate(self):
+        selected = client.MODELS[1]
+        messages = [dict(role='user', content='{"prompt_version":"test"}')]
+        with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}', model=selected)) as calls:
+            client.request_model(messages, selected, Path(temporary)/'request')
+            self.assertEqual(calls[0]['body']['model'], selected)
+        with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}', model=client.MODEL)):
+            with self.assertRaisesRegex(client.ProviderError, 'different model'):
+                client.request_model(messages, selected, Path(temporary)/'request')
+
+    def test_semantic_prompt_preserves_input_allowlist(self):
+        from patchgen.generator import edit_prompt
+        case = copy.deepcopy(CASE)
+        case['reference_answer'] = 'FORBIDDEN_REFERENCE'
+        case['expected_results'] = 'FORBIDDEN_ORACLE'
+        original = edit_prompt(case, case['affected_files'][0], 'candidate_edits')
+        revised = edit_prompt(case, case['affected_files'][0], 'candidate_semantic_edits')
+        self.assertNotIn('FORBIDDEN_', json.dumps(revised))
+        before, after = json.loads(original[1]['content']), json.loads(revised[1]['content'])
+        self.assertTrue(after.pop('prompt_version').startswith('3.0-semantic'))
+        before.pop('prompt_version')
+        self.assertEqual(before, after)
+        self.assertIn('C# explicitly widen', revised[0]['content'])
+
     def test_unapproved_model_stops_before_http(self):
         with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}')) as calls:
             with self.assertRaisesRegex(client.ProviderError, 'only'):

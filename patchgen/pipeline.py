@@ -1,5 +1,5 @@
 """One-command independent descriptor -> syntax candidates -> adapter workflow."""
-from patchgen.nvidia_client import MODEL as NVIDIA_MODEL
+from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 import argparse
 import hashlib
 import json
@@ -125,11 +125,11 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,NVIDIA_MODEL),default=None,help='explicit model identifier')
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,*NVIDIA_MODELS),default=None,help='explicit model identifier')
     parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'),default='ollama')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
-    parser.add_argument('--strategy',choices=(*INVENTORY_EVOLUTION_STRATEGIES,'deterministic_telemetry_metadata','deterministic_telemetry_message_rename','deterministic_inventory_state_rename','deterministic_telemetry_quantized','deterministic_inventory_reservation','deterministic_inventory_labels','deterministic_inventory_presence','deterministic_inventory_stock_release','deterministic_inventory_width','deterministic_inventory_zigzag','candidate_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=(*INVENTORY_EVOLUTION_STRATEGIES,'deterministic_telemetry_metadata','deterministic_telemetry_message_rename','deterministic_inventory_state_rename','deterministic_telemetry_quantized','deterministic_inventory_reservation','deterministic_inventory_labels','deterministic_inventory_presence','deterministic_inventory_stock_release','deterministic_inventory_width','deterministic_inventory_zigzag','candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
     parser.add_argument('--feedback',type=Path,help='explicit feedback for a separately measured live feedback attempt')
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
@@ -139,7 +139,7 @@ def main():
             from importlib import import_module
             transport = import_module('patchgen.' + args.backend + '_client')
             credential = transport.credential
-            if not args.generate or args.response or args.feedback or args.model != transport.MODEL:
+            if not args.generate or args.response or args.feedback or args.model not in getattr(transport, 'MODELS', (transport.MODEL,)):
                 raise ContractError('Cloud backend requires an explicit generation run for its selected model')
             credential()
         if (bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks')

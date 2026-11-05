@@ -1,5 +1,5 @@
 """Measure actual local LLM proposals on migrations supported by the live route."""
-from patchgen.nvidia_client import MODEL as NVIDIA_MODEL
+from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 import argparse
 import hashlib
 import json
@@ -67,13 +67,13 @@ def collect(target, exit_code, elapsed):
 
 
 def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None):
-    if strategy not in ('candidate_edits','candidate_blocks'):
+    if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     if backend in ('openrouter', 'nvidia'):
         from importlib import import_module
         transport = import_module('patchgen.' + backend + '_client')
         credential = transport.credential
-        if model != transport.MODEL:
+        if model not in getattr(transport, 'MODELS', (transport.MODEL,)):
             raise ValueError('Cloud evaluation requires its selected model')
         credential()
     elif backend != 'ollama' or model not in LOCAL_MODELS:
@@ -133,10 +133,10 @@ def main():
     parser.add_argument('--full-benchmark', action='store_true',
                         help='record eligibility across the complete deterministic benchmark and run its supported live cases')
     parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default='ollama')
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,NVIDIA_MODEL), default=None)
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,*NVIDIA_MODELS), default=None)
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
-    parser.add_argument('--strategy',choices=('candidate_edits','candidate_blocks'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks'),default='candidate_edits')
     args=parser.parse_args()
     model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(args.backend, 'ministral-3:8b'))
     try:

@@ -11,6 +11,7 @@ import urllib.error
 import urllib.request
 
 MODEL = 'nvidia/nemotron-3-ultra-550b-a55b'
+MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b')
 API_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 KEY_FILE = Path.home() / '.config/schema-sentinel/nvidia.key'
 OPTIONS = {
@@ -40,8 +41,8 @@ def save(path, value):
 
 
 def request_model(messages, model, output):
-    if model != MODEL:
-        raise ProviderError('This transport permits only the explicitly selected free Nemotron model.')
+    if model not in MODELS:
+        raise ProviderError('This transport permits only explicitly allowed NVIDIA Nemotron models.')
     token = credential()
     output.mkdir(parents=True, exist_ok=False)
     payload = json.loads(messages[-1]['content'])

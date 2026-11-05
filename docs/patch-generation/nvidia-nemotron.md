@@ -29,3 +29,34 @@ Initial bounded trial:
 ```
 
 No live NVIDIA result is established by the integration's synthetic HTTP tests.
+
+## Bounded model and prompt comparison
+
+The explicit model allowlist also includes
+`nvidia/nemotron-3.5-super-vl-120b-a12b`, whose direct free endpoint was verified
+on NVIDIA Build on 2026-11-05:
+https://build.nvidia.com/nvidia/nemotron-3.5-super-vl-120b-a12b
+Neither model routes to another model or provider on failure.
+
+`candidate_semantic_edits` is prompt version `3.0-semantic`, with the same edit
+schema, reference-answer exclusion, and validation gates as `candidate_edits`
+version 2.5. It adds general input/wire/decoded-observation consistency guidance,
+including explicit C# widening when exact decoded float32 JSON values are required.
+It includes no numeric benchmark answers. This is a development prompt informed
+by previous failures, not a prompt selected using a held-out test set.
+
+Run the finite comparison with:
+
+```sh
+.venv/bin/python -m patchgen.nvidia_comparison \
+  --output patchgen/evidence/nvidia-model-prompt-comparison-001
+```
+
+This executes each model with each prompt on eight eligible migrations, one
+sample per cell, sequentially. It stops after four cohorts or on unavailable
+provider/runner state. Temperature, token budget, disabled thinking, edit contract,
+fixture revisions, and runtime oracles are held fixed. There are no repair calls.
+Single stochastic samples cannot establish statistical reliability or isolate a
+prompt effect from sampling noise; repeatability requires a separate evaluation.
+The other twelve deterministic benchmark cases remain explicitly ineligible for
+this live route and are not counted as model successes.

@@ -1,5 +1,5 @@
 """Versioned fixture -> local Ollama proposal -> isolated, fixed validation gate."""
-from patchgen.nvidia_client import MODEL as NVIDIA_MODEL
+from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 import argparse
 import ast
 import difflib
@@ -120,6 +120,21 @@ CANDIDATE_SYSTEM = MIGRATION_SYSTEM.replace(
     'Every supplied impact position must be covered by an edit range. Each edit range must touch a supplied\nimpact position.',
     'Positions are conservative syntax CANDIDATES, possibly belonging to an unchanged version or unrelated type.\nReview each candidate line exactly once in candidate_reviews: line, decision (edit or unaffected), reason.\nOnly candidates marked edit must be covered by edits. Every edit must touch a candidate marked edit.\nDo not modify unaffected candidates. Explain version/type evidence for each unaffected decision.').replace(
     'Only patch outcomes must\ncover every supplied position.', 'Patch outcomes cover every candidate marked edit.') + "\nKeep original indentation. TextEncoder and TextDecoder require new instances in TypeScript."
+SEMANTIC_GUIDANCE = """
+Before returning edits, check the complete path: request input -> constructed message -> wire
+encoding -> decoded message -> observation -> predicate. Follow intended_behavior at every stage.
+Use decoded message values in observations, never substitute original request values. Preserve
+numeric width, signedness, presence, and precision. JSON has no float32 type: when exact decoded
+float32 observations are required, expose the decoded value as a double precision JSON number;
+in C# explicitly widen the decoded float to double before placing it in an object/dictionary.
+Do not round decoded values or change equality assertions to hide discrepancies. Transform
+producer units before encoding and consumer thresholds consistently, using only supplied semantics.
+For bytes fields, distinguish raw bytes, UTF-8 text, and base64; follow the declared observation contract.
+Keep every expression complete: include its declaration, condition, and both branches when replacing
+an entire conditional assignment. Keep line numbers tied to original source and review each candidate.
+This is a private consistency check; return only the JSON response, without a chain of thought.
+"""
+
 CANDIDATE_SCHEMA = {**LINE_SCHEMA, 'properties':dict(LINE_SCHEMA['properties']),
                     'required':LINE_SCHEMA['required'] + ['candidate_reviews']}
 CANDIDATE_SCHEMA['properties']['candidate_reviews'] = {'type':'array','items':{
@@ -151,6 +166,7 @@ STRATEGY_VERSIONS['deterministic_inventory_labels'] = 'host-inventory-labels/1.0
 STRATEGY_VERSIONS['deterministic_inventory_presence'] = 'host-inventory-presence/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_stock_release'] = 'host-stock-release/1.0'
 STRATEGY_VERSIONS['candidate_blocks']='2.8'
+STRATEGY_VERSIONS['candidate_semantic_edits']='3.0-semantic'
 STRATEGY_VERSIONS['candidate_feedback_blocks']='2.9-feedback'
 
 
@@ -229,6 +245,13 @@ def file_context(file):
 
 
 def edit_prompt(case, file, strategy='exact_edits'):
+    if strategy == 'candidate_semantic_edits':
+        messages = edit_prompt(case, file, 'candidate_edits')
+        messages[0]['content'] += SEMANTIC_GUIDANCE
+        payload = json.loads(messages[1]['content'])
+        payload['prompt_version'] = STRATEGY_VERSIONS[strategy] + ('-binding1' if any(p.get('required_reference') for p in file['positions']) else '')
+        messages[1]['content'] = json.dumps(payload, indent=2)
+        return messages
     # Reuse the input allowlist so reference/caller metadata never enters a request.
     payload = json.loads(prompt(case)[1]['content'])
     payload['affected_files'] = [file_context(file)]
@@ -477,7 +500,7 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
         from importlib import import_module
         transport = import_module('patchgen.' + backend + '_client')
         credential, cloud_request, cloud_options = transport.credential, transport.request_model, transport.OPTIONS
-        if model != transport.MODEL or strategy not in ('candidate_edits', 'candidate_blocks'):
+        if model not in getattr(transport, 'MODELS', (transport.MODEL,)) or strategy not in ('candidate_edits', 'candidate_semantic_edits', 'candidate_blocks'):
             raise ContractError('Cloud backend requires its selected model and a supported live editing strategy')
         credential()
         def request(messages, selected_model, unused_endpoint, directory):
@@ -516,8 +539,8 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
                 updated = resolve(file['source_context'],value,tokens,file['positions'])
             else:
                 value = request(edit_prompt(case,file,strategy),model,endpoint,directory)
-            if strategy in ('line_edits','migration_edits','candidate_edits'):
-                updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy == 'candidate_edits' else resolve_lines(file['source_context'],value,file['positions'])
+            if strategy in ('line_edits','migration_edits','candidate_edits','candidate_semantic_edits'):
+                updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy in ('candidate_edits','candidate_semantic_edits') else resolve_lines(file['source_context'],value,file['positions'])
             elif strategy not in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_feedback_blocks'):
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
@@ -808,7 +831,7 @@ def main():
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
         if args.backend in ('openrouter', 'nvidia') and (args.response or args.feedback
-                or args.model != {'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}[args.backend] or args.strategy not in ('candidate_edits','candidate_blocks')):
+                or args.model not in ({'openrouter': (OPENROUTER_MODEL,), 'nvidia': NVIDIA_MODELS}[args.backend]) or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks')):
             raise ContractError('cloud backend requires an explicit request to its selected model')
         if bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks') or args.feedback and args.response:
             raise ContractError('feedback strategy requires explicit live feedback and cannot use offline replay')
