@@ -5,8 +5,8 @@ The request selects that provider and disables provider fallback. It sends the
 schema-change task and pinned runtime source excerpts for the selected case.
 
 The first trial uses telemetry rename, which makes three requests. It uses the
-existing candidate-edits prompt, temperature 0, seed 42, an 8192-token response
-budget, JSON object mode and enabled reasoning. OpenRouter does not enforce
+existing candidate-edits prompt, temperature 0, seed 42, a 2048-token response
+budget, JSON object mode and disabled reasoning. OpenRouter does not enforce
 the full response schema for this endpoint. The host still checks edit ranges,
 candidate reviews, source identity, compilation and independent runtime evidence.
 These serving settings differ from the local Ollama structured-output run.
@@ -52,7 +52,7 @@ The eight-case comparison uses:
 ```
 
 Free-tier quota and capacity can interrupt a run. HTTP errors retain their status
-and any Retry-After header. Each file makes one request, without automatic retry.
+and any Retry-After header. Each file makes one request, without automatic retry. A provider HTTP error stops the case before requesting the remaining files.
 Key values and authentication headers are excluded from saved request evidence.
 
 ## Verification before live use

@@ -1,0 +1,8 @@
+{
+  "backend": "openrouter",
+  "status": "http_error",
+  "model": "google/gemma-4-31b-it:free",
+  "http_status": 429,
+  "retry_after": null,
+  "elapsed_seconds": 0.38793087494559586
+}

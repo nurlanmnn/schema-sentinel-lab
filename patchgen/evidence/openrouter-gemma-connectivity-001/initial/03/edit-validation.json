@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "path": "runtimes/typescript/telemetry.ts",
+  "error": "OpenRouter HTTP 429. Authentication or capacity may need attention. No retry was sent."
+}

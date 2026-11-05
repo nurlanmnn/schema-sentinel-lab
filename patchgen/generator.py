@@ -14,7 +14,7 @@ import threading
 import time
 import urllib.request
 from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
-from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL
+from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL, ProviderHTTPError
 
 PROMPT_VERSION = '2.3'
 OPTIONS = {'temperature': 0, 'seed': 42, 'num_ctx': 16384, 'num_predict': 8192}
@@ -519,6 +519,11 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
             save(directory / 'edit-validation.json',{'status':'passed','path':file['path']})
+        except ProviderHTTPError as error:
+            errors.append(f'{file["path"]}: {error}')
+            save(directory / 'edit-validation.json', dict(status='provider_unavailable',
+                 path=file['path'], error=str(error)))
+            break
         except (OSError,ValueError,KeyError) as error:
             errors.append(f'{file["path"]}: {error}')
             directory.mkdir(parents=True,exist_ok=True)

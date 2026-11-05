@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from patchgen import openrouter_client as client
 from patchgen.generator import ContractError, generate
+from patchgen.live_suite import collect
 
 ROOT = Path(__file__).resolve().parents[2]
 CASE = json.loads((ROOT/'patchgen/fixtures/entity-name-removal/input.json').read_text())
@@ -78,6 +79,28 @@ class OpenRouterTests(unittest.TestCase):
                 self.assertEqual(record['http_status'], status)
                 self.assertEqual(record['retry_after'], '60')
                 self.assertNotIn(TOKEN, json.dumps(record))
+                retained = (output/'http-error.json').read_text()
+                self.assertNotIn(TOKEN, retained)
+                self.assertIn('[REDACTED]', retained)
+
+    def test_provider_error_stops_generation_before_remaining_files(self):
+        with tempfile.TemporaryDirectory() as temporary, service(status=429, raw={'error':'shared pool'}) as calls:
+            with self.assertRaisesRegex(ContractError, 'HTTP 429'):
+                generate(CASE, client.MODEL, 'unused', Path(temporary), 'candidate_edits', backend='openrouter')
+            self.assertEqual(len(calls), 1)
+
+    def test_provider_failure_is_distinct_from_model_failure(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            request = target/'run/proposal/requests/01'
+            request.mkdir(parents=True)
+            (request/'request.json').write_text('{}')
+            (request/'request-measurement.json').write_text(json.dumps(
+                dict(http_status=429, backend='openrouter', status='http_error')))
+            row = collect(target, 1, .5)
+            self.assertEqual(row['status'], 'provider_unavailable')
+            self.assertFalse(row['generated_patch_validated'])
+            self.assertEqual(row['provider_errors'][0]['http_status'], 429)
 
     def test_invalid_truncated_and_substituted_responses_are_rejected(self):
         for raw in (response('not JSON'), response('{}', finish='length'), response('{}', model='other')):

@@ -55,6 +55,12 @@ def collect(target, exit_code, elapsed):
         if 'measurement' in item:item['measurement']={key:value for key,value in item['measurement'].items() if key!='memory_samples'}
         requests.append(item)
     result['requests']=requests
+    result['provider_errors'] = [
+        dict(request=item['request'], http_status=item['measurement']['http_status'])
+        for item in requests if item.get('measurement', {}).get('http_status')
+    ]
+    if result['provider_errors']:
+        result['status'] = 'provider_unavailable'
     result['generated_patch_validated'] &= result['model_requests'] > 0
     return result
 
@@ -108,7 +114,10 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         report['results'].append(result);save()
         print(result['case']+': '+result['status']+'; actual model requests='+str(result['model_requests']),flush=True)
     passed=sum(r['generated_patch_validated'] for r in report['results'])
-    report.update(status='completed',validated_model_patches=passed,model_patch_validation_rate=passed/len(entries),
+    unavailable = sum(row['status'] == 'provider_unavailable' for row in report['results'])
+    report.update(status='provider_unavailable' if unavailable else 'completed',
+                  provider_unavailable_cases=unavailable,validated_model_patches=passed,
+                  model_patch_validation_rate=None if unavailable else passed/len(entries),
                   model_requests=sum(r['model_requests'] for r in report['results']),
                   generation_seconds=sum(r['generation_seconds'] for r in report['results']))
     save()

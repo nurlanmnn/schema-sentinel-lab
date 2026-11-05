@@ -15,7 +15,7 @@ The local HTTP checks are synthetic. They establish request and error handling,
 and do not count toward model quality or live patch validation rates.
 
 Google's JSON mode provides object output without full schema enforcement.
-Enabled reasoning and server-side model implementation differ from the local
+Disabled reasoning and server-side model implementation differ from the local
 Ollama baseline. Record these differences when interpreting a comparison.
 
 No new third-party dependency was introduced.

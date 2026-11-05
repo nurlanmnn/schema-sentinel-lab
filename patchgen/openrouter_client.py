@@ -16,8 +16,8 @@ KEY_FILE = Path.home() / '.config/schema-sentinel/openrouter.key'
 OPTIONS = {
     'temperature': 0,
     'seed': 42,
-    'max_tokens': 8192,
-    'reasoning': {'enabled': True},
+    'max_tokens': 2048,
+    'reasoning': {'enabled': False},
     'response_format': {'type': 'json_object'},
     'provider': {'only': ['Google AI Studio'], 'allow_fallbacks': False},
 }
@@ -25,6 +25,10 @@ OPTIONS = {
 
 class ProviderError(ValueError):
     """A cloud request failed before a usable edit response was produced."""
+
+
+class ProviderHTTPError(ProviderError):
+    """The provider could not serve a request."""
 
 
 def credential():
@@ -89,7 +93,16 @@ def request_model(messages, model, output):
     except urllib.error.HTTPError as error:
         measurement.update(status='http_error', http_status=error.code,
                            retry_after=error.headers.get('Retry-After'))
-        raise ProviderError(f'OpenRouter HTTP {error.code}. Authentication or capacity may need attention. No retry was sent.') from None
+        message = error.read(65536).decode('utf8', errors='replace').replace(token, '[REDACTED]')
+        try:
+            details = json.loads(message)
+            if isinstance(details, dict):
+                details.pop('user_id', None)
+            message = json.dumps(details)
+        except ValueError:
+            pass
+        save(output / 'http-error.json', dict(status=error.code, body=message))
+        raise ProviderHTTPError(f'OpenRouter HTTP {error.code}: {message[:1000]}') from None
     except (OSError, ValueError, KeyError, TypeError) as error:
         measurement['status'] = 'failed'
         raise ProviderError(str(error).replace(token, '[REDACTED]')) from None
