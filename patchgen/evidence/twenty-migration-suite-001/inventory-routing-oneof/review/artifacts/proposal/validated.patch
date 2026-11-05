@@ -1,0 +1,370 @@
+diff --git a/generated/csharp/Inventory/Item.cs b/generated/csharp/Inventory/Item.cs
+index f05d3d1..7bb2286 100644
+--- a/generated/csharp/Inventory/Item.cs
++++ b/generated/csharp/Inventory/Item.cs
+@@ -25,17 +25,17 @@ namespace Simulation.Inventory {
+       byte[] descriptorData = global::System.Convert.FromBase64String(
+           string.Concat(
+             "ChRpbnZlbnRvcnkvaXRlbS5wcm90bxIUc2ltdWxhdGlvbi5pbnZlbnRvcnki",
+-            "0wEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
++            "5gEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
+             "IAEoBVIIcXVhbnRpdHkSNgoFc3RhdGUYAyABKA4yIC5zaW11bGF0aW9uLmlu",
+             "dmVudG9yeS5TdG9ja1N0YXRlUgVzdGF0ZRIlCg5kaXNwbGF5X2xhYmVscxgE",
+-            "IAMoCVINZGlzcGxheUxhYmVscxIcCgl3YXJlaG91c2UYByABKAlSCXdhcmVo",
+-            "b3VzZRIbCglkcm9wX3pvbmUYCCABKAlSCGRyb3Bab25lKkYKClN0b2NrU3Rh",
+-            "dGUSGwoXU1RPQ0tfU1RBVEVfVU5TUEVDSUZJRUQQABIbChdTVE9DS19TVEFU",
+-            "RV9RVUFSQU5USU5FRBABYgZwcm90bzM="));
++            "IAMoCVINZGlzcGxheUxhYmVscxIeCgl3YXJlaG91c2UYByABKAlIAFIJd2Fy",
++            "ZWhvdXNlEh0KCWRyb3Bfem9uZRgIIAEoCUgAUghkcm9wWm9uZUINCgtkZXN0",
++            "aW5hdGlvbipGCgpTdG9ja1N0YXRlEhsKF1NUT0NLX1NUQVRFX1VOU1BFQ0lG",
++            "SUVEEAASGwoXU1RPQ0tfU1RBVEVfUVVBUkFOVElORUQQAWIGcHJvdG8z"));
+       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+           new pbr::FileDescriptor[] { },
+           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.Inventory.StockState), }, null, new pbr::GeneratedClrTypeInfo[] {
+-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels", "Warehouse", "DropZone" }, null, null, null, null)
++            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels", "Warehouse", "DropZone" }, new[]{ "Destination" }, null, null, null)
+           }));
+     }
+     #endregion
+@@ -89,8 +89,15 @@ namespace Simulation.Inventory {
+       quantity_ = other.quantity_;
+       state_ = other.state_;
+       displayLabels_ = other.displayLabels_.Clone();
+-      warehouse_ = other.warehouse_;
+-      dropZone_ = other.dropZone_;
++      switch (other.DestinationCase) {
++        case DestinationOneofCase.Warehouse:
++          Warehouse = other.Warehouse;
++          break;
++        case DestinationOneofCase.DropZone:
++          DropZone = other.DropZone;
++          break;
++      }
++
+       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+     }
+ 
+@@ -149,27 +156,76 @@ namespace Simulation.Inventory {
+ 
+     /// <summary>Field number for the "warehouse" field.</summary>
+     public const int WarehouseFieldNumber = 7;
+-    private string warehouse_ = "";
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public string Warehouse {
+-      get { return warehouse_; }
++      get { return HasWarehouse ? (string) destination_ : ""; }
+       set {
+-        warehouse_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
++        destination_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
++        destinationCase_ = DestinationOneofCase.Warehouse;
++      }
++    }
++    /// <summary>Gets whether the "warehouse" field is set</summary>
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public bool HasWarehouse {
++      get { return destinationCase_ == DestinationOneofCase.Warehouse; }
++    }
++    /// <summary> Clears the value of the oneof if it's currently set to "warehouse" </summary>
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public void ClearWarehouse() {
++      if (HasWarehouse) {
++        ClearDestination();
+       }
+     }
+ 
+     /// <summary>Field number for the "drop_zone" field.</summary>
+     public const int DropZoneFieldNumber = 8;
+-    private string dropZone_ = "";
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public string DropZone {
+-      get { return dropZone_; }
++      get { return HasDropZone ? (string) destination_ : ""; }
+       set {
+-        dropZone_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
++        destination_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
++        destinationCase_ = DestinationOneofCase.DropZone;
+       }
+     }
++    /// <summary>Gets whether the "drop_zone" field is set</summary>
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public bool HasDropZone {
++      get { return destinationCase_ == DestinationOneofCase.DropZone; }
++    }
++    /// <summary> Clears the value of the oneof if it's currently set to "drop_zone" </summary>
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public void ClearDropZone() {
++      if (HasDropZone) {
++        ClearDestination();
++      }
++    }
++
++    private object destination_;
++    /// <summary>Enum of possible cases for the "destination" oneof.</summary>
++    public enum DestinationOneofCase {
++      None = 0,
++      Warehouse = 7,
++      DropZone = 8,
++    }
++    private DestinationOneofCase destinationCase_ = DestinationOneofCase.None;
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public DestinationOneofCase DestinationCase {
++      get { return destinationCase_; }
++    }
++
++    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
++    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
++    public void ClearDestination() {
++      destinationCase_ = DestinationOneofCase.None;
++      destination_ = null;
++    }
+ 
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+@@ -192,6 +248,7 @@ namespace Simulation.Inventory {
+       if(!displayLabels_.Equals(other.displayLabels_)) return false;
+       if (Warehouse != other.Warehouse) return false;
+       if (DropZone != other.DropZone) return false;
++      if (DestinationCase != other.DestinationCase) return false;
+       return Equals(_unknownFields, other._unknownFields);
+     }
+ 
+@@ -203,8 +260,9 @@ namespace Simulation.Inventory {
+       if (Quantity != 0) hash ^= Quantity.GetHashCode();
+       if (State != global::Simulation.Inventory.StockState.Unspecified) hash ^= State.GetHashCode();
+       hash ^= displayLabels_.GetHashCode();
+-      if (Warehouse.Length != 0) hash ^= Warehouse.GetHashCode();
+-      if (DropZone.Length != 0) hash ^= DropZone.GetHashCode();
++      if (HasWarehouse) hash ^= Warehouse.GetHashCode();
++      if (HasDropZone) hash ^= DropZone.GetHashCode();
++      hash ^= (int) destinationCase_;
+       if (_unknownFields != null) {
+         hash ^= _unknownFields.GetHashCode();
+       }
+@@ -236,11 +294,11 @@ namespace Simulation.Inventory {
+         output.WriteEnum((int) State);
+       }
+       displayLabels_.WriteTo(output, _repeated_displayLabels_codec);
+-      if (Warehouse.Length != 0) {
++      if (HasWarehouse) {
+         output.WriteRawTag(58);
+         output.WriteString(Warehouse);
+       }
+-      if (DropZone.Length != 0) {
++      if (HasDropZone) {
+         output.WriteRawTag(66);
+         output.WriteString(DropZone);
+       }
+@@ -267,11 +325,11 @@ namespace Simulation.Inventory {
+         output.WriteEnum((int) State);
+       }
+       displayLabels_.WriteTo(ref output, _repeated_displayLabels_codec);
+-      if (Warehouse.Length != 0) {
++      if (HasWarehouse) {
+         output.WriteRawTag(58);
+         output.WriteString(Warehouse);
+       }
+-      if (DropZone.Length != 0) {
++      if (HasDropZone) {
+         output.WriteRawTag(66);
+         output.WriteString(DropZone);
+       }
+@@ -295,10 +353,10 @@ namespace Simulation.Inventory {
+         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
+       }
+       size += displayLabels_.CalculateSize(_repeated_displayLabels_codec);
+-      if (Warehouse.Length != 0) {
++      if (HasWarehouse) {
+         size += 1 + pb::CodedOutputStream.ComputeStringSize(Warehouse);
+       }
+-      if (DropZone.Length != 0) {
++      if (HasDropZone) {
+         size += 1 + pb::CodedOutputStream.ComputeStringSize(DropZone);
+       }
+       if (_unknownFields != null) {
+@@ -323,12 +381,15 @@ namespace Simulation.Inventory {
+         State = other.State;
+       }
+       displayLabels_.Add(other.displayLabels_);
+-      if (other.Warehouse.Length != 0) {
+-        Warehouse = other.Warehouse;
+-      }
+-      if (other.DropZone.Length != 0) {
+-        DropZone = other.DropZone;
++      switch (other.DestinationCase) {
++        case DestinationOneofCase.Warehouse:
++          Warehouse = other.Warehouse;
++          break;
++        case DestinationOneofCase.DropZone:
++          DropZone = other.DropZone;
++          break;
+       }
++
+       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+     }
+ 
+diff --git a/generated/python/inventory/item_pb2.py b/generated/python/inventory/item_pb2.py
+index 173d463..4675bba 100644
+--- a/generated/python/inventory/item_pb2.py
++++ b/generated/python/inventory/item_pb2.py
+@@ -14,15 +14,15 @@ _sym_db = _symbol_database.Default()
+ 
+ 
+ 
+-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14inventory/item.proto\x12\x14simulation.inventory\"\xd3\x01\n\tStockItem\x12\x10\n\x03sku\x18\x01 \x01(\tR\x03sku\x12\x1a\n\x08quantity\x18\x02 \x01(\x05R\x08quantity\x12\x36\n\x05state\x18\x03 \x01(\x0e\x32 .simulation.inventory.StockStateR\x05state\x12%\n\x0e\x64isplay_labels\x18\x04 \x03(\tR\rdisplayLabels\x12\x1c\n\twarehouse\x18\x07 \x01(\tR\twarehouse\x12\x1b\n\tdrop_zone\x18\x08 \x01(\tR\x08\x64ropZone*F\n\nStockState\x12\x1b\n\x17STOCK_STATE_UNSPECIFIED\x10\x00\x12\x1b\n\x17STOCK_STATE_QUARANTINED\x10\x01\x62\x06proto3')
++DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14inventory/item.proto\x12\x14simulation.inventory\"\xe6\x01\n\tStockItem\x12\x10\n\x03sku\x18\x01 \x01(\tR\x03sku\x12\x1a\n\x08quantity\x18\x02 \x01(\x05R\x08quantity\x12\x36\n\x05state\x18\x03 \x01(\x0e\x32 .simulation.inventory.StockStateR\x05state\x12%\n\x0e\x64isplay_labels\x18\x04 \x03(\tR\rdisplayLabels\x12\x1e\n\twarehouse\x18\x07 \x01(\tH\x00R\twarehouse\x12\x1d\n\tdrop_zone\x18\x08 \x01(\tH\x00R\x08\x64ropZoneB\r\n\x0b\x64\x65stination*F\n\nStockState\x12\x1b\n\x17STOCK_STATE_UNSPECIFIED\x10\x00\x12\x1b\n\x17STOCK_STATE_QUARANTINED\x10\x01\x62\x06proto3')
+ 
+ _globals = globals()
+ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'inventory.item_pb2', _globals)
+ if _descriptor._USE_C_DESCRIPTORS == False:
+   DESCRIPTOR._options = None
+-  _globals['_STOCKSTATE']._serialized_start=260
+-  _globals['_STOCKSTATE']._serialized_end=330
++  _globals['_STOCKSTATE']._serialized_start=279
++  _globals['_STOCKSTATE']._serialized_end=349
+   _globals['_STOCKITEM']._serialized_start=47
+-  _globals['_STOCKITEM']._serialized_end=258
++  _globals['_STOCKITEM']._serialized_end=277
+ # @@protoc_insertion_point(module_scope)
+diff --git a/generated/ts/inventory/item.ts b/generated/ts/inventory/item.ts
+index 8a1de56..ddd1832 100644
+--- a/generated/ts/inventory/item.ts
++++ b/generated/ts/inventory/item.ts
+@@ -41,12 +41,12 @@ export interface StockItem {
+   quantity: number;
+   state: StockState;
+   displayLabels: string[];
+-  warehouse: string;
+-  dropZone: string;
++  warehouse?: string | undefined;
++  dropZone?: string | undefined;
+ }
+ 
+ function createBaseStockItem(): StockItem {
+-  return { sku: "", quantity: 0, state: 0, displayLabels: [], warehouse: "", dropZone: "" };
++  return { sku: "", quantity: 0, state: 0, displayLabels: [], warehouse: undefined, dropZone: undefined };
+ }
+ 
+ export const StockItem = {
+@@ -63,10 +63,10 @@ export const StockItem = {
+     for (const v of message.displayLabels) {
+       writer.uint32(34).string(v!);
+     }
+-    if (message.warehouse !== "") {
++    if (message.warehouse !== undefined) {
+       writer.uint32(58).string(message.warehouse);
+     }
+-    if (message.dropZone !== "") {
++    if (message.dropZone !== undefined) {
+       writer.uint32(66).string(message.dropZone);
+     }
+     return writer;
+@@ -138,8 +138,8 @@ export const StockItem = {
+       displayLabels: globalThis.Array.isArray(object?.displayLabels)
+         ? object.displayLabels.map((e: any) => globalThis.String(e))
+         : [],
+-      warehouse: isSet(object.warehouse) ? globalThis.String(object.warehouse) : "",
+-      dropZone: isSet(object.dropZone) ? globalThis.String(object.dropZone) : "",
++      warehouse: isSet(object.warehouse) ? globalThis.String(object.warehouse) : undefined,
++      dropZone: isSet(object.dropZone) ? globalThis.String(object.dropZone) : undefined,
+     };
+   },
+ 
+@@ -157,10 +157,10 @@ export const StockItem = {
+     if (message.displayLabels?.length) {
+       obj.displayLabels = message.displayLabels;
+     }
+-    if (message.warehouse !== "") {
++    if (message.warehouse !== undefined) {
+       obj.warehouse = message.warehouse;
+     }
+-    if (message.dropZone !== "") {
++    if (message.dropZone !== undefined) {
+       obj.dropZone = message.dropZone;
+     }
+     return obj;
+@@ -175,8 +175,8 @@ export const StockItem = {
+     message.quantity = object.quantity ?? 0;
+     message.state = object.state ?? 0;
+     message.displayLabels = object.displayLabels?.map((e) => e) || [];
+-    message.warehouse = object.warehouse ?? "";
+-    message.dropZone = object.dropZone ?? "";
++    message.warehouse = object.warehouse ?? undefined;
++    message.dropZone = object.dropZone ?? undefined;
+     return message;
+   },
+ };
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+index e653693..8d7f19c 100644
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -5,8 +5,10 @@ message StockItem {
+   int32 quantity = 2;
+   StockState state = 3;
+   repeated string display_labels = 4;
+-  string warehouse = 7;
+-  string drop_zone = 8;
++  oneof destination {
++    string warehouse = 7;
++    string drop_zone = 8;
++  }
+ }
+ 
+ enum StockState {
+diff --git a/runtimes/csharp/Inventory.cs b/runtimes/csharp/Inventory.cs
+index 7fb565d..489ac2b 100644
+--- a/runtimes/csharp/Inventory.cs
++++ b/runtimes/csharp/Inventory.cs
+@@ -13,8 +13,10 @@ static class InventoryRuntime
+             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+             var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
+             sample.DisplayLabels.Add(request.DisplayLabels ?? Array.Empty<string>());
+-            sample.Warehouse = request.Warehouse ?? "";
+-            sample.DropZone = request.DropZone ?? "";
++            if (!string.IsNullOrEmpty(request.DropZone))
++                sample.DropZone = request.DropZone;
++            else if (!string.IsNullOrEmpty(request.Warehouse))
++                sample.Warehouse = request.Warehouse;
+             var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
+             if (request.DisplayLabels is not null)
+                 fields["display_labels"] = entity.DisplayLabels.ToArray();
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+index 070e675..335ae93 100644
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -9,7 +9,8 @@ def evaluate(request):
+     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
+     sample = StockItem(sku=request['sku'], quantity=int(request['quantity']),
+                        display_labels=request.get('display_labels', []),
+-                       warehouse=request.get('warehouse', ''), drop_zone=request.get('drop_zone', ''))
++                       warehouse=None if request.get('drop_zone') else request.get('warehouse') or None,
++                       drop_zone=request.get('drop_zone') or None)
+     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
+     if 'display_labels' in request:
+         fields['display_labels'] = list(entity.display_labels)
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+index 2f3c510..573c86d 100644
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -15,11 +15,12 @@ export function runInventory() {
+     const entity = StockItem.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+     const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED,
+       displayLabels: request.display_labels ?? [],
+-      warehouse: request.warehouse ?? "", dropZone: request.drop_zone ?? "" }).finish();
++      warehouse: request.drop_zone ? undefined : (request.warehouse || undefined),
++      dropZone: request.drop_zone || undefined }).finish();
+     const fields = {
+       sku: entity.sku, quantity: entity.quantity.toString(),
+       ...(request.display_labels === undefined ? {} : { display_labels: entity.displayLabels }),
+-      ...(request.include_route ? { warehouse: entity.warehouse, drop_zone: entity.dropZone } : {}),
++      ...(request.include_route ? { warehouse: entity.warehouse ?? "", drop_zone: entity.dropZone ?? "" } : {}),
+       ...(request.include_state ? { state_label: stateLabel(entity.state) } : {}),
+     };
+     return { fields, in_stock: BigInt(entity.quantity) > 0n && entity.state === StockState.STOCK_STATE_UNSPECIFIED, constructed_payload: Buffer.from(sample).toString("base64") };

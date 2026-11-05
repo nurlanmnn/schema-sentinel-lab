@@ -1,0 +1,11 @@
+{
+  "contract_version": "1.0",
+  "outcome": "patch",
+  "diff": "diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto\n--- a/proto/inventory/item.proto\n+++ b/proto/inventory/item.proto\n@@ -5,7 +5,7 @@\n   int32 quantity = 2;\n   StockState state = 3;\n   repeated string display_labels = 4;\n-  repeated int32 bin_counts = 6 [packed = false];\n+  repeated int32 bin_counts = 6 [packed = true];\n   string warehouse = 7;\n   string drop_zone = 8;\n }\n",
+  "rationale": "Write packed bin counts and accept packed and unpacked input. Preserve order and stock eligibility.",
+  "confidence": 0,
+  "assumptions": [
+    "Only the pinned application policy was evaluated.",
+    "Confidence is unestimated. Human review required."
+  ]
+}

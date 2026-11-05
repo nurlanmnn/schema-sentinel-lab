@@ -1,0 +1,10 @@
+{
+  "command": [
+    "dotnet",
+    "runtimes/csharp/bin/Release/net8.0/CsharpApp.dll",
+    "--telemetry"
+  ],
+  "exit_code": 0,
+  "stdout": "[{\"fields\":{\"vehicle_id\":\"stopped\",\"groundSpeed\":0},\"speeding\":false,\"constructed_payload\":\"CgdzdG9wcGVk\"},{\"fields\":{\"vehicle_id\":\"below\",\"groundSpeed\":29.5},\"speeding\":false,\"constructed_payload\":\"CgViZWxvdxUAAOxB\"},{\"fields\":{\"vehicle_id\":\"boundary\",\"groundSpeed\":30},\"speeding\":false,\"constructed_payload\":\"Cghib3VuZGFyeRUAAPBB\"},{\"fields\":{\"vehicle_id\":\"above\",\"groundSpeed\":30.5},\"speeding\":true,\"constructed_payload\":\"CgVhYm92ZRUAAPRB\"},{\"fields\":{\"vehicle_id\":\"reverse\",\"groundSpeed\":-1},\"speeding\":false,\"constructed_payload\":\"CgdyZXZlcnNlFQAAgL8=\"},{\"fields\":{\"vehicle_id\":\"\\u8ECA-\\u03B1\",\"groundSpeed\":12.5},\"speeding\":false,\"constructed_payload\":\"Cgbou4otzrEVAABIQQ==\"},{\"fields\":{\"vehicle_id\":\"\",\"groundSpeed\":4},\"speeding\":false,\"constructed_payload\":\"FQAAgEA=\"},{\"fields\":{\"vehicle_id\":\"fast\",\"groundSpeed\":256},\"speeding\":true,\"constructed_payload\":\"CgRmYXN0FQAAgEM=\"}]\n",
+  "stderr": ""
+}

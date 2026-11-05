@@ -1,0 +1,55 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "ba9ebb103102b1c513091e083ab8149eeb4460dd",
+  "old_schema_sha256": "c0666a2027d414720afe714a2001ff518d3c387322d864491c35b48a4fcccdf5",
+  "new_schema_sha256": "98d4d4776c65540ea307318cbd09da622ef71ccd8750644046ad6d045b768067",
+  "old_descriptor_sha256": "97342ae2043739cfe1ee66604c1b2f6eb7b821186a26539c77729c16eeed33ce",
+  "new_descriptor_sha256": "f8146275a8d52b10056594ff71566b9f766d5aeefe2f6e7758ab5ce34490b270",
+  "events": [
+    {
+      "message": "simulation.inventory.StockItem",
+      "field_number": 6,
+      "old_name": "bin_counts",
+      "new_name": "bin_counts",
+      "old_field": {
+        "name": "bin_counts",
+        "number": 6,
+        "type": 5,
+        "type_name": "",
+        "label": 3,
+        "json_name": "binCounts",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      },
+      "new_field": {
+        "name": "bin_counts",
+        "number": 6,
+        "type": 5,
+        "type_name": "",
+        "label": 3,
+        "json_name": "binCounts",
+        "proto3_optional": false,
+        "oneof_index": null,
+        "default_value": null
+      },
+      "category": "field_packing_changed",
+      "old_packed": false,
+      "new_packed": true
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "inventory-packed-bins",
+    "category": "field_packing_changed",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  repeated int32 bin_counts = 6 [packed = false];\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  repeated int32 bin_counts = 6 [packed = true];\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n"
+  },
+  "intended_behavior": "Write packed bin counts and accept packed and unpacked input. Preserve order and stock eligibility."
+}

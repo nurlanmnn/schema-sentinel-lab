@@ -1,0 +1,119 @@
+{
+  "review_version": "1.0",
+  "change_id": "inventory-state-retirement",
+  "source_revision": "d7efa49f9f95da951bc4b7bdd0ca4454f6a41afd",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "validation_passed",
+  "mode": "deterministic_proposal",
+  "strategy": "deterministic_inventory_state_retirement",
+  "approval_eligible": true,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "dfa34f93c9e6a40a7f972c54c94dfc508e383f43442911d7d1748a54951a02d8",
+      "bytes": 9901
+    },
+    "request.json": {
+      "sha256": "b4345f9004cd5072b059fd5ceb42c743c00e23dde378cce4a4b8b170b5f699b0",
+      "bytes": 914
+    },
+    "report.json": {
+      "sha256": "9ca9e049b9a3d24c935260a2bfee0698667ee5dac3e3cd25663ef52e624e0847",
+      "bytes": 10664
+    },
+    "provenance.json": {
+      "sha256": "27f31667adf29520e2aa7e23cff15ffd6b9f2b66835d218f41ac82b74c272255",
+      "bytes": 130
+    },
+    "detector.json": {
+      "sha256": "6ff7a53dc4335dcf70fdd12ac7df3184abeed19d2b0cec229e7c9f0b63b2a143",
+      "bytes": 1806
+    },
+    "locator.json": {
+      "sha256": "c43d70482e330e936de0e0a8b3024e576702f72dfb52d59d72e965b23e06f022",
+      "bytes": 11122
+    },
+    "measurement.json": {
+      "sha256": "d6642fb6f1f12a572190f196f358e41b82cafbfb52b293a232130549f5f4ce68",
+      "bytes": 1243
+    },
+    "implementation.json": {
+      "sha256": "114243ec75176645a5ac176dab7a4f116fe757f29bd7f9753935a68a6a6ddb24",
+      "bytes": 2698
+    },
+    "proposal/report.json": {
+      "sha256": "6ec92f02c8265e3e81db1a03180650cf70e32fa5d8b66405439c21af28dcb041",
+      "bytes": 6050
+    },
+    "proposal/assembly.json": {
+      "sha256": "6aa8fcceb34509d38d6a1663038ab3c1f2c6441e04f242cd250ac5fdfb9bc225",
+      "bytes": 747
+    },
+    "proposal/inventory-state-retirement-source.py": {
+      "sha256": "bddbb42e15f17486207fad433d8ed6cc8f4edfd8c46faff44e640993c0a89a62",
+      "bytes": 7094
+    },
+    "proposal/proposal.json": {
+      "sha256": "db23778b59eb31dd478b22f793f9b712a7f20c55b8e80c6b40be4d75666be571",
+      "bytes": 2617
+    },
+    "proposal/proposal.patch": {
+      "sha256": "6b8996f5a97901146ab150f481fae00a02e947a73ec9dff11be1c3142f4770ac",
+      "bytes": 2203
+    },
+    "proposal/validated.patch": {
+      "sha256": "2686f0c3344d038cf4ab4f291b0e639b11dcfacda88c4afb73d244291b9e68eb",
+      "bytes": 6714
+    },
+    "proposal/validation.log": {
+      "sha256": "9b259a72ef8f99f59d8aa0fe3b72e01f1df3b7ea2702a7afd7835dfa8bb085d5",
+      "bytes": 15009
+    },
+    "proposal/validation-profile.json": {
+      "sha256": "52583fd4e47ee71a2ec67b739c400f6437a4a84d010c42bfa8294f221cc5814e",
+      "bytes": 391
+    },
+    "proposal/validation-tests.patch": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "proposal/inventory/report.json": {
+      "sha256": "1274cbfc9cbeaa22c905eca48089ba84bfca4f27eeb73258ae255049fc2c0583",
+      "bytes": 3612
+    },
+    "proposal/inventory/expected.json": {
+      "sha256": "64459ce650ef7ce04f7c134786055e7b65ab4ff6067ed889791b837c6518f0ce",
+      "bytes": 5184
+    },
+    "proposal/inventory/python.json": {
+      "sha256": "cfe27851a31be9ee5b6adfa3b999dc7331172682f741a421ad48f67d0afd01ae",
+      "bytes": 2722
+    },
+    "proposal/inventory/typescript.json": {
+      "sha256": "46ba1e6963277f72a8c5ff74e7c2d63811055ddb8d6f59b7a6c83d6a00e8c790",
+      "bytes": 2432
+    },
+    "proposal/inventory/csharp.json": {
+      "sha256": "ea162e3dc68bd630487b2fa2b08525b58f602c8b58e4cf89a6806ac6892dd0dc",
+      "bytes": 2436
+    },
+    "proposal/inventory-oracle-source.py": {
+      "sha256": "bc9171af49983991f4e1eff575d79635c0d44c8c48cb6d46041e9e75362b3eee",
+      "bytes": 14396
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    },
+    "proposal/local-codegen-toolchain.json": {
+      "sha256": "c33b64db86116c6244f441836ca218447a42929e9193667db67102387df25d3e",
+      "bytes": 527
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

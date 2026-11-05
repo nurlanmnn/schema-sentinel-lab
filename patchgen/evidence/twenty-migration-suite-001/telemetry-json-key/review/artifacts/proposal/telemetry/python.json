@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmp.d7WNVWiihk/twenty-migrations/telemetry-json-key/run/proposal/workspace/.venv/bin/python",
+    "runtimes/python/main.py",
+    "--telemetry"
+  ],
+  "exit_code": 0,
+  "stdout": "[{\"fields\": {\"vehicle_id\": \"stopped\", \"groundSpeed\": 0.0}, \"speeding\": false, \"constructed_payload\": \"CgdzdG9wcGVk\"}, {\"fields\": {\"vehicle_id\": \"below\", \"groundSpeed\": 29.5}, \"speeding\": false, \"constructed_payload\": \"CgViZWxvdxUAAOxB\"}, {\"fields\": {\"vehicle_id\": \"boundary\", \"groundSpeed\": 30.0}, \"speeding\": false, \"constructed_payload\": \"Cghib3VuZGFyeRUAAPBB\"}, {\"fields\": {\"vehicle_id\": \"above\", \"groundSpeed\": 30.5}, \"speeding\": true, \"constructed_payload\": \"CgVhYm92ZRUAAPRB\"}, {\"fields\": {\"vehicle_id\": \"reverse\", \"groundSpeed\": -1.0}, \"speeding\": false, \"constructed_payload\": \"CgdyZXZlcnNlFQAAgL8=\"}, {\"fields\": {\"vehicle_id\": \"\\u8eca-\\u03b1\", \"groundSpeed\": 12.5}, \"speeding\": false, \"constructed_payload\": \"Cgbou4otzrEVAABIQQ==\"}, {\"fields\": {\"vehicle_id\": \"\", \"groundSpeed\": 4.0}, \"speeding\": false, \"constructed_payload\": \"FQAAgEA=\"}, {\"fields\": {\"vehicle_id\": \"fast\", \"groundSpeed\": 256.0}, \"speeding\": true, \"constructed_payload\": \"CgRmYXN0FQAAgEM=\"}]\n",
+  "stderr": ""
+}

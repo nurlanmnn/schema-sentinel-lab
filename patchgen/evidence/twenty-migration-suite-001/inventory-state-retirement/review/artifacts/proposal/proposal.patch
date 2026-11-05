@@ -1,0 +1,53 @@
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -9,5 +9,6 @@
+ 
+ enum StockState {
+   STOCK_STATE_UNSPECIFIED = 0;
+-  STOCK_STATE_QUARANTINED = 1;
++  reserved 1;
++  reserved "STOCK_STATE_QUARANTINED";
+ }
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -2,7 +2,7 @@
+ import base64
+ import json
+ import sys
+-from inventory.item_pb2 import STOCK_STATE_QUARANTINED, STOCK_STATE_UNSPECIFIED, StockItem
++from inventory.item_pb2 import STOCK_STATE_UNSPECIFIED, StockItem
+ 
+ 
+ def evaluate(request):
+@@ -15,7 +15,6 @@
+     if request.get('include_state'):
+         fields['state_label'] = {
+             STOCK_STATE_UNSPECIFIED: 'UNSPECIFIED',
+-            STOCK_STATE_QUARANTINED: 'QUARANTINED',
+         }.get(entity.state, 'UNKNOWN')
+     return {'fields': fields, 'in_stock': entity.quantity > 0 and entity.state == STOCK_STATE_UNSPECIFIED,
+             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -5,7 +5,6 @@
+ function stateLabel(state: StockState) {
+   switch (state) {
+     case StockState.STOCK_STATE_UNSPECIFIED: return "UNSPECIFIED";
+-    case StockState.STOCK_STATE_QUARANTINED: return "QUARANTINED";
+     default: return "UNKNOWN";
+   }
+ }
+diff --git a/runtimes/csharp/Inventory.cs b/runtimes/csharp/Inventory.cs
+--- a/runtimes/csharp/Inventory.cs
++++ b/runtimes/csharp/Inventory.cs
+@@ -19,7 +19,6 @@
+             if (request.IncludeState)
+                 fields["state_label"] = entity.State switch {
+                     StockState.Unspecified => "UNSPECIFIED",
+-                    StockState.Quarantined => "QUARANTINED",
+                     _ => "UNKNOWN",
+                 };
+             return new { fields, in_stock = entity.Quantity > 0 && entity.State == Simulation.Inventory.StockState.Unspecified, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };

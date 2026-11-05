@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "ba9ebb103102b1c513091e083ab8149eeb4460dd",
+  "change_id": "inventory-packed-bins",
+  "new_schema_sha256": "98d4d4776c65540ea307318cbd09da622ef71ccd8750644046ad6d045b768067",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "inventory_case": "packed-bins"
+}

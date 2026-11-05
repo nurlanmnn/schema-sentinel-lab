@@ -1,0 +1,10 @@
+{
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change": {
+    "id": "telemetry-tag-move",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  reserved 2;\n  float speed_mps = 7;\n}\n"
+  },
+  "intended_behavior": "Move speed_mps to wire tag 7 and reserve tag 2. Preserve runtime observations and the strict threshold."
+}

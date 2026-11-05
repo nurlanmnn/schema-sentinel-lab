@@ -1,0 +1,63 @@
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -5,8 +5,10 @@
+   int32 quantity = 2;
+   StockState state = 3;
+   repeated string display_labels = 4;
+-  string warehouse = 7;
+-  string drop_zone = 8;
++  oneof destination {
++    string warehouse = 7;
++    string drop_zone = 8;
++  }
+ }
+ 
+ enum StockState {
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -9,7 +9,8 @@
+     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
+     sample = StockItem(sku=request['sku'], quantity=int(request['quantity']),
+                        display_labels=request.get('display_labels', []),
+-                       warehouse=request.get('warehouse', ''), drop_zone=request.get('drop_zone', ''))
++                       warehouse=None if request.get('drop_zone') else request.get('warehouse') or None,
++                       drop_zone=request.get('drop_zone') or None)
+     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
+     if 'display_labels' in request:
+         fields['display_labels'] = list(entity.display_labels)
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -15,11 +15,12 @@
+     const entity = StockItem.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+     const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED,
+       displayLabels: request.display_labels ?? [],
+-      warehouse: request.warehouse ?? "", dropZone: request.drop_zone ?? "" }).finish();
++      warehouse: request.drop_zone ? undefined : (request.warehouse || undefined),
++      dropZone: request.drop_zone || undefined }).finish();
+     const fields = {
+       sku: entity.sku, quantity: entity.quantity.toString(),
+       ...(request.display_labels === undefined ? {} : { display_labels: entity.displayLabels }),
+-      ...(request.include_route ? { warehouse: entity.warehouse, drop_zone: entity.dropZone } : {}),
++      ...(request.include_route ? { warehouse: entity.warehouse ?? "", drop_zone: entity.dropZone ?? "" } : {}),
+       ...(request.include_state ? { state_label: stateLabel(entity.state) } : {}),
+     };
+     return { fields, in_stock: BigInt(entity.quantity) > 0n && entity.state === StockState.STOCK_STATE_UNSPECIFIED, constructed_payload: Buffer.from(sample).toString("base64") };
+diff --git a/runtimes/csharp/Inventory.cs b/runtimes/csharp/Inventory.cs
+--- a/runtimes/csharp/Inventory.cs
++++ b/runtimes/csharp/Inventory.cs
+@@ -13,8 +13,10 @@
+             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+             var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
+             sample.DisplayLabels.Add(request.DisplayLabels ?? Array.Empty<string>());
+-            sample.Warehouse = request.Warehouse ?? "";
+-            sample.DropZone = request.DropZone ?? "";
++            if (!string.IsNullOrEmpty(request.DropZone))
++                sample.DropZone = request.DropZone;
++            else if (!string.IsNullOrEmpty(request.Warehouse))
++                sample.Warehouse = request.Warehouse;
+             var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
+             if (request.DisplayLabels is not null)
+                 fields["display_labels"] = entity.DisplayLabels.ToArray();

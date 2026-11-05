@@ -1,0 +1,33 @@
+{
+  "strategy": "deterministic_telemetry_metadata",
+  "model_requests": 0,
+  "decisions": [
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "edited_lines": [],
+      "candidate_lines": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "edited_lines": [],
+      "candidate_lines": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "edited_lines": [],
+      "candidate_lines": [
+        12,
+        13,
+        14
+      ]
+    }
+  ]
+}

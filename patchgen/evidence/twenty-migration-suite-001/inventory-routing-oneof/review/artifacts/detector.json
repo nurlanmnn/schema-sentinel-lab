@@ -1,0 +1,39 @@
+{
+  "adapter_version": "1.0",
+  "producer": "independent-descriptor-detector/1.1",
+  "status": "complete",
+  "structural_status": "single_supported_event",
+  "analysis_issues": [],
+  "source_revision": "1b96fa988852e92bb06e4661091215b61bf31382",
+  "old_schema_sha256": "f2f9881538c5b9c559116a3c0f0f9faac2e1f1222d4dd34a9d62151fe2fdfccc",
+  "new_schema_sha256": "83b05281b404d5d2888c8cf268ad395ffcefeea36e6746b766c19f218f7dca0c",
+  "old_descriptor_sha256": "5358beeb04ec91400e7182b5eef55a634bbe630e75fb3e7eda6948dfc1e90880",
+  "new_descriptor_sha256": "2f8fca63ca8d6c7c70c1d0d5f944f9182ef70a04920d50e2b209fe14e3320be6",
+  "events": [
+    {
+      "category": "fields_grouped_in_oneof",
+      "message": "simulation.inventory.StockItem",
+      "old_name": "warehouse",
+      "new_name": "warehouse",
+      "member_names": [
+        "warehouse",
+        "drop_zone"
+      ],
+      "member_numbers": [
+        7,
+        8
+      ],
+      "oneof": "destination"
+    }
+  ],
+  "unsupported": [],
+  "semantic_policy": "caller-supplied intended behavior; comments/units/frames are not inferred",
+  "change": {
+    "id": "inventory-routing-oneof",
+    "category": "fields_grouped_in_oneof",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  oneof destination {\n    string warehouse = 7;\n    string drop_zone = 8;\n  }\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n"
+  },
+  "intended_behavior": "Write one nonempty destination. Prefer drop_zone over warehouse when both are supplied. Read payloads with at most one destination tag."
+}

@@ -1,0 +1,11 @@
+{
+  "contract_version": "1.0",
+  "outcome": "patch",
+  "diff": "diff --git a/proto/telemetry/vehicle.proto b/proto/telemetry/vehicle.proto\n--- a/proto/telemetry/vehicle.proto\n+++ b/proto/telemetry/vehicle.proto\n@@ -3,5 +3,6 @@\n message VehicleTelemetry {\n   string vehicle_id = 1;\n   // Ground speed in meters per second.\n-  float speed_mps = 2;\n+  reserved 2;\n+  float speed_mps = 7;\n }\n",
+  "rationale": "Move speed_mps to wire tag 7 and reserve tag 2. Preserve runtime observations and the strict threshold.",
+  "confidence": 0,
+  "assumptions": [
+    "Coordinate rollout and migrate persisted tag-2 bytes.",
+    "Confidence is unestimated. Human review required."
+  ]
+}
