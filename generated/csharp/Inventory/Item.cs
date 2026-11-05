@@ -25,16 +25,18 @@ namespace Simulation.Inventory {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRpbnZlbnRvcnkvaXRlbS5wcm90bxIUc2ltdWxhdGlvbi5pbnZlbnRvcnki",
-            "mAEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
+            "9gEKCVN0b2NrSXRlbRIQCgNza3UYASABKAlSA3NrdRIaCghxdWFudGl0eRgC",
             "IAEoBVIIcXVhbnRpdHkSNgoFc3RhdGUYAyABKA4yIC5zaW11bGF0aW9uLmlu",
             "dmVudG9yeS5TdG9ja1N0YXRlUgVzdGF0ZRIlCg5kaXNwbGF5X2xhYmVscxgE",
-            "IAMoCVINZGlzcGxheUxhYmVscypGCgpTdG9ja1N0YXRlEhsKF1NUT0NLX1NU",
-            "QVRFX1VOU1BFQ0lGSUVEEAASGwoXU1RPQ0tfU1RBVEVfUVVBUkFOVElORUQQ",
-            "AWIGcHJvdG8z"));
+            "IAMoCVINZGlzcGxheUxhYmVscxIhCgpiaW5fY291bnRzGAYgAygFQgIQAFIJ",
+            "YmluQ291bnRzEhwKCXdhcmVob3VzZRgHIAEoCVIJd2FyZWhvdXNlEhsKCWRy",
+            "b3Bfem9uZRgIIAEoCVIIZHJvcFpvbmUqRgoKU3RvY2tTdGF0ZRIbChdTVE9D",
+            "S19TVEFURV9VTlNQRUNJRklFRBAAEhsKF1NUT0NLX1NUQVRFX1FVQVJBTlRJ",
+            "TkVEEAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Simulation.Inventory.StockState), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Inventory.StockItem), global::Simulation.Inventory.StockItem.Parser, new[]{ "Sku", "Quantity", "State", "DisplayLabels", "BinCounts", "Warehouse", "DropZone" }, null, null, null, null)
           }));
     }
     #endregion
@@ -88,6 +90,9 @@ namespace Simulation.Inventory {
       quantity_ = other.quantity_;
       state_ = other.state_;
       displayLabels_ = other.displayLabels_.Clone();
+      binCounts_ = other.binCounts_.Clone();
+      warehouse_ = other.warehouse_;
+      dropZone_ = other.dropZone_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -144,6 +149,41 @@ namespace Simulation.Inventory {
       get { return displayLabels_; }
     }
 
+    /// <summary>Field number for the "bin_counts" field.</summary>
+    public const int BinCountsFieldNumber = 6;
+    private static readonly pb::FieldCodec<int> _repeated_binCounts_codec
+        = pb::FieldCodec.ForInt32(48);
+    private readonly pbc::RepeatedField<int> binCounts_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<int> BinCounts {
+      get { return binCounts_; }
+    }
+
+    /// <summary>Field number for the "warehouse" field.</summary>
+    public const int WarehouseFieldNumber = 7;
+    private string warehouse_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Warehouse {
+      get { return warehouse_; }
+      set {
+        warehouse_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "drop_zone" field.</summary>
+    public const int DropZoneFieldNumber = 8;
+    private string dropZone_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DropZone {
+      get { return dropZone_; }
+      set {
+        dropZone_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -163,6 +203,9 @@ namespace Simulation.Inventory {
       if (Quantity != other.Quantity) return false;
       if (State != other.State) return false;
       if(!displayLabels_.Equals(other.displayLabels_)) return false;
+      if(!binCounts_.Equals(other.binCounts_)) return false;
+      if (Warehouse != other.Warehouse) return false;
+      if (DropZone != other.DropZone) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -174,6 +217,9 @@ namespace Simulation.Inventory {
       if (Quantity != 0) hash ^= Quantity.GetHashCode();
       if (State != global::Simulation.Inventory.StockState.Unspecified) hash ^= State.GetHashCode();
       hash ^= displayLabels_.GetHashCode();
+      hash ^= binCounts_.GetHashCode();
+      if (Warehouse.Length != 0) hash ^= Warehouse.GetHashCode();
+      if (DropZone.Length != 0) hash ^= DropZone.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -205,6 +251,15 @@ namespace Simulation.Inventory {
         output.WriteEnum((int) State);
       }
       displayLabels_.WriteTo(output, _repeated_displayLabels_codec);
+      binCounts_.WriteTo(output, _repeated_binCounts_codec);
+      if (Warehouse.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Warehouse);
+      }
+      if (DropZone.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(DropZone);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -228,6 +283,15 @@ namespace Simulation.Inventory {
         output.WriteEnum((int) State);
       }
       displayLabels_.WriteTo(ref output, _repeated_displayLabels_codec);
+      binCounts_.WriteTo(ref output, _repeated_binCounts_codec);
+      if (Warehouse.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Warehouse);
+      }
+      if (DropZone.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(DropZone);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -248,6 +312,13 @@ namespace Simulation.Inventory {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       size += displayLabels_.CalculateSize(_repeated_displayLabels_codec);
+      size += binCounts_.CalculateSize(_repeated_binCounts_codec);
+      if (Warehouse.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Warehouse);
+      }
+      if (DropZone.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DropZone);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -270,6 +341,13 @@ namespace Simulation.Inventory {
         State = other.State;
       }
       displayLabels_.Add(other.displayLabels_);
+      binCounts_.Add(other.binCounts_);
+      if (other.Warehouse.Length != 0) {
+        Warehouse = other.Warehouse;
+      }
+      if (other.DropZone.Length != 0) {
+        DropZone = other.DropZone;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -301,6 +379,19 @@ namespace Simulation.Inventory {
             displayLabels_.AddEntriesFrom(input, _repeated_displayLabels_codec);
             break;
           }
+          case 50:
+          case 48: {
+            binCounts_.AddEntriesFrom(input, _repeated_binCounts_codec);
+            break;
+          }
+          case 58: {
+            Warehouse = input.ReadString();
+            break;
+          }
+          case 66: {
+            DropZone = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -330,6 +421,19 @@ namespace Simulation.Inventory {
           }
           case 34: {
             displayLabels_.AddEntriesFrom(ref input, _repeated_displayLabels_codec);
+            break;
+          }
+          case 50:
+          case 48: {
+            binCounts_.AddEntriesFrom(ref input, _repeated_binCounts_codec);
+            break;
+          }
+          case 58: {
+            Warehouse = input.ReadString();
+            break;
+          }
+          case 66: {
+            DropZone = input.ReadString();
             break;
           }
         }

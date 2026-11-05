@@ -13,9 +13,18 @@ static class InventoryRuntime
             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
             var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
             sample.DisplayLabels.Add(request.DisplayLabels ?? Array.Empty<string>());
+            sample.BinCounts.Add(request.BinCounts ?? Array.Empty<int>());
+            sample.Warehouse = request.Warehouse ?? "";
+            sample.DropZone = request.DropZone ?? "";
             var fields = new Dictionary<string, object> { ["sku"] = entity.Sku, ["quantity"] = entity.Quantity.ToString(CultureInfo.InvariantCulture) };
             if (request.DisplayLabels is not null)
                 fields["display_labels"] = entity.DisplayLabels.ToArray();
+            if (request.BinCounts is not null)
+                fields["bin_counts"] = entity.BinCounts.ToArray();
+            if (request.IncludeRoute) {
+                fields["warehouse"] = entity.Warehouse;
+                fields["drop_zone"] = entity.DropZone;
+            }
             if (request.IncludeState)
                 fields["state_label"] = entity.State switch {
                     StockState.Unspecified => "UNSPECIFIED",
@@ -28,4 +37,7 @@ static class InventoryRuntime
     }
 }
 record InventoryRequest(string Payload, string Sku, string Quantity, [property: System.Text.Json.Serialization.JsonPropertyName("display_labels")] string[]? DisplayLabels,
-    [property: System.Text.Json.Serialization.JsonPropertyName("include_state")] bool IncludeState = false);
+    [property: System.Text.Json.Serialization.JsonPropertyName("include_state")] bool IncludeState = false,
+    [property: System.Text.Json.Serialization.JsonPropertyName("bin_counts")] int[]? BinCounts = null,
+    string? Warehouse = null, [property: System.Text.Json.Serialization.JsonPropertyName("drop_zone")] string? DropZone = null,
+    [property: System.Text.Json.Serialization.JsonPropertyName("include_route")] bool IncludeRoute = false);

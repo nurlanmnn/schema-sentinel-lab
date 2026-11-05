@@ -8,10 +8,16 @@ from inventory.item_pb2 import STOCK_STATE_QUARANTINED, STOCK_STATE_UNSPECIFIED,
 def evaluate(request):
     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
     sample = StockItem(sku=request['sku'], quantity=int(request['quantity']),
-                       display_labels=request.get('display_labels', []))
+                       display_labels=request.get('display_labels', []), bin_counts=request.get('bin_counts', []),
+                       warehouse=request.get('warehouse', ''), drop_zone=request.get('drop_zone', ''))
     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
     if 'display_labels' in request:
         fields['display_labels'] = list(entity.display_labels)
+    if 'bin_counts' in request:
+        fields['bin_counts'] = list(entity.bin_counts)
+    if request.get('include_route'):
+        fields['warehouse'] = entity.warehouse
+        fields['drop_zone'] = entity.drop_zone
     if request.get('include_state'):
         fields['state_label'] = {
             STOCK_STATE_UNSPECIFIED: 'UNSPECIFIED',

@@ -5,6 +5,9 @@ message StockItem {
   int32 quantity = 2;
   StockState state = 3;
   repeated string display_labels = 4;
+  repeated int32 bin_counts = 6 [packed = false];
+  string warehouse = 7;
+  string drop_zone = 8;
 }
 
 enum StockState {
