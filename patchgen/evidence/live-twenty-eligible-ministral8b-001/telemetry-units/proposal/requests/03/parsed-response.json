@@ -1,0 +1,50 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 9,
+      "end_line": 9,
+      "replacement_lines": [
+        "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedKph: request.speed * 3.6 }).finish();"
+      ]
+    },
+    {
+      "start_line": 10,
+      "end_line": 10,
+      "replacement_lines": [
+        "    const fields = { vehicle_id: entity.vehicleId, speed_kph: entity.speedKph };"
+      ]
+    },
+    {
+      "start_line": 11,
+      "end_line": 11,
+      "replacement_lines": [
+        "    return { fields, speeding: entity.speedKph > 108.0, constructed_payload: Buffer.from(sample).toString(\"base64\") };"
+      ]
+    }
+  ],
+  "rationale": "The schema change renames the field from `speed_mps` to `speed_kph`, requiring updates in three places: (1) encoding with a conversion factor of 3.6, (2) field name mapping for output fields, and (3) speeding threshold adjustment to >108.0 km/h. The input request.speed remains in m/s as per intended_behavior; the code scales it before serialization. Generated protobuf bindings use PascalCase (`speedKph`), so the TypeScript code follows this convention.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated protobuf bindings correctly map `speed_kph` to `speedKph` in TypeScript (PascalCase).",
+    "No other runtime logic depends on the old field name or threshold value outside these edits.",
+    "The input request.speed is always provided in meters per second and must be scaled by 3.6 for encoding."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 9,
+      "decision": "edit",
+      "reason": "Field name changed from `speed_mps` to `speed_kph`; encoding requires conversion factor of 3.6 and updated field name (`speedKph`)."
+    },
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": "Output field mapping must reflect the new schema: `speed_mps` \u2192 `speed_kph`."
+    },
+    {
+      "line": 11,
+      "decision": "edit",
+      "reason": "Speeding threshold updated to >108.0 km/h (30 m/s * 3.6) and field name changed to `speedKph` for consistency."
+    }
+  ]
+}

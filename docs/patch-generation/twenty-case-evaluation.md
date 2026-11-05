@@ -40,3 +40,13 @@ a passing runtime gate, and a review bundle. The model workflow makes one
 request per selected source file and performs zero automatic repairs.
 
 The manual participant and review-timing exercises are deferred.
+
+## Retained results
+
+- [Deterministic run](../../patchgen/evidence/twenty-migration-suite-001/summary.md)
+  passed all 20 authored cases and found all 137 expected impact sites with
+  61 additional candidates. The five new cases include their review bundles
+  and compiled predecessor controls.
+- [Local model run](../../patchgen/evidence/live-twenty-eligible-ministral8b-001/summary.md)
+  produced zero passing patches across eight eligible cases and 24 requests.
+  The report records failure stages, timings, and coverage for all twenty cases.

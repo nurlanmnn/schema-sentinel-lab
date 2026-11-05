@@ -1,0 +1,817 @@
+{
+  "status": "completed",
+  "mode": "live_model",
+  "model": "ministral-3:8b",
+  "strategy": "candidate_edits",
+  "prompt_version": "2.5",
+  "options": {
+    "temperature": 0,
+    "seed": 42,
+    "num_ctx": 16384,
+    "num_predict": 8192
+  },
+  "planned_cases": 8,
+  "automatic_repairs": 0,
+  "human_approval_required": true,
+  "implementation_revision": "d3cbf65b7750179b2b6238c56f735674929b0c51",
+  "implementation_dirty": false,
+  "scope": "authored migrations eligible for actual model-generated runtime edits",
+  "benchmark_coverage": {
+    "pubsub-rename": "eligible",
+    "pubsub-removal": "eligible",
+    "pubsub-utf8": "eligible",
+    "telemetry-rename": "eligible",
+    "telemetry-precision": "eligible",
+    "telemetry-units": "eligible",
+    "inventory-width": "eligible",
+    "inventory-zigzag": "schema_only",
+    "inventory-stock-release": "requires_pinned_policy",
+    "inventory-presence": "requires_pinned_policy",
+    "inventory-labels": "requires_pinned_policy",
+    "inventory-reservation": "requires_pinned_policy",
+    "telemetry-quantized": "eligible",
+    "inventory-state-rename": "requires_pinned_policy",
+    "telemetry-message-rename": "requires_pinned_policy",
+    "telemetry-tag-move": "schema_only",
+    "telemetry-json-key": "requires_pinned_policy",
+    "inventory-packed-bins": "schema_only",
+    "inventory-routing-oneof": "requires_pinned_policy",
+    "inventory-state-retirement": "requires_pinned_policy"
+  },
+  "benchmark_cases": 20,
+  "timing_scope": "per-request wall time includes local model load; prepared pipeline wall time separate; not propagation/human baseline",
+  "results": [
+    {
+      "case": "pubsub-rename",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 168.32535270799417,
+      "model_requests": 3,
+      "generation_seconds": 161.48573487391695,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: Python 3.13.7, Node.js v24.10.0, and .NET 8 SDK found.\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python\" -m venv /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmp.d7WNVWiihk/live-full/pubsub-rename/run/proposal/workspace/.venv\n\n> /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmp.d7WNVWiihk/live-full/pubsub-rename/run/proposal/workspace/.venv/bin/python -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.3\n[notice] To update, run: /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmp.d7WNVWiihk/live-full/pubsub-rename/run/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 613ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmp.d7WNVWiihk/live-full/pubsub-rename/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 108 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\nmain.ts(82,5): error TS1128: Declaration or statement expected.\nmain.ts(83,5): error TS1128: Declaration or statement expected.\n\nCommand failed (exit 2). See the output above.\n",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 73.03067800006829,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "88d57b6a4e6b747dc803db3a36adb486ae424df5622bb745ee83a723c60370b2",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4239,
+            "eval_count": 493,
+            "total_duration": 73006482667,
+            "load_duration": 15418854750,
+            "prompt_eval_duration": 24689627000,
+            "eval_duration": 32763743000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/main.py"
+          },
+          "measurement": {
+            "elapsed_seconds": 46.214170957915485,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "fd611ad131ec22ac0b58988e8fc821d3d99dd7aa1ae371ce031815548496b3f3",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4612,
+            "eval_count": 373,
+            "total_duration": 46205453333,
+            "load_duration": 162132250,
+            "prompt_eval_duration": 23669155000,
+            "eval_duration": 22117891000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 42.24088591593318,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "c169e7fcb5f9a0598e05af5c4c94f85889d673b6a0615e79b904fcb0ae1abd9c",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4064,
+            "eval_count": 413,
+            "total_duration": 42236755291,
+            "load_duration": 134833291,
+            "prompt_eval_duration": 18602314000,
+            "eval_duration": 23300986000
+          }
+        }
+      ]
+    },
+    {
+      "case": "pubsub-removal",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 148.9926934170071,
+      "model_requests": 3,
+      "generation_seconds": 146.31909370713402,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/python/main.py: invalid/duplicate candidate review line",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 45.89630170806777,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "75938e6521b4347ef3372019865e04b7009ce4ac0b95da332a586985d1bb1441",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4259,
+            "eval_count": 427,
+            "total_duration": 45890226875,
+            "load_duration": 152015458,
+            "prompt_eval_duration": 20921065000,
+            "eval_duration": 24557141000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/python/main.py",
+            "error": "invalid/duplicate candidate review line"
+          },
+          "measurement": {
+            "elapsed_seconds": 55.55722454097122,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "a5d263f0fd3083885b0acd53b7f632df025417cf912527938ee751567979b461",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4632,
+            "eval_count": 573,
+            "total_duration": 55553260125,
+            "load_duration": 135565000,
+            "prompt_eval_duration": 21871569000,
+            "eval_duration": 33289854000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 44.86556745809503,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "b5d4569a97f2ee7012e05d856650b34f41f5d2c3153270a105afeb29cfa79498",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4084,
+            "eval_count": 456,
+            "total_duration": 44861446291,
+            "load_duration": 119036083,
+            "prompt_eval_duration": 18609772000,
+            "eval_duration": 25878543000
+          }
+        }
+      ]
+    },
+    {
+      "case": "pubsub-utf8",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 163.0058601249475,
+      "model_requests": 3,
+      "generation_seconds": 161.65093341690954,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/csharp/main.cs",
+            "line": 15
+          },
+          {
+            "path": "runtimes/csharp/main.cs",
+            "line": 67
+          },
+          {
+            "path": "runtimes/typescript/main.ts",
+            "line": 83
+          }
+        ],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/csharp/main.cs: candidate decision/edit coverage mismatch",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/csharp/main.cs",
+            "error": "candidate decision/edit coverage mismatch"
+          },
+          "measurement": {
+            "elapsed_seconds": 57.97710166696925,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "514bdef72b8a76431d44dfcd2116219f897b3a9cb89d51ed259220ca08a6c6e9",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4349,
+            "eval_count": 625,
+            "total_duration": 57970752917,
+            "load_duration": 148245292,
+            "prompt_eval_duration": 21610439000,
+            "eval_duration": 36006295000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/main.py"
+          },
+          "measurement": {
+            "elapsed_seconds": 47.94722574995831,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "b46649e20bc9811c58a3d048372accd1d9e7d1a721865a130a201d357cdce901",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4646,
+            "eval_count": 436,
+            "total_duration": 47941087292,
+            "load_duration": 132522083,
+            "prompt_eval_duration": 21898956000,
+            "eval_duration": 25658099000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 55.726605999981984,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "5770a40c48c0cf24654f9ed4036e26932ab2d0e828aceb948e309be0a9db8c48",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 4131,
+            "eval_count": 581,
+            "total_duration": 55718561917,
+            "load_duration": 141701417,
+            "prompt_eval_duration": 19223833000,
+            "eval_duration": 36082455000
+          }
+        }
+      ]
+    },
+    {
+      "case": "telemetry-rename",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 121.19617100001778,
+      "model_requests": 3,
+      "generation_seconds": 119.57855683285743,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/csharp/Telemetry.cs: missing candidate reviews; runtimes/python/telemetry_runtime.py: invalid/duplicate candidate review line",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/csharp/Telemetry.cs",
+            "error": "missing candidate reviews"
+          },
+          "measurement": {
+            "elapsed_seconds": 34.96572474995628,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "83926f1c628a3680b776bf4285e926ad3e6a4988f08ceebd4cf8f38f865025f6",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 1921,
+            "eval_count": 456,
+            "total_duration": 34961609958,
+            "load_duration": 146496292,
+            "prompt_eval_duration": 8325668000,
+            "eval_duration": 26239125000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/python/telemetry_runtime.py",
+            "error": "invalid/duplicate candidate review line"
+          },
+          "measurement": {
+            "elapsed_seconds": 40.68613916588947,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "b31d821749f2d2dbcb24be6b0ae305278d8a9b8585305399a390dd2465420dd8",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2354,
+            "eval_count": 496,
+            "total_duration": 40679389958,
+            "load_duration": 117710666,
+            "prompt_eval_duration": 9587076000,
+            "eval_duration": 30835541000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/telemetry.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 43.92669291701168,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "f035667a675b26ee14dc76786b4850aa7941d923cf5b45a41cc949eef6e2f493",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2339,
+            "eval_count": 571,
+            "total_duration": 43923446125,
+            "load_duration": 140594083,
+            "prompt_eval_duration": 9106528000,
+            "eval_duration": 34567255000
+          }
+        }
+      ]
+    },
+    {
+      "case": "telemetry-precision",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 128.99290491594002,
+      "model_requests": 3,
+      "generation_seconds": 127.45622508297674,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/typescript/telemetry.ts: line edit makes no change",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 43.340535957948305,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "86914c28fa7e4cddbd4dd8fa1de29520c5542de1e6529a5602c7ef4f0f0ed0ed",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 1946,
+            "eval_count": 559,
+            "total_duration": 43336311416,
+            "load_duration": 150231083,
+            "prompt_eval_duration": 8514500000,
+            "eval_duration": 34523116000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/telemetry_runtime.py"
+          },
+          "measurement": {
+            "elapsed_seconds": 42.05047116696369,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "dbb6b74f08afca663aabda9a0c6073d53eb293fe828b4ea371b9999b57f9b7bc",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2340,
+            "eval_count": 556,
+            "total_duration": 42047229167,
+            "load_duration": 121059583,
+            "prompt_eval_duration": 9062129000,
+            "eval_duration": 32794896999
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/typescript/telemetry.ts",
+            "error": "line edit makes no change"
+          },
+          "measurement": {
+            "elapsed_seconds": 42.06521795806475,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "4f6ebef2dc3fa3593dc4c2929dbd7dc942b8c8e8eedd56615417be6b4bdf6393",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2325,
+            "eval_count": 563,
+            "total_duration": 42062019375,
+            "load_duration": 129752250,
+            "prompt_eval_duration": 9162443000,
+            "eval_duration": 32605490000
+          }
+        }
+      ]
+    },
+    {
+      "case": "telemetry-units",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 140.88395337492693,
+      "model_requests": 3,
+      "generation_seconds": 130.30256720795296,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": "command failed (1): /private/var/folders/6w/7031r_kd0n9dr_7_7x5pm2w40000gn/T/tmp.d7WNVWiihk/live-full/telemetry-units/run/proposal/workspace/.venv/bin/python: a26839c8fe12df5fb39fe8\",\n    \"runtimes/csharp/Telemetry.cs\": \"7d6607b53f2c6006f9ce60b536a9e0dfb7afc4d5cb81d6b1e8086a85485a3367\",\n    \"runtimes/csharp/CsharpApp.csproj\": \"e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d\",\n    \"runtimes/csharp/main.cs\": \"99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a\",\n    \"proto/v1/entity.proto\": \"4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1\",\n    \"proto/v2/entity.proto\": \"6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366\",\n    \"proto/telemetry/vehicle.proto\": \"858ff2a455dd02877212827e95535d6c127c647e4f95f842809eeb1eb4cd19c5\",\n    \"generated/ts/v1/entity.ts\": \"95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792\",\n    \"generated/ts/v2/entity.ts\": \"fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93\",\n    \"generated/ts/telemetry/vehicle.ts\": \"afba36b971c2694b5b9d2ba441ff9d9d2468eaeb30737544cfc470247fd98a11\",\n    \"generated/csharp/V1/Entity.cs\": \"20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24\",\n    \"generated/csharp/V2/Entity.cs\": \"cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5\",\n    \"generated/csharp/Telemetry/Vehicle.cs\": \"11f7a96b6bd2920a60d926cf66979162b0f0ceed6acab656f3141bebb2c16c7d\",\n    \"generated/python/v1/entity_pb2.py\": \"d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc\",\n    \"generated/python/v2/entity_pb2.py\": \"ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972\",\n    \"generated/python/telemetry/vehicle_pb2.py\": \"35a75fe6811991b26388cfe4a8200bc00f8be4a92c8e51e1a637631f6391494d\"\n  },\n  \"runtime_cases\": 16,\n  \"model_requests\": 0,\n  \"scope\": \"authored float32 cases; excludes arbitrary wire and mixed versions\",\n  \"error\": \"telemetry wire/units/threshold mismatch at case 1\"\n}\n",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 43.043536375043914,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "48aae2a1152c0d170e9c920d258daddc8cfdc5ef88128e9987e438046d82ca2d",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 1962,
+            "eval_count": 595,
+            "total_duration": 43039226666,
+            "load_duration": 142974083,
+            "prompt_eval_duration": 8340236000,
+            "eval_duration": 34404667000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/telemetry_runtime.py"
+          },
+          "measurement": {
+            "elapsed_seconds": 43.39364062494133,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "cfdd5248c0f6e7d202b1f6edc8b33571c2ffc37e7dc70a0d9e330599fea89f45",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2392,
+            "eval_count": 583,
+            "total_duration": 43389338708,
+            "load_duration": 136057958,
+            "prompt_eval_duration": 9313947000,
+            "eval_duration": 33802747000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/telemetry.ts"
+          },
+          "measurement": {
+            "elapsed_seconds": 43.86539020796772,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "67bbd46afed22997b4c490b74affa1c39743ee751297e0e7dd4e67620a3ed59a",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2377,
+            "eval_count": 594,
+            "total_duration": 43861487792,
+            "load_duration": 115762125,
+            "prompt_eval_duration": 9139367000,
+            "eval_duration": 34437854000
+          }
+        }
+      ]
+    },
+    {
+      "case": "inventory-width",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 138.055444000056,
+      "model_requests": 3,
+      "generation_seconds": 136.3796388329938,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/csharp/Inventory.cs",
+            "line": 20
+          },
+          {
+            "path": "runtimes/typescript/inventory.ts",
+            "line": 4
+          }
+        ],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/csharp/Inventory.cs: line edit makes no change; runtimes/typescript/inventory.ts: line edit makes no change",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/csharp/Inventory.cs",
+            "error": "line edit makes no change"
+          },
+          "measurement": {
+            "elapsed_seconds": 46.158225457998924,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "d96bbb7a8bcb631176404c23a742b91d558522695e13a011e2d2a63d749b6932",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 1939,
+            "eval_count": 654,
+            "total_duration": 46154344125,
+            "load_duration": 149028459,
+            "prompt_eval_duration": 8434945000,
+            "eval_duration": 37402336000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/inventory_runtime.py"
+          },
+          "measurement": {
+            "elapsed_seconds": 42.81108137499541,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "12786e332f9f59d7b11eeb8f1d4d7c51df65681eea70c3f71682e3a6c31f56ab",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2266,
+            "eval_count": 566,
+            "total_duration": 42806861125,
+            "load_duration": 118818875,
+            "prompt_eval_duration": 8968029000,
+            "eval_duration": 32717437000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/typescript/inventory.ts",
+            "error": "line edit makes no change"
+          },
+          "measurement": {
+            "elapsed_seconds": 47.41033199999947,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "440416399b2eb1010132278c925cafba71610e1d7b7fce6b53f82b5af64c5632",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2291,
+            "eval_count": 635,
+            "total_duration": 47403464917,
+            "load_duration": 120995334,
+            "prompt_eval_duration": 8959617000,
+            "eval_duration": 38151634000
+          }
+        }
+      ]
+    },
+    {
+      "case": "telemetry-quantized",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 162.3551845420152,
+      "model_requests": 3,
+      "generation_seconds": 160.68914045696147,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "measurement": {
+        "expected_sites": 3,
+        "matched_sites": 3,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/csharp/Telemetry.cs",
+            "line": 13
+          },
+          {
+            "path": "runtimes/csharp/Telemetry.cs",
+            "line": 14
+          },
+          {
+            "path": "runtimes/python/telemetry_runtime.py",
+            "line": 11
+          },
+          {
+            "path": "runtimes/python/telemetry_runtime.py",
+            "line": 12
+          },
+          {
+            "path": "runtimes/typescript/telemetry.ts",
+            "line": 10
+          },
+          {
+            "path": "runtimes/typescript/telemetry.ts",
+            "line": 11
+          }
+        ],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/python/telemetry_runtime.py: invalid/duplicate candidate review line; runtimes/typescript/telemetry.ts: line edit makes no change",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "elapsed_seconds": 47.38587383297272,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "170ea3ea5cd6bceb5ca82392f9055c8ab8d7567a9d9a4a0e799195e323ec5c97",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 1914,
+            "eval_count": 665,
+            "total_duration": 47380594250,
+            "load_duration": 139529916,
+            "prompt_eval_duration": 8352213000,
+            "eval_duration": 38775989000
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/python/telemetry_runtime.py",
+            "error": "invalid/duplicate candidate review line"
+          },
+          "measurement": {
+            "elapsed_seconds": 70.3377107080305,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "a9c528a9e2adc4b85928a7b6765880c3cca46fd54ecfb9d189b6601f526524ea",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2308,
+            "eval_count": 1034,
+            "total_duration": 70333878000,
+            "load_duration": 138139125,
+            "prompt_eval_duration": 8971797000,
+            "eval_duration": 60199810000
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/typescript/telemetry.ts",
+            "error": "line edit makes no change"
+          },
+          "measurement": {
+            "elapsed_seconds": 42.96555591595825,
+            "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+          },
+          "request_sha256": "38fd52d283ef8f40d78a185b0b33776f9ba020f469e12a0b824941300a6e02b0",
+          "serving_counts": {
+            "done": true,
+            "done_reason": "stop",
+            "prompt_eval_count": 2293,
+            "eval_count": 584,
+            "total_duration": 42961865500,
+            "load_duration": 115076583,
+            "prompt_eval_duration": 8957513000,
+            "eval_duration": 33710809999
+          }
+        }
+      ]
+    }
+  ],
+  "validated_model_patches": 0,
+  "model_patch_validation_rate": 0.0,
+  "model_requests": 24,
+  "generation_seconds": 1143.861890411703
+}

@@ -1,0 +1,1110 @@
+{
+  "elapsed_seconds": 46.214170957915485,
+  "memory_samples": [
+    {
+      "elapsed_seconds": 0.0003057079156860709,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 1.0064610419794917,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 2.013708999962546,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 3.018748499918729,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 4.025385458022356,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 5.031847957987338,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 6.035600167000666,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 7.042282667011023,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 8.050447624991648,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 9.064276874996722,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 10.070373749942519,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 11.072053708019666,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 12.07719024992548,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 13.07862845796626,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 14.081624666927382,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 15.085567041998729,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 16.091780666960403,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 17.097907957970165,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 18.104022832936607,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 19.1105334169697,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 20.115010291920044,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 21.14395529194735,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 22.14784770796541,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 23.15150279190857,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 24.15982920792885,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 25.162239957950078,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 26.164495041943155,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 27.171076249913312,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 28.174355249968357,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 29.18066958291456,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 30.1862383330008,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 31.192240083008073,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 32.198565666913055,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 33.202254791976884,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 34.20671737496741,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 35.21117212495301,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 36.21507141692564,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 37.21854912501294,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 38.22345308295917,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 39.22884170792531,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 40.23114674992394,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 41.235194957931526,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 42.23868516692892,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 43.245225207996555,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 44.25181095791049,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 45.2584134999197,
+      "models": [
+        {
+          "name": "ministral-3:8b",
+          "model": "ministral-3:8b",
+          "size": 7352174508,
+          "digest": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "mistral3",
+            "families": [
+              "mistral3"
+            ],
+            "parameter_size": "8.9B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-11-04T23:30:16.557106-05:00",
+          "size_vram": 7352174508,
+          "context_length": 16384
+        }
+      ]
+    }
+  ],
+  "memory_scope": "Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded"
+}

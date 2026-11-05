@@ -1,0 +1,50 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 31,
+      "end_line": 34,
+      "replacement_lines": [
+        "    fields = {\"entity_id\": entity.entity_id}"
+      ]
+    },
+    {
+      "start_line": 116,
+      "end_line": 117,
+      "replacement_lines": []
+    }
+  ],
+  "rationale": "The `name` field was removed from the schema in v1, so all references to it must be removed. The first edit removes the conditional addition of the `name` field during entity processing (line 33), as it is no longer part of the schema. The second edit deletes the explicit assignment of a name to an Entity object when constructing a v1 entity (line 117). Both edits align with the removal of the `name` field from the protobuf definition and preserve the intended behavior of only including `entity_id`.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated bindings for Entity in v1 will not expose a `name` attribute after regeneration, so direct assignment is invalidated.",
+    "No other implicit or external logic depends on the `name` field beyond what is explicitly shown."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 33,
+      "decision": "edit",
+      "reason": "This line adds the `name` field to the output dictionary, which is no longer valid after the schema change. The field must be removed from all v1 processing."
+    },
+    {
+      "line": 31,
+      "decision": "unaffected",
+      "reason": "This line initializes the fields dictionary with `entity_id`, which remains unchanged and valid in the new schema."
+    },
+    {
+      "line": 32,
+      "decision": "unaffected",
+      "reason": "The conditional check for version is preserved as it controls whether legacy v1 behavior (now invalid) would occur, but the logic inside must be removed."
+    },
+    {
+      "line": 117,
+      "decision": "edit",
+      "reason": "This line assigns a `name` to an Entity object during construction, which is no longer valid for v1. The field must be removed entirely."
+    },
+    {
+      "line": 116,
+      "decision": "unaffected",
+      "reason": "The conditional check for version remains necessary to distinguish between v1 and v2 behavior, but the body of the block is invalidated by the schema change."
+    }
+  ]
+}

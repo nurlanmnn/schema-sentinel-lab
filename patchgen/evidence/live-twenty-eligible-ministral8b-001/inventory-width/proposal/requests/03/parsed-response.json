@@ -1,0 +1,49 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 4,
+      "end_line": 4,
+      "replacement_lines": [
+        "interface Request { payload: string; sku: string; quantity: string }"
+      ]
+    },
+    {
+      "start_line": 9,
+      "end_line": 9,
+      "replacement_lines": [
+        "    const sample = StockItem.encode({ sku: request.sku, quantity: request.quantity }).finish();"
+      ]
+    },
+    {
+      "start_line": 10,
+      "end_line": 10,
+      "replacement_lines": [
+        "    const fields = { sku: entity.sku, quantity: entity.quantity };"
+      ]
+    }
+  ],
+  "rationale": "The `quantity` field in the protobuf schema changed from int32 to int64. The generated TypeScript code will handle this as a string (due to ts-proto forceLong=string) or BigInt/number depending on usage, but explicit conversion is required for consistency with the intended behavior of preserving exact signed int64 quantities as canonical decimal strings in JSON. The edits remove unsafe numeric conversions and ensure the quantity remains a string throughout the pipeline: (1) The `Request` interface does not need to change since it already uses `quantity: string`. (2) The encoding step avoids converting the input string to a number, preserving the exact value. (3) The output fields use the raw protobuf field value directly without any numeric conversion, ensuring no loss of precision or sign information.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated `StockItem` type from ts-proto will correctly handle int64 as a string or BigInt when accessed via `.quantity`, and the protobuf library's decode/encode methods preserve the exact value without implicit conversion.",
+    "No other parts of the codebase rely on numeric operations on `entity.quantity` that would break due to this change."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 4,
+      "decision": "unaffected",
+      "reason": "The `Request` interface already uses `quantity: string`, which aligns with the intended behavior of preserving exact signed int64 quantities as canonical decimal strings. No changes are needed."
+    },
+    {
+      "line": 9,
+      "decision": "edit",
+      "reason": "The line converts the input quantity to a number using `Number.parseInt()`, which could truncate or alter the value for large/signed int64 values. Replaced with direct string usage to preserve exactness."
+    },
+    {
+      "line": 10,
+      "decision": "edit",
+      "reason": ".toString() conversion is unnecessary and unsafe since the protobuf field will be a string or BigInt, but explicitly using `entity.quantity` directly ensures no implicit numeric conversion occurs."
+    }
+  ]
+}

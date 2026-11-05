@@ -1,0 +1,37 @@
+{
+  "outcome": "patch",
+  "edits": [
+    {
+      "start_line": 15,
+      "end_line": 15,
+      "replacement_lines": [
+        "        fields = new() { [\"entity_id\"] = decoded.EntityId }"
+      ]
+    },
+    {
+      "start_line": 67,
+      "end_line": 67,
+      "replacement_lines": [
+        "        ? new Simulation.V1.Entity { EntityId = \"cs_202\" }"
+      ]
+    }
+  ],
+  "rationale": "The schema change removes the `name` field from v1 Entity messages, requiring removal of all references to it. The two identified lines in the C# runtime directly construct or populate fields using `Name`, which must be removed to align with the new schema. No other lines reference `Name` or use the field in a way that would require changes beyond these two sites.",
+  "confidence": 1,
+  "assumptions": [
+    "The generated protobuf bindings for v1 Entity will not expose a `Name` property after regeneration, and the runtime must adapt to this change by removing all explicit references to it. The `entity_id` field remains unchanged in both construction and decoding.",
+    "No other implicit or reflection-based access to `Name` exists beyond these two explicit sites."
+  ],
+  "candidate_reviews": [
+    {
+      "line": 15,
+      "decision": "edit",
+      "reason": "This line explicitly includes the removed `name` field in the dictionary construction for v1 Entity decoding. The schema change requires removal of this field from all v1 payloads."
+    },
+    {
+      "line": 67,
+      "decision": "edit",
+      "reason": "This line constructs a v1 Entity with an explicit `Name` assignment, which is no longer valid per the new schema. The field must be removed to comply with the reserved/removed field."
+    }
+  ]
+}
