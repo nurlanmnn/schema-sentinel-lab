@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
-from patchgen.generator import LOCAL_MODELS, OPTIONS, STRATEGY_VERSIONS
+from patchgen.generator import LOCAL_MODELS, OPENROUTER_MODEL, OPTIONS, STRATEGY_VERSIONS
 from run_benchmark import manifest
 from run_demo import check_output
 
@@ -31,7 +31,7 @@ def collect(target, exit_code, elapsed):
     if report_path.is_file():
         pipeline = json.loads(report_path.read_text())
         proposal = pipeline.get('proposal_report',{})
-        result.update(status=pipeline['status'],measurement=pipeline.get('measurement'),
+        result.update(backend=proposal.get('backend', 'ollama'),status=pipeline['status'],measurement=pipeline.get('measurement'),
                       error=proposal.get('error',pipeline.get('error')),mode=proposal.get('mode'))
         result['generated_patch_validated'] = bool(exit_code==0 and pipeline['status']=='validation_passed'
             and proposal.get('mode')=='live_model' and (target/'review/index.html').is_file())
@@ -48,7 +48,9 @@ def collect(target, exit_code, elapsed):
         result['generation_seconds']+=item.get('measurement',{}).get('elapsed_seconds',0)
         if (directory/'raw-response.json').is_file():
             raw=json.loads((directory/'raw-response.json').read_text())
-            item['serving_counts']={key:raw.get(key) for key in ('done','done_reason','prompt_eval_count','eval_count','total_duration','load_duration','prompt_eval_duration','eval_duration')}
+            fields = ('id','model','provider','usage') if result.get('backend') == 'openrouter' else (
+                'done','done_reason','prompt_eval_count','eval_count','total_duration','load_duration','prompt_eval_duration','eval_duration')
+            item['serving_counts']={key:raw.get(key) for key in fields}
         # Full memory samples remain in their original request-measurement artifacts.
         if 'measurement' in item:item['measurement']={key:value for key,value in item['measurement'].items() if key!='memory_samples'}
         requests.append(item)
@@ -57,17 +59,33 @@ def collect(target, exit_code, elapsed):
     return result
 
 
-def execute(output,model,strategy='candidate_edits', *, full_benchmark=False):
+def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None):
     if strategy not in ('candidate_edits','candidate_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
+    if backend == 'openrouter':
+        from patchgen.openrouter_client import credential
+        if model != OPENROUTER_MODEL:
+            raise ValueError('OpenRouter evaluation requires the free Gemma model')
+        credential()
+    elif backend != 'ollama' or model not in LOCAL_MODELS:
+        raise ValueError('unsupported local backend or model')
+    if cases is not None and (not cases or len(set(cases)) != len(cases) or not set(cases) <= set(CASES + ADDITIONAL_CASES)):
+        raise ValueError('select distinct cases supported by the live route')
     output=check_output(output);output.mkdir(parents=True)
     available = manifest()
     plan = benchmark_plan(available) if full_benchmark else {name: 'eligible' for name in CASES}
+    if cases:
+        plan = benchmark_plan(available)
+        plan = {name: 'not_selected' if state == 'eligible' and name not in cases else state
+                for name, state in plan.items()}
     entries = [entry for entry in available if plan.get(entry['case']) == 'eligible']
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
-    report=dict(status='running',mode='live_model',model=model,strategy=strategy,
-                prompt_version=STRATEGY_VERSIONS[strategy],options=OPTIONS,
+    options = OPTIONS
+    if backend == 'openrouter':
+        from patchgen.openrouter_client import OPTIONS as options
+    report=dict(status='running',mode='live_model',model=model,strategy=strategy,backend=backend,
+                prompt_version=STRATEGY_VERSIONS[strategy],options=options,
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
                 implementation_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                 implementation_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True)),
@@ -80,7 +98,7 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False):
     for entry in entries:
         target=output/entry['case'];target.mkdir()
         command=[sys.executable,'-m','patchgen.pipeline','--fixture',str(ROOT/'patchgen/fixtures'/entry['profile']/'runtime-input.json'),
-                 '--output',str(target/'run'),'--generate','--strategy',strategy,'--model',model,'--local-codegen',
+                 '--output',str(target/'run'),'--generate','--strategy',strategy,'--model',model,'--backend',backend,'--local-codegen',
                  '--review-output',str(target/'review')]
         start=time.monotonic()
         with (target/'pipeline.log').open('w') as log:
@@ -102,10 +120,19 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--full-benchmark', action='store_true',
                         help='record eligibility across the complete deterministic benchmark and run its supported live cases')
-    parser.add_argument('--model',choices=LOCAL_MODELS,default='ministral-3:8b')
+    parser.add_argument('--backend', choices=('ollama','openrouter'), default='ollama')
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL), default=None)
+    parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
+                        help='run selected cases as a smaller initial trial')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_blocks'),default='candidate_edits')
     args=parser.parse_args()
-    return execute(args.output,args.model,args.strategy, full_benchmark=args.full_benchmark)
+    model = args.model or (OPENROUTER_MODEL if args.backend == 'openrouter' else 'ministral-3:8b')
+    try:
+        return execute(args.output,model,args.strategy, full_benchmark=args.full_benchmark,
+                       backend=args.backend,cases=args.case)
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
 
 
 if __name__=='__main__':raise SystemExit(main())

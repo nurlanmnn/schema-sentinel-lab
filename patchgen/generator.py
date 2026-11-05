@@ -14,6 +14,7 @@ import threading
 import time
 import urllib.request
 from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
+from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL
 
 PROMPT_VERSION = '2.3'
 OPTIONS = {'temperature': 0, 'seed': 42, 'num_ctx': 16384, 'num_predict': 8192}
@@ -470,15 +471,27 @@ def request_model(messages, model, endpoint, output):
     return parsed
 
 
-def generate(case, model, endpoint, output, strategy='line_edits'):
-    # Local endpoint only. No accidental cloud-model or remote-source transmission.
-    if endpoint not in ('http://127.0.0.1:11434','http://localhost:11434') or model not in LOCAL_MODELS:
-        raise ContractError('this evaluation supports only local models: '+', '.join(LOCAL_MODELS))
-    tags = api(endpoint,'/api/tags')['models']
-    metadata = next((m for m in tags if m['name'] == model),None)
-    if metadata is None:
-        raise ContractError(f'model missing: run ollama pull {model}')
-    save(output / 'model.json',{'tag':metadata,'show':api(endpoint,'/api/show',{'model':model}),'serving':api(endpoint,'/api/version')})
+def generate(case, model, endpoint, output, strategy='line_edits', backend='ollama'):
+    if backend == 'openrouter':
+        from patchgen.openrouter_client import credential, request_model as cloud_request, OPTIONS as cloud_options
+        if model != OPENROUTER_MODEL or strategy not in ('candidate_edits', 'candidate_blocks'):
+            raise ContractError('OpenRouter requires the free Gemma model and a supported live editing strategy')
+        credential()
+        def request(messages, selected_model, unused_endpoint, directory):
+            return cloud_request(messages, selected_model, directory)
+        save(output / 'model.json', dict(backend=backend, model=model, options=cloud_options,
+                                        response_contract='JSON object; schema checked by host'))
+    elif backend == 'ollama':
+        if endpoint not in ('http://127.0.0.1:11434','http://localhost:11434') or model not in LOCAL_MODELS:
+            raise ContractError('this evaluation supports only local models: '+', '.join(LOCAL_MODELS))
+        tags = api(endpoint,'/api/tags')['models']
+        metadata = next((m for m in tags if m['name'] == model),None)
+        if metadata is None:
+            raise ContractError(f'model missing: run ollama pull {model}')
+        save(output / 'model.json',{'tag':metadata,'show':api(endpoint,'/api/show',{'model':model}),'serving':api(endpoint,'/api/version')})
+        request = request_model
+    else:
+        raise ContractError('unknown inference backend')
     records, errors = [], []
     # Exactly one request per supplied file. No validation feedback or repair attempts.
     for index,file in enumerate(case['affected_files'],start=1):
@@ -495,11 +508,11 @@ def generate(case, model, endpoint, output, strategy='line_edits'):
                 else:
                     from patchgen.rename_tokens import make_prompt, resolve
                 messages,tokens = make_prompt(case,file)
-                value = request_model(messages,model,endpoint,directory)
+                value = request(messages,model,endpoint,directory)
                 save(directory/'token-inventory.json',tokens)
                 updated = resolve(file['source_context'],value,tokens,file['positions'])
             else:
-                value = request_model(edit_prompt(case,file,strategy),model,endpoint,directory)
+                value = request(edit_prompt(case,file,strategy),model,endpoint,directory)
             if strategy in ('line_edits','migration_edits','candidate_edits'):
                 updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy == 'candidate_edits' else resolve_lines(file['source_context'],value,file['positions'])
             elif strategy not in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_feedback_blocks'):
@@ -703,6 +716,7 @@ def main():
     parser.add_argument('--prepare-source',action='store_true',help='explicitly snapshot fixture revision into output/source before generation')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--model',default='ministral-3:8b')
+    parser.add_argument('--backend', choices=('ollama','openrouter'), default='ollama')
     parser.add_argument('--strategy',choices=tuple(STRATEGY_VERSIONS),default='line_edits')
     parser.add_argument('--validation-profile',choices=tuple(VALIDATION_PROFILES),help='explicit independent test migration; never sent to the model')
     parser.add_argument('--endpoint',default='http://127.0.0.1:11434')
@@ -749,7 +763,7 @@ def main():
     if metadata_strategy:
         (output/'telemetry-metadata-source.py').write_bytes(Path(__file__).with_name('telemetry_metadata.py').read_bytes())
     report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or metadata_strategy or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units','deterministic_telemetry_quantized','deterministic_telemetry_message_rename') else 'live_model'),
-              'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,
+              'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,'backend':args.backend,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
     if args.strategy in ('candidate_blocks','candidate_feedback_blocks'):
@@ -778,9 +792,16 @@ def main():
             Path(__file__).with_name(inventory_policy).read_bytes()).hexdigest()
     if metadata_strategy:
         report['telemetry_metadata_sha256'] = hashlib.sha256((output/'telemetry-metadata-source.py').read_bytes()).hexdigest()
+    if args.backend == 'openrouter':
+        raw = Path(__file__).with_name('openrouter_client.py').read_bytes()
+        (output/'openrouter-client-source.py').write_bytes(raw)
+        report['openrouter_client_sha256'] = hashlib.sha256(raw).hexdigest()
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
+        if args.backend == 'openrouter' and (args.response or args.feedback
+                or args.model != OPENROUTER_MODEL or args.strategy not in ('candidate_edits','candidate_blocks')):
+            raise ContractError('cloud backend requires an explicit free Gemma live request')
         if bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks') or args.feedback and args.response:
             raise ContractError('feedback strategy requires explicit live feedback and cannot use offline replay')
         if args.feedback:
@@ -891,7 +912,7 @@ def main():
             from patchgen.rename_roles import propose
             proposal = propose(case, output)
         else:
-            proposal = validate_output(json.loads(args.response.read_text())) if args.response else generate(case,args.model,args.endpoint,output,args.strategy)
+            proposal = validate_output(json.loads(args.response.read_text())) if args.response else generate(case,args.model,args.endpoint,output,args.strategy,backend=args.backend)
         save(output / 'proposal.json',proposal)
         (output / 'proposal.patch').write_text(proposal['diff'])
         report['outcome'] = proposal['outcome']
