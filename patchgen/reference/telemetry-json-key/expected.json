@@ -1,0 +1,26 @@
+{
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change_id": "telemetry-json-key",
+  "category": "field_json_name_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "lines": [
+        11
+      ]
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "lines": [
+        10
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "lines": [
+        13
+      ]
+    }
+  ],
+  "method": "Authored public observation key in each runtime."
+}

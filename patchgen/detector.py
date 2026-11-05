@@ -149,6 +149,40 @@ def standalone_message_rename(old, new):
     return None
 
 
+def standalone_field_metadata_change(old, new):
+    """Recognize one field-number or JSON-name edit in a standalone message."""
+    if (old.syntax != 'proto3' or new.syntax != 'proto3'
+            or len(old.message_type) != 1 or len(new.message_type) != 1):
+        return None
+    left, right = copy.deepcopy(old), copy.deepcopy(new)
+    for file in (left, right):
+        file.ClearField('source_code_info')
+    before, after = left.message_type[0], right.message_type[0]
+    if len(before.field) != len(after.field):
+        return None
+    changed = [(x, y) for x, y in zip(before.field, after.field, strict=True) if x != y]
+    if len(changed) != 1:
+        return None
+    prior, field = changed[0]
+    event = dict(message=qualified(old.package, before.name), field_number=prior.number,
+                 old_name=prior.name, new_name=field.name,
+                 old_field=field_identity(prior), new_field=field_identity(field))
+    if prior.number != field.number and prior.label == prior.LABEL_OPTIONAL and not prior.HasField('oneof_index'):
+        event.update(category='field_renumbered', new_field_number=field.number)
+        field.number = prior.number
+        reservations = [i for i, r in enumerate(after.reserved_range)
+                        if (r.start, r.end) == (prior.number, prior.number + 1)]
+        if len(reservations) != 1:
+            return None
+        del after.reserved_range[reservations[0]]
+    elif prior.json_name != field.json_name:
+        event.update(category='field_json_name_changed')
+        field.json_name = prior.json_name
+    else:
+        return None
+    return event if left == right else None
+
+
 def compare(old, new):
     """Return normalized events and unsupported changes, matched by wire identity."""
     if (old.name, old.package) != (new.name, new.package):
@@ -156,6 +190,9 @@ def compare(old, new):
     message_rename = standalone_message_rename(old, new)
     if message_rename:
         return [message_rename], []
+    metadata_change = standalone_field_metadata_change(old, new)
+    if metadata_change:
+        return [metadata_change], []
     events, unsupported = [], []
     def messages(items, prefix):
         result = {}

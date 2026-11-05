@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-VALIDATION_COUNTS = {'rename': 24, 'precision': 33, 'units': 24, 'quantized': 36, 'message-rename': 24}
+VALIDATION_COUNTS = {'rename': 24, 'precision': 33, 'units': 24, 'quantized': 36, 'message-rename': 24, 'tag-move': 24, 'json-key': 24}
 ARTIFACTS = ('report.json', 'expected.json', 'python.json', 'typescript.json', 'csharp.json')
 
 
@@ -60,7 +60,7 @@ def requests(case="baseline"):
         wire_speed = speed * 3.6 if case == 'units' else speed
         wire = (b'\x0a' + bytes([len(encoded)]) + encoded if encoded else b'')
         if wire_speed:
-            wire += (b'\x11' + struct.pack('<d', wire_speed) if case == 'precision' else b'\x15' + struct.pack('<f', wire_speed))
+            wire += (b'\x11' + struct.pack('<d', wire_speed) if case == 'precision' else bytes([0x3d if case == 'tag-move' else 0x15]) + struct.pack('<f', wire_speed))
         result.append(dict(vehicle_id=vehicle, speed=speed, payload=base64.b64encode(wire).decode()))
     return result
 
@@ -72,7 +72,7 @@ def expected(case):
                 for vehicle, _, constructed, decoded in quantized_vectors()]
     if case != 'baseline' and case not in VALIDATION_COUNTS:
         raise ValueError('unknown telemetry oracle case')
-    key = {'rename':'ground_speed_mps','units':'speed_kph'}.get(case,'speed_mps')
+    key = {'rename':'ground_speed_mps','units':'speed_kph','json-key':'groundSpeed'}.get(case,'speed_mps')
     return [dict(fields=dict(vehicle_id=r['vehicle_id'], **{key:struct.unpack('<f',struct.pack('<f',r['speed']*3.6))[0] if case=='units' else r['speed']}),
                  speeding=r['speed'] > 30, constructed_payload=r['payload']) for r in requests(case)]
 

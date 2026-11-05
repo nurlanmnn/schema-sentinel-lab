@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change_id": "telemetry-tag-move",
+  "new_schema_sha256": "2871fab27da2e2d92822579298b779f194d655cc236e21ea43459cea18bb1a35",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "telemetry_case": "tag-move"
+}

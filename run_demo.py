@@ -18,6 +18,8 @@ CASES = {
     'inventory-stock-release': ('inventory-stock-release', 'deterministic_inventory_stock_release'),
     'inventory-zigzag': ('inventory-quantity-zigzag', 'deterministic_inventory_zigzag'),
     'inventory-width': ('inventory-quantity-width', 'deterministic_inventory_width'),
+    'telemetry-tag-move': ('telemetry-tag-move', 'deterministic_telemetry_metadata'),
+    'telemetry-json-key': ('telemetry-json-key', 'deterministic_telemetry_metadata'),
     'telemetry-message-rename': ('telemetry-message-rename', 'deterministic_telemetry_message_rename'),
     'telemetry-quantized': ('telemetry-speed-quantized', 'deterministic_telemetry_quantized'),
     'telemetry-units': ('telemetry-speed-units', 'deterministic_telemetry_units'),

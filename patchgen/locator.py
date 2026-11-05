@@ -281,6 +281,8 @@ def locate(repo, detector, *, added_field_policy_anchor=None):
         record['issues'].append('presence candidates only; constructor and observation policy requires review')
     if event['category'] == 'field_cardinality_changed':
         record['issues'].append('cardinality candidates only; collection collapse policy requires review')
+    if event['category'] in ('field_renumbered', 'field_json_name_changed'):
+        record['issues'].append('metadata candidates only; wire or JSON policy requires review')
     message_rename = event['category'] == 'message_renamed'
     if message_rename:
         record['issues'].append('message symbol candidates only; generated type usage requires review')

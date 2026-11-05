@@ -1,0 +1,32 @@
+{
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change_id": "telemetry-tag-move",
+  "category": "field_renumbered",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "lines": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "lines": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "lines": [
+        12,
+        13,
+        14
+      ]
+    }
+  ],
+  "method": "Authored producer, observation and threshold consumers of the generated field."
+}
