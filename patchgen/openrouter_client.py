@@ -27,6 +27,10 @@ class ProviderError(ValueError):
     """A cloud request failed before a usable edit response was produced."""
 
 
+class ProviderIdentityError(ProviderError):
+    """The provider returned an unverified model identity."""
+
+
 class ProviderHTTPError(ProviderError):
     """The provider could not serve a request."""
 

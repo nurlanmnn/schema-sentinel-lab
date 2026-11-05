@@ -15,6 +15,17 @@ class AnchorTests(unittest.TestCase):
             edits=[dict(before='    old = 1\n    return old\n',after='    new = 1\n    return new\n')],
             candidate_reviews={key:dict(decision='edit',reason='changed use') for key in self.inventory})
 
+    def test_semantic_variant_keeps_block_inventory_and_answer_exclusion(self):
+        case = dict(contract_version='1.0', source_revision='a'*40,
+                    change=dict(id='rename', category='renaming', schema_path='proto/test.proto', old_schema='old', new_schema='new'),
+                    intended_behavior='Rename', affected_files=[self.file], reference_answer='FORBIDDEN_ORACLE')
+        old, old_inventory = make_prompt(case, self.file)
+        revised, revised_inventory = make_prompt(case, self.file, semantic=True)
+        self.assertEqual(old_inventory, revised_inventory)
+        self.assertNotIn('FORBIDDEN_ORACLE', json.dumps(revised))
+        self.assertEqual(json.loads(revised[1]['content'])['prompt_version'], '3.1-semantic-blocks')
+        self.assertIn('before and after are identical', revised[0]['content'])
+
     def test_exact_blocks_are_host_resolved_and_all_candidates_required(self):
         self.assertEqual(resolve(self.source,self.response,self.inventory,self.positions),
                          'def f():\n    new = 1\n    return new\n')

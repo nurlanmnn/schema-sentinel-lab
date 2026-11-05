@@ -60,6 +60,8 @@ def collect(target, exit_code, elapsed):
         dict(request=item['request'], http_status=item['measurement']['http_status'])
         for item in requests if item.get('measurement', {}).get('http_status')
     ]
+    result['provider_errors'] += [dict(request=item['request'], status='provider_identity_mismatch')
+        for item in requests if item.get('measurement', {}).get('status') == 'provider_identity_mismatch']
     if result['provider_errors']:
         result['status'] = 'provider_unavailable'
     result['generated_patch_validated'] &= result['model_requests'] > 0
@@ -67,7 +69,7 @@ def collect(target, exit_code, elapsed):
 
 
 def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None):
-    if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks'):
+    if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     if backend in ('openrouter', 'nvidia'):
         from importlib import import_module
@@ -92,7 +94,7 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
     options = OPTIONS
     if backend in ('openrouter', 'nvidia'):
-        options = transport.OPTIONS
+        options = transport.options_for(model) if hasattr(transport, 'options_for') else transport.OPTIONS
     report=dict(status='running',mode='live_model',model=model,strategy=strategy,backend=backend,
                 prompt_version=STRATEGY_VERSIONS[strategy],options=options,
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
@@ -116,6 +118,8 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         result=dict(case=entry['case'],**collect(target,code,time.monotonic()-start))
         report['results'].append(result);save()
         print(result['case']+': '+result['status']+'; actual model requests='+str(result['model_requests']),flush=True)
+        if result['status'] == 'provider_unavailable':
+            break
     passed=sum(r['generated_patch_validated'] for r in report['results'])
     unavailable = sum(row['status'] == 'provider_unavailable' for row in report['results'])
     report.update(status='provider_unavailable' if unavailable else 'completed',
@@ -136,7 +140,7 @@ def main():
     parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,*NVIDIA_MODELS), default=None)
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
-    parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'),default='candidate_edits')
     args=parser.parse_args()
     model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(args.backend, 'ministral-3:8b'))
     try:

@@ -60,3 +60,40 @@ Single stochastic samples cannot establish statistical reliability or isolate a
 prompt effect from sampling noise; repeatability requires a separate evaluation.
 The other twelve deterministic benchmark cases remain explicitly ineligible for
 this live route and are not counted as model successes.
+
+## Identity failure and follow-up
+
+The first Super 3.5 evaluation returned the model identifier
+`private/nvidia/nemotron-3.5-super-120b-a12b` for requests to
+`nvidia/nemotron-3.5-super-vl-120b-a12b`. No authoritative alias mapping was
+verified. Those responses are rejected as provider identity failures and do not
+establish a model patch-validation rate. The interrupted comparison remains in
+`nvidia-model-prompt-comparison-001`; its Super per-case historical `failed`
+labels predate the corrected unavailable classification and must not be used as
+model-quality scores. The new adapter and runner stop on the first such failure.
+
+Google's `google/gemma-4-31b-it` is also explicitly allowed through the same
+NVIDIA endpoint. Its connectivity probe succeeded. NVIDIA's own sample uses
+model-specific temperature .5, top_p 1, seed 0; the adapter uses these with the
+same 4096 output-token budget and no Nemotron-only chat-template options.
+https://build.nvidia.com/google/gemma-4-31b-it
+
+`candidate_semantic_blocks` version `3.1-semantic-blocks` combines general
+semantic guidance with exact source blocks and explicit omission of unchanged
+edits. It retains the original block resolver, candidate coverage, required
+reference constraints, answer exclusion, compilation and runtime oracles.
+It was developed after inspecting the first comparison, so it is a development
+follow-up rather than held-out validation.
+
+```sh
+.venv/bin/python -m patchgen.nvidia_comparison \
+  --model nvidia/nemotron-3-ultra-550b-a55b \
+  --model google/gemma-4-31b-it \
+  --strategy candidate_semantic_blocks \
+  --output patchgen/evidence/nvidia-block-model-comparison-001
+```
+
+This final follow-up has two cohorts and sixteen case attempts, no automatic
+repairs. Model comparison includes different provider-recommended sampling
+options, so any outcome difference is between configurations, not parameter
+count alone. No Chinese-developed model is added to the allowlist.

@@ -36,7 +36,7 @@ def candidates(file):
         for index,line in enumerate(positions,1)}
 
 
-def make_prompt(case,file):
+def make_prompt(case,file, *, semantic=False):
     # Inherit the reference-answer exclusion allowlist from the existing generator.
     payload=json.loads(prompt(case)[1]['content'])
     payload.pop('affected_files')
@@ -48,11 +48,15 @@ def make_prompt(case,file):
                              'properties':{key:REVIEW_SCHEMA for key in inventory},'required':list(inventory)}}
     payload['response_schema']={**SCHEMA,'properties':{key:properties[key] for key in
         ('outcome','candidate_reviews','edits','rationale','confidence','assumptions')}}
-    payload['prompt_version']=VERSION
+    payload['prompt_version']='3.1-semantic-blocks' if semantic else VERSION
     if any(value.get('required_reference') for value in inventory.values()):
         payload['prompt_version'] += '-binding1'
         payload['binding_policy'] = 'required_reference candidates must be edited or deferred with needs_clarification; canonical binding evidence prevents an unaffected decision.'
-    return [{'role':'system','content':SYSTEM},{'role':'user','content':json.dumps(payload,indent=2)}],inventory
+    system = SYSTEM
+    if semantic:
+        from patchgen.generator import SEMANTIC_GUIDANCE
+        system += SEMANTIC_GUIDANCE + '\nNever emit an edit whose before and after are identical. For a candidate requiring no textual source change, use unaffected with its version/type reason and omit the edit. Required references still must be edited or deferred. Check every proposed before/after pair for an actual difference.\n'
+    return [{'role':'system','content':system},{'role':'user','content':json.dumps(payload,indent=2)}],inventory
 
 
 def resolve(source,value,inventory,positions):

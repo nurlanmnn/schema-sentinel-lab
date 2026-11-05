@@ -11,7 +11,7 @@ import urllib.error
 import urllib.request
 
 MODEL = 'nvidia/nemotron-3-ultra-550b-a55b'
-MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b')
+MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b', 'google/gemma-4-31b-it')
 API_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 KEY_FILE = Path.home() / '.config/schema-sentinel/nvidia.key'
 OPTIONS = {
@@ -22,7 +22,15 @@ OPTIONS = {
 }
 
 # Shared failure types let the generator stop after an unavailable provider.
-from patchgen.openrouter_client import ProviderError, ProviderHTTPError
+from patchgen.openrouter_client import ProviderError, ProviderHTTPError, ProviderIdentityError
+
+
+def options_for(model):
+    if model not in MODELS:
+        raise ProviderError('Unsupported model')
+    if model.startswith('google/'):
+        return dict(temperature=0.5, top_p=1, seed=0, max_tokens=4096)
+    return dict(OPTIONS)
 
 
 def credential():
@@ -46,7 +54,7 @@ def request_model(messages, model, output):
     token = credential()
     output.mkdir(parents=True, exist_ok=False)
     payload = json.loads(messages[-1]['content'])
-    request = dict(OPTIONS, model=model, messages=messages, stream=False)
+    request = dict(options_for(model), model=model, messages=messages, stream=False)
     save(output / 'request.json', request)
     save(output / 'prompt.json', dict(version=payload['prompt_version'],
          sha256=hashlib.sha256(json.dumps(messages).encode()).hexdigest(), messages=messages))
@@ -73,7 +81,7 @@ def request_model(messages, model, output):
         if raw.get('error'):
             raise ProviderError('NVIDIA returned an API error. See raw-response.json.')
         if raw.get('model', '').removesuffix(':free') != model.removesuffix(':free'):
-            raise ProviderError('NVIDIA returned a different model identifier.')
+            raise ProviderIdentityError('NVIDIA returned an unverified model identifier: ' + str(raw.get('model')))
         choices = raw.get('choices')
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict) or choices[0].get('finish_reason') != 'stop':
             raise ProviderError('Nemotron response was incomplete, refused, or truncated.')
@@ -84,6 +92,9 @@ def request_model(messages, model, output):
                            response_id=raw.get('id'), usage=raw.get('usage'))
         save(output / 'parsed-response.json', value)
         return value
+    except ProviderIdentityError:
+        measurement['status'] = 'provider_identity_mismatch'
+        raise
     except urllib.error.HTTPError as error:
         measurement.update(status='http_error', http_status=error.code,
                            retry_after=error.headers.get('Retry-After'))

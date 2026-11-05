@@ -15,7 +15,7 @@ import threading
 import time
 import urllib.request
 from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
-from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL, ProviderHTTPError
+from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL, ProviderHTTPError, ProviderIdentityError
 
 PROMPT_VERSION = '2.3'
 OPTIONS = {'temperature': 0, 'seed': 42, 'num_ctx': 16384, 'num_predict': 8192}
@@ -166,6 +166,7 @@ STRATEGY_VERSIONS['deterministic_inventory_labels'] = 'host-inventory-labels/1.0
 STRATEGY_VERSIONS['deterministic_inventory_presence'] = 'host-inventory-presence/1.0'
 STRATEGY_VERSIONS['deterministic_inventory_stock_release'] = 'host-stock-release/1.0'
 STRATEGY_VERSIONS['candidate_blocks']='2.8'
+STRATEGY_VERSIONS['candidate_semantic_blocks']='3.1-semantic-blocks'
 STRATEGY_VERSIONS['candidate_semantic_edits']='3.0-semantic'
 STRATEGY_VERSIONS['candidate_feedback_blocks']='2.9-feedback'
 
@@ -499,8 +500,9 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
     if backend in ('openrouter', 'nvidia'):
         from importlib import import_module
         transport = import_module('patchgen.' + backend + '_client')
-        credential, cloud_request, cloud_options = transport.credential, transport.request_model, transport.OPTIONS
-        if model not in getattr(transport, 'MODELS', (transport.MODEL,)) or strategy not in ('candidate_edits', 'candidate_semantic_edits', 'candidate_blocks'):
+        credential, cloud_request = transport.credential, transport.request_model
+        cloud_options = transport.options_for(model) if hasattr(transport, 'options_for') else transport.OPTIONS
+        if model not in getattr(transport, 'MODELS', (transport.MODEL,)) or strategy not in ('candidate_edits', 'candidate_semantic_edits', 'candidate_blocks', 'candidate_semantic_blocks'):
             raise ContractError('Cloud backend requires its selected model and a supported live editing strategy')
         credential()
         def request(messages, selected_model, unused_endpoint, directory):
@@ -524,16 +526,16 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
         directory = output / 'requests' / f'{index:02d}'
         print(f'Generating {index}/{len(case["affected_files"])}: {file["path"]}',flush=True)
         try:
-            if strategy in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_feedback_blocks'):
+            if strategy in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
                 if strategy == 'candidate_feedback_blocks':
                     from patchgen.feedback_blocks import make_prompt, resolve
-                elif strategy == 'candidate_blocks':
+                elif strategy in ('candidate_blocks','candidate_semantic_blocks'):
                     from patchgen.anchor_edits import make_prompt, resolve
                 elif strategy == 'syntax_rename_roles':
                     from patchgen.rename_roles import make_prompt, resolve
                 else:
                     from patchgen.rename_tokens import make_prompt, resolve
-                messages,tokens = make_prompt(case,file)
+                messages,tokens = make_prompt(case,file, semantic=True) if strategy == 'candidate_semantic_blocks' else make_prompt(case,file)
                 value = request(messages,model,endpoint,directory)
                 save(directory/'token-inventory.json',tokens)
                 updated = resolve(file['source_context'],value,tokens,file['positions'])
@@ -541,11 +543,11 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
                 value = request(edit_prompt(case,file,strategy),model,endpoint,directory)
             if strategy in ('line_edits','migration_edits','candidate_edits','candidate_semantic_edits'):
                 updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy in ('candidate_edits','candidate_semantic_edits') else resolve_lines(file['source_context'],value,file['positions'])
-            elif strategy not in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_feedback_blocks'):
+            elif strategy not in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
             save(directory / 'edit-validation.json',{'status':'passed','path':file['path']})
-        except ProviderHTTPError as error:
+        except (ProviderHTTPError, ProviderIdentityError) as error:
             errors.append(f'{file["path"]}: {error}')
             save(directory / 'edit-validation.json', dict(status='provider_unavailable',
                  path=file['path'], error=str(error)))
@@ -758,7 +760,7 @@ def main():
     args = parser.parse_args()
     output = args.output.resolve(); output.mkdir(parents=True,exist_ok=False)
     (output / 'generator-source.py').write_bytes(Path(__file__).read_bytes())
-    if args.strategy in ('candidate_blocks','candidate_feedback_blocks'):
+    if args.strategy in ('candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
         (output/'anchor-edits-source.py').write_bytes(Path(__file__).with_name('anchor_edits.py').read_bytes())
     if args.strategy == 'candidate_feedback_blocks':
         (output/'feedback-blocks-source.py').write_bytes(Path(__file__).with_name('feedback_blocks.py').read_bytes())
@@ -797,7 +799,7 @@ def main():
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,'backend':args.backend,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
-    if args.strategy in ('candidate_blocks','candidate_feedback_blocks'):
+    if args.strategy in ('candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
         report['anchor_edits_sha256']=hashlib.sha256(Path(__file__).with_name('anchor_edits.py').read_bytes()).hexdigest()
     if args.strategy == 'candidate_feedback_blocks':
         report['feedback_blocks_sha256']=hashlib.sha256(Path(__file__).with_name('feedback_blocks.py').read_bytes()).hexdigest()
@@ -831,7 +833,7 @@ def main():
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
         if args.backend in ('openrouter', 'nvidia') and (args.response or args.feedback
-                or args.model not in ({'openrouter': (OPENROUTER_MODEL,), 'nvidia': NVIDIA_MODELS}[args.backend]) or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks')):
+                or args.model not in ({'openrouter': (OPENROUTER_MODEL,), 'nvidia': NVIDIA_MODELS}[args.backend]) or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks')):
             raise ContractError('cloud backend requires an explicit request to its selected model')
         if bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks') or args.feedback and args.response:
             raise ContractError('feedback strategy requires explicit live feedback and cannot use offline replay')

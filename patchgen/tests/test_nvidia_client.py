@@ -116,7 +116,7 @@ class NvidiaTests(unittest.TestCase):
             client.request_model(messages, selected, Path(temporary)/'request')
             self.assertEqual(calls[0]['body']['model'], selected)
         with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}', model=client.MODEL)):
-            with self.assertRaisesRegex(client.ProviderError, 'different model'):
+            with self.assertRaisesRegex(client.ProviderError, 'unverified model'):
                 client.request_model(messages, selected, Path(temporary)/'request')
 
     def test_semantic_prompt_preserves_input_allowlist(self):
@@ -132,6 +132,18 @@ class NvidiaTests(unittest.TestCase):
         before.pop('prompt_version')
         self.assertEqual(before, after)
         self.assertIn('C# explicitly widen', revised[0]['content'])
+
+    def test_identity_mismatch_stops_generation_and_is_provider_failure(self):
+        with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}', model='private/unknown')) as calls:
+            target = Path(temporary)
+            proposal = target/'run/proposal'
+            proposal.mkdir(parents=True)
+            with self.assertRaisesRegex(ContractError, 'unverified model'):
+                generate(CASE, client.MODEL, 'unused', proposal, 'candidate_edits', backend='nvidia')
+            self.assertEqual(len(calls), 1)
+            row = collect(target, 1, .5)
+            self.assertEqual(row['status'], 'provider_unavailable')
+            self.assertFalse(row['generated_patch_validated'])
 
     def test_unapproved_model_stops_before_http(self):
         with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}')) as calls:
