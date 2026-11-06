@@ -171,6 +171,17 @@ class NvidiaTests(unittest.TestCase):
             self.assertEqual(body['temperature'], 1)
             self.assertEqual(body['top_p'], .95)
 
+    def test_deepseek_trial_is_explicit_and_has_no_nemotron_flags(self):
+        selected = 'deepseek-ai/deepseek-v4.1-flash'
+        messages = [dict(role='user', content='{"prompt_version":"test"}')]
+        with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}', model=selected)) as calls:
+            client.request_model(messages, selected, Path(temporary)/'request')
+            self.assertEqual(calls[0]['body']['model'], selected)
+            self.assertEqual(calls[0]['body']['max_tokens'], 4096)
+            self.assertNotIn('chat_template_kwargs', calls[0]['body'])
+        self.assertNotEqual(client.MODEL, selected)
+        self.assertEqual(client.MODELS[:2], (client.MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b'))
+
     def test_unapproved_model_stops_before_http(self):
         with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}')) as calls:
             with self.assertRaisesRegex(client.ProviderError, 'only'):

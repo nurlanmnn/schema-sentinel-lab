@@ -126,3 +126,20 @@ with the exact requested model identity. Use temperature 1, top_p .95, max_token
 
 This is a single frozen-prompt eight-case development trial with unchanged
 validation gates and no model repairs. See decision 0039 for the comparison limits.
+
+## Explicit DeepSeek trial exception
+
+The user authorized a bounded Qwen/DeepSeek test. DeepSeek V4.1 Flash is explicitly
+available as `deepseek-ai/deepseek-v4.1-flash`; defaults and fallback behavior remain
+unchanged. The older Qwen Coder free NVIDIA endpoint is deprecated. Use only the
+public synthetic cases for this trial.
+
+```sh
+.venv/bin/python -m patchgen.live_suite --backend nvidia \
+  --model deepseek-ai/deepseek-v4.1-flash --strategy candidate_semantic_blocks \
+  --full-benchmark --output patchgen/evidence/nvidia-deepseek-v41-flash-001
+```
+
+Temperature 1/top_p .95, no Nemotron-only flags, shared 4096 output-token cap.
+The provider documents a much larger default/recommended output budget, so this
+is explicitly a bounded-budget configuration comparison. See decision 0040.

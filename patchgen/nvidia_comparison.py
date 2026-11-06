@@ -35,7 +35,7 @@ def main():
     save()
     for model in models:
         for strategy in strategies:
-            label = {MODELS[0]: 'ultra', MODELS[1]: 'super35', MODELS[2]: 'gemma31', MODELS[3]: 'laguna-xs21'}[model] + '-' + {'candidate_edits': 'original', 'candidate_semantic_edits': 'semantic', 'candidate_blocks': 'blocks', 'candidate_semantic_blocks': 'semantic-blocks'}[strategy]
+            label = {MODELS[0]: 'ultra', MODELS[1]: 'super35', MODELS[2]: 'gemma31', MODELS[3]: 'laguna-xs21', MODELS[4]: 'deepseek-v41-flash'}[model] + '-' + {'candidate_edits': 'original', 'candidate_semantic_edits': 'semantic', 'candidate_blocks': 'blocks', 'candidate_semantic_blocks': 'semantic-blocks'}[strategy]
             target = output/label
             command = [sys.executable, '-m', 'patchgen.live_suite', '--backend', 'nvidia',
                        '--model', model, '--strategy', strategy, '--full-benchmark', '--output', str(target)]
