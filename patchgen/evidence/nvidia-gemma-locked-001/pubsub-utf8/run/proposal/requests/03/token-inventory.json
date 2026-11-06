@@ -1,0 +1,14 @@
+{
+  "C001": {
+    "line": 13,
+    "text": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n"
+  },
+  "C002": {
+    "line": 83,
+    "text": "    ? EntityV1.encode({ entityId: \"ts_303\", name: \"Sensor C\" }).finish()\n"
+  },
+  "C003": {
+    "line": 84,
+    "text": "    : EntityV2.encode({ entityId: \"ts_303\" }).finish();\n"
+  }
+}

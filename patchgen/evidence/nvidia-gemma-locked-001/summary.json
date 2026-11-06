@@ -1,0 +1,1489 @@
+{
+  "status": "completed",
+  "mode": "live_model",
+  "model": "google/gemma-4-31b-it",
+  "strategy": "candidate_semantic_blocks",
+  "backend": "nvidia",
+  "prompt_version": "3.1-semantic-blocks",
+  "options": {
+    "temperature": 0.5,
+    "top_p": 1,
+    "seed": 0,
+    "max_tokens": 4096
+  },
+  "locked_configuration": "0041",
+  "prompt_fingerprints": {
+    "one_shot": "9546791889d0d9ecd8a2baca015ce47a2740e0d179bdd92263dd55ac2d81cb23",
+    "repair": "35dca82e6243080d902eeeb61963eb63a57350755f08fe476b31d216845204cb",
+    "protocol": "b6fa35136a3155377f0ae887d29d8bd6dcbef0617d350a08872078f9a4fb6487"
+  },
+  "case_split": {
+    "pubsub-rename": "development",
+    "pubsub-removal": "development",
+    "pubsub-utf8": "development",
+    "telemetry-rename": "development",
+    "telemetry-precision": "development",
+    "telemetry-units": "development",
+    "inventory-width": "development",
+    "telemetry-quantized": "development"
+  },
+  "planned_cases": 8,
+  "automatic_repairs": 0,
+  "human_approval_required": true,
+  "implementation_revision": "801155754d75497fd475735fa2582543fa9e5537",
+  "implementation_dirty": true,
+  "scope": "authored migrations eligible for actual model-generated runtime edits",
+  "benchmark_coverage": {
+    "pubsub-rename": "eligible",
+    "pubsub-removal": "eligible",
+    "pubsub-utf8": "eligible",
+    "telemetry-rename": "eligible",
+    "telemetry-precision": "eligible",
+    "telemetry-units": "eligible",
+    "inventory-width": "eligible",
+    "inventory-zigzag": "schema_only",
+    "inventory-stock-release": "requires_pinned_policy",
+    "inventory-presence": "requires_pinned_policy",
+    "inventory-labels": "requires_pinned_policy",
+    "inventory-reservation": "requires_pinned_policy",
+    "telemetry-quantized": "eligible",
+    "inventory-state-rename": "requires_pinned_policy",
+    "telemetry-message-rename": "requires_pinned_policy",
+    "telemetry-tag-move": "schema_only",
+    "telemetry-json-key": "requires_pinned_policy",
+    "inventory-packed-bins": "schema_only",
+    "inventory-routing-oneof": "requires_pinned_policy",
+    "inventory-state-retirement": "requires_pinned_policy"
+  },
+  "benchmark_cases": 20,
+  "timing_scope": "per-request wall time includes local model load; prepared pipeline wall time separate; not propagation/human baseline",
+  "results": [
+    {
+      "case": "pubsub-rename",
+      "exit_code": 0,
+      "status": "validation_passed",
+      "workflow_seconds": 137.19705595902633,
+      "model_requests": 3,
+      "generation_seconds": 124.56231091695372,
+      "generated_patch_validated": true,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": null,
+      "mode": "live_model",
+      "runtime_validation": {
+        "status": "passed",
+        "mode": "actual_local_pubsub",
+        "case": "rename",
+        "scenario": "valid",
+        "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-rename/run/proposal/workspace",
+        "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+        "human_approval_required": true,
+        "generated_patch_approval": false,
+        "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+        "runtime_git_status": [
+          " M generated/csharp/V1/Entity.cs",
+          " M generated/python/v1/entity_pb2.py",
+          " M generated/ts/v1/entity.ts",
+          " M proto/v1/entity.proto",
+          " M runtimes/csharp/main.cs",
+          " M runtimes/python/main.py",
+          " M runtimes/typescript/main.ts",
+          " M testbed/tests/e2e_test.py",
+          " M testbed/tests/test_evidence.py"
+        ],
+        "tools": {
+          "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+          "node": "v24.10.0",
+          "dotnet": "8.0.426"
+        },
+        "runtime_source_sha256": {
+          "runtimes/python/main.py": "74202229a8ef534def81bb2005294ff742732280e2165c0ae2664ff9527c07a0",
+          "runtimes/typescript/main.ts": "7b553ffe1c6508b25ffcfc4a0f117fcbc141b071dacca3439704830899a56751",
+          "runtimes/csharp/main.cs": "d1c85dc894b64906a0c1c7676289cb706356804f08e252313c6aa7df133cfc93",
+          "proto/v1/entity.proto": "87b0ac8afff19c313625d7c3fe75fab3178c1fbe1ae94460e6c897a93da8abb6",
+          "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+        },
+        "harness_source_sha256": {
+          "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+          "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+          "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+        },
+        "publication_cases": 8,
+        "decoded_deliveries": 24,
+        "topics": 2,
+        "runtimes": 3,
+        "elapsed_seconds": 1.0901025420753285,
+        "children_stopped": true,
+        "broker_stopped": true
+      },
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-39534539-f5b5-4739-b574-5692d1df6447",
+            "usage": {
+              "prompt_tokens": 3074,
+              "completion_tokens": 416,
+              "total_tokens": 3490,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 19.218663916923106
+          },
+          "request_sha256": "e2edb7d3ca8a3a8642b751333d68cf6322cae9b23cfe8616c4b4ff73d097251b",
+          "serving_counts": {
+            "id": "chatcmpl-39534539-f5b5-4739-b574-5692d1df6447",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3074,
+              "completion_tokens": 416,
+              "total_tokens": 3490,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/main.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-94889635-77fc-483b-ac06-3bb78df65b4c",
+            "usage": {
+              "prompt_tokens": 3180,
+              "completion_tokens": 365,
+              "total_tokens": 3545,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 59.98034554102924
+          },
+          "request_sha256": "8bc925143dc23d4d8c8f8b7ccef47d40bad883fc731cae5261c3186d0f348322",
+          "serving_counts": {
+            "id": "chatcmpl-94889635-77fc-483b-ac06-3bb78df65b4c",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3180,
+              "completion_tokens": 365,
+              "total_tokens": 3545,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-79cf1af1-5e6e-45e8-b092-86c1fa344034",
+            "usage": {
+              "prompt_tokens": 3152,
+              "completion_tokens": 433,
+              "total_tokens": 3585,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 45.36330145900138
+          },
+          "request_sha256": "b5be3e72079d508309c5a98094d056fe317433950aafb6d9eac2e9f886618ef2",
+          "serving_counts": {
+            "id": "chatcmpl-79cf1af1-5e6e-45e8-b092-86c1fa344034",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3152,
+              "completion_tokens": 433,
+              "total_tokens": 3585,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "pubsub-removal",
+      "exit_code": 0,
+      "status": "validation_passed",
+      "workflow_seconds": 107.56155116704758,
+      "model_requests": 3,
+      "generation_seconds": 96.40910408296622,
+      "generated_patch_validated": true,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": null,
+      "mode": "live_model",
+      "runtime_validation": {
+        "status": "passed",
+        "mode": "actual_local_pubsub",
+        "case": "removal",
+        "scenario": "valid",
+        "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-removal/run/proposal/workspace",
+        "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+        "human_approval_required": true,
+        "generated_patch_approval": false,
+        "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+        "runtime_git_status": [
+          " M generated/csharp/V1/Entity.cs",
+          " M generated/python/v1/entity_pb2.py",
+          " M generated/ts/v1/entity.ts",
+          " M proto/v1/entity.proto",
+          " M runtimes/csharp/main.cs",
+          " M runtimes/python/main.py",
+          " M runtimes/typescript/main.ts",
+          " M testbed/tests/e2e_test.py",
+          " M testbed/tests/test_evidence.py"
+        ],
+        "tools": {
+          "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+          "node": "v24.10.0",
+          "dotnet": "8.0.426"
+        },
+        "runtime_source_sha256": {
+          "runtimes/python/main.py": "02f55def6428c05a068e105bdde0118c99609b420262954c15755c670e161e8c",
+          "runtimes/typescript/main.ts": "ee7bdcd0c91c91f040e6cf51f99b2a1abc6651caab361062c39b7b10ba6591ea",
+          "runtimes/csharp/main.cs": "29ec8a8af868d2f8c03aa01f7e2b58ce89e9ab13a2dc6b76213aae5d53b39f9a",
+          "proto/v1/entity.proto": "16704bf1cafa25c444eaf22b67de84bd965c842439c1b27d66b9aaef2f695128",
+          "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366"
+        },
+        "harness_source_sha256": {
+          "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+          "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+          "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+        },
+        "publication_cases": 8,
+        "decoded_deliveries": 24,
+        "topics": 2,
+        "runtimes": 3,
+        "elapsed_seconds": 1.0721401670016348,
+        "children_stopped": true,
+        "broker_stopped": true
+      },
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-613b3096-08af-4301-bef7-c5ef1c6cd421",
+            "usage": {
+              "prompt_tokens": 3091,
+              "completion_tokens": 365,
+              "total_tokens": 3456,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 19.151936375070363
+          },
+          "request_sha256": "41ff279b4b267f4401602ddc0c0d866c4dc53ae89a2760d1560060aaa2336650",
+          "serving_counts": {
+            "id": "chatcmpl-613b3096-08af-4301-bef7-c5ef1c6cd421",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3091,
+              "completion_tokens": 365,
+              "total_tokens": 3456,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/main.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-c779796a-67ba-4e8d-b0ce-c4f2314c2b38",
+            "usage": {
+              "prompt_tokens": 3197,
+              "completion_tokens": 294,
+              "total_tokens": 3491,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 15.399134040926583
+          },
+          "request_sha256": "578c7232738339c7b1319e56f86c8e132a9c989d2a6e716a9bb8553304ae861a",
+          "serving_counts": {
+            "id": "chatcmpl-c779796a-67ba-4e8d-b0ce-c4f2314c2b38",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3197,
+              "completion_tokens": 294,
+              "total_tokens": 3491,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-fc323f40-f4f0-40ee-bc00-39c94f9c886e",
+            "usage": {
+              "prompt_tokens": 3169,
+              "completion_tokens": 375,
+              "total_tokens": 3544,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 896
+              }
+            },
+            "elapsed_seconds": 61.85803366696928
+          },
+          "request_sha256": "c91ae9f1309342175008ced7e3aa9a5f0a56105c80bb4feaf05630da4c876ed2",
+          "serving_counts": {
+            "id": "chatcmpl-fc323f40-f4f0-40ee-bc00-39c94f9c886e",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3169,
+              "completion_tokens": 375,
+              "total_tokens": 3544,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 896
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "pubsub-utf8",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 130.2674267500406,
+      "model_requests": 3,
+      "generation_seconds": 122.37820954201743,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 6,
+        "matched_sites": 6,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/csharp/main.cs",
+            "line": 15
+          },
+          {
+            "path": "runtimes/csharp/main.cs",
+            "line": 67
+          },
+          {
+            "path": "runtimes/typescript/main.ts",
+            "line": 83
+          }
+        ],
+        "classification_correct": true
+      },
+      "error": "command failed (1): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: al/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 483ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 107 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\n\n> /usr/local/share/dotnet/dotnet build runtimes/csharp/CsharpApp.csproj --configuration Release\n  Determining projects to restore...\n  All projects are up-to-date for restore.\n/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/main.cs(21,78): error CS1503: Argument 1: cannot convert from 'Google.Protobuf.ByteString' to 'byte[]' [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]\n\nBuild FAILED.\n\n/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/main.cs(21,78): error CS1503: Argument 1: cannot convert from 'Google.Protobuf.ByteString' to 'byte[]' [/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-locked-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj]\n    0 Warning(s)\n    1 Error(s)\n\nTime Elapsed 00:00:00.95\n\nCommand failed (exit 1). See the output above.\n",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/main.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-8a229468-a8e7-4be6-9b13-3bdddf436305",
+            "usage": {
+              "prompt_tokens": 3452,
+              "completion_tokens": 513,
+              "total_tokens": 3965,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 53.8640556250466
+          },
+          "request_sha256": "bb2478a0af30bd015e7aa8412932d710ada82e555d4085b7c9e0afb8bd2a20d4",
+          "serving_counts": {
+            "id": "chatcmpl-8a229468-a8e7-4be6-9b13-3bdddf436305",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3452,
+              "completion_tokens": 513,
+              "total_tokens": 3965,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/main.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-0b1432b3-7366-487b-9e62-024dadd3b61b",
+            "usage": {
+              "prompt_tokens": 3226,
+              "completion_tokens": 426,
+              "total_tokens": 3652,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 46.185042166966014
+          },
+          "request_sha256": "dd824e3eeabf5e58d439d43080eeff9bcc999ba6fc1cb551493db13d50cacbcb",
+          "serving_counts": {
+            "id": "chatcmpl-0b1432b3-7366-487b-9e62-024dadd3b61b",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3226,
+              "completion_tokens": 426,
+              "total_tokens": 3652,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/main.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-cd5c217c-153e-4bbf-930d-ae1517b377d4",
+            "usage": {
+              "prompt_tokens": 3359,
+              "completion_tokens": 504,
+              "total_tokens": 3863,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 928
+              }
+            },
+            "elapsed_seconds": 22.329111750004813
+          },
+          "request_sha256": "3202880ff505d84b0c7bc4b76fe949288e5df43c7121d9fb7e7a28da099b0e0f",
+          "serving_counts": {
+            "id": "chatcmpl-cd5c217c-153e-4bbf-930d-ae1517b377d4",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 3359,
+              "completion_tokens": 504,
+              "total_tokens": 3863,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 928
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "telemetry-rename",
+      "exit_code": 0,
+      "status": "validation_passed",
+      "workflow_seconds": 135.98130908294115,
+      "model_requests": 3,
+      "generation_seconds": 127.54475374903996,
+      "generated_patch_validated": true,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": null,
+      "mode": "live_model",
+      "runtime_validation": {
+        "status": "passed",
+        "case": "rename",
+        "runtime_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+        "source_dirty": true,
+        "source_sha256": {
+          "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+          "runtimes/python/telemetry_runtime.py": "40e861d49ca641c7c20dcd0354231036b7ad0105bf91edf276c18fd1f2f61a27",
+          "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+          "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+          "runtimes/typescript/telemetry.ts": "e651bc8ecfd8fc69a6df59f137686b7e55f6d3ca3e50e9697fa62239e9f1a69d",
+          "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+          "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+          "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+          "runtimes/csharp/Telemetry.cs": "9e5ce886746bbd38ed53ceb1ab1f51d915b905e450ec7714626bc7197b1a4cd2",
+          "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+          "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+          "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+          "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+          "proto/telemetry/vehicle.proto": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+          "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+          "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+          "generated/ts/telemetry/vehicle.ts": "bb0aef3210e1299a2fb01446cb95d367cea1ba2455968a11a6e15afa525e07cc",
+          "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+          "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+          "generated/csharp/Telemetry/Vehicle.cs": "638c2f6a6c7f2c8bfebf7601e7de6bb9a3e9dbb1a8053b8cb4958a4268a9a442",
+          "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+          "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+          "generated/python/telemetry/vehicle_pb2.py": "03d658ac8349f5aa4fe92a08edf3065ac2315f229b79d062cd4c89c23dbef4ff"
+        },
+        "runtime_cases": 24,
+        "model_requests": 0,
+        "scope": "authored float32 cases; excludes arbitrary wire and mixed versions"
+      },
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-86ca5205-9ad2-4b54-943a-a8ae096ebfb6",
+            "usage": {
+              "prompt_tokens": 2193,
+              "completion_tokens": 566,
+              "total_tokens": 2759,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 38.553233416052535
+          },
+          "request_sha256": "e525b0a83506e551dc443b56a0345cff6029c4a354b69d0697d1bd008dde56fd",
+          "serving_counts": {
+            "id": "chatcmpl-86ca5205-9ad2-4b54-943a-a8ae096ebfb6",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2193,
+              "completion_tokens": 566,
+              "total_tokens": 2759,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/telemetry_runtime.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-681a5d5c-5222-46e1-ab6f-42d0d5a9e1dc",
+            "usage": {
+              "prompt_tokens": 2138,
+              "completion_tokens": 495,
+              "total_tokens": 2633,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 31.51943691598717
+          },
+          "request_sha256": "f75d7b6eed5c0ce5ef0bf89d6e8bd11aaecb9ee5e67084e94039a3e061928068",
+          "serving_counts": {
+            "id": "chatcmpl-681a5d5c-5222-46e1-ab6f-42d0d5a9e1dc",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2138,
+              "completion_tokens": 495,
+              "total_tokens": 2633,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/telemetry.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-d9e22164-c190-4565-8fb7-8a1f245d9525",
+            "usage": {
+              "prompt_tokens": 2185,
+              "completion_tokens": 535,
+              "total_tokens": 2720,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 57.47208341700025
+          },
+          "request_sha256": "983384e4e1a927a33e592393826fc1f23583783cb92343d059a45dbf5d94d182",
+          "serving_counts": {
+            "id": "chatcmpl-d9e22164-c190-4565-8fb7-8a1f245d9525",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2185,
+              "completion_tokens": 535,
+              "total_tokens": 2720,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "telemetry-precision",
+      "exit_code": 0,
+      "status": "validation_passed",
+      "workflow_seconds": 117.84424475010019,
+      "model_requests": 3,
+      "generation_seconds": 109.23929966602009,
+      "generated_patch_validated": true,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": null,
+      "mode": "live_model",
+      "runtime_validation": {
+        "status": "passed",
+        "case": "precision",
+        "runtime_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+        "source_dirty": true,
+        "source_sha256": {
+          "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+          "runtimes/python/telemetry_runtime.py": "aead8cf2bd2c35bb160c1c9f9e89e52e6dfcb483f3eb71c2e6b188fb1ecf3f91",
+          "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+          "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+          "runtimes/typescript/telemetry.ts": "385d09abf83926b0df87538a59cf19e20afce5b81ba3f3e4270066d41d706c10",
+          "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+          "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+          "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+          "runtimes/csharp/Telemetry.cs": "2bc91c9dc2868e476b96c3ffb66b2b317c17056cbf8aa69d22de6592004cae9b",
+          "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+          "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+          "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+          "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+          "proto/telemetry/vehicle.proto": "947f19d616a50f7dbdb6f439365cbb01e9099b3fecbc840e265cf20a532f6566",
+          "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+          "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+          "generated/ts/telemetry/vehicle.ts": "bc22623d78ed2faf31703a76bc6163a683ea6b76249cc67a5679f0e7d37b44e7",
+          "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+          "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+          "generated/csharp/Telemetry/Vehicle.cs": "7517aec262335a8b09adcc4cd43c4e8cbb561c535673ae088850aaca63c57f98",
+          "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+          "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+          "generated/python/telemetry/vehicle_pb2.py": "aab59e6b961661d1b78c3d9b79c7f309416bafb06da686f6b8ee0c896505f998"
+        },
+        "runtime_cases": 33,
+        "model_requests": 0,
+        "scope": "authored float64 cases; excludes arbitrary wire and mixed versions"
+      },
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-ffdf8d65-2195-4e7c-ba9f-06b5255c9c2f",
+            "usage": {
+              "prompt_tokens": 2220,
+              "completion_tokens": 384,
+              "total_tokens": 2604,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 17.453514624969102
+          },
+          "request_sha256": "6c1f8037178a979d392322002205a1565090eb754829a45e921d3c6437f4e793",
+          "serving_counts": {
+            "id": "chatcmpl-ffdf8d65-2195-4e7c-ba9f-06b5255c9c2f",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2220,
+              "completion_tokens": 384,
+              "total_tokens": 2604,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/telemetry_runtime.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-559bf149-1485-4e80-ab14-cf2d2cf11fc6",
+            "usage": {
+              "prompt_tokens": 2101,
+              "completion_tokens": 311,
+              "total_tokens": 2412,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 24.894565082970075
+          },
+          "request_sha256": "7b6d706fa100d616bdbbfc6e6e750237086ee45addb9fa1a2abdfe3fb5677ff8",
+          "serving_counts": {
+            "id": "chatcmpl-559bf149-1485-4e80-ab14-cf2d2cf11fc6",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2101,
+              "completion_tokens": 311,
+              "total_tokens": 2412,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/telemetry.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-30f978e1-9ccd-489d-9c35-066d7cf36363",
+            "usage": {
+              "prompt_tokens": 2148,
+              "completion_tokens": 310,
+              "total_tokens": 2458,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 66.89121995808091
+          },
+          "request_sha256": "6f889f1e98d38f06e54eb4764029f6db4f00eca3fd6d17e3990d5022a7273d2e",
+          "serving_counts": {
+            "id": "chatcmpl-30f978e1-9ccd-489d-9c35-066d7cf36363",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2148,
+              "completion_tokens": 310,
+              "total_tokens": 2458,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "telemetry-units",
+      "exit_code": 0,
+      "status": "validation_passed",
+      "workflow_seconds": 99.08328029105905,
+      "model_requests": 3,
+      "generation_seconds": 90.63757841580082,
+      "generated_patch_validated": true,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [],
+        "classification_correct": true
+      },
+      "error": null,
+      "mode": "live_model",
+      "runtime_validation": {
+        "status": "passed",
+        "case": "units",
+        "runtime_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+        "source_dirty": true,
+        "source_sha256": {
+          "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+          "runtimes/python/telemetry_runtime.py": "29316118628f820a05ba8bd3b36157edebea73a1de781b07056db13384d8a0fb",
+          "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+          "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+          "runtimes/typescript/telemetry.ts": "90535b98eb4dc9de6427a052135775e1afee4801338868483458f2116ffd5385",
+          "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+          "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+          "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+          "runtimes/csharp/Telemetry.cs": "c285e3a49fc7638760b824ee1c383bbe4dfe5d0c5bf4acd7f41629da1e3d4bc4",
+          "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+          "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+          "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+          "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+          "proto/telemetry/vehicle.proto": "858ff2a455dd02877212827e95535d6c127c647e4f95f842809eeb1eb4cd19c5",
+          "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+          "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+          "generated/ts/telemetry/vehicle.ts": "afba36b971c2694b5b9d2ba441ff9d9d2468eaeb30737544cfc470247fd98a11",
+          "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+          "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+          "generated/csharp/Telemetry/Vehicle.cs": "11f7a96b6bd2920a60d926cf66979162b0f0ceed6acab656f3141bebb2c16c7d",
+          "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+          "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+          "generated/python/telemetry/vehicle_pb2.py": "35a75fe6811991b26388cfe4a8200bc00f8be4a92c8e51e1a637631f6391494d"
+        },
+        "runtime_cases": 24,
+        "model_requests": 0,
+        "scope": "authored float32 cases; excludes arbitrary wire and mixed versions"
+      },
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-b507d27d-fdb7-4d51-9095-3a5fb7b3d371",
+            "usage": {
+              "prompt_tokens": 2236,
+              "completion_tokens": 595,
+              "total_tokens": 2831,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 29.459382832981646
+          },
+          "request_sha256": "ec6b492b867b8145d6404bef5bc02feb6d953ed4f4f025ec061902405729b7b4",
+          "serving_counts": {
+            "id": "chatcmpl-b507d27d-fdb7-4d51-9095-3a5fb7b3d371",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2236,
+              "completion_tokens": 595,
+              "total_tokens": 2831,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/telemetry_runtime.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-cae28ce6-7f75-4e6b-a5d8-43be4d005863",
+            "usage": {
+              "prompt_tokens": 2175,
+              "completion_tokens": 517,
+              "total_tokens": 2692,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 44.51842204190325
+          },
+          "request_sha256": "7e0b7cc9374a34a164d4fb1b967a4f80e7ceaf303435f1b40435bb04d9549e88",
+          "serving_counts": {
+            "id": "chatcmpl-cae28ce6-7f75-4e6b-a5d8-43be4d005863",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2175,
+              "completion_tokens": 517,
+              "total_tokens": 2692,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/telemetry.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-30c04684-0be5-4253-97bc-47e29698bd0c",
+            "usage": {
+              "prompt_tokens": 2222,
+              "completion_tokens": 552,
+              "total_tokens": 2774,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 16.65977354091592
+          },
+          "request_sha256": "37c54c8e5b5a04c6dd6589c3afa018d0aea810a42a359957cd28b24ae7a7c1ee",
+          "serving_counts": {
+            "id": "chatcmpl-30c04684-0be5-4253-97bc-47e29698bd0c",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2222,
+              "completion_tokens": 552,
+              "total_tokens": 2774,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "inventory-width",
+      "exit_code": 1,
+      "status": "failed",
+      "workflow_seconds": 142.46695841592737,
+      "model_requests": 3,
+      "generation_seconds": 141.00598820694722,
+      "generated_patch_validated": false,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 9,
+        "matched_sites": 9,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/csharp/Inventory.cs",
+            "line": 20
+          },
+          {
+            "path": "runtimes/typescript/inventory.ts",
+            "line": 4
+          }
+        ],
+        "classification_correct": true
+      },
+      "error": "file proposal rejected: runtimes/typescript/inventory.ts: Extra data: line 41 column 1 (char 2689)",
+      "mode": "live_model",
+      "runtime_validation": null,
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Inventory.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-f04dd707-ee27-4b21-b578-018496fd1106",
+            "usage": {
+              "prompt_tokens": 2327,
+              "completion_tokens": 438,
+              "total_tokens": 2765,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 31.402481500059366
+          },
+          "request_sha256": "27d084d6091be22f1bbe22e272d6f4ba56902575ba6b610773543ce817974555",
+          "serving_counts": {
+            "id": "chatcmpl-f04dd707-ee27-4b21-b578-018496fd1106",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2327,
+              "completion_tokens": 438,
+              "total_tokens": 2765,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/inventory_runtime.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-ce925f18-1ea9-46ef-8c0f-99115e24f514",
+            "usage": {
+              "prompt_tokens": 2029,
+              "completion_tokens": 311,
+              "total_tokens": 2340,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 6.723215415957384
+          },
+          "request_sha256": "36001df147a4f15c0b31dbe539914ec75944489cbe05958d6bd9e4b75103b370",
+          "serving_counts": {
+            "id": "chatcmpl-ce925f18-1ea9-46ef-8c0f-99115e24f514",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2029,
+              "completion_tokens": 311,
+              "total_tokens": 2340,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "failed",
+            "path": "runtimes/typescript/inventory.ts",
+            "error": "Extra data: line 41 column 1 (char 2689)"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "failed",
+            "model": "google/gemma-4-31b-it",
+            "elapsed_seconds": 102.88029129093047
+          },
+          "request_sha256": "a9ed5c180a40402cfb6211f62ec05fa3a79d36f64cecf5d37251435654cb362f",
+          "serving_counts": {
+            "id": "chatcmpl-4423e328-ebc9-4460-84d3-9fd906555a88",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2270,
+              "completion_tokens": 1369,
+              "total_tokens": 3639,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 864
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    },
+    {
+      "case": "telemetry-quantized",
+      "exit_code": 0,
+      "status": "validation_passed",
+      "workflow_seconds": 162.12929970806,
+      "model_requests": 3,
+      "generation_seconds": 152.46102645911742,
+      "generated_patch_validated": true,
+      "human_approval_required": true,
+      "backend": "nvidia",
+      "measurement": {
+        "expected_sites": 3,
+        "matched_sites": 3,
+        "recall": 1.0,
+        "missed": [],
+        "extra": [
+          {
+            "path": "runtimes/csharp/Telemetry.cs",
+            "line": 13
+          },
+          {
+            "path": "runtimes/csharp/Telemetry.cs",
+            "line": 14
+          },
+          {
+            "path": "runtimes/python/telemetry_runtime.py",
+            "line": 11
+          },
+          {
+            "path": "runtimes/python/telemetry_runtime.py",
+            "line": 12
+          },
+          {
+            "path": "runtimes/typescript/telemetry.ts",
+            "line": 10
+          },
+          {
+            "path": "runtimes/typescript/telemetry.ts",
+            "line": 11
+          }
+        ],
+        "classification_correct": true
+      },
+      "error": null,
+      "mode": "live_model",
+      "runtime_validation": {
+        "status": "passed",
+        "case": "quantized",
+        "runtime_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+        "source_dirty": true,
+        "source_sha256": {
+          "runtimes/python/requirements.txt": "08b62daa9d8b7484c944bb2cac4c17e2508cb983619eaaa615e8354d9d73bc0c",
+          "runtimes/python/telemetry_runtime.py": "44638c92e70c9e0df2f34ecc513ca6279278b08379d76de72908c643bae6d5e4",
+          "runtimes/python/main.py": "de510c9852f0b161918ca717b0252dda18660098edd911632feb1cf6ba65a6e3",
+          "runtimes/typescript/main.ts": "01950dc430d0e51a167e6c7d1d394e78761adbd25bc93b503e44aaeb6946311e",
+          "runtimes/typescript/telemetry.ts": "b56e18e138884d9db24bf6f1c4196e530de269247bc0e43f6b0b13c954fb8ca4",
+          "runtimes/typescript/package-lock.json": "8d1ee5a7cdcccc22a3bdc23e0d23e0a865cf5461e7633635a155b3110e30bdd6",
+          "runtimes/typescript/package.json": "9acdd1dff75a7accad3834c771c7d796b8eb0e6f26e11531132025f38939216b",
+          "runtimes/typescript/tsconfig.json": "b38b7a290bb2effe64cb7cf4576171d1e9f1316907a26839c8fe12df5fb39fe8",
+          "runtimes/csharp/Telemetry.cs": "4e45c88e28a78568e88e2ef5327a9f5f0ccbad11014d770b116c6becb5f2d1ce",
+          "runtimes/csharp/CsharpApp.csproj": "e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d",
+          "runtimes/csharp/main.cs": "99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a",
+          "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+          "proto/v2/entity.proto": "6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366",
+          "proto/telemetry/vehicle.proto": "9f9957464b5023a2d8f0fa3d1985023c1cddfeb7b11cd8d7c1fe4ba80cdfaf6b",
+          "generated/ts/v1/entity.ts": "95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792",
+          "generated/ts/v2/entity.ts": "fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93",
+          "generated/ts/telemetry/vehicle.ts": "178b644c87648e899843b45e2663caa409717c0c8fbb6a9f8edf4195e0436660",
+          "generated/csharp/V1/Entity.cs": "20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24",
+          "generated/csharp/V2/Entity.cs": "cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5",
+          "generated/csharp/Telemetry/Vehicle.cs": "8ea1c09451dd34d98b2b706ad9b78d2bd0b788b3b036ff4b91facd2db36f6238",
+          "generated/python/v1/entity_pb2.py": "d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc",
+          "generated/python/v2/entity_pb2.py": "ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972",
+          "generated/python/telemetry/vehicle_pb2.py": "092dbaa63da5d959c3928e143549153f2a6e8575449dfa267742df4a52c52e7f"
+        },
+        "runtime_cases": 36,
+        "model_requests": 0,
+        "scope": "authored int32 cases; excludes arbitrary wire and mixed versions"
+      },
+      "requests": [
+        {
+          "request": "01",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/csharp/Telemetry.cs"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-b7066f42-31a7-4183-9711-d844f6877908",
+            "usage": {
+              "prompt_tokens": 2186,
+              "completion_tokens": 585,
+              "total_tokens": 2771,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 109.53219545900356
+          },
+          "request_sha256": "ed6bdc4ae0dfb4c615fd3f625c6b77b41f75a8c89099fef1025562b91f37723a",
+          "serving_counts": {
+            "id": "chatcmpl-b7066f42-31a7-4183-9711-d844f6877908",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2186,
+              "completion_tokens": 585,
+              "total_tokens": 2771,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "02",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/python/telemetry_runtime.py"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-fbb3da7a-7cac-4936-b8a9-963f58aba1b1",
+            "usage": {
+              "prompt_tokens": 2067,
+              "completion_tokens": 529,
+              "total_tokens": 2596,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 14.046651083044708
+          },
+          "request_sha256": "dbbc1dfe53a0866e01cb4edafc70931a42ff17b9e048f4b859afbdb889394521",
+          "serving_counts": {
+            "id": "chatcmpl-fbb3da7a-7cac-4936-b8a9-963f58aba1b1",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2067,
+              "completion_tokens": 529,
+              "total_tokens": 2596,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "request": "03",
+          "edit_validation": {
+            "status": "passed",
+            "path": "runtimes/typescript/telemetry.ts"
+          },
+          "measurement": {
+            "backend": "nvidia",
+            "status": "response_received",
+            "model": "google/gemma-4-31b-it",
+            "json_fence_removed": true,
+            "provider": null,
+            "response_id": "chatcmpl-ab9b2d65-6005-4ad6-9156-e564be3d4f99",
+            "usage": {
+              "prompt_tokens": 2114,
+              "completion_tokens": 605,
+              "total_tokens": 2719,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            },
+            "elapsed_seconds": 28.882179917069152
+          },
+          "request_sha256": "53852d872fb5549fb2cac9818f03144129f09a4f60ad5f2e75c32f0b874658e0",
+          "serving_counts": {
+            "id": "chatcmpl-ab9b2d65-6005-4ad6-9156-e564be3d4f99",
+            "model": "google/gemma-4-31b-it",
+            "provider": null,
+            "usage": {
+              "prompt_tokens": 2114,
+              "completion_tokens": 605,
+              "total_tokens": 2719,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              }
+            }
+          }
+        }
+      ],
+      "provider_errors": []
+    }
+  ],
+  "provider_unavailable_cases": 0,
+  "validated_model_patches": 6,
+  "model_patch_validation_rate": 0.75,
+  "validated_by_split": {
+    "development": "6/8",
+    "held_out": "0/0"
+  },
+  "model_requests": 24,
+  "generation_seconds": 964.2382710388629
+}

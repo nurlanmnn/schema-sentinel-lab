@@ -1,0 +1,256 @@
+diff --git a/generated/csharp/V2/Entity.cs b/generated/csharp/V2/Entity.cs
+index 7f1b972..b9e0053 100644
+--- a/generated/csharp/V2/Entity.cs
++++ b/generated/csharp/V2/Entity.cs
+@@ -25,7 +25,7 @@ namespace Simulation.V2 {
+       byte[] descriptorData = global::System.Convert.FromBase64String(
+           string.Concat(
+             "Cg92Mi9lbnRpdHkucHJvdG8SDXNpbXVsYXRpb24udjIiJQoGRW50aXR5EhsK",
+-            "CWVudGl0eV9pZBgBIAEoCVIIZW50aXR5SWRiBnByb3RvMw=="));
++            "CWVudGl0eV9pZBgBIAEoDFIIZW50aXR5SWRiBnByb3RvMw=="));
+       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+           new pbr::FileDescriptor[] { },
+           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+@@ -83,10 +83,10 @@ namespace Simulation.V2 {
+ 
+     /// <summary>Field number for the "entity_id" field.</summary>
+     public const int EntityIdFieldNumber = 1;
+-    private string entityId_ = "";
++    private pb::ByteString entityId_ = pb::ByteString.Empty;
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+-    public string EntityId {
++    public pb::ByteString EntityId {
+       get { return entityId_; }
+       set {
+         entityId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+@@ -137,7 +137,7 @@ namespace Simulation.V2 {
+     #else
+       if (EntityId.Length != 0) {
+         output.WriteRawTag(10);
+-        output.WriteString(EntityId);
++        output.WriteBytes(EntityId);
+       }
+       if (_unknownFields != null) {
+         _unknownFields.WriteTo(output);
+@@ -151,7 +151,7 @@ namespace Simulation.V2 {
+     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+       if (EntityId.Length != 0) {
+         output.WriteRawTag(10);
+-        output.WriteString(EntityId);
++        output.WriteBytes(EntityId);
+       }
+       if (_unknownFields != null) {
+         _unknownFields.WriteTo(ref output);
+@@ -164,7 +164,7 @@ namespace Simulation.V2 {
+     public int CalculateSize() {
+       int size = 0;
+       if (EntityId.Length != 0) {
+-        size += 1 + pb::CodedOutputStream.ComputeStringSize(EntityId);
++        size += 1 + pb::CodedOutputStream.ComputeBytesSize(EntityId);
+       }
+       if (_unknownFields != null) {
+         size += _unknownFields.CalculateSize();
+@@ -197,7 +197,7 @@ namespace Simulation.V2 {
+             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+             break;
+           case 10: {
+-            EntityId = input.ReadString();
++            EntityId = input.ReadBytes();
+             break;
+           }
+         }
+@@ -216,7 +216,7 @@ namespace Simulation.V2 {
+             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+             break;
+           case 10: {
+-            EntityId = input.ReadString();
++            EntityId = input.ReadBytes();
+             break;
+           }
+         }
+diff --git a/generated/python/v2/entity_pb2.py b/generated/python/v2/entity_pb2.py
+index 49aac94..e48b2a7 100644
+--- a/generated/python/v2/entity_pb2.py
++++ b/generated/python/v2/entity_pb2.py
+@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
+ 
+ 
+ 
+-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fv2/entity.proto\x12\rsimulation.v2\"%\n\x06\x45ntity\x12\x1b\n\tentity_id\x18\x01 \x01(\tR\x08\x65ntityIdb\x06proto3')
++DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fv2/entity.proto\x12\rsimulation.v2\"%\n\x06\x45ntity\x12\x1b\n\tentity_id\x18\x01 \x01(\x0cR\x08\x65ntityIdb\x06proto3')
+ 
+ _globals = globals()
+ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+diff --git a/generated/ts/v2/entity.ts b/generated/ts/v2/entity.ts
+index 6b5ea47..91e798a 100644
+--- a/generated/ts/v2/entity.ts
++++ b/generated/ts/v2/entity.ts
+@@ -4,17 +4,17 @@ import * as _m0 from "protobufjs/minimal";
+ export const protobufPackage = "simulation.v2";
+ 
+ export interface Entity {
+-  entityId: string;
++  entityId: Uint8Array;
+ }
+ 
+ function createBaseEntity(): Entity {
+-  return { entityId: "" };
++  return { entityId: new Uint8Array(0) };
+ }
+ 
+ export const Entity = {
+   encode(message: Entity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+-    if (message.entityId !== "") {
+-      writer.uint32(10).string(message.entityId);
++    if (message.entityId.length !== 0) {
++      writer.uint32(10).bytes(message.entityId);
+     }
+     return writer;
+   },
+@@ -31,7 +31,7 @@ export const Entity = {
+             break;
+           }
+ 
+-          message.entityId = reader.string();
++          message.entityId = reader.bytes();
+           continue;
+       }
+       if ((tag & 7) === 4 || tag === 0) {
+@@ -43,13 +43,13 @@ export const Entity = {
+   },
+ 
+   fromJSON(object: any): Entity {
+-    return { entityId: isSet(object.entityId) ? globalThis.String(object.entityId) : "" };
++    return { entityId: isSet(object.entityId) ? bytesFromBase64(object.entityId) : new Uint8Array(0) };
+   },
+ 
+   toJSON(message: Entity): unknown {
+     const obj: any = {};
+-    if (message.entityId !== "") {
+-      obj.entityId = message.entityId;
++    if (message.entityId.length !== 0) {
++      obj.entityId = base64FromBytes(message.entityId);
+     }
+     return obj;
+   },
+@@ -59,11 +59,36 @@ export const Entity = {
+   },
+   fromPartial<I extends Exact<DeepPartial<Entity>, I>>(object: I): Entity {
+     const message = createBaseEntity();
+-    message.entityId = object.entityId ?? "";
++    message.entityId = object.entityId ?? new Uint8Array(0);
+     return message;
+   },
+ };
+ 
++function bytesFromBase64(b64: string): Uint8Array {
++  if (globalThis.Buffer) {
++    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
++  } else {
++    const bin = globalThis.atob(b64);
++    const arr = new Uint8Array(bin.length);
++    for (let i = 0; i < bin.length; ++i) {
++      arr[i] = bin.charCodeAt(i);
++    }
++    return arr;
++  }
++}
++
++function base64FromBytes(arr: Uint8Array): string {
++  if (globalThis.Buffer) {
++    return globalThis.Buffer.from(arr).toString("base64");
++  } else {
++    const bin: string[] = [];
++    arr.forEach((byte) => {
++      bin.push(globalThis.String.fromCharCode(byte));
++    });
++    return globalThis.btoa(bin.join(""));
++  }
++}
++
+ type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+ 
+ export type DeepPartial<T> = T extends Builtin ? T
+diff --git a/proto/v2/entity.proto b/proto/v2/entity.proto
+index 53d02e7..7b0ad9a 100644
+--- a/proto/v2/entity.proto
++++ b/proto/v2/entity.proto
+@@ -3,5 +3,5 @@ syntax = "proto3";
+ package simulation.v2;
+ 
+ message Entity {
+-  string entity_id = 1;
++  bytes entity_id = 1;
+ }
+diff --git a/runtimes/csharp/main.cs b/runtimes/csharp/main.cs
+index e62faa1..64201dc 100644
+--- a/runtimes/csharp/main.cs
++++ b/runtimes/csharp/main.cs
+@@ -18,7 +18,7 @@ static (IMessage Entity, Dictionary<string, string> Fields) ProcessEntity(byte[]
+     {
+         var decoded = Simulation.V2.Entity.Parser.ParseFrom(rawBytes);
+         entity = decoded;
+-        fields = new() { ["entity_id"] = decoded.EntityId };
++        fields = new() { ["entity_id"] = System.Text.Encoding.UTF8.GetString(decoded.EntityId.ToByteArray()) };
+     }
+     else throw new ArgumentException($"Unsupported version: {version}");
+     Console.WriteLine(JsonSerializer.Serialize(new { runtime = "csharp", version, fields }));
+@@ -65,7 +65,7 @@ if (!args.Contains("--serve"))
+     var version = args.Contains("--v2") ? "v2" : "v1";
+     IMessage entity = version == "v1"
+         ? new Simulation.V1.Entity { EntityId = "cs_202", Name = "Sensor B" }
+-        : new Simulation.V2.Entity { EntityId = "cs_202" };
++        : new Simulation.V2.Entity { EntityId = Google.Protobuf.ByteString.CopyFromUtf8("cs_202") };
+     ProcessEntity(entity.ToByteArray(), version);
+     return 0;
+ }
+diff --git a/runtimes/python/main.py b/runtimes/python/main.py
+index 5d093a5..8c9ac92 100644
+--- a/runtimes/python/main.py
++++ b/runtimes/python/main.py
+@@ -28,7 +28,10 @@ def process_entity(raw_bytes: bytes, version: str):
+     if version not in ("v1", "v2"):
+         raise ValueError(f"Unsupported schema version: {version}")
+     entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+-    fields = {"entity_id": entity.entity_id}
++    entity_id = entity.entity_id
++    if version == "v2":
++        entity_id = entity_id.decode("utf-8")
++    fields = {"entity_id": entity_id}
+     if version == "v1":
+         fields["name"] = entity.name
+     print(json.dumps({"runtime": "python", "version": version, "fields": fields}, ensure_ascii=True), flush=True)
+@@ -112,7 +115,10 @@ if __name__ == "__main__":
+             server.serve_forever()
+     else:
+         module = importlib.import_module(f"{args.version}.entity_pb2")
+-        entity = module.Entity(entity_id="py_101")
++        entity_id = "py_101"
++        if args.version == "v2":
++            entity_id = entity_id.encode("utf-8")
++        entity = module.Entity(entity_id=entity_id)
+         if args.version == "v1":
+             entity.name = "Sensor A"
+         process_entity(entity.SerializeToString(), args.version)
+diff --git a/runtimes/typescript/main.ts b/runtimes/typescript/main.ts
+index 67a51db..4c4a295 100644
+--- a/runtimes/typescript/main.ts
++++ b/runtimes/typescript/main.ts
+@@ -10,7 +10,7 @@ export function processEntity(rawBytes: Uint8Array, version: string) {
+   // Plain Uint8Array selects the bounds-checked Reader rather than BufferReader.string clamping.
+   rawBytes = new Uint8Array(rawBytes);
+   const entity = version === "v1" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);
+-  const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
++  const fields = { entity_id: version === "v1" ? (entity as EntityV1).entityId : new TextDecoder().decode(new Uint8Array((entity as EntityV2).entityId)), ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
+   console.log(JSON.stringify({ runtime: "typescript", version, fields }));
+   return { entity, fields };
+ }
+@@ -81,6 +81,6 @@ if (process.argv.includes("--subscribe")) {
+   const version = process.argv.includes("--v2") ? "v2" : "v1";
+   const bytes = version === "v1"
+     ? EntityV1.encode({ entityId: "ts_303", name: "Sensor C" }).finish()
+-    : EntityV2.encode({ entityId: "ts_303" }).finish();
++    : EntityV2.encode({ entityId: new TextEncoder().encode("ts_303") }).finish();
+   processEntity(bytes, version);
+ }

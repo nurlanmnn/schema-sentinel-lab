@@ -1,0 +1,11 @@
+{
+  "backend": "nvidia",
+  "model": "google/gemma-4-31b-it",
+  "options": {
+    "temperature": 0.5,
+    "top_p": 1,
+    "seed": 0,
+    "max_tokens": 4096
+  },
+  "response_contract": "JSON object; schema checked by host"
+}

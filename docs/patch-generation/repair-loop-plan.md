@@ -1,7 +1,7 @@
 # Bounded repair loop
 
-Status: implemented with synthetic tests (decision 0042). No live repair run
-has been made yet.
+Status: implemented (decision 0042). First live run: 6/8 first pass, 7/8 after
+repair. See `patchgen/evidence/nvidia-gemma-repair-001/summary.md`.
 
 The proposal's home-run item asks for a repair loop: when a generated patch
 fails validation, feed compiler and test output back to the model for a fixed

@@ -1,0 +1,26 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "v2 entity_id is now bytes and must be decoded as UTF-8 for the observation string."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "v2 entity_id is now bytes and must be encoded as UTF-8 on construction."
+    }
+  },
+  "edits": [
+    {
+      "before": "    fields = {\"entity_id\": entity.entity_id}\n",
+      "after": "    entity_id = entity.entity_id\n    if version == \"v2\":\n        entity_id = entity_id.decode(\"utf-8\")\n    fields = {\"entity_id\": entity_id}\n"
+    },
+    {
+      "before": "        entity = module.Entity(entity_id=\"py_101\")\n",
+      "after": "        entity_id = \"py_101\"\n        if args.version == \"v2\":\n            entity_id = entity_id.encode(\"utf-8\")\n        entity = module.Entity(entity_id=entity_id)\n"
+    }
+  ],
+  "rationale": "The schema change for v2 Entity.entity_id from string to bytes requires updating the runtime to handle UTF-8 encoding during construction and decoding during observation. v1 remains unchanged. The `process_entity` function now checks the version to decide whether to decode the bytes. The sample identifier construction in the main block now encodes the string for v2. The observation key 'entity_id' remains a string.",
+  "confidence": 1.0,
+  "assumptions": []
+}

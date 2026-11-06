@@ -1,0 +1,14 @@
+{
+  "C001": {
+    "line": 10,
+    "text": "    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']))\n"
+  },
+  "C002": {
+    "line": 11,
+    "text": "    fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}\n"
+  },
+  "C003": {
+    "line": 12,
+    "text": "    return {'fields': fields, 'in_stock': entity.quantity > 0,\n"
+  }
+}

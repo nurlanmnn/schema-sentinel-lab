@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-c779796a-67ba-4e8d-b0ce-c4f2314c2b38",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Remove the logic that reads and adds Entity.name to the fields dictionary for v1 entities.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Remove the assignment of Entity.name during v1 entity construction.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    if version == \\\"v1\\\":\\n        fields[\\\"name\\\"] = entity.name\\n\",\n      \"after\": \"\"\n    },\n    {\n      \"before\": \"        if args.version == \\\"v1\\\":\\n            entity.name = \\\"Sensor A\\\"\\n\",\n      \"after\": \"\"\n    }\n  ],\n  \"rationale\": \"The intended behavior is to remove Entity.name from v1 construction, reads, and decoded observations. C001 handles the read/observation part in process_entity, and C002 handles the construction part in the main block. Both are removed to comply with the schema change where field 2 is now reserved.\",\n  \"confidence\": 1.0,\n  \"assumptions\": []\n}\n```",
+        "role": "assistant",
+        "reasoning_content": null
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793932782,
+  "model": "google/gemma-4-31b-it",
+  "service_tier": null,
+  "system_fingerprint": null,
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 3197,
+    "completion_tokens": 294,
+    "total_tokens": 3491,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

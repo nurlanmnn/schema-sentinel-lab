@@ -1,0 +1,597 @@
+{
+  "status": "completed",
+  "protocol": "bounded_validation_feedback_repair",
+  "locked_configuration": "0041",
+  "backend": "nvidia",
+  "model": "google/gemma-4-31b-it",
+  "strategy": "candidate_semantic_blocks",
+  "repair_strategy": "candidate_semantic_feedback_blocks",
+  "max_rounds": 2,
+  "human_approval_required": true,
+  "source_summary_sha256": "f1eea743656aac6afca8d0f33dcb5707bfe8a46ebbf0e382ba50c9aa8f264fe3",
+  "prompt_fingerprints": {
+    "one_shot": "9546791889d0d9ecd8a2baca015ce47a2740e0d179bdd92263dd55ac2d81cb23",
+    "repair": "35dca82e6243080d902eeeb61963eb63a57350755f08fe476b31d216845204cb",
+    "protocol": "b6fa35136a3155377f0ae887d29d8bd6dcbef0617d350a08872078f9a4fb6487"
+  },
+  "cases": [
+    {
+      "case": "pubsub-rename",
+      "split": "development",
+      "first_pass_stage": "validated",
+      "attempts": [],
+      "validated_round": 0,
+      "skipped": "not_repairable"
+    },
+    {
+      "case": "pubsub-removal",
+      "split": "development",
+      "first_pass_stage": "validated",
+      "attempts": [],
+      "validated_round": 0,
+      "skipped": "not_repairable"
+    },
+    {
+      "case": "pubsub-utf8",
+      "split": "development",
+      "first_pass_stage": "compilation",
+      "attempts": [
+        {
+          "round": 1,
+          "withheld_compiler_lines": 0,
+          "exit_code": 0,
+          "status": "validation_passed",
+          "workflow_seconds": 75.82605124998372,
+          "model_requests": 3,
+          "generation_seconds": 64.65296933206264,
+          "generated_patch_validated": false,
+          "human_approval_required": true,
+          "backend": "nvidia",
+          "measurement": {
+            "expected_sites": 6,
+            "matched_sites": 6,
+            "recall": 1.0,
+            "missed": [],
+            "extra": [
+              {
+                "path": "runtimes/csharp/main.cs",
+                "line": 15
+              },
+              {
+                "path": "runtimes/csharp/main.cs",
+                "line": 67
+              },
+              {
+                "path": "runtimes/typescript/main.ts",
+                "line": 83
+              }
+            ],
+            "classification_correct": true
+          },
+          "error": null,
+          "mode": "live_model_feedback",
+          "runtime_validation": {
+            "status": "passed",
+            "mode": "actual_local_pubsub",
+            "case": "utf8",
+            "scenario": "valid",
+            "runtime_root": "/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-gemma-repair-001/pubsub-utf8/round-1/run/proposal/workspace",
+            "timing_scope": "local publish-to-ack including polling, HTTP and decode; not schema propagation or human review",
+            "human_approval_required": true,
+            "generated_patch_approval": false,
+            "runtime_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+            "runtime_git_status": [
+              " M generated/csharp/V2/Entity.cs",
+              " M generated/python/v2/entity_pb2.py",
+              " M generated/ts/v2/entity.ts",
+              " M proto/v2/entity.proto",
+              " M runtimes/csharp/main.cs",
+              " M runtimes/python/main.py",
+              " M runtimes/typescript/main.ts"
+            ],
+            "tools": {
+              "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+              "node": "v24.10.0",
+              "dotnet": "8.0.426"
+            },
+            "runtime_source_sha256": {
+              "runtimes/python/main.py": "f283b6f52bad925d3d4bc6bd64e487542c46b9364802c0a58bb6f883438b3e59",
+              "runtimes/typescript/main.ts": "0e4ddfd007228d44830620706f9307aeb53e16214cbdc0eb20ffd25fe46cc009",
+              "runtimes/csharp/main.cs": "ae498ac7d49a974896ba270b876c544c80b342d5131d8af64c48fe492fef7004",
+              "proto/v1/entity.proto": "4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1",
+              "proto/v2/entity.proto": "781968fc26ca15247f50e86e94cec788a3b76a6f35ff145ca51897e3453c1c36"
+            },
+            "harness_source_sha256": {
+              "testbed/pubsub/run.py": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+              "testbed/pubsub/broker.py": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+              "testbed/pubsub/topics.json": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3"
+            },
+            "publication_cases": 8,
+            "decoded_deliveries": 24,
+            "topics": 2,
+            "runtimes": 3,
+            "elapsed_seconds": 0.8346035409485921,
+            "children_stopped": true,
+            "broker_stopped": true
+          },
+          "requests": [
+            {
+              "request": "01",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/csharp/main.cs"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-504fe308-c3ab-4333-8434-7b384e07bd11",
+                "usage": {
+                  "prompt_tokens": 4197,
+                  "completion_tokens": 525,
+                  "total_tokens": 4722,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 23.64189179101959
+              },
+              "request_sha256": "ed4af56c58af35befc2dab464d9bc1af3e90ce71fe906fe2ef9957f8755cbc89",
+              "serving_counts": {
+                "id": "chatcmpl-504fe308-c3ab-4333-8434-7b384e07bd11",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 4197,
+                  "completion_tokens": 525,
+                  "total_tokens": 4722,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            },
+            {
+              "request": "02",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/python/main.py"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-e032647a-1916-47d4-af43-e90e508ab027",
+                "usage": {
+                  "prompt_tokens": 3884,
+                  "completion_tokens": 437,
+                  "total_tokens": 4321,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 19.311467624967918
+              },
+              "request_sha256": "9e75e5591214fe732b9971a064f625f9a4312e632c17bc056378b12051eae9b2",
+              "serving_counts": {
+                "id": "chatcmpl-e032647a-1916-47d4-af43-e90e508ab027",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 3884,
+                  "completion_tokens": 437,
+                  "total_tokens": 4321,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            },
+            {
+              "request": "03",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/typescript/main.ts"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-f84dbf59-7383-4e25-aebc-f8f16b4fa6a7",
+                "usage": {
+                  "prompt_tokens": 4095,
+                  "completion_tokens": 545,
+                  "total_tokens": 4640,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 21.699609916075133
+              },
+              "request_sha256": "5630cd4e2abbb9fe3d7a1177d4c788bc992ffca1c6c77a89f032b8d170d6169d",
+              "serving_counts": {
+                "id": "chatcmpl-f84dbf59-7383-4e25-aebc-f8f16b4fa6a7",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 4095,
+                  "completion_tokens": 545,
+                  "total_tokens": 4640,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            }
+          ],
+          "provider_errors": [],
+          "validated": true,
+          "stage": "validated"
+        }
+      ],
+      "validated_round": 1
+    },
+    {
+      "case": "telemetry-rename",
+      "split": "development",
+      "first_pass_stage": "validated",
+      "attempts": [],
+      "validated_round": 0,
+      "skipped": "not_repairable"
+    },
+    {
+      "case": "telemetry-precision",
+      "split": "development",
+      "first_pass_stage": "validated",
+      "attempts": [],
+      "validated_round": 0,
+      "skipped": "not_repairable"
+    },
+    {
+      "case": "telemetry-units",
+      "split": "development",
+      "first_pass_stage": "validated",
+      "attempts": [],
+      "validated_round": 0,
+      "skipped": "not_repairable"
+    },
+    {
+      "case": "inventory-width",
+      "split": "development",
+      "first_pass_stage": "response_or_edit_contract",
+      "attempts": [
+        {
+          "round": 1,
+          "withheld_compiler_lines": 0,
+          "exit_code": 1,
+          "status": "failed",
+          "workflow_seconds": 261.7301620829385,
+          "model_requests": 3,
+          "generation_seconds": 260.1891174168559,
+          "generated_patch_validated": false,
+          "human_approval_required": true,
+          "backend": "nvidia",
+          "measurement": {
+            "expected_sites": 9,
+            "matched_sites": 9,
+            "recall": 1.0,
+            "missed": [],
+            "extra": [
+              {
+                "path": "runtimes/csharp/Inventory.cs",
+                "line": 20
+              },
+              {
+                "path": "runtimes/typescript/inventory.ts",
+                "line": 4
+              }
+            ],
+            "classification_correct": true
+          },
+          "error": "file proposal rejected: runtimes/typescript/inventory.ts: Extra data: line 41 column 1 (char 2484)",
+          "mode": "live_model_feedback",
+          "runtime_validation": null,
+          "requests": [
+            {
+              "request": "01",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/csharp/Inventory.cs"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-9b82e9f1-5992-482a-9412-ba44280de85b",
+                "usage": {
+                  "prompt_tokens": 2968,
+                  "completion_tokens": 457,
+                  "total_tokens": 3425,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 26.843625041889027
+              },
+              "request_sha256": "c1e5caff9ba223a72e1a56efe927d12a8c194fa2c607ff7564af928212f8aeb8",
+              "serving_counts": {
+                "id": "chatcmpl-9b82e9f1-5992-482a-9412-ba44280de85b",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 2968,
+                  "completion_tokens": 457,
+                  "total_tokens": 3425,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            },
+            {
+              "request": "02",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/python/inventory_runtime.py"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-c771ed94-49e8-4b20-985f-0e73a921c999",
+                "usage": {
+                  "prompt_tokens": 2543,
+                  "completion_tokens": 311,
+                  "total_tokens": 2854,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 182.325205000001
+              },
+              "request_sha256": "5fc03e9f2da11af24227624d3f1356b5e5ea82fe7ac78f8be6617d77ecf577f1",
+              "serving_counts": {
+                "id": "chatcmpl-c771ed94-49e8-4b20-985f-0e73a921c999",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 2543,
+                  "completion_tokens": 311,
+                  "total_tokens": 2854,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            },
+            {
+              "request": "03",
+              "edit_validation": {
+                "status": "failed",
+                "path": "runtimes/typescript/inventory.ts",
+                "error": "Extra data: line 41 column 1 (char 2484)"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "failed",
+                "model": "google/gemma-4-31b-it",
+                "elapsed_seconds": 51.02028737496585
+              },
+              "request_sha256": "e7a5769f6d088e457b059b0afd367120f89bf065afa1a8483e4b9a40895d7238",
+              "serving_counts": {
+                "id": "chatcmpl-e3e39ac5-e299-4022-9abe-c7438efd5582",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 2485,
+                  "completion_tokens": 1277,
+                  "total_tokens": 3762,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            }
+          ],
+          "provider_errors": [],
+          "validated": false,
+          "stage": "response_or_edit_contract"
+        },
+        {
+          "round": 2,
+          "withheld_compiler_lines": 0,
+          "exit_code": 1,
+          "status": "failed",
+          "workflow_seconds": 193.92798699997365,
+          "model_requests": 3,
+          "generation_seconds": 192.21028950007167,
+          "generated_patch_validated": false,
+          "human_approval_required": true,
+          "backend": "nvidia",
+          "measurement": {
+            "expected_sites": 9,
+            "matched_sites": 9,
+            "recall": 1.0,
+            "missed": [],
+            "extra": [
+              {
+                "path": "runtimes/csharp/Inventory.cs",
+                "line": 20
+              },
+              {
+                "path": "runtimes/typescript/inventory.ts",
+                "line": 4
+              }
+            ],
+            "classification_correct": true
+          },
+          "error": "file proposal rejected: runtimes/typescript/inventory.ts: Extra data: line 42 column 1 (char 2292)",
+          "mode": "live_model_feedback",
+          "runtime_validation": null,
+          "requests": [
+            {
+              "request": "01",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/csharp/Inventory.cs"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-e9c6bb74-a279-4b14-b70e-85d17b841e19",
+                "usage": {
+                  "prompt_tokens": 2987,
+                  "completion_tokens": 457,
+                  "total_tokens": 3444,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 23.69024108396843
+              },
+              "request_sha256": "de49e92687a32b86151efb27df8346c2f4cfea7ad15678a7c6122274c64b3a53",
+              "serving_counts": {
+                "id": "chatcmpl-e9c6bb74-a279-4b14-b70e-85d17b841e19",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 2987,
+                  "completion_tokens": 457,
+                  "total_tokens": 3444,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            },
+            {
+              "request": "02",
+              "edit_validation": {
+                "status": "passed",
+                "path": "runtimes/python/inventory_runtime.py"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "response_received",
+                "model": "google/gemma-4-31b-it",
+                "json_fence_removed": true,
+                "provider": null,
+                "response_id": "chatcmpl-db7ce73a-2496-42b8-a8bc-67ccaaa6d678",
+                "usage": {
+                  "prompt_tokens": 2543,
+                  "completion_tokens": 311,
+                  "total_tokens": 2854,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                },
+                "elapsed_seconds": 16.16221675009001
+              },
+              "request_sha256": "5fc03e9f2da11af24227624d3f1356b5e5ea82fe7ac78f8be6617d77ecf577f1",
+              "serving_counts": {
+                "id": "chatcmpl-db7ce73a-2496-42b8-a8bc-67ccaaa6d678",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 2543,
+                  "completion_tokens": 311,
+                  "total_tokens": 2854,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 0
+                  }
+                }
+              }
+            },
+            {
+              "request": "03",
+              "edit_validation": {
+                "status": "failed",
+                "path": "runtimes/typescript/inventory.ts",
+                "error": "Extra data: line 42 column 1 (char 2292)"
+              },
+              "measurement": {
+                "backend": "nvidia",
+                "status": "failed",
+                "model": "google/gemma-4-31b-it",
+                "elapsed_seconds": 152.35783166601323
+              },
+              "request_sha256": "8357144f12f4d8c593c12cbed903ce11f467763ff286796c50eb11b31b997a71",
+              "serving_counts": {
+                "id": "chatcmpl-051c3d80-6c74-4826-88ed-ce3b006fbaba",
+                "model": "google/gemma-4-31b-it",
+                "provider": null,
+                "usage": {
+                  "prompt_tokens": 2485,
+                  "completion_tokens": 1465,
+                  "total_tokens": 3950,
+                  "prompt_tokens_details": {
+                    "audio_tokens": null,
+                    "cached_tokens": 1024
+                  }
+                }
+              }
+            }
+          ],
+          "provider_errors": [],
+          "validated": false,
+          "stage": "response_or_edit_contract"
+        }
+      ],
+      "validated_round": null
+    },
+    {
+      "case": "telemetry-quantized",
+      "split": "development",
+      "first_pass_stage": "validated",
+      "attempts": [],
+      "validated_round": 0,
+      "skipped": "not_repairable"
+    }
+  ],
+  "scope": "repair rounds after a one-shot locked suite; repaired passes are never first-pass successes",
+  "planned_cases": 8,
+  "first_pass_validated": 6,
+  "validated_within_rounds": {
+    "1": 7,
+    "2": 7
+  },
+  "first_pass_stages": {
+    "pubsub-rename": "validated",
+    "pubsub-removal": "validated",
+    "pubsub-utf8": "compilation",
+    "telemetry-rename": "validated",
+    "telemetry-precision": "validated",
+    "telemetry-units": "validated",
+    "inventory-width": "response_or_edit_contract",
+    "telemetry-quantized": "validated"
+  },
+  "repair_model_requests": 9
+}

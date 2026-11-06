@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
+  "change_id": "telemetry-speed-units",
+  "new_schema_sha256": "858ff2a455dd02877212827e95535d6c127c647e4f95f842809eeb1eb4cd19c5",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "telemetry_case": "units"
+}

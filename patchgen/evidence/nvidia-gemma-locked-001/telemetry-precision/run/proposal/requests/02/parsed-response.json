@@ -1,0 +1,21 @@
+{
+  "outcome": "no_change",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "Python floats are double-precision (binary64). The assignment to speed_mps remains syntactically and semantically identical regardless of whether the underlying protobuf field is float or double."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "The field name 'speed_mps' is preserved in the new schema, and the observation key remains the same. No textual change is required."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "The comparison threshold (30.0) and the field name are unchanged. Python's float comparison handles the widened precision without modification."
+    }
+  },
+  "edits": [],
+  "rationale": "The schema change widens 'speed_mps' from float32 to float64. In Python, all floats are double-precision. The generated bindings for both float and double map to Python's float type. Since the field name is preserved and no explicit type casting or narrowing was present in the source, no code changes are necessary to support the increased precision.",
+  "confidence": 1.0,
+  "assumptions": []
+}

@@ -1,0 +1,34 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Field speed_mps renamed to speed_kph; producer must scale input mps by 3.6."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Field speed_mps renamed to speed_kph in both the binding and the observation key."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "Field speed_mps renamed to speed_kph; threshold updated from 30.0 mps to 108.0 kph."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)\n"
+    },
+    {
+      "before": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n",
+      "after": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}\n"
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,\n"
+    }
+  ],
+  "rationale": "The schema change renames 'speed_mps' to 'speed_kph'. Following the intended behavior, the producer (sample construction) now multiplies the input speed (mps) by 3.6. The observation key and the binding access are updated to 'speed_kph'. The speeding threshold is updated to 108.0 (30.0 * 3.6).",
+  "confidence": 1.0,
+  "assumptions": []
+}

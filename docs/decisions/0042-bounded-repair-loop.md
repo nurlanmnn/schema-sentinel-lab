@@ -53,5 +53,15 @@ An independent read-only Codex review of this change found the oracle-text
 leak, the first-pass classification gap, the narrow fingerprint and the loose
 compiler filter. All four are fixed above and covered by tests.
 
+## Observed outcome
+
+A fresh locked baseline reproduced 6/8. Bounded repair raised this to 7/8 within
+one round (33 model requests in total). `pubsub-utf8` was fixed from the C#
+compiler error alone. `inventory-width` failed all three attempts the same way:
+Gemma appended "Wait, I noticed a mistake…" and a second JSON answer after the
+first, which the parser rejects by design. That is recorded as a response-format
+finding; no parser or feedback change is made after observing it. See
+`patchgen/evidence/nvidia-gemma-repair-001/summary.md`.
+
 Unit tests (282 in total) are implementation checks, not migration cases.
 Human approval remains required for every patch, repaired or not.
