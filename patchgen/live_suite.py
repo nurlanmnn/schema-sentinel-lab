@@ -20,6 +20,48 @@ LOCKED_DECISION = '0041'
 LOCKED_CONFIG = dict(backend='nvidia', model='google/gemma-4-31b-it', strategy='candidate_semantic_blocks')
 
 
+# Every authored live case informed prompt development; future unseen cases belong in HELD_OUT_CASES.
+HELD_OUT_CASES = ()
+# Fixed synthetic input: the hash changes only when prompt construction changes.
+_FINGERPRINT_FILE = dict(path='runtimes/python/main.py', language='python', source_context='old = 1\n',
+                         positions=[dict(start_line=1, end_line=1, reason='candidate')])
+_FINGERPRINT_CASE = dict(contract_version='1.0', source_revision='0'*40, intended_behavior='fingerprint',
+    change=dict(id='fingerprint', category='field_renamed', old_schema='a', new_schema='b', schema_path='proto/a.proto'),
+    affected_files=[_FINGERPRINT_FILE])
+LOCKED_PROMPT_SHA256 = dict(
+    one_shot='9546791889d0d9ecd8a2baca015ce47a2740e0d179bdd92263dd55ac2d81cb23',
+    repair='35dca82e6243080d902eeeb61963eb63a57350755f08fe476b31d216845204cb',
+    protocol='b6fa35136a3155377f0ae887d29d8bd6dcbef0617d350a08872078f9a4fb6487')
+
+
+def prompt_fingerprints():
+    """Hash the locked prompts, edit resolver, envelope parser and sampling so silent tuning is detectable."""
+    import inspect
+    from patchgen import anchor_edits, generator, nvidia_client
+    from patchgen.feedback_blocks import make_prompt as repair_prompt
+    # A second file exercises the binding-specific prompt branch.
+    bound = dict(_FINGERPRINT_FILE, path='runtimes/typescript/main.ts', language='typescript',
+                 positions=[dict(start_line=1, end_line=1, reason='candidate', required_reference=True)])
+    case = dict(_FINGERPRINT_CASE, affected_files=[_FINGERPRINT_FILE, bound])
+    feedback = dict(case, model_feedback=dict(source_revision='0'*40, change_id='fingerprint',
+        files={file['path']: dict(previous_response={}, validation_diagnostics=['fingerprint']) for file in (_FINGERPRINT_FILE, bound)}))
+    digest = lambda value: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+    protocol = [inspect.getsource(function) for function in (generator.prompt, generator.file_context, anchor_edits.candidates,
+                anchor_edits.resolve, nvidia_client.parse_content)] + [nvidia_client.options_for(LOCKED_CONFIG['model'])]
+    return dict(one_shot=digest([anchor_edits.make_prompt(case, file, semantic=True)[0] for file in (_FINGERPRINT_FILE, bound)]),
+                repair=digest([repair_prompt(feedback, file, semantic=True)[0] for file in (_FINGERPRINT_FILE, bound)]),
+                protocol=digest(protocol))
+
+
+def require_locked_prompts():
+    if prompt_fingerprints() != LOCKED_PROMPT_SHA256:
+        raise ValueError('locked prompt text changed; record a new decision before a locked run')
+
+
+def case_split(name):
+    return 'held_out' if name in HELD_OUT_CASES else 'development'
+
+
 def resolve_configuration(args):
     """Apply --locked, refusing partial overrides so the frozen setup stays exact."""
     if args.locked:
@@ -85,6 +127,8 @@ def collect(target, exit_code, elapsed):
 def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None, locked=False):
     if locked and dict(backend=backend, model=model, strategy=strategy) != LOCKED_CONFIG:
         raise ValueError('locked run must use the decision 0041 configuration')
+    if locked:
+        require_locked_prompts()
     if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     if backend in ('openrouter', 'nvidia'):
@@ -114,6 +158,8 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
     report=dict(status='running',mode='live_model',model=model,strategy=strategy,backend=backend,
                 prompt_version=STRATEGY_VERSIONS[strategy],options=options,
                 locked_configuration=LOCKED_DECISION if locked else None,
+                prompt_fingerprints=prompt_fingerprints() if locked else None,
+                case_split={entry['case']: case_split(entry['case']) for entry in entries},
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
                 implementation_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                 implementation_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True)),
@@ -142,6 +188,9 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
     report.update(status='provider_unavailable' if unavailable else 'completed',
                   provider_unavailable_cases=unavailable,validated_model_patches=passed,
                   model_patch_validation_rate=None if unavailable else passed/len(entries),
+                  validated_by_split={split: f"{sum(r['generated_patch_validated'] for r in report['results'] if case_split(r['case']) == split)}/"
+                                             f"{sum(case_split(r['case']) == split for r in report['results'])}"
+                                      for split in ('development', 'held_out')},
                   model_requests=sum(r['model_requests'] for r in report['results']),
                   generation_seconds=sum(r['generation_seconds'] for r in report['results']))
     save()

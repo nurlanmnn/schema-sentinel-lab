@@ -169,6 +169,8 @@ STRATEGY_VERSIONS['candidate_blocks']='2.8'
 STRATEGY_VERSIONS['candidate_semantic_blocks']='3.1-semantic-blocks'
 STRATEGY_VERSIONS['candidate_semantic_edits']='3.0-semantic'
 STRATEGY_VERSIONS['candidate_feedback_blocks']='2.9-feedback'
+STRATEGY_VERSIONS['candidate_semantic_feedback_blocks']='3.1-feedback'
+FEEDBACK_STRATEGIES = ('candidate_feedback_blocks', 'candidate_semantic_feedback_blocks')
 
 
 class ContractError(ValueError):
@@ -502,7 +504,9 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
         transport = import_module('patchgen.' + backend + '_client')
         credential, cloud_request = transport.credential, transport.request_model
         cloud_options = transport.options_for(model) if hasattr(transport, 'options_for') else transport.OPTIONS
-        if model not in getattr(transport, 'MODELS', (transport.MODEL,)) or strategy not in ('candidate_edits', 'candidate_semantic_edits', 'candidate_blocks', 'candidate_semantic_blocks'):
+        cloud_strategies = ('candidate_edits', 'candidate_semantic_edits', 'candidate_blocks', 'candidate_semantic_blocks') + (
+            ('candidate_semantic_feedback_blocks',) if backend == 'nvidia' else ())
+        if model not in getattr(transport, 'MODELS', (transport.MODEL,)) or strategy not in cloud_strategies:
             raise ContractError('Cloud backend requires its selected model and a supported live editing strategy')
         credential()
         def request(messages, selected_model, unused_endpoint, directory):
@@ -526,8 +530,8 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
         directory = output / 'requests' / f'{index:02d}'
         print(f'Generating {index}/{len(case["affected_files"])}: {file["path"]}',flush=True)
         try:
-            if strategy in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
-                if strategy == 'candidate_feedback_blocks':
+            if strategy in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks','candidate_semantic_feedback_blocks'):
+                if strategy in FEEDBACK_STRATEGIES:
                     from patchgen.feedback_blocks import make_prompt, resolve
                 elif strategy in ('candidate_blocks','candidate_semantic_blocks'):
                     from patchgen.anchor_edits import make_prompt, resolve
@@ -535,7 +539,7 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
                     from patchgen.rename_roles import make_prompt, resolve
                 else:
                     from patchgen.rename_tokens import make_prompt, resolve
-                messages,tokens = make_prompt(case,file, semantic=True) if strategy == 'candidate_semantic_blocks' else make_prompt(case,file)
+                messages,tokens = make_prompt(case,file, semantic=True) if strategy in ('candidate_semantic_blocks','candidate_semantic_feedback_blocks') else make_prompt(case,file)
                 value = request(messages,model,endpoint,directory)
                 save(directory/'token-inventory.json',tokens)
                 updated = resolve(file['source_context'],value,tokens,file['positions'])
@@ -543,7 +547,7 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
                 value = request(edit_prompt(case,file,strategy),model,endpoint,directory)
             if strategy in ('line_edits','migration_edits','candidate_edits','candidate_semantic_edits'):
                 updated = resolve_candidates(file['source_context'],value,file['positions']) if strategy in ('candidate_edits','candidate_semantic_edits') else resolve_lines(file['source_context'],value,file['positions'])
-            elif strategy not in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
+            elif strategy not in ('syntax_rename','syntax_rename_roles','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks','candidate_semantic_feedback_blocks'):
                 updated = {'exact_edits':resolve_edits,'file_content':resolve_file}[strategy](file['source_context'],value)
             records.append({'path':file['path'],'response':value,'updated_source':updated})
             save(directory / 'edit-validation.json',{'status':'passed','path':file['path']})
@@ -760,9 +764,9 @@ def main():
     args = parser.parse_args()
     output = args.output.resolve(); output.mkdir(parents=True,exist_ok=False)
     (output / 'generator-source.py').write_bytes(Path(__file__).read_bytes())
-    if args.strategy in ('candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
+    if args.strategy in ('candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks','candidate_semantic_feedback_blocks'):
         (output/'anchor-edits-source.py').write_bytes(Path(__file__).with_name('anchor_edits.py').read_bytes())
-    if args.strategy == 'candidate_feedback_blocks':
+    if args.strategy in FEEDBACK_STRATEGIES:
         (output/'feedback-blocks-source.py').write_bytes(Path(__file__).with_name('feedback_blocks.py').read_bytes())
     if args.strategy in ('syntax_rename','syntax_rename_roles','deterministic_rename_roles'):
         (output / 'rename-token-source.py').write_bytes(Path(__file__).with_name('rename_tokens.py').read_bytes())
@@ -799,9 +803,9 @@ def main():
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,'backend':args.backend,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
-    if args.strategy in ('candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks'):
+    if args.strategy in ('candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks','candidate_semantic_feedback_blocks'):
         report['anchor_edits_sha256']=hashlib.sha256(Path(__file__).with_name('anchor_edits.py').read_bytes()).hexdigest()
-    if args.strategy == 'candidate_feedback_blocks':
+    if args.strategy in FEEDBACK_STRATEGIES:
         report['feedback_blocks_sha256']=hashlib.sha256(Path(__file__).with_name('feedback_blocks.py').read_bytes()).hexdigest()
     if args.strategy in ('syntax_rename','syntax_rename_roles','deterministic_rename_roles'):
         report['rename_token_sha256'] = hashlib.sha256(Path(__file__).with_name('rename_tokens.py').read_bytes()).hexdigest()
@@ -832,10 +836,13 @@ def main():
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
-        if args.backend in ('openrouter', 'nvidia') and (args.response or args.feedback
-                or args.model not in ({'openrouter': (OPENROUTER_MODEL,), 'nvidia': NVIDIA_MODELS}[args.backend]) or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks')):
+        # Hosted feedback is limited to NVIDIA semantic-block repair rounds (decision 0042).
+        cloud_feedback = args.backend == 'nvidia' and args.strategy == 'candidate_semantic_feedback_blocks'
+        if args.backend in ('openrouter', 'nvidia') and (args.response or (args.feedback and not cloud_feedback)
+                or args.model not in ({'openrouter': (OPENROUTER_MODEL,), 'nvidia': NVIDIA_MODELS}[args.backend])
+                or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks') + (('candidate_semantic_feedback_blocks',) if cloud_feedback else ())):
             raise ContractError('cloud backend requires an explicit request to its selected model')
-        if bool(args.feedback)!=(args.strategy=='candidate_feedback_blocks') or args.feedback and args.response:
+        if bool(args.feedback)!=(args.strategy in FEEDBACK_STRATEGIES) or args.feedback and args.response:
             raise ContractError('feedback strategy requires explicit live feedback and cannot use offline replay')
         if args.feedback:
             from patchgen.feedback_blocks import validate_feedback
