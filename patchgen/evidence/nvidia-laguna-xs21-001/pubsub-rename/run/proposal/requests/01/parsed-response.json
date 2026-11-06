@@ -1,0 +1,30 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "C# bindings regenerated for v1 Entity.name renamed to DisplayName; observation key must become display_name to match intended_behavior"
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "C# bindings regenerated for v1 Entity.Name renamed to DisplayName; --serve path creates v1 Entity with new DisplayName property"
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"name\"] = decoded.Name };\n",
+      "after": "        fields = new() { [\"entity_id\"] = decoded.EntityId, [\"display_name\"] = decoded.DisplayName };\n"
+    },
+    {
+      "before": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", Name = \"Sensor B\" }\n",
+      "after": "        ? new Simulation.V1.Entity { EntityId = \"cs_202\", DisplayName = \"Sensor B\" }\n"
+    }
+  ],
+  "rationale": "The v1 Entity.name field is renamed to display_name on the same wire field 2. The C# bindings are regenerated to expose DisplayName as the property name. Both observation key construction and entity creation in --serve mode need to reference DisplayName instead of Name. v2 remains unchanged with only EntityId.",
+  "confidence": 0.95,
+  "assumptions": [
+    "C# protobuf compiler generates DisplayName property for v1 Entity after schema regeneration",
+    "The JSON observation key 'display_name' matches intended_behavior for runtime output",
+    "Empty/Unicode/escaped text preservation is handled automatically by protobuf parsing"
+  ]
+}

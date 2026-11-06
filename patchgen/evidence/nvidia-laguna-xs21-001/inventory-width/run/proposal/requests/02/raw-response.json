@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-1ea33d5b-30ca-43fa-a014-4a9b2924875a",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"int64 field requires int() conversion from canonical decimal string input; int() handles Python's arbitrary precision for int64 values\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"int64 field must be serialized as canonical decimal string; entity.quantity is now int64 but str() conversion remains correct for canonical decimal output\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"int64 comparison with 0 requires explicit int64 conversion; entity.quantity must be cast to int for >0 predicate to work correctly with canonical string JSON input\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']))\\n\",\n      \"after\": \"    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']))\\n\"\n    },\n    {\n      \"before\": \"    fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}\\n\",\n      \"after\": \"    fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}\\n\"\n    },\n    {\n      \"before\": \"    return {'fields': fields, 'in_stock': entity.quantity > 0,\\n\",\n      \"after\": \"    return {'fields': fields, 'in_stock': int(entity.quantity) > 0,\\n\"\n    }\n  ],\n  \"rationale\": \"Schema change: int32 -> int64. Python int() handles arbitrary precision. Canonical decimal strings preserved. Entity quantity comparison requires explicit cast. Constructed payload unchanged (still uses int() on canonical string). Wire encoding unchanged (base64 protobuf). Decoder returns int64 as Python int (arbitrary precision).\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"Python int() correctly parses canonical decimal string to arbitrary precision integer\",\n    \"entity.quantity from protobuf is Python int (arbitrary precision)\",\n    \"StockItem constructor accepts Python int for int64 field\",\n    \"base64 encoding/decoding handles protobuf wire format unchanged\"\n  ]\n}\n```",
+        "refusal": null,
+        "role": "assistant"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793928185,
+  "model": "poolside/laguna-xs-2.1",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 1957,
+    "completion_tokens": 533,
+    "total_tokens": 2490,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  }
+}

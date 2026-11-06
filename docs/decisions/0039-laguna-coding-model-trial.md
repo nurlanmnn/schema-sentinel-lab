@@ -26,3 +26,14 @@ The previous best observed configuration was Gemma 31B at 6/8; compare Laguna
 without reclassifying historical failures or treating human review as complete.
 
 Evidence: `patchgen/evidence/nvidia-laguna-xs21-001`.
+
+## Outcome
+
+Laguna completed all eight cases with 24 actual benchmark requests and no repairs:
+2/8 validated. Both rename migrations passed; the other six were rejected by
+edit contracts, compilation, or the exact float32 observation oracle. All 24
+prompt messages and hashes match Gemma's prior trial. Total model-request wall
+time was 128.70 seconds; free-provider queueing and output differences prevent
+interpreting this as controlled inference speed. All 269 patch-generation tests
+passed. Keep Gemma/3.1 as the best observed configuration (6/8), with no claim of
+held-out reliability. No prompt or validation rule was tuned for Laguna.

@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-589c7e94-4f64-4f19-a568-e4f77b0bad8d",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Required reference: constructs sample from request['speed'] in mps, must convert to kph (multiply by 3.6) and use new field name speed_kph.\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Returns entity fields; entity field is speed_kph after deserialization, observation key must be speed_kph, value is decoded float32 kph.\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Required reference: speeding threshold changes from 30.0 mps to >108.0 kph; entity.speed_kph used after conversion.\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\\n\",\n      \"after\": \"    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)\\n\"\n    },\n    {\n      \"before\": \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\\n\",\n      \"after\": \"    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}\\n\"\n    },\n    {\n      \"before\": \"    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\\n\",\n      \"after\": \"    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,\\n\"\n    }\n  ],\n  \"rationale\": \"Schema change renames speed_mps to speed_kph and changes unit from mps to kph. Request provides speed in mps, so producers must scale by 3.6 before serialization. Threshold for speeding becomes >108.0 kph. Observation key becomes speed_kph. Wire field 2 remains float32. Entity v1/v2 unchanged per spec.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"Protobuf float32 values serialize as-is; Python float multiplication produces double but protobuf encodes as 32-bit\",\n    \"The generated VehicleTelemetry class now has speed_kph field instead of speed_mps\",\n    \"The threshold 108.0 corresponds to 30 mps * 3.6 = 108 kph\"\n  ]\n}",
+        "refusal": null,
+        "role": "assistant"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793928146,
+  "model": "poolside/laguna-xs-2.1",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2089,
+    "completion_tokens": 592,
+    "total_tokens": 2681,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  }
+}

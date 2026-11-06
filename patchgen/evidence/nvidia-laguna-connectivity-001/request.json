@@ -1,0 +1,17 @@
+{
+  "temperature": 1,
+  "top_p": 0.95,
+  "max_tokens": 4096,
+  "model": "poolside/laguna-xs-2.1",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Return only the JSON object {\"ok\":true}."
+    },
+    {
+      "role": "user",
+      "content": "{\"prompt_version\": \"connectivity\", \"request\": \"Reply with the JSON object only.\"}"
+    }
+  ],
+  "stream": false
+}

@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-1630a8b7-b0a4-4842-ab19-85decbdb1e34",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Construction of sample uses old property SpeedMps which must be renamed to GroundSpeedMps per new schema\"\n    },\n    \"C002\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Observation dictionary key 'speed_mps' must be renamed to 'ground_speed_mps' per intended_behavior\"\n    },\n    \"C003\": {\n      \"decision\": \"edit\",\n      \"reason\": \"Speeding predicate uses entity.SpeedMps which must be renamed to entity.GroundSpeedMps per new schema\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = request.Speed };\\n\",\n      \"after\": \"            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, GroundSpeedMps = request.Speed };\\n\"\n    },\n    {\n      \"before\": \"            var fields = new Dictionary<string, object> { [\\\"vehicle_id\\\"] = entity.VehicleId, [\\\"speed_mps\\\"] = entity.SpeedMps };\\n\",\n      \"after\": \"            var fields = new Dictionary<string, object> { [\\\"vehicle_id\\\"] = entity.VehicleId, [\\\"ground_speed_mps\\\"] = entity.GroundSpeedMps };\\n\"\n    },\n    {\n      \"before\": \"            return new { fields, speeding = entity.SpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };\\n\",\n      \"after\": \"            return new { fields, speeding = entity.GroundSpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };\\n\"\n    }\n  ],\n  \"rationale\": \"Schema change renames field speed_mps to ground_speed_mps on wire field 2. This requires updating: (1) the sample construction property from SpeedMps to GroundSpeedMps, (2) the observation key from 'speed_mps' to 'ground_speed_mps', and (3) the speeding predicate from entity.SpeedMps to entity.GroundSpeedMps. The threshold > 30.0 and vehicle_id remain unchanged as specified.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"Protobuf C# bindings will generate property named GroundSpeedMps for the renamed field\",\n    \"The runtime dictionary key must match the new wire field name 'ground_speed_mps'\",\n    \"All three occurrences of SpeedMps must be consistently renamed to GroundSpeedMps\"\n  ]\n}",
+        "refusal": null,
+        "role": "assistant"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793928109,
+  "model": "poolside/laguna-xs-2.1",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2115,
+    "completion_tokens": 635,
+    "total_tokens": 2750,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  }
+}

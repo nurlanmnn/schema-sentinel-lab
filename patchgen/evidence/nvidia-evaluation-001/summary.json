@@ -214,5 +214,59 @@
         "error": null
       }
     ]
+  },
+  "Laguna XS 2.1 / semantic blocks 3.1": {
+    "passed": 2,
+    "evaluated": 8,
+    "results": [
+      {
+        "case": "pubsub-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "pubsub-removal",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/python/main.py: before must contain complete source lines"
+      },
+      {
+        "case": "pubsub-utf8",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "command failed (2): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/.venv/bin/python: adli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-laguna-xs21-001/pubsub-utf8/run/proposal/workspace/.venv\"\n\n> \"/Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-laguna-xs21-001/pubsub-utf8/run/proposal/workspace/.venv/bin/python\" -m pip install -r runtimes/python/requirements.txt\nCollecting protobuf==4.25.8 (from -r runtimes/python/requirements.txt (line 1))\n  Using cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl.metadata (541 bytes)\nUsing cached protobuf-4.25.8-cp37-abi3-macosx_10_9_universal2.whl (394 kB)\nInstalling collected packages: protobuf\nSuccessfully installed protobuf-4.25.8\n\n[notice] A new release of pip is available: 25.2 -> 26.3\n[notice] To update, run: /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-laguna-xs21-001/pubsub-utf8/run/proposal/workspace/.venv/bin/python -m pip install --upgrade pip\n\n> /opt/homebrew/bin/npm ci --prefix runtimes/typescript\n\nadded 14 packages, and audited 15 packages in 425ms\n\nfound 0 vulnerabilities\n\n> /usr/local/share/dotnet/dotnet restore runtimes/csharp/CsharpApp.csproj\n  Determining projects to restore...\n  Restored /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-laguna-xs21-001/pubsub-utf8/run/proposal/workspace/runtimes/csharp/CsharpApp.csproj (in 93 ms).\n\n> /opt/homebrew/bin/npm run build --prefix runtimes/typescript\n\n> schema-sentinel-typescript-service@0.1.0 build\n> tsc --project tsconfig.json\n\nmain.ts(13,67): error TS2345: Argument of type 'string | Uint8Array<ArrayBufferLike>' is not assignable to parameter of type 'AllowSharedBufferSource | undefined'.\n  Type 'string' is not assignable to type 'AllowSharedBufferSource | undefined'.\n\nCommand failed (exit 2). See the output above.\n"
+      },
+      {
+        "case": "telemetry-rename",
+        "status": "validation_passed",
+        "generated_patch_validated": true,
+        "error": null
+      },
+      {
+        "case": "telemetry-precision",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/python/telemetry_runtime.py: edits must be an array"
+      },
+      {
+        "case": "telemetry-units",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "command failed (1): /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/patchgen/evidence/nvidia-laguna-xs21-001/telemetry-units/run/proposal/workspace/.venv/bin/python: a26839c8fe12df5fb39fe8\",\n    \"runtimes/csharp/Telemetry.cs\": \"7d6607b53f2c6006f9ce60b536a9e0dfb7afc4d5cb81d6b1e8086a85485a3367\",\n    \"runtimes/csharp/CsharpApp.csproj\": \"e90c8e3bed8337713302962fed186c244ba3ed391066b3031f2cb4a94f3b457d\",\n    \"runtimes/csharp/main.cs\": \"99718bafdfe55f799c4ad85066e277284625b1ca1cc9e7813853d4a62d23cd2a\",\n    \"proto/v1/entity.proto\": \"4220b72753e0d8d3b9a4e5685db3cd243a4db89446636c17ebef81b82d7c25d1\",\n    \"proto/v2/entity.proto\": \"6d14192cea12b49c9041d09038f21901efc22274a74f288405e54e6f957db366\",\n    \"proto/telemetry/vehicle.proto\": \"858ff2a455dd02877212827e95535d6c127c647e4f95f842809eeb1eb4cd19c5\",\n    \"generated/ts/v1/entity.ts\": \"95f8fd05865230694af4d85dc1be25ef9ae065cd5d8df027649741d2944cc792\",\n    \"generated/ts/v2/entity.ts\": \"fc3f4064beb2aab64df15fbcd68b4d0752d700c0e12500e166837a5594e15d93\",\n    \"generated/ts/telemetry/vehicle.ts\": \"afba36b971c2694b5b9d2ba441ff9d9d2468eaeb30737544cfc470247fd98a11\",\n    \"generated/csharp/V1/Entity.cs\": \"20854c30d9dce8b9d99858dedc60798bf68106c6b4a2efb0aaf358c8b07eeb24\",\n    \"generated/csharp/V2/Entity.cs\": \"cb7ca8ba262c74b76dc7d81c73075df2bb79a4a02935ff3e7fc504454f2cb3d5\",\n    \"generated/csharp/Telemetry/Vehicle.cs\": \"11f7a96b6bd2920a60d926cf66979162b0f0ceed6acab656f3141bebb2c16c7d\",\n    \"generated/python/v1/entity_pb2.py\": \"d1ef4e29587562cde86043fa0fcf343601f2d11b71a329769100c1553bcec4fc\",\n    \"generated/python/v2/entity_pb2.py\": \"ddb97a8dc4fbd1cc3638470e7860f3cfbd9edfa5cd0370628361828db4dae972\",\n    \"generated/python/telemetry/vehicle_pb2.py\": \"35a75fe6811991b26388cfe4a8200bc00f8be4a92c8e51e1a637631f6391494d\"\n  },\n  \"runtime_cases\": 16,\n  \"model_requests\": 0,\n  \"scope\": \"authored float32 cases; excludes arbitrary wire and mixed versions\",\n  \"error\": \"telemetry wire/units/threshold mismatch at case 1\"\n}\n"
+      },
+      {
+        "case": "inventory-width",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/python/inventory_runtime.py: line edit makes no change"
+      },
+      {
+        "case": "telemetry-quantized",
+        "status": "failed",
+        "generated_patch_validated": false,
+        "error": "file proposal rejected: runtimes/csharp/Telemetry.cs: line edit makes no change; runtimes/typescript/telemetry.ts: line edit makes no change"
+      }
+    ]
   }
 }

@@ -1,0 +1,10 @@
+{
+  "C001": {
+    "line": 33,
+    "text": "        fields[\"name\"] = entity.name\n"
+  },
+  "C002": {
+    "line": 117,
+    "text": "            entity.name = \"Sensor A\"\n"
+  }
+}

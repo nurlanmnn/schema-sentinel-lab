@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Required reference to encode construction. Must update speedMps to groundSpeedMps to match new schema field name."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Output field observation. Must rename speed_mps to ground_speed_mps per intended_behavior wire field name."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "Required reference for speeding threshold check. Must update entity.speedMps to entity.groundSpeedMps to match new schema."
+    }
+  },
+  "edits": [
+    {
+      "before": "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();\n",
+      "after": "    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, groundSpeedMps: request.speed }).finish();\n"
+    },
+    {
+      "before": "    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };\n",
+      "after": "    const fields = { vehicle_id: entity.vehicleId, ground_speed_mps: entity.groundSpeedMps };\n"
+    },
+    {
+      "before": "    return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n",
+      "after": "    return { fields, speeding: entity.groundSpeedMps > 30.0, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n"
+    }
+  ],
+  "rationale": "The schema change renames speed_mps to ground_speed_mps on wire field 2. All three required references must be updated: the encode construction uses the new groundSpeedMps accessor, the observation output uses the new ground_speed_mps key, and the speeding threshold check accesses entity.groundSpeedMps. The 30.0 m/s threshold remains unchanged, and float32 precision is preserved through the TypeScript/JavaScript number type.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated TypeScript bindings use camelCase naming (groundSpeedMps) for the renamed field",
+    "The Request interface 'speed' field name can remain unchanged as it is external input",
+    "TypeScript's number type is appropriate for float32 precision in this runtime context"
+  ]
+}

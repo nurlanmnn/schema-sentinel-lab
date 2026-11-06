@@ -1,0 +1,9 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "32e39a2fa9e6aeeab326afa6708868191785dad5",
+  "change_id": "telemetry-speed-rename",
+  "new_schema_sha256": "e1e6a4c21c22905b6cdbc3b08ad27489d58c29dec7f61c013bf991ac0f9db6a5",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "telemetry_case": "rename"
+}

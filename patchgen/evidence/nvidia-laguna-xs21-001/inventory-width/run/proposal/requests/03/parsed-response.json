@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "Request interface unchanged; quantity remains string per input contract."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Must pass int64 directly without JS Number conversion to preserve exact values. parseInt returns Number and violates int64 precision for large values."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "entity.quantity.toString() already produces canonical decimal string; int64 toString behavior unchanged."
+    },
+    "C004": {
+      "decision": "edit",
+      "reason": "Must use entity.quantity directly with BigInt constructor instead of Number(entity.quantity) to preserve exact signed int64 values for >0 predicate."
+    }
+  },
+  "edits": [
+    {
+      "before": "    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10) }).finish();\n",
+      "after": "    const sample = StockItem.encode({ sku: request.sku, quantity: BigInt(request.quantity) }).finish();\n"
+    },
+    {
+      "before": "    return { fields, in_stock: BigInt(entity.quantity) > 0n, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n",
+      "after": "    return { fields, in_stock: entity.quantity > 0n, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n"
+    }
+  ],
+  "rationale": "Schema change int32->int64 requires preserving exact quantities. C002: parseInt loses precision; must use BigInt for construction. C004: entity.quantity from ts-proto is already Long (int64); BigInt(entity.quantity) was redundant/wrong; direct comparison with >0n works for Long values in generated bindings.",
+  "confidence": 0.95,
+  "assumptions": [
+    "ts-proto generated bindings expose int64 as Long objects supporting > comparison with bigint literals",
+    "StockItem.encode accepts Long/ BigInt values for int64 fields",
+    "No JS number conversion anywhere in the pipeline to maintain int64 precision"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "outcome": "no_change",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "unaffected",
+      "reason": "The encode operation passes request.speed (a TypeScript number which is binary64) to speedMps. No narrowing needed; the generated protobuf bindings handle the float64 wire type automatically."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "The entity.speedMps field is now binary64 (double) from the protobuf decode. Using it directly in the output object preserves full precision without any conversion code required."
+    },
+    "C003": {
+      "decision": "unaffected",
+      "reason": "The comparison entity.speedMps > 30.0 works correctly with binary64 values. No code change needed since TypeScript numbers already represent binary64 and the threshold is preserved."
+    }
+  },
+  "edits": [],
+  "rationale": "The schema change from float to double only affects the protobuf wire encoding. TypeScript's native number type is already binary64, and the generated protobuf bindings transparently handle the larger field size. No runtime code modifications are required: encoding accepts the number directly, decoding produces a binary64-compatible value, and comparisons work as before. The three candidate locations involve no precision-loss operations or explicit narrowing that would need adjustment.",
+  "confidence": 0.95,
+  "assumptions": [
+    "The generated TypeScript protobuf bindings correctly handle the float64 field without additional serialization logic.",
+    "The base64 payload in the input is valid for the new schema version.",
+    "TypeScript numbers provide sufficient precision for the double field requirements."
+  ]
+}

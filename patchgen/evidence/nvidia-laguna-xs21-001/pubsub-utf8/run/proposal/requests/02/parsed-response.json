@@ -1,0 +1,30 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "process_entity extracts entity_id for v2 which is now bytes; need to decode as UTF-8 string for observation output"
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Constructor creates entity with string entity_id; for v2 need to encode string to bytes"
+    }
+  },
+  "edits": [
+    {
+      "before": "    fields = {\"entity_id\": entity.entity_id}\n",
+      "after": "    fields = {\"entity_id\": entity.entity_id.decode('utf-8') if version == \"v2\" else entity.entity_id}\n"
+    },
+    {
+      "before": "        entity = module.Entity(entity_id=\"py_101\")\n",
+      "after": "        entity = module.Entity(entity_id=b\"py_101\" if args.version == \"v2\" else \"py_101\")\n"
+    }
+  ],
+  "rationale": "Changed entity_id handling in process_entity to decode bytes to UTF-8 string for v2 observations, preserving string output. Modified constructor call to encode string to bytes for v2 entity creation. v1 behavior unchanged.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated Python bindings properly handle bytes entity_id field",
+    "UTF-8 encoding/decoding preserves string identifiers correctly",
+    "Empty/Unicode strings round-trip properly through UTF-8 encode/decode"
+  ]
+}

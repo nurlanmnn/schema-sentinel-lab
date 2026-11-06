@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-7c9a6eab-118b-48c3-89c2-32b39179f7c6",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "content": "{\n  \"outcome\": \"patch\",\n  \"candidate_reviews\": {\n    \"C001\": {\n      \"decision\": \"edit\",\n      \"reason\": \"int.Parse returns 32-bit int; must use long.Parse for int64 field in new schema\"\n    },\n    \"C002\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"entity.Quantity.ToString() returns canonical decimal string for int64; behavior unchanged\"\n    },\n    \"C003\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"entity.Quantity > 0 preserves strict >0 stock predicate; int64 comparison unchanged\"\n    },\n    \"C004\": {\n      \"decision\": \"unaffected\",\n      \"reason\": \"record definition unchanged; request.Quantity remains string input for canonical decimal parsing\"\n    }\n  },\n  \"edits\": [\n    {\n      \"before\": \"            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };\\n\",\n      \"after\": \"            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = long.Parse(request.Quantity, CultureInfo.InvariantCulture) };\\n\"\n    }\n  ],\n  \"rationale\": \"Schema change from int32 to int64 requires updating parsing from int.Parse to long.Parse to correctly handle int64 values. The output string representation via ToString() and the stock predicate remain valid for int64. No changes needed to Dictionary output or return statement.\",\n  \"confidence\": 0.95,\n  \"assumptions\": [\n    \"Request.Quantity contains valid canonical decimal string representation of a signed 64-bit integer\",\n    \"Consumers will migrate before any out-of-int32 range producers are active\",\n    \"ts-proto generated code will properly handle int64 as string per forceLong=string configuration\"\n  ]\n}",
+        "refusal": null,
+        "role": "assistant"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "created": 1793928182,
+  "model": "poolside/laguna-xs-2.1",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 2241,
+    "completion_tokens": 438,
+    "total_tokens": 2679,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  }
+}

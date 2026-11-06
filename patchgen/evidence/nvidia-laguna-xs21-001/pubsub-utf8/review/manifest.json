@@ -1,0 +1,103 @@
+{
+  "review_version": "1.0",
+  "change_id": "pubsub-identifier-utf8",
+  "source_revision": "6ead28a89ed68a02fc3461bc124af84c7200f3b7",
+  "input_artifact": "input.json",
+  "report_artifact": "proposal/report.json",
+  "validation_status": "failed",
+  "mode": "live_model",
+  "strategy": "candidate_semantic_blocks",
+  "approval_eligible": false,
+  "human_approval_required": true,
+  "artifacts": {
+    "input.json": {
+      "sha256": "ba5fc0b8fa8cbb7b798e9cf9c3ec0651bd2ad0686eb9c93108e2798d502d4cf7",
+      "bytes": 18151
+    },
+    "request.json": {
+      "sha256": "a3206b530c41507ded2e96fafed1a2bbef34ba05d46e542e407aba49c2e9d2b9",
+      "bytes": 1134
+    },
+    "report.json": {
+      "sha256": "41af08a5daa0f304555049c1c2ad732dd1bf814ff4332e0dcb0863d02ab5cf5a",
+      "bytes": 7692
+    },
+    "provenance.json": {
+      "sha256": "5c4a4db800ff7625579a02ac9ba62fb2c3fb737e654b534737f69c15b879ba7a",
+      "bytes": 1048
+    },
+    "detector.json": {
+      "sha256": "88d8397d4c00b2d933fc2278fb62fd0eb61a53d4660fd1314dff2b29c25c0a1e",
+      "bytes": 2678
+    },
+    "locator.json": {
+      "sha256": "6bcc3a251f49605616dc09c303296288eaa9e21efb7007532452434b69d23b0a",
+      "bytes": 8434
+    },
+    "measurement.json": {
+      "sha256": "05c68d5045423b800c0515fbf1ae3a4a73b91dc46697f300b5c1923f9c161f55",
+      "bytes": 349
+    },
+    "implementation.json": {
+      "sha256": "267ba47fb84709bcfbc22c76492cdc8a537819dc11f3c99b9f4185102a2ded92",
+      "bytes": 2886
+    },
+    "proposal/report.json": {
+      "sha256": "7b909175bf3ebee98bf147824c3059dcfd589a6595256815b89bdd29f91ac24f",
+      "bytes": 3971
+    },
+    "proposal/assembly.json": {
+      "sha256": "24964d0456089209ba4c5fde24ac5f76c8269d5cb3cddf4e82830914b9fafec7",
+      "bytes": 260
+    },
+    "proposal/proposal.json": {
+      "sha256": "7035a85837c45cf423685b49f0bb88bf5e9e3a726fd717a33376611b8412c7b8",
+      "bytes": 5647
+    },
+    "proposal/proposal.patch": {
+      "sha256": "26ebbea352414671e79bd5a398e19a34a390695b1f1ee933dc92343745af758c",
+      "bytes": 3524
+    },
+    "proposal/nvidia-client-source.py": {
+      "sha256": "e756545a9d0f2db35bddd0e0dd8ab19f9c002878ae2a8de77c3aec4f76dcc324",
+      "bytes": 7191
+    },
+    "proposal/validation.log": {
+      "sha256": "1356871e8edc642ddf1b9809204f880e05e53d3adf55b5ac01d8b769c2d02183",
+      "bytes": 2924
+    },
+    "proposal/validation-profile.json": {
+      "sha256": "c46fe266475600235d46030045209a63115d4927707b547d5dfb2fbd816d576b",
+      "bytes": 573
+    },
+    "proposal/validation-tests.patch": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "proposal/pubsub-harness/testbed/pubsub/run.py": {
+      "sha256": "2f128c8dca9b9355509b3f3516f719d67ce8aa6254f2fd03426b60ffe67b4283",
+      "bytes": 12892
+    },
+    "proposal/pubsub-harness/testbed/pubsub/broker.py": {
+      "sha256": "2a6c30d79cf4a9f3687da829e3f1f00c14f0b9cdd4edde0a46f936a0857a877e",
+      "bytes": 6550
+    },
+    "proposal/pubsub-harness/testbed/pubsub/topics.json": {
+      "sha256": "14ba1f745270c48e1a0447ac90831569ae06313203ae735dfb674342d7a415c3",
+      "bytes": 221
+    },
+    "proposal/local-codegen-source.py": {
+      "sha256": "c344fef7c2a99400c838b2f3693cb3216321f78bc85249876b916f4e2102638c",
+      "bytes": 3075
+    },
+    "proposal/local-codegen-toolchain.json": {
+      "sha256": "c33b64db86116c6244f441836ca218447a42929e9193667db67102387df25d3e",
+      "bytes": 527
+    }
+  },
+  "limitations": [
+    "Validation applies to the retained testbed and checks only.",
+    "Decision records are self-reported, not authenticated signatures.",
+    "Review export and decisions never apply, merge or publish code."
+  ]
+}

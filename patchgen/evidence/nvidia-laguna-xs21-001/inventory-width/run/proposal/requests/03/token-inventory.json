@@ -1,0 +1,18 @@
+{
+  "C001": {
+    "line": 4,
+    "text": "interface Request { payload: string; sku: string; quantity: string }\n"
+  },
+  "C002": {
+    "line": 9,
+    "text": "    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10) }).finish();\n"
+  },
+  "C003": {
+    "line": 10,
+    "text": "    const fields = { sku: entity.sku, quantity: entity.quantity.toString() };\n"
+  },
+  "C004": {
+    "line": 11,
+    "text": "    return { fields, in_stock: BigInt(entity.quantity) > 0n, constructed_payload: Buffer.from(sample).toString(\"base64\") };\n"
+  }
+}

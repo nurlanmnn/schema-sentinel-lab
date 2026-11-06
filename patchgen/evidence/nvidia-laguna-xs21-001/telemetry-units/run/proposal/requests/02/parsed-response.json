@@ -1,0 +1,38 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Required reference: constructs sample from request['speed'] in mps, must convert to kph (multiply by 3.6) and use new field name speed_kph."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "Returns entity fields; entity field is speed_kph after deserialization, observation key must be speed_kph, value is decoded float32 kph."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "Required reference: speeding threshold changes from 30.0 mps to >108.0 kph; entity.speed_kph used after conversion."
+    }
+  },
+  "edits": [
+    {
+      "before": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])\n",
+      "after": "    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_kph=request['speed'] * 3.6)\n"
+    },
+    {
+      "before": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}\n",
+      "after": "    fields = {'vehicle_id': entity.vehicle_id, 'speed_kph': entity.speed_kph}\n"
+    },
+    {
+      "before": "    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,\n",
+      "after": "    return {'fields': fields, 'speeding': entity.speed_kph > 108.0,\n"
+    }
+  ],
+  "rationale": "Schema change renames speed_mps to speed_kph and changes unit from mps to kph. Request provides speed in mps, so producers must scale by 3.6 before serialization. Threshold for speeding becomes >108.0 kph. Observation key becomes speed_kph. Wire field 2 remains float32. Entity v1/v2 unchanged per spec.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Protobuf float32 values serialize as-is; Python float multiplication produces double but protobuf encodes as 32-bit",
+    "The generated VehicleTelemetry class now has speed_kph field instead of speed_mps",
+    "The threshold 108.0 corresponds to 30 mps * 3.6 = 108 kph"
+  ]
+}

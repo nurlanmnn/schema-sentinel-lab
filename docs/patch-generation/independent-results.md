@@ -376,3 +376,14 @@ tests passed. No generated patch was merged. The human baseline remains deferred
 
 Comparison, raw failures and successful reviews:
 `patchgen/evidence/nvidia-evaluation-001/summary.md`.
+
+## Poolside Laguna XS 2.1 frozen trial
+
+The coding-specialist trial completed through NVIDIA: 2/8 validated, 24 actual
+requests, zero repairs. All 24 prompt-message bodies and hashes match the Gemma
+trial; the prompt, edit/semantic gates and source revisions were unchanged.
+Laguna passed the two renames; six cases failed edit contracts, compilation or
+exact numerical observations. Total request wall time was 128.70 seconds, with
+provider queueing and output length uncontrolled. All 269 tests pass. Gemma/3.1
+remains the best observed configuration at 6/8, pending unseen-case evaluation.
+See `patchgen/evidence/nvidia-laguna-xs21-001/summary.md`.

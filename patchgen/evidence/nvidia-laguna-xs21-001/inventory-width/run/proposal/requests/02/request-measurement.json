@@ -1,0 +1,20 @@
+{
+  "backend": "nvidia",
+  "status": "response_received",
+  "model": "poolside/laguna-xs-2.1",
+  "json_fence_removed": true,
+  "provider": null,
+  "response_id": "chatcmpl-1ea33d5b-30ca-43fa-a014-4a9b2924875a",
+  "usage": {
+    "prompt_tokens": 1957,
+    "completion_tokens": 533,
+    "total_tokens": 2490,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "elapsed_seconds": 3.8905200000153854
+}

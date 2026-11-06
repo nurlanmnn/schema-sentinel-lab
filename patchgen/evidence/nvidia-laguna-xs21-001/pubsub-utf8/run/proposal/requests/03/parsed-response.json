@@ -1,0 +1,34 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "v2 Entity.entityId is now bytes, must decode from UTF-8 for observation key. v1 remains string, unchanged."
+    },
+    "C002": {
+      "decision": "unaffected",
+      "reason": "v1 encoding uses string entityId unchanged. UTF-8 encode only applies to v2 bytes field."
+    },
+    "C003": {
+      "decision": "edit",
+      "reason": "v2 encode requires bytes: must UTF-8 encode the string 'ts_303' to Uint8Array before passing to entityId field."
+    }
+  },
+  "edits": [
+    {
+      "before": "  const fields = { entity_id: entity.entityId, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n",
+      "after": "  const entityIdObs = version === \"v2\" ? new TextDecoder().decode(entity.entityId) : entity.entityId;\n  const fields = { entity_id: entityIdObs, ...(version === \"v1\" ? { name: (entity as EntityV1).name } : {}) };\n"
+    },
+    {
+      "before": "    : EntityV2.encode({ entityId: \"ts_303\" }).finish();\n",
+      "after": "    : EntityV2.encode({ entityId: new TextEncoder().encode(\"ts_303\") }).finish();\n"
+    }
+  ],
+  "rationale": "v2 entity_id changed from string to bytes per schema. At construction, TextEncoder encodes string to UTF-8 bytes. At observation, TextDecoder decodes bytes back to string for the entity_id JSON output key. v1 behavior unchanged. The output key remains entity_id with string value as specified.",
+  "confidence": 0.95,
+  "assumptions": [
+    "TextDecoder/TextEncoder provide UTF-8 encode/decode for valid UTF-8 round-trip",
+    "Generated TypeScript bindings expose entityId as Uint8Array for v2 Entity",
+    "Empty/Unicode/escaped text round-trips identically through encode/decode cycle"
+  ]
+}

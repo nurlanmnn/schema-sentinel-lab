@@ -1,0 +1,31 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "The name field is removed from v1 Entity; reading entity.name is no longer valid and must be removed from the fields dict construction."
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "The name field is removed from v1 Entity; setting entity.name in v1 construction code must be removed."
+    }
+  },
+  "edits": [
+    {
+      "before": "    fields = {\"entity_id\": entity.entity_id}\n    if version == \"v1\":\n        fields[\"name\"] = entity.name\n    print(json.dumps({\"runtime\": \"python\", \"version\": version, \"fields\": fields}, ensure_ascii=True), flush=True)\n    return entity, fields",
+      "after": "    fields = {\"entity_id\": entity.entity_id}\n    print(json.dumps({\"runtime\": \"python\", \"version\": version, \"fields\": fields}, ensure_ascii=True), flush=True)\n    return entity, fields"
+    },
+    {
+      "before": "        entity = module.Entity(entity_id=\"py_101\")\n        if args.version == \"v1\":\n            entity.name = \"Sensor A\"\n        process_entity(entity.SerializeToString(), args.version)",
+      "after": "        entity = module.Entity(entity_id=\"py_101\")\n        process_entity(entity.SerializeToString(), args.version)"
+    }
+  ],
+  "rationale": "Removing Entity.name from v1 construction and decoded observations. The name field is reserved in the new schema (field 2), so Python code accessing entity.name or setting it must be removed. The v2 behavior is unchanged. The entity_id is preserved in all operations, and the three-service order with four round-trip cases will continue to work. Legacy payloads containing field 2 will be preserved during decoding due to protobuf's unknown field handling.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated Python bindings will handle reserved field numbers gracefully",
+    "The protobuf library in Python will ignore unknown fields (field 2) when decoding legacy v1 payloads",
+    "entity_id remains the only field in the Entity message for v1",
+    "Subscribers in all three runtimes must independently handle the removal"
+  ]
+}

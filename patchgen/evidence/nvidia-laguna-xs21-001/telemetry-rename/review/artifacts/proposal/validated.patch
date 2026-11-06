@@ -1,0 +1,284 @@
+diff --git a/generated/csharp/Telemetry/Vehicle.cs b/generated/csharp/Telemetry/Vehicle.cs
+index 39ede49..c23a81b 100644
+--- a/generated/csharp/Telemetry/Vehicle.cs
++++ b/generated/csharp/Telemetry/Vehicle.cs
+@@ -25,12 +25,13 @@ namespace Simulation.Telemetry {
+       byte[] descriptorData = global::System.Convert.FromBase64String(
+           string.Concat(
+             "Chd0ZWxlbWV0cnkvdmVoaWNsZS5wcm90bxIUc2ltdWxhdGlvbi50ZWxlbWV0",
+-            "cnkiTgoQVmVoaWNsZVRlbGVtZXRyeRIdCgp2ZWhpY2xlX2lkGAEgASgJUgl2",
+-            "ZWhpY2xlSWQSGwoJc3BlZWRfbXBzGAIgASgCUghzcGVlZE1wc2IGcHJvdG8z"));
++            "cnkiWwoQVmVoaWNsZVRlbGVtZXRyeRIdCgp2ZWhpY2xlX2lkGAEgASgJUgl2",
++            "ZWhpY2xlSWQSKAoQZ3JvdW5kX3NwZWVkX21wcxgCIAEoAlIOZ3JvdW5kU3Bl",
++            "ZWRNcHNiBnByb3RvMw=="));
+       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+           new pbr::FileDescriptor[] { },
+           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+-            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Telemetry.VehicleTelemetry), global::Simulation.Telemetry.VehicleTelemetry.Parser, new[]{ "VehicleId", "SpeedMps" }, null, null, null, null)
++            new pbr::GeneratedClrTypeInfo(typeof(global::Simulation.Telemetry.VehicleTelemetry), global::Simulation.Telemetry.VehicleTelemetry.Parser, new[]{ "VehicleId", "GroundSpeedMps" }, null, null, null, null)
+           }));
+     }
+     #endregion
+@@ -73,7 +74,7 @@ namespace Simulation.Telemetry {
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+     public VehicleTelemetry(VehicleTelemetry other) : this() {
+       vehicleId_ = other.vehicleId_;
+-      speedMps_ = other.speedMps_;
++      groundSpeedMps_ = other.groundSpeedMps_;
+       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+     }
+ 
+@@ -95,18 +96,18 @@ namespace Simulation.Telemetry {
+       }
+     }
+ 
+-    /// <summary>Field number for the "speed_mps" field.</summary>
+-    public const int SpeedMpsFieldNumber = 2;
+-    private float speedMps_;
++    /// <summary>Field number for the "ground_speed_mps" field.</summary>
++    public const int GroundSpeedMpsFieldNumber = 2;
++    private float groundSpeedMps_;
+     /// <summary>
+     /// Ground speed in meters per second.
+     /// </summary>
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+-    public float SpeedMps {
+-      get { return speedMps_; }
++    public float GroundSpeedMps {
++      get { return groundSpeedMps_; }
+       set {
+-        speedMps_ = value;
++        groundSpeedMps_ = value;
+       }
+     }
+ 
+@@ -126,7 +127,7 @@ namespace Simulation.Telemetry {
+         return true;
+       }
+       if (VehicleId != other.VehicleId) return false;
+-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(SpeedMps, other.SpeedMps)) return false;
++      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(GroundSpeedMps, other.GroundSpeedMps)) return false;
+       return Equals(_unknownFields, other._unknownFields);
+     }
+ 
+@@ -135,7 +136,7 @@ namespace Simulation.Telemetry {
+     public override int GetHashCode() {
+       int hash = 1;
+       if (VehicleId.Length != 0) hash ^= VehicleId.GetHashCode();
+-      if (SpeedMps != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(SpeedMps);
++      if (GroundSpeedMps != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(GroundSpeedMps);
+       if (_unknownFields != null) {
+         hash ^= _unknownFields.GetHashCode();
+       }
+@@ -158,9 +159,9 @@ namespace Simulation.Telemetry {
+         output.WriteRawTag(10);
+         output.WriteString(VehicleId);
+       }
+-      if (SpeedMps != 0F) {
++      if (GroundSpeedMps != 0F) {
+         output.WriteRawTag(21);
+-        output.WriteFloat(SpeedMps);
++        output.WriteFloat(GroundSpeedMps);
+       }
+       if (_unknownFields != null) {
+         _unknownFields.WriteTo(output);
+@@ -176,9 +177,9 @@ namespace Simulation.Telemetry {
+         output.WriteRawTag(10);
+         output.WriteString(VehicleId);
+       }
+-      if (SpeedMps != 0F) {
++      if (GroundSpeedMps != 0F) {
+         output.WriteRawTag(21);
+-        output.WriteFloat(SpeedMps);
++        output.WriteFloat(GroundSpeedMps);
+       }
+       if (_unknownFields != null) {
+         _unknownFields.WriteTo(ref output);
+@@ -193,7 +194,7 @@ namespace Simulation.Telemetry {
+       if (VehicleId.Length != 0) {
+         size += 1 + pb::CodedOutputStream.ComputeStringSize(VehicleId);
+       }
+-      if (SpeedMps != 0F) {
++      if (GroundSpeedMps != 0F) {
+         size += 1 + 4;
+       }
+       if (_unknownFields != null) {
+@@ -211,8 +212,8 @@ namespace Simulation.Telemetry {
+       if (other.VehicleId.Length != 0) {
+         VehicleId = other.VehicleId;
+       }
+-      if (other.SpeedMps != 0F) {
+-        SpeedMps = other.SpeedMps;
++      if (other.GroundSpeedMps != 0F) {
++        GroundSpeedMps = other.GroundSpeedMps;
+       }
+       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+     }
+@@ -234,7 +235,7 @@ namespace Simulation.Telemetry {
+             break;
+           }
+           case 21: {
+-            SpeedMps = input.ReadFloat();
++            GroundSpeedMps = input.ReadFloat();
+             break;
+           }
+         }
+@@ -257,7 +258,7 @@ namespace Simulation.Telemetry {
+             break;
+           }
+           case 21: {
+-            SpeedMps = input.ReadFloat();
++            GroundSpeedMps = input.ReadFloat();
+             break;
+           }
+         }
+diff --git a/generated/python/telemetry/vehicle_pb2.py b/generated/python/telemetry/vehicle_pb2.py
+index 3fcc161..57bf1f9 100644
+--- a/generated/python/telemetry/vehicle_pb2.py
++++ b/generated/python/telemetry/vehicle_pb2.py
+@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
+ 
+ 
+ 
+-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17telemetry/vehicle.proto\x12\x14simulation.telemetry\"N\n\x10VehicleTelemetry\x12\x1d\n\nvehicle_id\x18\x01 \x01(\tR\tvehicleId\x12\x1b\n\tspeed_mps\x18\x02 \x01(\x02R\x08speedMpsb\x06proto3')
++DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17telemetry/vehicle.proto\x12\x14simulation.telemetry\"[\n\x10VehicleTelemetry\x12\x1d\n\nvehicle_id\x18\x01 \x01(\tR\tvehicleId\x12(\n\x10ground_speed_mps\x18\x02 \x01(\x02R\x0egroundSpeedMpsb\x06proto3')
+ 
+ _globals = globals()
+ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+@@ -22,5 +22,5 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'telemetry.vehicle_pb2', _gl
+ if _descriptor._USE_C_DESCRIPTORS == False:
+   DESCRIPTOR._options = None
+   _globals['_VEHICLETELEMETRY']._serialized_start=49
+-  _globals['_VEHICLETELEMETRY']._serialized_end=127
++  _globals['_VEHICLETELEMETRY']._serialized_end=140
+ # @@protoc_insertion_point(module_scope)
+diff --git a/generated/ts/telemetry/vehicle.ts b/generated/ts/telemetry/vehicle.ts
+index 927acb6..6ed7f79 100644
+--- a/generated/ts/telemetry/vehicle.ts
++++ b/generated/ts/telemetry/vehicle.ts
+@@ -6,11 +6,11 @@ export const protobufPackage = "simulation.telemetry";
+ export interface VehicleTelemetry {
+   vehicleId: string;
+   /** Ground speed in meters per second. */
+-  speedMps: number;
++  groundSpeedMps: number;
+ }
+ 
+ function createBaseVehicleTelemetry(): VehicleTelemetry {
+-  return { vehicleId: "", speedMps: 0 };
++  return { vehicleId: "", groundSpeedMps: 0 };
+ }
+ 
+ export const VehicleTelemetry = {
+@@ -18,8 +18,8 @@ export const VehicleTelemetry = {
+     if (message.vehicleId !== "") {
+       writer.uint32(10).string(message.vehicleId);
+     }
+-    if (message.speedMps !== 0) {
+-      writer.uint32(21).float(message.speedMps);
++    if (message.groundSpeedMps !== 0) {
++      writer.uint32(21).float(message.groundSpeedMps);
+     }
+     return writer;
+   },
+@@ -43,7 +43,7 @@ export const VehicleTelemetry = {
+             break;
+           }
+ 
+-          message.speedMps = reader.float();
++          message.groundSpeedMps = reader.float();
+           continue;
+       }
+       if ((tag & 7) === 4 || tag === 0) {
+@@ -57,7 +57,7 @@ export const VehicleTelemetry = {
+   fromJSON(object: any): VehicleTelemetry {
+     return {
+       vehicleId: isSet(object.vehicleId) ? globalThis.String(object.vehicleId) : "",
+-      speedMps: isSet(object.speedMps) ? globalThis.Number(object.speedMps) : 0,
++      groundSpeedMps: isSet(object.groundSpeedMps) ? globalThis.Number(object.groundSpeedMps) : 0,
+     };
+   },
+ 
+@@ -66,8 +66,8 @@ export const VehicleTelemetry = {
+     if (message.vehicleId !== "") {
+       obj.vehicleId = message.vehicleId;
+     }
+-    if (message.speedMps !== 0) {
+-      obj.speedMps = message.speedMps;
++    if (message.groundSpeedMps !== 0) {
++      obj.groundSpeedMps = message.groundSpeedMps;
+     }
+     return obj;
+   },
+@@ -78,7 +78,7 @@ export const VehicleTelemetry = {
+   fromPartial<I extends Exact<DeepPartial<VehicleTelemetry>, I>>(object: I): VehicleTelemetry {
+     const message = createBaseVehicleTelemetry();
+     message.vehicleId = object.vehicleId ?? "";
+-    message.speedMps = object.speedMps ?? 0;
++    message.groundSpeedMps = object.groundSpeedMps ?? 0;
+     return message;
+   },
+ };
+diff --git a/proto/telemetry/vehicle.proto b/proto/telemetry/vehicle.proto
+index d889fe1..619eb6a 100644
+--- a/proto/telemetry/vehicle.proto
++++ b/proto/telemetry/vehicle.proto
+@@ -3,5 +3,5 @@ package simulation.telemetry;
+ message VehicleTelemetry {
+   string vehicle_id = 1;
+   // Ground speed in meters per second.
+-  float speed_mps = 2;
++  float ground_speed_mps = 2;
+ }
+diff --git a/runtimes/csharp/Telemetry.cs b/runtimes/csharp/Telemetry.cs
+index 4fcfbb8..91994a1 100644
+--- a/runtimes/csharp/Telemetry.cs
++++ b/runtimes/csharp/Telemetry.cs
+@@ -9,9 +9,9 @@ static class TelemetryRuntime
+             new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException("Missing requests");
+         var results = requests.Select(request => {
+             var entity = Simulation.Telemetry.VehicleTelemetry.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+-            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, SpeedMps = request.Speed };
+-            var fields = new Dictionary<string, object> { ["vehicle_id"] = entity.VehicleId, ["speed_mps"] = entity.SpeedMps };
+-            return new { fields, speeding = entity.SpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
++            var sample = new Simulation.Telemetry.VehicleTelemetry { VehicleId = request.VehicleId, GroundSpeedMps = request.Speed };
++            var fields = new Dictionary<string, object> { ["vehicle_id"] = entity.VehicleId, ["ground_speed_mps"] = entity.GroundSpeedMps };
++            return new { fields, speeding = entity.GroundSpeedMps > 30.0, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
+         });
+         Console.WriteLine(JsonSerializer.Serialize(results));
+     }
+diff --git a/runtimes/python/telemetry_runtime.py b/runtimes/python/telemetry_runtime.py
+index 87aba28..fb1293d 100644
+--- a/runtimes/python/telemetry_runtime.py
++++ b/runtimes/python/telemetry_runtime.py
+@@ -7,9 +7,9 @@ from telemetry.vehicle_pb2 import VehicleTelemetry
+ 
+ def evaluate(request):
+     entity = VehicleTelemetry.FromString(base64.b64decode(request['payload'], validate=True))
+-    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])
+-    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}
+-    return {'fields': fields, 'speeding': entity.speed_mps > 30.0,
++    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], ground_speed_mps=request['speed'])
++    fields = {'vehicle_id': entity.vehicle_id, 'ground_speed_mps': entity.ground_speed_mps}
++    return {'fields': fields, 'speeding': entity.ground_speed_mps > 30.0,
+             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
+ 
+ 
+diff --git a/runtimes/typescript/telemetry.ts b/runtimes/typescript/telemetry.ts
+index 41724c8..807fd4b 100644
+--- a/runtimes/typescript/telemetry.ts
++++ b/runtimes/typescript/telemetry.ts
+@@ -6,9 +6,9 @@ export function runTelemetry() {
+   const requests: Request[] = JSON.parse(readFileSync(0, "utf8"));
+   const results = requests.map(request => {
+     const entity = VehicleTelemetry.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+-    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();
+-    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };
+-    return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString("base64") };
++    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, groundSpeedMps: request.speed }).finish();
++    const fields = { vehicle_id: entity.vehicleId, ground_speed_mps: entity.groundSpeedMps };
++    return { fields, speeding: entity.groundSpeedMps > 30.0, constructed_payload: Buffer.from(sample).toString("base64") };
+   });
+   console.log(JSON.stringify(results));
+ }

@@ -1,0 +1,30 @@
+{
+  "outcome": "patch",
+  "candidate_reviews": {
+    "C001": {
+      "decision": "edit",
+      "reason": "Runtime observation key for v1 Entity.name renamed to display_name per intended_behavior"
+    },
+    "C002": {
+      "decision": "edit",
+      "reason": "v1 test entity creation must use display_name field after schema rename"
+    }
+  },
+  "edits": [
+    {
+      "before": "        fields[\"name\"] = entity.name\n",
+      "after": "        fields[\"display_name\"] = entity.display_name\n"
+    },
+    {
+      "before": "            entity.name = \"Sensor A\"\n",
+      "after": "            entity.display_name = \"Sensor A\"\n"
+    }
+  ],
+  "rationale": "Both edits update Python runtime code to use display_name field after v1 Entity.name field was renamed to display_name on the same wire field 2. The observation output key changes from \"name\" to \"display_name\" for v1. v2 is unchanged per intended_behavior. No test sources modified.",
+  "confidence": 0.95,
+  "assumptions": [
+    "Generated Python bindings use display_name for v1 Entity field 2",
+    "Runtime observation key should match the new field name in observation dict",
+    "Both v1 and v2 topics must be independently decodable by subscribers"
+  ]
+}

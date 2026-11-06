@@ -10,6 +10,7 @@ Public synthetic development benchmark; no generated patch was merged. Every pas
 | Ultra / semantic 3.0 | 4/8 |
 | Ultra / semantic blocks 3.1 | 5/8 |
 | Gemma / semantic blocks 3.1 | 6/8 |
+| Laguna XS 2.1 / semantic blocks 3.1 | 2/8 |
 
 | Case | Ultra / original 2.5 | Ultra / semantic 3.0 | Ultra / semantic blocks 3.1 | Gemma / semantic blocks 3.1 |
 |---|---|---|---|---|
@@ -60,7 +61,7 @@ Only eight of the twenty authored deterministic migrations are eligible for this
 - [Gemma semantic blocks with bounded JSON envelope parsing](../nvidia-block-gemma-envelope-001/summary.json)
 - [Successful units review](../nvidia-block-model-comparison-001/ultra-semantic-blocks/telemetry-units/review/index.html)
 
-Verification: 268 patch-generation tests passed. Transport tests use synthetic loopback HTTP responses and are separate from these actual model calls.
+Verification: 269 patch-generation tests passed. Transport tests use synthetic loopback HTTP responses and are separate from these actual model calls.
 
 ## Recommendation and remaining failures
 
@@ -87,3 +88,8 @@ The existing CLI defaults remain unchanged. Before making broader sponsor
 reliability claims, freeze the chosen configuration and evaluate new migrations
 that were not used to develop these prompts. This experiment set is complete;
 no additional model or prompt variants are running.
+
+
+## Subsequent coding-specialist trial
+
+Poolside Laguna XS 2.1 completed the same eight cases with 24 identical prompt-message bodies and no repairs: **2/8 validated**, in 128.70 seconds of total model-request wall time. It passed the two renames. Gemma remains the best observed configuration. See [Laguna results](../nvidia-laguna-xs21-001/summary.md) and decision 0039. All 269 patch-generation tests pass. These remain one-sample development results.
