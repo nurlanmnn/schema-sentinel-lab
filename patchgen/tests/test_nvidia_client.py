@@ -158,6 +158,19 @@ class NvidiaTests(unittest.TestCase):
             with self.subTest(invalid=invalid), self.assertRaises(ValueError):
                 client.parse_content(invalid)
 
+    def test_laguna_uses_its_exact_model_without_nemotron_options(self):
+        selected = 'poolside/laguna-xs-2.1'
+        messages = [dict(role='user', content='{"prompt_version":"test"}')]
+        with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}', model=selected)) as calls:
+            client.request_model(messages, selected, Path(temporary)/'request')
+            self.assertEqual(len(calls), 1)
+            body = calls[0]['body']
+            self.assertEqual(body['model'], selected)
+            self.assertNotIn('chat_template_kwargs', body)
+            self.assertEqual(body['max_tokens'], 4096)
+            self.assertEqual(body['temperature'], 1)
+            self.assertEqual(body['top_p'], .95)
+
     def test_unapproved_model_stops_before_http(self):
         with tempfile.TemporaryDirectory() as temporary, service(raw=response('{}')) as calls:
             with self.assertRaisesRegex(client.ProviderError, 'only'):

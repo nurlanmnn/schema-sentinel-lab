@@ -11,7 +11,7 @@ import urllib.error
 import urllib.request
 
 MODEL = 'nvidia/nemotron-3-ultra-550b-a55b'
-MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b', 'google/gemma-4-31b-it')
+MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b', 'google/gemma-4-31b-it', 'poolside/laguna-xs-2.1')
 API_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 KEY_FILE = Path.home() / '.config/schema-sentinel/nvidia.key'
 OPTIONS = {
@@ -30,6 +30,8 @@ def options_for(model):
         raise ProviderError('Unsupported model')
     if model.startswith('google/'):
         return dict(temperature=0.5, top_p=1, seed=0, max_tokens=4096)
+    if model == 'poolside/laguna-xs-2.1':
+        return dict(temperature=1, top_p=0.95, max_tokens=4096)
     return dict(OPTIONS)
 
 

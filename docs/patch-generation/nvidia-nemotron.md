@@ -110,3 +110,19 @@ accepts trailing text, repairs JSON, or changes edits. Raw content is retained a
 gates remain unchanged. A fresh final eight-case cohort is recorded separately at
 `nvidia-block-gemma-envelope-001`. The adapter and sampling configuration are part
 of the evaluated configuration; this is not a controlled prompt-only comparison.
+
+## Poolside Laguna XS 2.1 coding-model trial
+
+The explicit allowlist includes `poolside/laguna-xs-2.1`, a coding-focused model
+at https://build.nvidia.com/poolside/laguna-xs-2.1. Its connectivity probe succeeded
+with the exact requested model identity. Use temperature 1, top_p .95, max_tokens
+4096, with no Nemotron-specific chat-template flags. No new API key is required.
+
+```sh
+.venv/bin/python -m patchgen.live_suite --backend nvidia \
+  --model poolside/laguna-xs-2.1 --strategy candidate_semantic_blocks \
+  --full-benchmark --output patchgen/evidence/nvidia-laguna-xs21-001
+```
+
+This is a single frozen-prompt eight-case development trial with unchanged
+validation gates and no model repairs. See decision 0039 for the comparison limits.
