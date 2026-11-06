@@ -17,7 +17,8 @@ Model selection is now locked to Gemma 4 31B via NVIDIA with semantic blocks 3.1
 [decision 0041](docs/decisions/0041-locked-gemma-configuration.md) and the
 [repair loop plan](docs/patch-generation/repair-loop-plan.md).
 Latest run: 6/8 first pass, 7/8 after one bounded repair round, on development
-cases only ([results](patchgen/evidence/nvidia-gemma-repair-001/summary.md)).
+cases only ([results](patchgen/evidence/nvidia-gemma-repair-001/summary.md)). Next: the
+[held-out evaluation plan](docs/patch-generation/held-out-plan.md).
 
 For the complete independent proposal/validation/review path, see the
 [one-command demo](docs/patch-generation/demo.md):
