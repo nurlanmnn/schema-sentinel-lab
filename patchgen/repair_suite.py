@@ -9,7 +9,7 @@ import sys
 import time
 from patchgen.generator import save
 from patchgen.nvidia_client import options_for
-from patchgen.live_suite import LOCKED_CONFIG, LOCKED_DECISION, case_split, collect, prompt_fingerprints, require_locked_prompts
+from patchgen.live_suite import LOCKED_CONFIG, LOCKED_DECISION, collect, prompt_fingerprints, require_locked_prompts
 from run_demo import check_output
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -119,19 +119,32 @@ def execute(source, output, max_rounds=2):
         raise ValueError('repair output must be outside the retained source suite')
     require_locked_prompts()
     summary = require_locked_source(source)
+    if summary.get('held_out_registry'):
+        # The seal must still hold, and be the very registry the one-shot run used.
+        from patchgen import held_out
+        registry = ROOT/summary['held_out_registry']
+        held_out.verify(registry)
+        if held_out.registry_sha256(registry) != summary.get('held_out_registry_sha256'):
+            raise ValueError('held-out registry differs from the one used by the source run')
+        # One repair per attempt, on evidence byte-identical to what the ledger recorded at completion.
+        held_out.begin_repair(registry, source, output)
+        sealed_fixtures = {e['case']: ROOT/'patchgen/fixtures'/e['profile']/'runtime-input.json' for e in read(source/'manifest.json')}
     output.mkdir(parents=True)
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     report = dict(status='running', protocol='bounded_validation_feedback_repair', locked_configuration=LOCKED_DECISION,
         **LOCKED_CONFIG, repair_strategy=STRATEGY, max_rounds=max_rounds, human_approval_required=True,
         source_summary_sha256=hashlib.sha256((source/'summary.json').read_bytes()).hexdigest(),
         prompt_fingerprints=prompt_fingerprints(), cases=[],
+        held_out_registry=summary.get('held_out_registry'), held_out_registry_sha256=summary.get('held_out_registry_sha256'),
+        # Repair learns from each case's own oracle verdicts, so held-out repair is never the headline score.
+        result_kind='held_out_with_validation_feedback' if summary.get('held_out_registry') else 'development_with_validation_feedback',
         scope='repair rounds after a one-shot locked suite; repaired passes are never first-pass successes')
     save(output/'summary.json', report)
     stopped = False
     for row in summary['results']:
         name = row['case']
         first = 'validated' if row['generated_patch_validated'] else failure_stage(source/name, row)
-        record = dict(case=name, split=case_split(name), first_pass_stage=first, attempts=[], validated_round=0 if first == 'validated' else None)
+        record = dict(case=name, split=(summary.get('case_split') or {}).get(name, 'development'), first_pass_stage=first, attempts=[], validated_round=0 if first == 'validated' else None)
         report['cases'].append(record)
         if first in ('validated', 'provider_unavailable', 'no_model_request') or stopped:
             record['skipped'] = 'not_repairable' if not stopped else 'suite_stopped'
@@ -141,7 +154,9 @@ def execute(source, output, max_rounds=2):
             target = output/name/f'round-{round_number}'; target.mkdir(parents=True)
             feedback, meta = build_feedback(previous, read(previous/'input.json'))
             save(target/'feedback.json', feedback)
-            command = [sys.executable, '-m', 'patchgen.pipeline', '--fixture', str(source/name/'run/request.json'),
+            # Held-out repair reads the sealed fixture, never the retained copy.
+            fixture = sealed_fixtures[name] if summary.get('held_out_registry') else source/name/'run/request.json'
+            command = [sys.executable, '-m', 'patchgen.pipeline', '--fixture', str(fixture),
                        '--output', str(target/'run'), '--review-output', str(target/'review'), '--generate',
                        '--strategy', STRATEGY, '--feedback', str(target/'feedback.json'), '--model', LOCKED_CONFIG['model'],
                        '--backend', LOCKED_CONFIG['backend'], '--local-codegen']
@@ -165,6 +180,15 @@ def execute(source, output, max_rounds=2):
         first_pass_validated=within(0), validated_within_rounds={str(n): within(n) for n in range(1, max_rounds + 1)},
         first_pass_stages={c['case']: c['first_pass_stage'] for c in report['cases']},
         repair_model_requests=sum(a['model_requests'] for c in report['cases'] for a in c['attempts']))
+    if summary.get('cohorts'):
+        # Registry cohorts keep withdrawn and unattempted cases in each denominator and variants apart.
+        rounds = {c['case']: c['validated_round'] for c in report['cases']}
+        upto = lambda names, limit: f"{sum(rounds.get(n) is not None and rounds[n] <= limit for n in names)}/{len(names)}"
+        report['validated_by_cohort'] = {cohort: {str(limit): upto(names, limit) for limit in range(max_rounds + 1)}
+                                         for cohort, names in summary['cohorts'].items()}
+        total = len(summary['cohorts']['headline'])
+        save(output/'summary.json', report)
+        return int(sum(rounds.get(n) is not None for n in summary['cohorts']['headline']) != total)
     save(output/'summary.json', report)
     return int(within(max_rounds) != total)
 

@@ -20,8 +20,8 @@ LOCKED_DECISION = '0041'
 LOCKED_CONFIG = dict(backend='nvidia', model='google/gemma-4-31b-it', strategy='candidate_semantic_blocks')
 
 
-# Every authored live case informed prompt development; future unseen cases belong in HELD_OUT_CASES.
-HELD_OUT_CASES = ()
+# Every authored benchmark case informed prompt development. Held-out cases come only from a
+# sealed registry (patchgen/held_out.py) and never join run_benchmark.CASES.
 # Fixed synthetic input: the hash changes only when prompt construction changes.
 _FINGERPRINT_FILE = dict(path='runtimes/python/main.py', language='python', source_context='old = 1\n',
                          positions=[dict(start_line=1, end_line=1, reason='candidate')])
@@ -58,8 +58,27 @@ def require_locked_prompts():
         raise ValueError('locked prompt text changed; record a new decision before a locked run')
 
 
-def case_split(name):
-    return 'held_out' if name in HELD_OUT_CASES else 'development'
+def held_out_cohorts(registry):
+    """Case names per reported cohort. Variants are kept out of the headline because they correlate with parents."""
+    cases = registry['cases']
+    base = [c for c in cases if not c.get('variant_of')]
+    return dict(headline=[c['case'] for c in base],
+                **{label: [c['case'] for c in base if c['label'] == label] for label in ('new_mechanism', 'transfer')},
+                minimal_semantics_variants=[c['case'] for c in cases if c.get('variant_of')])
+
+
+def held_out_entries(registry):
+    """Manifest rows for sealed cases, read from their sealed fixtures, plus withdrawn case names."""
+    entries, withdrawn = [], {}
+    for case in registry['cases']:
+        if case['status'] == 'withdrawn':
+            withdrawn[case['case']] = case['withdrawn_reason']
+            continue
+        fixture = ROOT/'patchgen/fixtures'/case['profile']/'runtime-input.json'
+        entries.append(dict(case=case['case'], id=case['id'], label=case['label'], variant_of=case.get('variant_of'),
+                            profile=case['profile'], source_revision=json.loads(fixture.read_text())['source_revision'],
+                            fixture_sha256=hashlib.sha256(fixture.read_bytes()).hexdigest()))
+    return entries, withdrawn
 
 
 def resolve_configuration(args):
@@ -124,11 +143,21 @@ def collect(target, exit_code, elapsed):
     return result
 
 
-def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None, locked=False):
+def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None, locked=False,
+            held_out=None, rerun_reason=None):
     if locked and dict(backend=backend, model=model, strategy=strategy) != LOCKED_CONFIG:
         raise ValueError('locked run must use the decision 0041 configuration')
     if locked:
         require_locked_prompts()
+    registry = None
+    if held_out is not None:
+        from patchgen import held_out as sealed
+        if not locked or cases or full_benchmark:
+            raise ValueError('a held-out run requires --locked and cannot select development cases')
+        # Verify before any credential or network use; a mismatch must never reach the model.
+        registry = sealed.verify(held_out)
+    elif rerun_reason:
+        raise ValueError('--rerun-reason applies only to held-out runs')
     if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     if backend in ('openrouter', 'nvidia'):
@@ -142,14 +171,25 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         raise ValueError('unsupported local backend or model')
     if cases is not None and (not cases or len(set(cases)) != len(cases) or not set(cases) <= set(CASES + ADDITIONAL_CASES)):
         raise ValueError('select distinct cases supported by the live route')
-    output=check_output(output);output.mkdir(parents=True)
-    available = manifest()
-    plan = benchmark_plan(available) if full_benchmark else {name: 'eligible' for name in CASES}
-    if cases:
-        plan = benchmark_plan(available)
-        plan = {name: 'not_selected' if state == 'eligible' and name not in cases else state
-                for name, state in plan.items()}
-    entries = [entry for entry in available if plan.get(entry['case']) == 'eligible']
+    output=check_output(output)
+    withdrawn, attempt = {}, None
+    if registry:
+        # Recorded before the output exists or any request is sent, wherever the output lives.
+        attempt = sealed.begin_one_shot(held_out, output, rerun_reason)
+    output.mkdir(parents=True)
+    if registry:
+        entries, withdrawn = held_out_entries(registry)
+        available = entries
+        plan = {**{entry['case']: 'eligible' for entry in entries}, **{name: 'withdrawn' for name in withdrawn}}
+    else:
+        available = manifest()
+        plan = benchmark_plan(available) if full_benchmark else {name: 'eligible' for name in CASES}
+        if cases:
+            plan = benchmark_plan(available)
+            plan = {name: 'not_selected' if state == 'eligible' and name not in cases else state
+                    for name, state in plan.items()}
+        entries = [entry for entry in available if plan.get(entry['case']) == 'eligible']
+    splits = {entry['case']: 'held_out' if registry else 'development' for entry in entries}
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
     options = OPTIONS
@@ -159,7 +199,14 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
                 prompt_version=STRATEGY_VERSIONS[strategy],options=options,
                 locked_configuration=LOCKED_DECISION if locked else None,
                 prompt_fingerprints=prompt_fingerprints() if locked else None,
-                case_split={entry['case']: case_split(entry['case']) for entry in entries},
+                case_split=splits,
+                held_out_registry=str(Path(held_out).resolve().relative_to(ROOT)) if registry else None,
+                held_out_registry_sha256=hashlib.sha256(Path(held_out).read_bytes()).hexdigest() if registry else None,
+                held_out_attempt=attempt['attempt'] if attempt else None,
+                cohorts=held_out_cohorts(registry) if registry else None,
+                case_labels={entry['case']: entry['label'] for entry in entries} if registry else None,
+                withdrawn_cases=withdrawn if registry else None,
+                rerun_reason=rerun_reason,
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
                 implementation_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                 implementation_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True)),
@@ -185,16 +232,26 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
             break
     passed=sum(r['generated_patch_validated'] for r in report['results'])
     unavailable = sum(row['status'] == 'provider_unavailable' for row in report['results'])
+    count = lambda rows: f"{sum(r['generated_patch_validated'] for r in rows)}/{len(rows)}"
+    denominator = len(entries)
+    if registry:
+        # Every denominator comes from the registry: withdrawn and unattempted cases count as unvalidated.
+        validated = {r['case'] for r in report['results'] if r['generated_patch_validated']}
+        scored = {name: f"{len(validated & set(names))}/{len(names)}" for name, names in report['cohorts'].items()}
+        headline = report['cohorts']['headline']
+        passed, denominator = len(validated & set(headline)), len(headline)
+        report.update(validated_by_cohort=scored, headline_validated=scored['headline'])
     report.update(status='provider_unavailable' if unavailable else 'completed',
                   provider_unavailable_cases=unavailable,validated_model_patches=passed,
-                  model_patch_validation_rate=None if unavailable else passed/len(entries),
-                  validated_by_split={split: f"{sum(r['generated_patch_validated'] for r in report['results'] if case_split(r['case']) == split)}/"
-                                             f"{sum(case_split(r['case']) == split for r in report['results'])}"
+                  model_patch_validation_rate=None if unavailable or not denominator else passed/denominator,
+                  validated_by_split={split: count([r for r in report['results'] if splits[r['case']] == split])
                                       for split in ('development', 'held_out')},
                   model_requests=sum(r['model_requests'] for r in report['results']),
                   generation_seconds=sum(r['generation_seconds'] for r in report['results']))
     save()
-    return int(passed!=len(entries))
+    if registry:
+        sealed.finish(held_out, attempt['attempt'], output)
+    return int(passed!=denominator)
 
 
 def main():
@@ -209,12 +266,15 @@ def main():
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'),default=None)
+    parser.add_argument('--held-out', type=Path, help='sealed held-out registry; requires --locked')
+    parser.add_argument('--rerun-reason', help='record a separate, non-substituting rerun of already-scored held-out cases')
     args=parser.parse_args()
     try:
         config = resolve_configuration(args)
         return execute(args.output,config['model'],config['strategy'], full_benchmark=args.full_benchmark,
-                       backend=config['backend'],cases=args.case,locked=args.locked)
-    except (OSError, ValueError) as error:
+                       backend=config['backend'],cases=args.case,locked=args.locked,
+                       held_out=args.held_out, rerun_reason=args.rerun_reason)
+    except (OSError, ValueError, RuntimeError) as error:
         print(str(error), file=sys.stderr)
         return 1
 

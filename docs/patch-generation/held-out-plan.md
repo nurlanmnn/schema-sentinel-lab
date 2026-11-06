@@ -1,6 +1,7 @@
 # Held-out evaluation plan
 
-Status: plan. No held-out case exists yet, and the model has not seen any.
+Status: runner built and tested. No held-out case exists yet, and the model has
+not seen any.
 
 The 6/8 and 7/8 results come from eight cases that shaped the prompt. A
 held-out case is one that is written after the lock (decision 0041), sealed
@@ -123,10 +124,66 @@ the true rate is.
 6. Evaluator review against the checklist, seal, push, then the single locked run.
 7. Fold any sponsor cases in as a second sealed set when they arrive.
 
+A second adversarial Codex review of the runner found unsealed execution code,
+a self-authenticating registry, first-run evasion through output location,
+editable repair inputs, inflated denominators, repeatable controls and variant
+cycles. The runner section below describes the fixes.
+
 An independent read-only Codex review of this plan found the selection-bias
 gap, overstated novelty for H1/H2/H3/H7/H8, unproven live eligibility, weak
 single negative controls, and unenforced seals. The rules and labels above
 address each.
+
+## Runner (built)
+
+`patchgen/held_out.py` seals and verifies the registry. `live_suite --held-out`
+and `repair_suite` enforce it.
+
+```sh
+# After evaluator approval and pre-seal evidence exist:
+.venv/bin/python -m patchgen.held_out seal --draft held-out/draft.json
+git add held-out && git commit -m "Seal held-out cases" && git push
+# Send the printed digest to the evaluator. Then, once:
+.venv/bin/python -m patchgen.held_out verify
+.venv/bin/python -m patchgen.live_suite --locked --held-out held-out/registry.json --output patchgen/evidence/held-out-001
+git add held-out/attempts.jsonl patchgen/evidence/held-out-001 && git commit -m "Record held-out attempt" && git push
+.venv/bin/python -m patchgen.repair_suite --source patchgen/evidence/held-out-001 --output patchgen/evidence/held-out-repair-001
+```
+
+What the code enforces:
+
+- **What is sealed.** 66 harness files (`patchgen/*.py`, testbed runners and
+  tests, codegen tooling, `buf` configs), and for each case its fixture, its
+  *whole* reference folder, every wrong patch, and the evidence files. The
+  case file list is computed, so a required file cannot be left out, and a
+  file added to a sealed folder later is detected. Symlinks are refused.
+- **Evidence content.** The reference evidence must show `validation_passed`
+  and each wrong patch's evidence a rejection. This is rechecked at verify.
+- **Draft structure.** An evaluator, three or more *distinct* wrong patches,
+  and reasons for withdrawals. Variants need a different, sealed, non-variant
+  parent.
+- **Git.** No uncommitted tracked changes. The registry is committed exactly
+  once and never modified. Its commit is pushed to a GitHub upstream. Each
+  case's `source_revision` exists as a commit.
+- **Attempt ledger.** `held-out/attempts.jsonl` is created by `seal` and
+  committed with it. Every one-shot attempt is recorded, under an exclusive
+  lock, *before* any request, wherever its output goes. A second attempt
+  needs `--rerun-reason`. Committed ledger history must be append-only. A
+  repair is allowed once per attempt, only on evidence byte-identical to what
+  the ledger recorded at completion, and it reads the sealed fixture rather
+  than the retained copy.
+- **Denominators.** Every cohort comes from the registry. Withdrawn and
+  unattempted cases count as unvalidated. Variants are kept out of the headline
+  and reported separately.
+
+Limits that code cannot enforce, so they are procedure:
+
+- Evaluator independence is attested by a person.
+- A force-push could rewrite history, including the ledger. The external
+  anchor is the registry digest the evaluator records at seal time, and the
+  committed ledger should be pushed after every attempt.
+- Baseline runtime code is pinned through each fixture's `source_revision`
+  commit, not by file hashes.
 
 ## Sponsor request (draft, not sent)
 
