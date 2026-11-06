@@ -12,6 +12,10 @@ The [live model evaluation](docs/live-model-evaluation-2026-11-02.md) records
 0/6 for 8B with prompt 2.8. A bounded rename-feedback probe also failed.
 Successful deterministic demos are separate evidence. See the
 [model reassessment](docs/model-shortlist-2026-11-02.md) for the next comparisons.
+Model selection is now locked to Gemma 4 31B via NVIDIA with semantic blocks 3.1
+(6/8 on the live-eligible cases); run it with `live_suite --locked`. See
+[decision 0041](docs/decisions/0041-locked-gemma-configuration.md) and the
+[repair loop plan](docs/patch-generation/repair-loop-plan.md).
 
 For the complete independent proposal/validation/review path, see the
 [one-command demo](docs/patch-generation/demo.md):

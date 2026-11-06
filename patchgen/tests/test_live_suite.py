@@ -16,6 +16,20 @@ class LiveSuiteTests(unittest.TestCase):
                 with self.assertRaises(ValueError):analyze(root,Path(tmp)/'analysis')
                 self.assertFalse((Path(tmp)/'analysis').exists())
 
+    def test_locked_configuration_is_exact_and_refuses_overrides(self):
+        from argparse import Namespace
+        from patchgen.live_suite import LOCKED_CONFIG, execute, resolve_configuration
+        args=dict(locked=True,backend=None,model=None,strategy=None)
+        self.assertEqual(resolve_configuration(Namespace(**args)),LOCKED_CONFIG)
+        for key,value in [('backend','ollama'),('model','ministral-3:8b'),('strategy','candidate_edits')]:
+            with self.assertRaises(ValueError):resolve_configuration(Namespace(**{**args,key:value}))
+        unlocked=resolve_configuration(Namespace(locked=False,backend=None,model=None,strategy=None))
+        self.assertEqual(unlocked,dict(backend='ollama',model='ministral-3:8b',strategy='candidate_edits'))
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(ValueError):
+                execute(Path(tmp)/'out','ministral-3:8b','candidate_edits',locked=True)
+            self.assertFalse((Path(tmp)/'out').exists())
+
     def test_missing_report_is_failed_not_a_success(self):
         with tempfile.TemporaryDirectory() as tmp:
             result=collect(Path(tmp),1,3)

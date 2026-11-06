@@ -15,6 +15,20 @@ ROOT = Path(__file__).resolve().parents[1]
 CASES = ('pubsub-rename','pubsub-removal','pubsub-utf8','telemetry-rename','telemetry-precision','telemetry-units')
 ADDITIONAL_CASES = ('inventory-width', 'telemetry-quantized')
 SCHEMA_ONLY_CASES = ('inventory-zigzag', 'telemetry-tag-move', 'inventory-packed-bins')
+# Decision 0041: the frozen configuration for subsequent live evaluations.
+LOCKED_DECISION = '0041'
+LOCKED_CONFIG = dict(backend='nvidia', model='google/gemma-4-31b-it', strategy='candidate_semantic_blocks')
+
+
+def resolve_configuration(args):
+    """Apply --locked, refusing partial overrides so the frozen setup stays exact."""
+    if args.locked:
+        if args.backend or args.model or args.strategy:
+            raise ValueError('--locked fixes backend, model and strategy; omit those options')
+        return dict(LOCKED_CONFIG)
+    backend = args.backend or 'ollama'
+    model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(backend, 'ministral-3:8b'))
+    return dict(backend=backend, model=model, strategy=args.strategy or 'candidate_edits')
 
 
 def benchmark_plan(entries):
@@ -68,7 +82,9 @@ def collect(target, exit_code, elapsed):
     return result
 
 
-def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None):
+def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None, locked=False):
+    if locked and dict(backend=backend, model=model, strategy=strategy) != LOCKED_CONFIG:
+        raise ValueError('locked run must use the decision 0041 configuration')
     if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     if backend in ('openrouter', 'nvidia'):
@@ -97,6 +113,7 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         options = transport.options_for(model) if hasattr(transport, 'options_for') else transport.OPTIONS
     report=dict(status='running',mode='live_model',model=model,strategy=strategy,backend=backend,
                 prompt_version=STRATEGY_VERSIONS[strategy],options=options,
+                locked_configuration=LOCKED_DECISION if locked else None,
                 planned_cases=len(entries),automatic_repairs=0,human_approval_required=True,
                 implementation_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                 implementation_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True)),
@@ -136,16 +153,18 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--full-benchmark', action='store_true',
                         help='record eligibility across the complete deterministic benchmark and run its supported live cases')
-    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default='ollama')
+    parser.add_argument('--locked', action='store_true',
+                        help='use the decision 0041 configuration: Gemma 4 31B via NVIDIA, semantic blocks 3.1')
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default=None)
     parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,*NVIDIA_MODELS), default=None)
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
-    parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'),default='candidate_edits')
+    parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'),default=None)
     args=parser.parse_args()
-    model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(args.backend, 'ministral-3:8b'))
     try:
-        return execute(args.output,model,args.strategy, full_benchmark=args.full_benchmark,
-                       backend=args.backend,cases=args.case)
+        config = resolve_configuration(args)
+        return execute(args.output,config['model'],config['strategy'], full_benchmark=args.full_benchmark,
+                       backend=config['backend'],cases=args.case,locked=args.locked)
     except (OSError, ValueError) as error:
         print(str(error), file=sys.stderr)
         return 1
