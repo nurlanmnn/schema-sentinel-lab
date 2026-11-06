@@ -387,3 +387,14 @@ exact numerical observations. Total request wall time was 128.70 seconds, with
 provider queueing and output length uncontrolled. All 269 tests pass. Gemma/3.1
 remains the best observed configuration at 6/8, pending unseen-case evaluation.
 See `patchgen/evidence/nvidia-laguna-xs21-001/summary.md`.
+
+## Explicit DeepSeek trial exception: provider unavailable
+
+At the user's request, prepared the same frozen eight-case test for DeepSeek
+V4.1 Flash through NVIDIA. The first connectivity call returned HTTP 504 after
+about 300 seconds; one smaller probe timed out after 90 seconds. No benchmark
+case or generated patch exists, so there is no model-quality score. Qwen Coder's
+older NVIDIA endpoint is deprecated, and the checked OpenRouter catalog had no
+zero-token-price Qwen/DeepSeek alternative. No paid route was called. All 270
+implementation tests passed; default model selection remains unchanged.
+See `patchgen/evidence/nvidia-deepseek-v41-flash-001/summary.md`.

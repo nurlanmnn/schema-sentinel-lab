@@ -1,0 +1,8 @@
+{
+  "backend": "nvidia",
+  "status": "http_error",
+  "model": "deepseek-ai/deepseek-v4.1-flash",
+  "http_status": 504,
+  "retry_after": null,
+  "elapsed_seconds": 302.3511209170101
+}

@@ -1,0 +1,14 @@
+{
+  "version": "connectivity-small-budget",
+  "sha256": "d6f206e99cdb8642345c1a271bb92373dd1965d6b8c2ad61052ec2fd30daec9c",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Return only the JSON object {\"ok\":true}."
+    },
+    {
+      "role": "user",
+      "content": "{\"prompt_version\": \"connectivity-small-budget\", \"request\": \"Reply with the JSON object only.\"}"
+    }
+  ]
+}

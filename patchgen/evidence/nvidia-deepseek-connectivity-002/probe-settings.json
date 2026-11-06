@@ -1,0 +1,5 @@
+{
+  "max_tokens": 64,
+  "timeout_seconds": 90,
+  "benchmark_attempt": false
+}

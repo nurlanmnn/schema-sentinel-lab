@@ -31,3 +31,14 @@ https://docs.api.nvidia.com/nim/reference/nvidia-deepseek-v4_1-flash-infer
 This is an authored development benchmark, not unseen-case generalization or a
 full twenty-case live-model result. Evidence lives in
 `patchgen/evidence/nvidia-deepseek-v41-flash-001`.
+
+## Outcome: serving unavailable, no quality score
+
+The initial connectivity request returned NVIDIA HTTP 504 after approximately
+300 seconds. One smaller 64-token connectivity attempt, with an explicit
+90-second socket timeout, also timed out. No benchmark case was attempted and
+no patch was generated. Record provider_unavailable and a null quality rate,
+not 0/8. The current OpenRouter public catalog contained no Qwen/DeepSeek model
+with zero prompt and completion prices; no paid alternative was invoked.
+All 270 implementation tests passed. The bounded trial attempt is closed, with
+no automatic retry pending. Default model selection remains unchanged.
