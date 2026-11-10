@@ -1,6 +1,0 @@
-{
-  "strategy": "deterministic_telemetry_units",
-  "model_requests": 0,
-  "automatic_repairs": 0,
-  "policy": "explicit m/s -> km/h producer scale and predicate migration; semantics supplied by request, never inferred"
-}

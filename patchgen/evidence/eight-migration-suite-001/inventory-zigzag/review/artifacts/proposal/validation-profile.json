@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
-  "change_id": "inventory-quantity-zigzag",
-  "new_schema_sha256": "36f5b10d92ce56d9732bd03f265b34685b04aa1d83cdd83b8a5cc78d3b280846",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "inventory_case": "zigzag"
-}

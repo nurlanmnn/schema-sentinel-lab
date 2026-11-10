@@ -1,6 +1,0 @@
-{
-  "strategy": "deterministic_inventory_zigzag",
-  "model_requests": 0,
-  "automatic_repairs": 0,
-  "policy": "Preserve signed int32 quantities, decimal-string JSON and strict >0 stock predicate with ZigZag wire encoding"
-}

@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/python/main.py",
-  "error": "after must end with a newline"
-}

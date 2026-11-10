@@ -1,6 +1,0 @@
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"ts_303","name":"Sensor C"}}
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"A","name":""}}
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"A","name":""}}
-{"runtime":"typescript","version":"v2","fields":{"entity_id":"A"}}
-{"runtime":"typescript","version":"v2","fields":{"entity_id":"A"}}
-PASS: v1/v2 Buffer and Uint8Array truncated fields reject; complete fields decode

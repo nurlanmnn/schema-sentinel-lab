@@ -1,6 +1,0 @@
-{
-  "expectation": "every subscriber fails before acknowledgement",
-  "payload_hex": "0a0561",
-  "sha256": "bb41b3df1cc868005284347ff83750091f65717b47ad43eae8c0be59f49d87a4",
-  "message_id": 1
-}

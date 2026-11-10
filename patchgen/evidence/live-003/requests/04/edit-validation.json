@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "testbed/tests/e2e_test.py",
-  "error": "edit.before must match exactly once in original source"
-}

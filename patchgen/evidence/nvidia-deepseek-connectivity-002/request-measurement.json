@@ -1,6 +1,0 @@
-{
-  "backend": "nvidia",
-  "status": "failed",
-  "model": "deepseek-ai/deepseek-v4.1-flash",
-  "elapsed_seconds": 90.14421966695227
-}

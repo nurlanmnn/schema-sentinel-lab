@@ -1,7 +1,0 @@
-{
-  "elapsed_seconds": 163.07397983397823,
-  "result": {
-    "status": "success"
-  },
-  "scope": "one model download, separate from inference"
-}

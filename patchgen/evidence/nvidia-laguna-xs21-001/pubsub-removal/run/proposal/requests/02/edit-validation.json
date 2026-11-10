@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/python/main.py",
-  "error": "before must contain complete source lines"
-}

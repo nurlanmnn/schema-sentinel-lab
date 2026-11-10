@@ -13,6 +13,8 @@ from patchgen.adapter import adapt, coverage
 from patchgen.generator import command, save, ContractError, require, safe_path, VALIDATION_PROFILES, LOCAL_MODELS, OPENROUTER_MODEL, INVENTORY_EVOLUTION_STRATEGIES, FEEDBACK_STRATEGIES
 
 ROOT = Path(__file__).resolve().parents[1]
+# Source files hashed and copied into every run so its output records the exact code used.
+IMPLEMENTATION_FILES = ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','generator.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py','nvidia_client.py')
 
 
 def run(case, output, generate=False, response=None, strategy="candidate_edits", local_codegen=False, model="ministral-3:8b", feedback=None, backend="ollama"):
@@ -20,9 +22,11 @@ def run(case, output, generate=False, response=None, strategy="candidate_edits",
     output.mkdir(parents=True, exist_ok=False)
     implementation = dict(revision=command(['git','rev-parse','HEAD'],ROOT).strip(),
                           files={name:hashlib.sha256((ROOT/'patchgen'/name).read_bytes()).hexdigest()
-                                 for name in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','generator.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py','nvidia_client.py')})
+                                 for name in IMPLEMENTATION_FILES})
     save(output/'implementation.json',implementation)
-    for filename in ('detector.py','locator.py','python_bindings.py','runtime_inventory.py','source_spellings.py','typescript_bindings.py','binding_analysis.py','pipeline.py','adapter.py','anchor_edits.py','feedback_blocks.py','rename_tokens.py','rename_roles.py','type_utf8.py','remove_name.py','type_precision.py','telemetry_units.py','inventory_width.py','stock_release.py','inventory_presence.py','inventory_labels.py','inventory_reservation.py','telemetry_quantized.py','inventory_state_rename.py','telemetry_message_rename.py','telemetry_metadata.py','inventory_evolution.py','openrouter_client.py','nvidia_client.py'):
+    for filename in IMPLEMENTATION_FILES:
+        if filename == 'generator.py':
+            continue  # hashed above, but not copied (historical run layout)
         (output/('implementation-'+filename)).write_bytes((ROOT/'patchgen'/filename).read_bytes())
     revision=require(case,'source_revision',str,'request')
     if not re.fullmatch(r'[0-9a-f]{40}',revision):

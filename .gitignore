@@ -8,9 +8,10 @@ obj/
 .venv/
 testbed/artifacts/
 .generated_semgrep.yml
-# Retain compact patch-generation evidence, not nested checkouts and installed dependencies.
-patchgen/evidence/**/workspace/
-patchgen/evidence/**/source/
+
+# Run outputs. Each pipeline/demo/benchmark run writes a large folder here.
+# Old committed runs are kept under the git tag archive/pre-cleanup-2026-11-10.
+patchgen/evidence/
 
 # Pinned local code-generation executables and installed packages.
 .tools/

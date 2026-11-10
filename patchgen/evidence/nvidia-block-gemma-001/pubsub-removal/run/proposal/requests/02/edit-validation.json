@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/python/main.py",
-  "error": "Expecting value: line 1 column 1 (char 0)"
-}

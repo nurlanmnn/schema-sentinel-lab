@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
-  "change_id": "telemetry-speed-quantized",
-  "new_schema_sha256": "9f9957464b5023a2d8f0fa3d1985023c1cddfeb7b11cd8d7c1fe4ba80cdfaf6b",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "telemetry_case": "quantized"
-}

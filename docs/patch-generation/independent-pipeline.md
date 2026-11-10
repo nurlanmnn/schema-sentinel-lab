@@ -12,7 +12,7 @@ Use Python 3.13 and Buf for deterministic analysis. Node 22+ and .NET 8 are
 needed for the retained full validation demos. Analysis does not require Ollama.
 The current priority is [deterministic hardening](../decisions/0024-deterministic-analysis-priority.md);
 live-generation commands below are retained experimental paths, not the next step.
-See the [November 3 results](../deterministic-analysis-2026-11-03.md) for current
+See the [November 3 results](../history/deterministic-analysis-2026-11-03.md) for current
 candidate/binding semantics, scan-manifest checks and the 32-case component suite.
 
 ```sh

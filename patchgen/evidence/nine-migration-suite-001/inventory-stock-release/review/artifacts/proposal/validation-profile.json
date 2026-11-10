@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "d4a3e66888e8e6a17a1cbc49b48234ba92e9d86e",
-  "change_id": "inventory-stock-release",
-  "new_schema_sha256": "69a2e290a75a22df1de21108f037fa89fd3e1387704b54f67b0e4c78e05d19a1",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "inventory_case": "stock-release"
-}

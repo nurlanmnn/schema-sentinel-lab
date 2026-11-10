@@ -1,6 +1,0 @@
-{
-  "strategy": "deterministic_remove_name_v1",
-  "model_requests": 0,
-  "automatic_repairs": 0,
-  "policy": "adopted v1 name construction and observation removal; preserve entity_id and v2"
-}

@@ -1,6 +1,0 @@
-{
-  "backend": "nvidia",
-  "status": "failed",
-  "model": "google/gemma-4-31b-it",
-  "elapsed_seconds": 64.01557295804378
-}

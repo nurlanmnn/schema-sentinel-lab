@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "b18692397beb3550917ee7e9ba3456da73bf21ef",
-  "change_id": "inventory-labels",
-  "new_schema_sha256": "79f82d216867d9cd3ef35aa82165c763cb7c467fd3e2b9b6d01f69f84cc692f2",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "inventory_case": "labels"
-}

@@ -1,1 +1,0 @@
-Local protoc 25.1 + ts-proto 1.165.0: both schema versions emit speedMps: number. No network or models used.

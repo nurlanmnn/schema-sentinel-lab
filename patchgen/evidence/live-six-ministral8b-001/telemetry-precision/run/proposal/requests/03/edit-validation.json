@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/typescript/telemetry.ts",
-  "error": "overlapping line edit ranges"
-}

@@ -1,240 +1,162 @@
 # Schema Sentinel Lab
 
-Independent personal working checkout, retaining the project's inherited history.
-The new [descriptor and runtime impact pipeline](docs/patch-generation/independent-pipeline.md)
-compares matching schema identities, scans Python/TypeScript/C#, and feeds the
-review-only patch generator. See [measured results](docs/patch-generation/independent-results.md)
-for the bounded scope and retained failures. Human approval is required for every
-proposed patch. The inherited testbed instructions follow.
+Schema Sentinel helps when a shared data schema changes. Several programs, written in
+different languages, all read and write the same Protobuf messages. When someone edits
+the `.proto` schema, every one of those programs may need a code change. Schema Sentinel:
 
-The [live model evaluation](docs/live-model-evaluation-2026-11-02.md) records
-0/6 validated proposals for both Ministral 3 3B and 8B with prompt 2.5, and
-0/6 for 8B with prompt 2.8. A bounded rename-feedback probe also failed.
-Successful deterministic demos are separate evidence. See the
-[model reassessment](docs/model-shortlist-2026-11-02.md) for the next comparisons.
-Model selection is now locked to Gemma 4 31B via NVIDIA with semantic blocks 3.1
-(6/8 on the live-eligible cases); run it with `live_suite --locked`. See
-[decision 0041](docs/decisions/0041-locked-gemma-configuration.md) and the
-[repair loop plan](docs/patch-generation/repair-loop-plan.md).
-Latest run: 6/8 first pass, 7/8 after one bounded repair round, on development
-cases only ([results](patchgen/evidence/nvidia-gemma-repair-001/summary.md)). Next: the
-[held-out evaluation plan](docs/patch-generation/held-out-plan.md).
+1. **Detects the change.** It compares the old and new schema and says exactly what changed.
+2. **Locates the impact.** It finds the lines of runtime code that may need editing.
+3. **Drafts a patch.** It proposes the code edits, either from a fixed recipe or with an LLM.
+4. **Validates the patch.** It builds and runs all three runtimes to check them.
+5. **Asks a human.** A person approves or rejects every patch. Nothing is merged automatically.
 
-For the complete independent proposal/validation/review path, see the
-[one-command demo](docs/patch-generation/demo.md):
+The runtimes are small mock services in **Python**, **TypeScript** and **C#** (in `runtimes/`).
+
+```mermaid
+flowchart LR
+    schema["old + new .proto"] --> detector["1. detector.py<br/>what changed?"]
+    detector --> locator["2. locator.py<br/>which lines?"]
+    locator --> patch["3. patch generator<br/>proposed edits"]
+    patch --> validate["4. validation<br/>build + run runtimes"]
+    validate --> review["5. human review"]
+```
+
+## Try it: see change detection and impact location
+
+This runs only steps 1 and 2. It needs no model, no services and no internet after setup.
+
+You need **Python 3.13**, **[Buf](https://buf.build/docs/installation)** (macOS:
+`brew install bufbuild/buf/buf`) and a **full** `git clone`. A shallow clone
+won't work because the examples read older commits.
 
 ```sh
-python3.13 run_demo.py --output patchgen/evidence/my-demo
+python3.13 -m venv .venv
+.venv/bin/pip install -r patchgen/pipeline-requirements.txt
+.venv/bin/python explain_change.py
 ```
 
-Install the prerequisites listed in that guide first. This bounded deterministic
-demo makes zero model calls and leaves human approval pending.
-Use `--case pubsub-utf8` (also `pubsub-rename` or `pubsub-removal`) to add
-three-runtime fan-out and a truncated-payload negative control. For the standalone
-pub/sub testbed, see [testbed development](testbed/README.md).
+On Windows, use `py -3.13 -m venv .venv` and `.venv\Scripts\python` instead of `.venv/bin/python`.
 
+The default example renames the telemetry field `speed_mps` to `ground_speed_mps`. The output
+looks like this (shortened):
 
-UCF Senior Design project for testing schema changes across Python, TypeScript,
-and C#. The testbed sends one Protobuf `Entity` through all three services and
-checks that each service reads the same `entity_id` and `name`.
+```text
+STEP 1 - CHANGE DETECTION
+  status: complete  (single_supported_event)
+  event: {'category': 'field_renamed', 'message': 'simulation.telemetry.VehicleTelemetry',
+          'field_number': 2, 'old_name': 'speed_mps', 'new_name': 'ground_speed_mps'}
 
-## Run locally
+STEP 2 - IMPACT LOCATION
+  status: complete   files scanned: 6
 
-Install these tools, then reopen your terminal:
-
-| Tool | Version |
-| --- | --- |
-| [Python](https://www.python.org/downloads/) | 3.10 or newer |
-| [Node.js and npm](https://nodejs.org/en/download) | Node.js 22 or newer |
-| [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) | 8.0 SDK |
-
-Open the project folder in your editor, then run the command below in its terminal.
-
-### Windows (PowerShell or Command Prompt)
-
-```powershell
-py run_local.py
+  runtimes/python/telemetry_runtime.py
+    line  10 [bound, must edit]: sample = VehicleTelemetry(vehicle_id=..., speed_mps=request['speed'])
+             why: keyword_argument
+  ...
 ```
 
-If `py` is unavailable, use `python run_local.py`.
+More ways to run it:
 
-### macOS and Linux
+```sh
+.venv/bin/python explain_change.py --list                       # all example changes
+.venv/bin/python explain_change.py --fixture entity-name-removal  # pick one
+.venv/bin/python explain_change.py --json                       # full machine-readable records
+.venv/bin/python explain_change.py --old my_old.proto --new my_new.proto --schema-path proto/v1/entity.proto
+```
+
+Each example lives in `patchgen/fixtures/<name>/runtime-input.json`. It holds the old schema,
+the new schema, the git commit of the runtime code to scan, and a sentence describing what
+the change should mean.
+
+## How the code works
+
+### Step 1: change detection (`patchgen/detector.py`)
+
+- `descriptor()` asks **Buf** to compile a `.proto` file into a *descriptor*, which is
+  Protobuf's own structured description of the schema. Comparing descriptors avoids
+  fragile text diffing.
+- `compare(old, new)` walks messages, fields and enums and matches fields by **field
+  number** (their wire identity), not by name. That is how a rename shows up as
+  `field_renamed` and not as a removal plus an addition.
+- Each recognized change becomes an **event** with a category such as `field_renamed`,
+  `field_removed`, `field_type_changed`, `field_added`, `enum_value_added`,
+  `message_renamed` and so on. Anything it doesn't fully understand goes into an
+  **`unsupported`** list instead of being guessed.
+- `detect()` wraps it all into one record. Status is `complete` only when there is exactly
+  one supported event, nothing unsupported, and an intended-behavior sentence. Otherwise
+  it is `partial` and later steps refuse to generate a patch.
+- It **never guesses meaning**. A change from m/s to km/h looks like a plain rename here.
+  The intended-behavior text has to say so.
+
+### Step 2: impact location (`patchgen/locator.py`)
+
+- `runtime_inventory.py` lists every tracked file under `runtimes/` at the chosen commit.
+  Unknown file types make the result `partial`, because a file it can't read might hide an impact.
+- `scan()` parses each Python, TypeScript and C# file with **Tree-sitter**, a real parser,
+  and marks lines that mention the field. It checks every spelling the generated code can
+  use (`speed_mps`, `speedMps`, `SpeedMps`), string keys like `"speed_mps"`, and risky
+  patterns such as reflection (`getattr`, `GetProperty`) or dynamic `obj[key]` access.
+- These lines are **candidates**: "look here", not "this is definitely affected". The
+  design favors recall, because a missed site is worse than an extra one.
+- `python_bindings.py` and `typescript_bindings.py` add stronger **binding evidence**. They
+  follow imports of the generated Protobuf class, so the locator can say "this line really
+  uses `VehicleTelemetry.speed_mps`" (`[bound]`) and "this line must be edited"
+  (`[bound, must edit]`). C# lines stay plain candidates.
+- `locate()` returns one record: the scanned files with their hashes, the candidate lines
+  with reasons, and any issues.
+
+### Steps 3 to 5: patch generation, validation and review
+
+`patchgen/pipeline.py` runs the whole chain. `adapter.py` re-checks the detector and locator
+records. `generator.py` drafts and validates a patch, using either a per-case deterministic
+recipe (files such as `type_utf8.py` and `inventory_width.py`) or an LLM. `review.py` exports
+a local review page. The one-command demo is `run_demo.py`, explained in
+[docs/patch-generation/demo.md](docs/patch-generation/demo.md). Model work is documented in
+[docs/patch-generation/](docs/patch-generation/) and [docs/decisions/](docs/decisions/).
+
+## Run the three runtimes (testbed)
+
+Needs Python 3.10+, Node.js 22+ and the .NET 8 SDK.
 
 ```sh
 python3 run_local.py
 ```
 
-The script installs the project dependencies, builds the runtimes, runs the unit
-tests, and sends four test messages through Python -> TypeScript -> C#. It stops
-the services when finished. Docker, Make, and Buf are not needed for this run.
-The first run needs an internet connection to download dependencies.
+(Windows: `py run_local.py`.) This installs the dependencies, builds everything, runs the unit
+tests, and sends four test messages Python -> TypeScript -> C# and back. The last line should be
+`PASS: 4/4 round-trip cases passed.` Add `test` to rerun without reinstalling, or `start` to
+keep the services running. See [testbed/README.md](testbed/README.md) for more.
 
-Each case shows the input, encoded Protobuf bytes in hex, the values decoded by
-each service, and the returned bytes and fields. PASS results confirm that the
-decoded values and service order match the expectations. For example:
-
-```text
-[PASS] 1/4 - Standard text
-  Input: entity_id="roundtrip-001", name="Sensor A"
-  Encoded request (25 bytes, hex):
-    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
-    08 53 65 6e 73 6f 72 20 41
-  Decoded by each service:
-    Python [PASS]: entity_id="roundtrip-001", name="Sensor A"
-    TypeScript [PASS]: entity_id="roundtrip-001", name="Sensor A"
-    C# [PASS]: entity_id="roundtrip-001", name="Sensor A"
-  Encoded response (25 bytes, hex):
-    0a 0d 72 6f 75 6e 64 74 72 69 70 2d 30 30 31 12
-    08 53 65 6e 73 6f 72 20 41
-  Decoded response [PASS]: entity_id="roundtrip-001", name="Sensor A"
-  Service order [PASS]: Python -> TypeScript -> C#
-```
-
-The empty-string case encodes to zero bytes because Protobuf omits default string
-values. The decoders still read both fields as empty strings.
-
-The final line should read `PASS: 4/4 round-trip cases passed.`
-
-To repeat the checks without reinstalling dependencies, add `test` to the command.
-To keep the services running for development, add `start`. Press Ctrl+C to stop them.
-
-## Common setup problems
-
-- **Missing `node`, `npm`, or `dotnet`:** install the tools above and reopen the
-  terminal. For .NET, choose the **8.0 SDK**, not just the runtime.
-- **Python is missing:** install Python. On Windows, enable its command-line
-  shortcuts; on Linux, your distribution may also require `python3-venv`.
-- **`run_local.py` is missing:** run from the project folder containing this README
-  and `run_local.py`.
-- **A port is unavailable:** stop the program using ports 8000, 8001, or 8002.
-- **A service fails:** check its log in `testbed/artifacts/`.
-
-## Project files
-
-The schema defines the message. Generated code lets each language read and write
-it. The launcher builds the project, then runs the tests and services.
-
-```mermaid
-flowchart TD
-    schema["proto/v1/entity.proto<br/>Message schema"]
-    bindings["generated/<br/>Language bindings"]
-    services["runtimes/<br/>Python, TypeScript, and C#"]
-    launcher["run_local.py<br/>Setup and build"]
-    unit["testbed/tests/test_*.py<br/>Unit tests"]
-    runner["run-local.py<br/>Start and stop services"]
-    integration["e2e_test.py<br/>Round-trip tests"]
-
-    schema -->|buf generate| bindings
-    bindings -->|imported by| services
-    launcher -->|runs| unit
-    launcher -->|runs| runner
-    runner -->|starts and stops| services
-    runner -->|runs| integration
-    integration <-->|messages and results| services
-```
-
-The service runner is `testbed/scripts/run-local.py`; the tests live in `testbed/tests/`.
-The message route is `e2e_test.py -> Python :8000 -> TypeScript :8001 -> C# :8002`.
-The response returns along the same path. Each service records the fields it
-decoded, and the test checks those values, the returned message, and service order.
-Generated bindings are already committed; the normal local run does not need Buf.
-
-Deterministic analysis runs separately from the runtime testbed:
-
-```mermaid
-flowchart LR
-    schemas["Old/new canonical schema<br/>Matching file and package identity"]
-    detector["patchgen.detector<br/>Compare descriptors"]
-    locator["patchgen.locator<br/>Find syntax candidates"]
-    matches["Versioned JSON evidence<br/>Locations, uncertainty, coverage"]
-
-    schemas --> detector
-    detector --> locator
-    locator --> matches
-```
-
-`run_local.py` does not run the impact locator. See the
-[impact locator guide](docs/impact-locator.md) for its setup and current limits.
-
-- `proto/`: v1 has `entity_id` and `name`; v2 removes `name`.
-- `generated/`: Protobuf bindings used by the runtimes.
-- `runtimes/`: Python, TypeScript, and C# service code.
-- `testbed/`: tests, logs, and the local service runner.
-
-See [testbed development](testbed/README.md) for individual service commands and
-optional Docker commands. The [impact locator guide](docs/impact-locator.md)
-covers the current descriptor and Tree-sitter pipeline and its limitations.
-
-For a distinct buildable telemetry migration, run `run_demo.py --case telemetry-rename`
-(or add `--local-codegen` after installing the pinned tools in
-[tools/codegen](tools/codegen/README.md)). It checks float32 producer/consumer bytes,
-renamed observations and a speed threshold in all three languages. See
-[decision 0015](docs/decisions/0015-buildable-telemetry-benchmark.md) for evidence and scope.
-`--case telemetry-precision` exercises float32-to-float64 serialization and
-near-threshold precision across 33 runtime/case checks, with coordinated rollout
-required for the wire-type change.
-`--case telemetry-units` applies an explicitly supplied m/s-to-km/h policy to
-producers, observations and thresholds. The structural detector does not infer
-units. All three telemetry demos leave human review pending.
-
-Run the distinct authored migrations sequentially with:
+## Run the tests
 
 ```sh
-python3.13 run_benchmark.py --local-codegen --output patchgen/evidence/NEW-suite
+.venv/bin/python -m unittest discover -s patchgen/tests       # analysis + patch generation (~40 s)
+.venv/bin/python -m unittest discover -s testbed/tests -p 'test_*.py'
 ```
 
-The suite retains every case and reports structural classification, candidate-site
-recall, runtime validation and prepared-demo timing. See
-[decision 0018](docs/decisions/0018-six-migration-suite.md) for prerequisites,
-denominators and limits. The twenty authored cases measure the deterministic path. Live model results
-and human timing are evaluated separately.
+Good starting tests for steps 1 and 2: `test_detector_boundaries.py`, `test_pipeline.py`,
+`test_python_bindings.py`, `test_typescript_bindings.py` and `test_source_spellings.py`.
 
-`run_demo.py --case inventory-width --local-codegen` validates exact signed int64
-stock quantities across the three runtimes, including values above JavaScript's
-safe-integer range. See
-[decision 0020](docs/decisions/0020-inventory-integer-width-migration.md).
-`run_demo.py --case inventory-zigzag --local-codegen` changes signed int32 wire
-encoding while preserving decimal-string JSON and stock decisions. It checks
-regenerated producer and consumer bytes across three languages. Coordinate the
-wire change before deploying it.
-See [decision 0028](docs/decisions/0028-inventory-zigzag-wire-migration.md).
+## Where things are
 
-The [manual baseline protocol](docs/patch-generation/manual-baseline.md)
-packages the telemetry units task for an independent participant and evaluates
-their patch with the same pinned runtime checks.
+| Path | What it is |
+| --- | --- |
+| `proto/` | The schemas: `v1`/`v2` Entity, `telemetry`, `inventory` |
+| `generated/` | Code that Buf generates from `proto/` for each language. Don't edit it by hand |
+| `runtimes/` | The Python, TypeScript and C# mock services that the locator scans |
+| `explain_change.py` | Runs steps 1 and 2 and prints the result in plain text |
+| `patchgen/detector.py` | Step 1: change detection |
+| `patchgen/locator.py` | Step 2: impact location, plus the `*_bindings.py`, `source_spellings.py` and `runtime_inventory.py` helpers |
+| `patchgen/pipeline.py`, `generator.py`, `review.py` | Steps 3 to 5 |
+| `patchgen/fixtures/` | Example change requests (input) |
+| `patchgen/reference/` | Known-correct answers, used only for scoring after a run |
+| `patchgen/corpus/` | Extra authored scenarios (orders, inventory, telemetry) for testing steps 1 and 2 |
+| `patchgen/tests/`, `testbed/tests/` | Unit tests |
+| `run_local.py`, `testbed/` | The runtime testbed and its launcher |
+| `run_demo.py`, `run_benchmark.py`, `run_manual_baseline.py` | End-to-end demo, 20-case benchmark, and manual baseline |
+| `docs/decisions/` | Numbered design decisions (why things are the way they are) |
+| `docs/history/` | Old dated reports. Not needed to understand the code |
 
-`run_demo.py --case inventory-stock-release --local-codegen` adds a released
-stock enum state and updates all three consumers' eligibility checks. Quarantined
-and unknown values remain blocked. The suite includes this pinned
-policy while the generic enum analysis remains candidate-only.
-
-`run_demo.py --case inventory-presence --local-codegen` migrates inventory
-quantity to explicit proto3 presence. The tenth suite case checks absent and
-explicit-zero values at both wire and JSON boundaries across the three runtimes.
-See [decision 0030](docs/decisions/0030-inventory-quantity-presence.md).
-
-`run_demo.py --case inventory-labels --local-codegen` collapses repeated
-display labels into one value. It checks last-label selection and old repeated
-wire inputs across the three runtimes.
-See [decision 0031](docs/decisions/0031-inventory-display-labels.md).
-
-`run_demo.py --case inventory-reservation --local-codegen` adds a reserved
-quantity with a zero default and checks the new availability rule across the
-three runtimes. See [decision 0032](docs/decisions/0032-inventory-reservation.md).
-
-`run_demo.py --case telemetry-quantized --local-codegen` changes telemetry
-speed from float32 to a saturated, truncated int32 and checks the resulting
-wire values and threshold decisions across all three runtimes.
-See [decision 0033](docs/decisions/0033-telemetry-speed-quantization.md).
-
-`run_demo.py --case inventory-state-rename --local-codegen` changes the
-opted-in symbolic stock state label to `ON_HOLD` while preserving numeric
-wire values and eligibility. See [decision 0034](docs/decisions/0034-inventory-state-rename.md).
-
-`run_demo.py --case telemetry-message-rename --local-codegen` renames the
-standalone generated telemetry type and validates unchanged raw payloads and
-runtime decisions. See [decision 0035](docs/decisions/0035-telemetry-message-rename.md).
-
-The [twenty-case benchmark decision](docs/decisions/0036-twenty-migration-benchmark.md)
-describes the wire-tag move, JSON key override, packed inventory counts,
-destination oneof, and enum retirement, including their rollout constraints.
+Run outputs go to `patchgen/evidence/`, which git ignores. Older committed runs were
+removed to keep the repo small. They are still available under the git tag
+`archive/pre-cleanup-2026-11-10`.

@@ -1,5 +1,0 @@
-$ git worktree add --detach /Users/nurlanmammadli/.codex/worktrees/ss-70-72/Schema Sentinel/patchgen/evidence/reference-rename-001/source 26304c1ed2f4738676a9607e8fe21e17ebd090f0
-Preparing worktree (detached HEAD 26304c1)
-HEAD is now at 26304c1 Show encoded Protobuf bytes and actual decoded values in test output
-
-exit=0; elapsed_seconds=0.962494

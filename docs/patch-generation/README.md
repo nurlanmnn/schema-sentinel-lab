@@ -1,5 +1,5 @@
 Independent Lab continuation: [descriptor/locator pipeline](independent-pipeline.md)
-and [current measurements](independent-results.md). The historical results below
+and [current measurements](../history/independent-results.md). The historical results below
 remain intact; the independent path adds measured runtime candidate production.
 
 # Local patch-generation example
@@ -94,7 +94,7 @@ not passed to the runtime model. To repeat the broader failed scope, use the
 original `input.json` fixture without `--validation-profile`.
 
 
-Three-case expansion: [benchmark seed report](benchmark-seed-2026-10-28.md).
+Three-case expansion: [benchmark seed report](../history/benchmark-seed-2026-10-28.md).
 Live rename/type proposals failed; an unused enum addition passed with no runtime
 edits. Independent rename/type reference replays passed separately. Run
 `python3 -m patchgen.benchmark --output patchgen/evidence/benchmark-next` for all

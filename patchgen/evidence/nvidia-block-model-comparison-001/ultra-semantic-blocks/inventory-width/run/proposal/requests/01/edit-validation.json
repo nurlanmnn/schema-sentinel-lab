@@ -1,5 +1,0 @@
-{
-  "status": "provider_unavailable",
-  "path": "runtimes/csharp/Inventory.cs",
-  "error": "NVIDIA HTTP 502: {\"type\": \"about:blank\", \"title\": \"Bad Gateway\", \"status\": 502, \"detail\": \"Upstream request failed.\"}"
-}

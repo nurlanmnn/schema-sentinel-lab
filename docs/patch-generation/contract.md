@@ -91,5 +91,5 @@ The original five-file fixture remains saved and has no passing live result.
 Prompt 2.4 (`--strategy migration_edits`) supports removal, rename, explicitly
 defined type conversions, and unaffected additive changes. Prompt 2.3 remains
 unchanged for earlier replay. [Adapter 1.0](adapter.md) validates structured
-producer records; [benchmark seed results](benchmark-seed-2026-10-28.md) distinguish
+producer records; [benchmark seed results](../history/benchmark-seed-2026-10-28.md) distinguish
 live failures, a justified runtime no-change, and offline reference validation.

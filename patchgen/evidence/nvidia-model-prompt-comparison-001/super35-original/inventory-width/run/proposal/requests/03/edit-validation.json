@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/typescript/inventory.ts",
-  "error": "NVIDIA returned a different model identifier."
-}

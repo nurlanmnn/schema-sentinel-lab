@@ -1,8 +1,0 @@
-test_changed_inputs_and_weakened_gate_cannot_be_called_model_comparison (patchgen.tests.test_live_comparison.ComparisonTests.test_changed_inputs_and_weakened_gate_cannot_be_called_model_comparison) ... ok
-test_same_prompt_label_does_not_hide_changed_messages (patchgen.tests.test_live_comparison.ComparisonTests.test_same_prompt_label_does_not_hide_changed_messages) ... ok
-test_separates_model_prompt_and_confounded_changes (patchgen.tests.test_live_comparison.ComparisonTests.test_separates_model_prompt_and_confounded_changes) ... ok
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.118s
-
-OK

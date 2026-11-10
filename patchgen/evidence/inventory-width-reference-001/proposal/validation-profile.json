@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "91072d89eb9add6b851a19ac80309a368d671781",
-  "change_id": "inventory-quantity-width",
-  "new_schema_sha256": "d868049b9de1b1ef2015ca13170ed7872ffd57251e82847ca014f026766df774",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "inventory_case": "width"
-}

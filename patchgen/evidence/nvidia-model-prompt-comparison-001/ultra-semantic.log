@@ -1,8 +1,0 @@
-pubsub-rename: validation_passed; actual model requests=3
-pubsub-removal: validation_passed; actual model requests=3
-pubsub-utf8: failed; actual model requests=3
-telemetry-rename: validation_passed; actual model requests=3
-telemetry-precision: validation_passed; actual model requests=3
-telemetry-units: failed; actual model requests=3
-inventory-width: failed; actual model requests=3
-telemetry-quantized: failed; actual model requests=3

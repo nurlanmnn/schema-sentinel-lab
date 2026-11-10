@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "1b96fa988852e92bb06e4661091215b61bf31382",
-  "change_id": "inventory-routing-oneof",
-  "new_schema_sha256": "83b05281b404d5d2888c8cf268ad395ffcefeea36e6746b766c19f218f7dca0c",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "inventory_case": "routing-oneof"
-}

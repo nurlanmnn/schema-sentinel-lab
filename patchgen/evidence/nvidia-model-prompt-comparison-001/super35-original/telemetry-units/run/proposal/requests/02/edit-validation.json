@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/python/telemetry_runtime.py",
-  "error": "NVIDIA returned a different model identifier."
-}

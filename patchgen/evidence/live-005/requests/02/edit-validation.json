@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "runtimes/typescript/main.ts",
-  "error": "replacement must be complete newline-terminated lines, or empty for deletion"
-}

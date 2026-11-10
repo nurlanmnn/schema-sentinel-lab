@@ -1,5 +1,0 @@
-{
-  "status": "failed",
-  "path": "testbed/tests/e2e_test.py",
-  "error": "replacement must be complete newline-terminated lines, or empty for deletion"
-}

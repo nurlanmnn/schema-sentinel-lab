@@ -1,8 +1,0 @@
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"","name":""}}
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"pubsub-001","name":"Sensor A"}}
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"entity-雪-🚀","name":"Café / Δ / 🚀"}}
-{"runtime":"typescript","version":"v1","fields":{"entity_id":"quotes \"\n\\","name":"line\nbreak \" \\"}}
-{"runtime":"typescript","version":"v2","fields":{"entity_id":""}}
-{"runtime":"typescript","version":"v2","fields":{"entity_id":"pubsub-001"}}
-{"runtime":"typescript","version":"v2","fields":{"entity_id":"entity-雪-🚀"}}
-{"runtime":"typescript","version":"v2","fields":{"entity_id":"quotes \"\n\\"}}

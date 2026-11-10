@@ -1,8 +1,0 @@
-{"runtime":"csharp","version":"v1","fields":{"entity_id":"","name":""}}
-{"runtime":"csharp","version":"v1","fields":{"entity_id":"pubsub-001","name":"Sensor A"}}
-{"runtime":"csharp","version":"v1","fields":{"entity_id":"entity-\u96EA-\uD83D\uDE80","name":"Caf\u00E9 / \u0394 / \uD83D\uDE80"}}
-{"runtime":"csharp","version":"v1","fields":{"entity_id":"quotes \u0022\n\\","name":"line\nbreak \u0022 \\"}}
-{"runtime":"csharp","version":"v2","fields":{"entity_id":""}}
-{"runtime":"csharp","version":"v2","fields":{"entity_id":"pubsub-001"}}
-{"runtime":"csharp","version":"v2","fields":{"entity_id":"entity-\u96EA-\uD83D\uDE80"}}
-{"runtime":"csharp","version":"v2","fields":{"entity_id":"quotes \u0022\n\\"}}

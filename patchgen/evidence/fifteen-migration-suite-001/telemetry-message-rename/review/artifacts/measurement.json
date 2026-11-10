@@ -1,8 +1,0 @@
-{
-  "expected_sites": 8,
-  "matched_sites": 8,
-  "recall": 1.0,
-  "missed": [],
-  "extra": [],
-  "classification_correct": true
-}

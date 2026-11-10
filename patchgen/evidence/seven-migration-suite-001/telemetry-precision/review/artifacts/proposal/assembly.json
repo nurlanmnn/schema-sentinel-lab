@@ -1,6 +1,0 @@
-{
-  "strategy": "deterministic_telemetry_precision",
-  "model_requests": 0,
-  "automatic_repairs": 0,
-  "policy": "explicit telemetry float64 widening; wire type changes, coordinated rollout required"
-}

@@ -85,7 +85,7 @@ class InventoryReviewTests(unittest.TestCase):
         import tempfile
         import shutil
         from patchgen.review import check_host_evidence, ARTIFACTS
-        source = ROOT/'patchgen/evidence/pipeline-inventory-width-002'
+        source = ROOT/'patchgen/tests/data/inventory-width-run'
         report = json.loads((source/'proposal/report.json').read_text())
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)

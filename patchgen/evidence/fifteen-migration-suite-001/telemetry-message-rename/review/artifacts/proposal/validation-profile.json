@@ -1,9 +1,0 @@
-{
-  "profile_version": "1.0",
-  "source_revision": "665e06e11f912e592f39966443fc7c06f8b3b9ac",
-  "change_id": "telemetry-message-rename",
-  "new_schema_sha256": "dd34f32ddd702ab16d5f46b0650afca8b68dfccf29745ecc362e8bc9abe3ee7b",
-  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "allowed_test_paths": [],
-  "telemetry_case": "message-rename"
-}

@@ -1,9 +1,0 @@
-test_exact_constructor_changes_and_preserved_observations (patchgen.tests.test_inventory_width.InventoryWidthTests.test_exact_constructor_changes_and_preserved_observations) ... ok
-test_number_input_or_observation_rejected (patchgen.tests.test_inventory_width.InventoryWidthTests.test_number_input_or_observation_rejected) ... ok
-test_predicate_observation_and_binding_drift_rejected (patchgen.tests.test_inventory_width.InventoryWidthTests.test_predicate_observation_and_binding_drift_rejected) ... ok
-test_unknown_policy_type_cardinality_and_optional_rejected (patchgen.tests.test_inventory_width.InventoryWidthTests.test_unknown_policy_type_cardinality_and_optional_rejected) ... ok
-
-----------------------------------------------------------------------
-Ran 4 tests in 0.606s
-
-OK

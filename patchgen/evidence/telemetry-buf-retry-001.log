@@ -1,3 +1,0 @@
-Failure: resource_exhausted: too many requests
-
-Please see https://buf.build/docs/bsr/rate-limits/ for details about BSR rate limiting.

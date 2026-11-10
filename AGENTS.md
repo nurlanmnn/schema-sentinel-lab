@@ -1,6 +1,6 @@
 # Schema Sentinel Project Context
 
-This repository is the workspace for the UCF Senior Design project **Schema Sentinel**. The project is at its starting point. Do not assume that proposal features have already been implemented.
+This repository is the workspace for the UCF Senior Design project **Schema Sentinel**. The README describes what is implemented today; do not assume other proposal features exist.
 
 ## Source hierarchy
 

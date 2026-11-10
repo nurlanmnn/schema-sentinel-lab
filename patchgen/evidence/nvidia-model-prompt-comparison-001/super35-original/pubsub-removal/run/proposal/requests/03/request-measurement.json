@@ -1,6 +1,0 @@
-{
-  "backend": "nvidia",
-  "status": "failed",
-  "model": "nvidia/nemotron-3.5-super-vl-120b-a12b",
-  "elapsed_seconds": 2.640663583064452
-}

@@ -1,8 +1,0 @@
-{
-  "backend": "nvidia",
-  "status": "http_error",
-  "model": "nvidia/nemotron-3-ultra-550b-a55b",
-  "http_status": 502,
-  "retry_after": null,
-  "elapsed_seconds": 0.16580141696613282
-}

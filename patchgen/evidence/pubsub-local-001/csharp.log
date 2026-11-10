@@ -1,6 +1,0 @@
-Unhandled exception. System.Net.Http.HttpRequestException: Response status code does not indicate success: 400 (Bad Request).
-   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
-   at Program.<>c__DisplayClass0_0.<<<Main>$>g__Post|4>d.MoveNext() in /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/csharp/main.cs:line 37
---- End of stack trace from previous location ---
-   at Program.<Main>$(String[] args) in /Users/nurlanmammadli/Documents/ChatGPT/Schema Sentinel Lab/runtimes/csharp/main.cs:line 41
-   at Program.<Main>(String[] args)
