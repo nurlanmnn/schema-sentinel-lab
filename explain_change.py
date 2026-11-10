@@ -71,9 +71,15 @@ def main():
 
     print('STEP 1 - CHANGE DETECTION')
     print(f"  status: {detector['status']}  ({detector['structural_status']})")
-    for event in detector['events']:
+    print(f"  compatibility: {detector['compatibility']}")
+    for event, label in zip(detector['events'], detector['event_compatibility']):
         details = {k: v for k, v in event.items() if k not in ('old_field', 'new_field')}
         print('  event:', details)
+        print(f"    -> {label['label']}: {label['reason']}")
+    for change in detector['comment_changes']:
+        print(f"  comment changed on {change['element']} (check units/meaning):")
+        print(f"    old: {change['old_comment']}")
+        print(f"    new: {change['new_comment']}")
     for reason in detector['unsupported']:
         print('  unsupported:', reason)
     for issue in detector['analysis_issues']:

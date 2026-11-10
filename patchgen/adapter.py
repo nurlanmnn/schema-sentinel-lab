@@ -78,6 +78,8 @@ def verify_detector_record(detector):
                       require(detector, 'intended_behavior', str, 'detector'))
     keys = ('status', 'structural_status', 'events', 'unsupported', 'old_schema_sha256',
             'new_schema_sha256', 'old_descriptor_sha256', 'new_descriptor_sha256')
+    if version >= (1, 2):
+        keys += ('compatibility', 'event_compatibility', 'comment_changes', 'semantic_review')
     if expected['change']['category'] != change['category'] or any(detector.get(key) != expected[key] for key in keys):
         raise ContractError('detector claims do not match schema descriptor recomputation')
     return 'schema hashes, descriptor hashes and supported event recomputed; not independent analysis'

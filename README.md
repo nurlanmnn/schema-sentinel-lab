@@ -43,8 +43,10 @@ looks like this (shortened):
 ```text
 STEP 1 - CHANGE DETECTION
   status: complete  (single_supported_event)
+  compatibility: renaming
   event: {'category': 'field_renamed', 'message': 'simulation.telemetry.VehicleTelemetry',
           'field_number': 2, 'old_name': 'speed_mps', 'new_name': 'ground_speed_mps'}
+    -> renaming: wire bytes unchanged; generated names and JSON keys change
 
 STEP 2 - IMPACT LOCATION
   status: complete   files scanned: 6
@@ -82,11 +84,17 @@ the change should mean.
   `field_removed`, `field_type_changed`, `field_added`, `enum_value_added`,
   `message_renamed` and so on. Anything it doesn't fully understand goes into an
   **`unsupported`** list instead of being guessed.
+- Each event also gets a **compatibility label**, using the sponsor's four classes:
+  `breaking`, `renaming` (wire bytes unchanged, names change), `safe-additive` or
+  `semantic-only` (only comments changed). The table is `COMPATIBILITY` in `detector.py`.
+  The record's overall `compatibility` is the most severe label, or `unknown` if anything is unsupported.
 - `detect()` wraps it all into one record. Status is `complete` only when there is exactly
   one supported event, nothing unsupported, and an intended-behavior sentence. Otherwise
   it is `partial` and later steps refuse to generate a patch.
-- It **never guesses meaning**. A change from m/s to km/h looks like a plain rename here.
-  The intended-behavior text has to say so.
+- It **never guesses meaning**, but it does report changed `.proto` comments
+  (`comment_changes`, `semantic_review`). A change from m/s to km/h looks like a plain rename,
+  so the changed comment ("meters per second" → "kilometers per hour") is the only clue
+  that a person needs to check the units. The intended-behavior text has to say what to do.
 
 ### Step 2: impact location (`patchgen/locator.py`)
 

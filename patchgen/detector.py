@@ -400,19 +400,101 @@ def compare(old, new):
     return events, unsupported
 
 
+# Sponsor taxonomy: safe-additive, breaking, renaming or semantic-only. Each label
+# describes the effect on existing code and data:
+#   breaking      - existing code, wire data or JSON can stop working
+#   renaming      - wire data unchanged, but names in code or JSON change
+#   safe-additive - existing code and data keep working unchanged
+#   semantic-only - no structural change, but documented meaning (comments) changed
+COMPATIBILITY = {
+    'field_added': ('safe-additive', 'old readers skip the new field; old writers leave it at its default'),
+    'field_removed': ('breaking', 'code that reads or writes the field stops compiling or loses data'),
+    'field_renamed': ('renaming', 'wire bytes unchanged; generated names and JSON keys change'),
+    'field_type_changed': ('breaking', 'the generated type, and possibly the wire encoding, changes'),
+    'field_presence_added': ('breaking', 'generated accessors change (has/clear; TypeScript may allow undefined)'),
+    'field_cardinality_changed': ('breaking', 'a list becomes a single value in code and JSON'),
+    'field_renumbered': ('breaking', 'old and new wire data no longer match'),
+    'field_json_name_changed': ('breaking', 'JSON readers and writers use a different key'),
+    'field_packing_changed': ('safe-additive', 'only the repeated-field encoding changes; parsers accept both'),
+    'fields_grouped_in_oneof': ('breaking', 'setting one member now clears the other'),
+    'message_renamed': ('renaming', 'wire bytes unchanged; the generated type name changes'),
+    'enum_value_added': ('safe-additive', 'existing values keep their meaning; consumers may need a new case'),
+    'enum_value_renamed': ('renaming', 'numeric value unchanged; the generated symbol changes'),
+    'enum_value_retired': ('breaking', 'code that uses the removed value stops compiling'),
+}
+SEVERITY = ('breaking', 'renaming', 'semantic-only', 'safe-additive')  # most severe first
+# Descriptor source paths: which field tag holds which children, per element kind.
+CHILDREN = {'file': {4: 'message_type', 5: 'enum_type'},
+            'message': {2: 'field', 3: 'nested_type', 4: 'enum_type'},
+            'enum': {2: 'value'}}
+# Comments on a whole statement inside a message, e.g. path (4, 0, 9) = message 0's 'reserved' line.
+STATEMENTS = {9: 'reserved', 10: 'reserved', 8: 'oneof', 7: 'options'}
+
+
+def element_name(file, path):
+    """Turn a descriptor source path such as (4, 0, 2, 1) into 'VehicleTelemetry.speed_mps'."""
+    scope, kind, parts = file, 'file', []
+    for position in range(0, len(path), 2):
+        tag = path[position]
+        attribute = CHILDREN.get(kind, {}).get(tag)
+        if attribute is None or position + 1 >= len(path) or path[position + 1] >= len(getattr(scope, attribute)):
+            if kind == 'message' and tag in STATEMENTS:
+                parts.append(STATEMENTS[tag])
+            break
+        scope = getattr(scope, attribute)[path[position + 1]]
+        parts.append(scope.name)
+        kind = ('message' if attribute in ('message_type', 'nested_type') else
+                'enum' if attribute == 'enum_type' else 'leaf')
+    return '.'.join(parts) or file.name
+
+
+def comment_changes(old, new):
+    """List elements whose comments differ; comments often carry units and meaning."""
+    def comments(file):
+        result = {}
+        for location in file.source_code_info.location:
+            texts = [location.leading_comments, location.trailing_comments, *location.leading_detached_comments]
+            text = ' | '.join(' '.join(t.split()) for t in texts if t.strip())
+            if text:
+                result[tuple(location.path)] = text
+        return result
+    before, after = comments(old), comments(new)
+    return [dict(element=element_name(new if path in after else old, path),
+                 old_comment=before.get(path), new_comment=after.get(path))
+            for path in sorted(before.keys() | after.keys()) if before.get(path) != after.get(path)]
+
+
+def compatibility(events, unsupported, comments):
+    """Label each event, then use the most severe label for the change as a whole."""
+    labelled = [dict(category=e['category'], label=COMPATIBILITY[e['category']][0],
+                     reason=COMPATIBILITY[e['category']][1]) for e in events]
+    if unsupported:
+        overall = 'unknown'  # something changed that the detector cannot classify
+    elif labelled:
+        overall = min((item['label'] for item in labelled), key=SEVERITY.index)
+    else:
+        overall = 'semantic-only' if comments else 'none'
+    return overall, labelled
+
+
 def detect(old_schema, new_schema, schema_path, revision, change_id, intended_behavior):
     old, oh = descriptor(old_schema, schema_path)
     new, nh = descriptor(new_schema, schema_path)
     events, unsupported = compare(old, new)
+    comments = comment_changes(old, new)
+    overall, labelled = compatibility(events, unsupported, comments)
     structural_status = ('unsupported' if unsupported else 'no_structural_change' if not events else
                          'single_supported_event' if len(events) == 1 else 'multiple_events')
     status = 'complete' if len(events) == 1 and not unsupported and intended_behavior.strip() else 'partial'
-    return dict(adapter_version='1.0', producer='independent-descriptor-detector/1.1', status=status,
+    return dict(adapter_version='1.0', producer='independent-descriptor-detector/1.2', status=status,
                 structural_status=structural_status,
                 analysis_issues=(['explicit intended behavior required'] if not intended_behavior.strip() else []),
                 source_revision=revision, old_schema_sha256=digest(old_schema), new_schema_sha256=digest(new_schema),
                 old_descriptor_sha256=oh, new_descriptor_sha256=nh, events=events, unsupported=unsupported,
-                semantic_policy='caller-supplied intended behavior; comments/units/frames are not inferred',
+                compatibility=overall, event_compatibility=labelled,
+                # Comment edits are flagged for a human; their meaning is still never inferred.
+                comment_changes=comments, semantic_review=bool(comments),
+                semantic_policy='caller-supplied intended behavior; changed comments are flagged, units/frames are not inferred',
                 change=dict(id=change_id, category=events[0]['category'] if len(events)==1 else 'ambiguous',
                             schema_path=schema_path, old_schema=old_schema, new_schema=new_schema),
                 intended_behavior=intended_behavior)
