@@ -113,14 +113,108 @@ the change should mean.
 - `locate()` returns one record: the scanned files with their hashes, the candidate lines
   with reasons, and any issues.
 
-### Steps 3 to 5: patch generation, validation and review
+## Patch generation, validation and review (steps 3 to 5)
 
-`patchgen/pipeline.py` runs the whole chain. `adapter.py` re-checks the detector and locator
-records. `generator.py` drafts and validates a patch, using either a per-case deterministic
-recipe (files such as `type_utf8.py` and `inventory_width.py`) or an LLM. `review.py` exports
-a local review page. The one-command demo is `run_demo.py`, explained in
-[docs/patch-generation/demo.md](docs/patch-generation/demo.md). Model work is documented in
-[docs/patch-generation/](docs/patch-generation/) and [docs/decisions/](docs/decisions/).
+Once both records are `complete`, the tool drafts a code change for every candidate file,
+applies it to an isolated copy of the repo, proves it works by building and running all
+three runtimes, and hands the result to a person. **It never merges anything by itself.**
+
+### How a patch is made
+
+1. **Check the inputs** (`patchgen/adapter.py`). The adapter re-runs the detector and the
+   locator scan on the pinned source and refuses records that don't match. It then writes
+   `input.json`, the request for the patch generator.
+2. **Draft the edits** (`patchgen/generator.py`). It makes one request per affected file.
+   That request holds the intended behavior, the old and new schema, the file's source and
+   the candidate lines. Answer keys and test files are never sent. The draft comes from one
+   of two sources:
+    - **An LLM**, via one of the `candidate_*` strategies. The model must return exact
+      before/after code blocks for the candidate lines, plus a rationale and a confidence.
+      The host checks every block (`anchor_edits.py`) and rejects any answer that edits
+      something it shouldn't, skips a required line, or isn't valid JSON.
+    - **A deterministic recipe**, via a `deterministic_*` strategy. This is a hand-written,
+      per-case policy such as `type_utf8.py`, `inventory_width.py` or `telemetry_units.py`.
+      It makes no model calls. These recipes prove that the validation and review path
+      works, and they are never counted as model successes.
+3. **Apply it in isolation.** The host checks the paths and the patch shape (no new,
+   deleted, renamed or binary files), creates a detached git worktree under the output
+   folder, runs `git apply --check`, and applies the patch there. Your checkout is never touched.
+4. **Validate** (the gate). It regenerates the Protobuf bindings (`buf generate`, or pinned
+   local tools with `--local-codegen`). Then `run_local.py` builds all three runtimes, runs
+   the unit tests and the Python → TypeScript → C# round trip. Last comes an
+   **independent oracle** written by us, not the model: `patchgen/oracle.py`,
+   `patchgen/benchmark_oracle.py`, or the telemetry, inventory and pub/sub checkers in
+   `testbed/`. These send real encoded messages and check every runtime's decoded values
+   and decisions. A patch is `validation_passed` only if every step passes.
+5. **Review** (`patchgen/review.py`). This exports a local web page with the intended
+   behavior, the full diff and all validation evidence. A person types their name and
+   reason and downloads an approve/reject decision file, and `review verify` checks it.
+   A failed patch can only be rejected. Nothing is applied to the real repo or merged.
+
+### The model setup (locked)
+
+Model choice was frozen on 5 Nov 2026 ([decision 0041](docs/decisions/0041-locked-gemma-configuration.md)).
+The setup is **Gemma 4 31B (`google/gemma-4-31b-it`) on NVIDIA's hosted API**, strategy
+`candidate_semantic_blocks` (prompt 3.1), temperature 0.5, seed 0. `--locked` selects exactly
+this setup and refuses any override. Prompt, sampling and parser fingerprints are checked
+on every run, so silent prompt tuning is caught.
+
+- **API key:** set `NVIDIA_API_KEY`, or run `.venv/bin/python -m patchgen.nvidia_client setup-key`
+  once. That stores it in `~/.config/schema-sentinel/nvidia.key`, outside the repo.
+- Without `--locked`, the CLI default is still local **Ollama** (Ministral 3 models), so
+  nothing calls a hosted model unless you ask for it. OpenRouter and other NVIDIA models
+  remain as recorded experiments.
+- **Repair loop** (`patchgen/repair_suite.py`, [decision 0042](docs/decisions/0042-bounded-repair-loop.md)):
+  for each rejected case, the compiler errors and a fixed-wording oracle verdict are sent
+  back for **at most two rounds**. Expected values, reference answers and test-file errors
+  are never sent. First-pass and repaired results are reported separately.
+
+### Results so far
+
+| What | Result | Source |
+| --- | --- | --- |
+| Deterministic recipes, 20 authored migrations | 20/20 validated; all 137 expected impact sites found (+61 extra candidates) | [20-case report](docs/history/twenty-case-evaluation.md), [decision 0036](docs/decisions/0036-twenty-migration-benchmark.md) |
+| Local Ministral 3 (3B, 8B) | 0/6 on the first six cases; 8B 0/8 on the eight model-eligible cases | [model report](docs/history/live-model-evaluation-2026-11-02.md), [20-case report](docs/history/twenty-case-evaluation.md) |
+| NVIDIA comparison (8 model-eligible cases) | Nemotron Ultra 2/8 → 5/8 as prompts improved; Gemma 6/8; Laguna 2/8 | [decision 0038](docs/decisions/0038-nvidia-model-prompt-evaluation.md), [decision 0039](docs/decisions/0039-laguna-coding-model-trial.md) |
+| Locked Gemma, first pass | 6/8 validated | [decision 0042](docs/decisions/0042-bounded-repair-loop.md) |
+| Locked Gemma + repair loop | 7/8 within one round (33 requests in total) | [decision 0042](docs/decisions/0042-bounded-repair-loop.md) |
+
+**Caveat:** all eight model cases were also used while developing the prompt, so 6/8 and 7/8
+are *development* numbers, not proof the model works on new changes. The fix is **held-out
+cases**: new migrations written after the lock, approved by someone who hasn't seen the model's
+failures, sealed, and scored once. The runner exists (`patchgen/held_out.py`,
+`live_suite --locked --held-out`), but no held-out cases exist yet. See the
+[held-out plan](docs/patch-generation/held-out-plan.md). Human review time has not been measured yet.
+
+### Run it
+
+You need the `.venv` from "Try it" above, plus Node.js 22+ and the .NET 8 SDK (validation
+builds all three runtimes), internet access for dependencies, and free ports 8000–8002. Each
+run needs a new output folder.
+
+```sh
+# Full deterministic demo (no model, no API key): detect, locate, patch, validate, review page
+python3.13 run_demo.py --output patchgen/evidence/my-demo
+python3.13 run_demo.py --case telemetry-units --output patchgen/evidence/my-units-demo
+
+# All 20 authored migrations, one after another (pinned local code generators: tools/codegen/README.md)
+python3.13 run_benchmark.py --local-codegen --output patchgen/evidence/my-benchmark
+
+# The locked LLM evaluation, then the repair loop on its failures (needs the NVIDIA key)
+.venv/bin/python -m patchgen.live_suite --locked --full-benchmark --output patchgen/evidence/my-locked
+.venv/bin/python -m patchgen.repair_suite --source patchgen/evidence/my-locked --output patchgen/evidence/my-repair
+
+# Look at a result and record a decision
+.venv/bin/python -m http.server 8765 --bind 127.0.0.1 --directory patchgen/evidence
+#   open http://127.0.0.1:8765/my-demo/review/index.html, decide, download review-decision.json
+.venv/bin/python -m patchgen.review verify --bundle patchgen/evidence/my-demo/review --decision ~/Downloads/review-decision.json
+```
+
+`run_demo.py --help` lists all 23 demo cases. `run_manual_baseline.py` packages one task for a
+person to do by hand, for the human-versus-tool comparison
+([guide](docs/patch-generation/manual-baseline.md)). More detail is in
+[docs/patch-generation/](docs/patch-generation/): [demo](docs/patch-generation/demo.md),
+[review](docs/patch-generation/review.md) and [contract](docs/patch-generation/contract.md).
 
 ## Run the three runtimes (testbed)
 
@@ -142,8 +236,10 @@ keep the services running. See [testbed/README.md](testbed/README.md) for more.
 .venv/bin/python -m unittest discover -s testbed/tests -p 'test_*.py'
 ```
 
-Good starting tests for steps 1 and 2: `test_detector_boundaries.py`, `test_pipeline.py`,
-`test_python_bindings.py`, `test_typescript_bindings.py` and `test_source_spellings.py`.
+Good starting tests for steps 1 and 2: `test_detector_boundaries.py`, `test_compatibility.py`,
+`test_pipeline.py`, `test_python_bindings.py`, `test_typescript_bindings.py` and `test_source_spellings.py`.
+For steps 3 to 5: `test_generator.py`, `test_anchor_edits.py`, `test_live_suite.py`,
+`test_repair_suite.py`, `test_held_out.py` and `test_review.py`.
 
 ## Where things are
 
@@ -155,7 +251,14 @@ Good starting tests for steps 1 and 2: `test_detector_boundaries.py`, `test_pipe
 | `explain_change.py` | Runs steps 1 and 2 and prints the result in plain text |
 | `patchgen/detector.py` | Step 1: change detection |
 | `patchgen/locator.py` | Step 2: impact location, plus the `*_bindings.py`, `source_spellings.py` and `runtime_inventory.py` helpers |
-| `patchgen/pipeline.py`, `generator.py`, `review.py` | Steps 3 to 5 |
+| `patchgen/pipeline.py`, `adapter.py` | Run the whole chain; check the detector and locator records before drafting |
+| `patchgen/generator.py`, `anchor_edits.py`, `feedback_blocks.py` | Step 3 (draft and apply) and step 4 (validate) |
+| `patchgen/type_utf8.py`, `inventory_*.py`, `telemetry_*.py`, `remove_name.py`, ... | Deterministic per-case recipes (no model) |
+| `patchgen/nvidia_client.py` | Hosted model access for the locked Gemma setup (`openrouter_client.py` is an older experiment) |
+| `patchgen/live_suite.py`, `repair_suite.py`, `held_out.py` | LLM evaluation, repair loop, held-out sealing |
+| `patchgen/oracle.py`, `benchmark_oracle.py`, `testbed/{telemetry,inventory,pubsub}/` | Independent checkers used by validation |
+| `patchgen/review.py`, `review_assets/` | Step 5: review page export and decision check |
+| `tools/codegen/` | Pinned local Protobuf code generators (`--local-codegen`) |
 | `patchgen/fixtures/` | Example change requests (input) |
 | `patchgen/reference/` | Known-correct answers, used only for scoring after a run |
 | `patchgen/corpus/` | Extra authored scenarios (orders, inventory, telemetry) for testing steps 1 and 2 |

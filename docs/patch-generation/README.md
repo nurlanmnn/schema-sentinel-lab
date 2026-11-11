@@ -1,5 +1,10 @@
+> **Start with the [main README](../../README.md#patch-generation-validation-and-review-steps-3-to-5)**
+> for the current patch-generation overview: locked Gemma setup, repair loop, results and commands.
+> This page is the original local-model write-up. Some statements are out of date: it says
+> there is no repair loop, and it describes only local models.
+
 Independent Lab continuation: [descriptor/locator pipeline](independent-pipeline.md)
-and [current measurements](../history/independent-results.md). The historical results below
+and [earlier measurements](../history/independent-results.md). The historical results below
 remain intact; the independent path adds measured runtime candidate production.
 
 # Local patch-generation example
