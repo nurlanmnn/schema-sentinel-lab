@@ -11,7 +11,17 @@ import urllib.error
 import urllib.request
 
 MODEL = 'nvidia/nemotron-3-ultra-550b-a55b'
-MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b', 'google/gemma-4-31b-it', 'poolside/laguna-xs-2.1', 'deepseek-ai/deepseek-v4.1-flash')
+# Provider-recommended sampling for post-lock screening candidates (draft decision 0043).
+# These are reasoning models, so they get a larger output budget than the locked Gemma run;
+# results must report that difference.
+SCREENING_OPTIONS = {
+    'mistralai/mistral-large-4-1t-a52b': dict(temperature=1.0, top_p=0.95, max_tokens=32768),
+    'meta/muse-glimmer-30b': dict(temperature=1.0, top_p=0.95, top_k=64, max_tokens=32768),
+    'openai/gpt-oss-20b': dict(temperature=1.0, top_p=1.0, max_tokens=32768),
+}
+MODELS = (MODEL, 'nvidia/nemotron-3.5-super-vl-120b-a12b', 'google/gemma-4-31b-it', 'poolside/laguna-xs-2.1', 'deepseek-ai/deepseek-v4.1-flash',
+          # Draft decision 0043: post-lock screening candidates (not the locked configuration).
+          *SCREENING_OPTIONS)
 API_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 KEY_FILE = Path.home() / '.config/schema-sentinel/nvidia.key'
 OPTIONS = {
@@ -30,6 +40,8 @@ def options_for(model):
         raise ProviderError('Unsupported model')
     if model.startswith('google/'):
         return dict(temperature=0.5, top_p=1, seed=0, max_tokens=4096)
+    if model in SCREENING_OPTIONS:
+        return dict(SCREENING_OPTIONS[model])
     if model in ('poolside/laguna-xs-2.1', 'deepseek-ai/deepseek-v4.1-flash'):
         return dict(temperature=1, top_p=0.95, max_tokens=4096)
     return dict(OPTIONS)
