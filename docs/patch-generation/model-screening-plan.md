@@ -127,3 +127,10 @@ at a time. Same counting rules as above. These numbers are reported in their
 own table and never added to the pre-registered headline. Other AMD models were
 not used: DeepSeek, Qwen and MiniCPM are Chinese-origin (user preference);
 Clef, d3 and d3-flash are not chat models.
+
+## Result
+
+See `docs/decisions/0043-post-lock-model-screening.md`. Summary: keep 0041;
+Gemma 9/15 on NVIDIA and an identical per-case pattern on AMD; gpt-oss-20b
+4/15; North Mini Code 0/15 (extra run); Mistral Large 4 and Muse Glimmer not
+measurable because of NVIDIA provider failures.

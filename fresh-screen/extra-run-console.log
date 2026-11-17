@@ -1,0 +1,35 @@
+=== sample 1 amd Gemma-4-31B-IT Tue Nov 17 15:57:07 EST 2026
+fresh-entity-name-presence: validation_passed; actual model requests=3
+fresh-telemetry-speed-presence: failed; actual model requests=3
+fresh-telemetry-asset-rename: provider_unavailable; actual model requests=3
+=== sample 1 openrouter north-mini-code Tue Nov 17 16:01:49 EST 2026
+fresh-entity-name-presence: failed; actual model requests=3
+fresh-telemetry-speed-presence: failed; actual model requests=3
+fresh-telemetry-asset-rename: failed; actual model requests=3
+fresh-inventory-quantity-unsigned: failed; actual model requests=3
+fresh-inventory-state-bool: failed; actual model requests=3
+=== sample 2 amd Gemma-4-31B-IT Tue Nov 17 16:13:21 EST 2026
+fresh-entity-name-presence: validation_passed; actual model requests=3
+fresh-telemetry-speed-presence: failed; actual model requests=3
+fresh-telemetry-asset-rename: validation_passed; actual model requests=3
+fresh-inventory-quantity-unsigned: validation_passed; actual model requests=3
+fresh-inventory-state-bool: provider_unavailable; actual model requests=1
+=== sample 2 openrouter north-mini-code Tue Nov 17 16:20:36 EST 2026
+fresh-entity-name-presence: failed; actual model requests=3
+fresh-telemetry-speed-presence: failed; actual model requests=3
+fresh-telemetry-asset-rename: failed; actual model requests=3
+fresh-inventory-quantity-unsigned: failed; actual model requests=3
+fresh-inventory-state-bool: failed; actual model requests=3
+=== sample 3 amd Gemma-4-31B-IT Tue Nov 17 16:36:14 EST 2026
+fresh-entity-name-presence: validation_passed; actual model requests=3
+fresh-telemetry-speed-presence: failed; actual model requests=3
+fresh-telemetry-asset-rename: validation_passed; actual model requests=3
+fresh-inventory-quantity-unsigned: validation_passed; actual model requests=3
+fresh-inventory-state-bool: provider_unavailable; actual model requests=1
+=== sample 3 openrouter north-mini-code Tue Nov 17 16:42:27 EST 2026
+fresh-entity-name-presence: failed; actual model requests=3
+fresh-telemetry-speed-presence: failed; actual model requests=3
+fresh-telemetry-asset-rename: failed; actual model requests=3
+fresh-inventory-quantity-unsigned: failed; actual model requests=3
+fresh-inventory-state-bool: failed; actual model requests=3
+=== done Tue Nov 17 16:53:24 EST 2026

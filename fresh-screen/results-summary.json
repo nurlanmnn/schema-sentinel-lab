@@ -1,0 +1,884 @@
+[
+ {
+  "run": "preregistered",
+  "dir": "fresh-gemma-s1",
+  "model": "google/gemma-4-31b-it",
+  "backend": "nvidia",
+  "sample": 1,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-gemma-s2",
+  "model": "google/gemma-4-31b-it",
+  "backend": "nvidia",
+  "sample": 2,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-gemma-s3",
+  "model": "google/gemma-4-31b-it",
+  "backend": "nvidia",
+  "sample": 3,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-gpt-oss-20b-s1",
+  "model": "openai/gpt-oss-20b",
+  "backend": "nvidia",
+  "sample": 1,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-gpt-oss-20b-s2",
+  "model": "openai/gpt-oss-20b",
+  "backend": "nvidia",
+  "sample": 2,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-gpt-oss-20b-s3",
+  "model": "openai/gpt-oss-20b",
+  "backend": "nvidia",
+  "sample": 3,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "request_timeout",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-mistral-large-4-1t-a52b-s1",
+  "model": "mistralai/mistral-large-4-1t-a52b",
+  "backend": "nvidia",
+  "sample": 1,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "request_timeout",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "request_timeout",
+    "category": "infrastructure",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-mistral-large-4-1t-a52b-s1-rerun",
+  "model": "mistralai/mistral-large-4-1t-a52b",
+  "backend": "nvidia",
+  "sample": 1,
+  "rerun": true,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-mistral-large-4-1t-a52b-s2",
+  "model": "mistralai/mistral-large-4-1t-a52b",
+  "backend": "nvidia",
+  "sample": 2,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "request_timeout",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-mistral-large-4-1t-a52b-s2-rerun",
+  "model": "mistralai/mistral-large-4-1t-a52b",
+  "backend": "nvidia",
+  "sample": 2,
+  "rerun": true,
+  "status": "running",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-mistral-large-4-1t-a52b-s3",
+  "model": "mistralai/mistral-large-4-1t-a52b",
+  "backend": "nvidia",
+  "sample": 3,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "connection_error",
+    "category": "infrastructure",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-muse-glimmer-30b-s1",
+  "model": "meta/muse-glimmer-30b",
+  "backend": "nvidia",
+  "sample": 1,
+  "rerun": false,
+  "status": "provider_unavailable",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 1
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-muse-glimmer-30b-s1-rerun",
+  "model": "meta/muse-glimmer-30b",
+  "backend": "nvidia",
+  "sample": 1,
+  "rerun": true,
+  "status": "provider_unavailable",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 1
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-muse-glimmer-30b-s2",
+  "model": "meta/muse-glimmer-30b",
+  "backend": "nvidia",
+  "sample": 2,
+  "rerun": false,
+  "status": "provider_unavailable",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 1
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-muse-glimmer-30b-s3",
+  "model": "meta/muse-glimmer-30b",
+  "backend": "nvidia",
+  "sample": 3,
+  "rerun": false,
+  "status": "provider_unavailable",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 1
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-north-mini-code-s1",
+  "model": "cohere/north-mini-code:free",
+  "backend": "openrouter",
+  "sample": 1,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-north-mini-code-s2",
+  "model": "cohere/north-mini-code:free",
+  "backend": "openrouter",
+  "sample": 2,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   }
+  }
+ },
+ {
+  "run": "preregistered",
+  "dir": "fresh-north-mini-code-s3",
+  "model": "cohere/north-mini-code:free",
+  "backend": "openrouter",
+  "sample": 3,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "6b9b9c7103677b1726499c7597c0cc0353802d21b521bdb1cae570c360289f69",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": null,
+    "category": "model",
+    "requests": 0
+   }
+  }
+ },
+ {
+  "run": "extra",
+  "dir": "extra-amd-gemma-s1",
+  "model": "Gemma-4-31B-IT",
+  "backend": "amd",
+  "sample": 1,
+  "rerun": false,
+  "status": "provider_unavailable",
+  "manifest_sha256": "511b83e3a3250f0a8c0f2833632154f94fb8ac201eca7373f806e1ee3eb38e6c",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "extra",
+  "dir": "extra-amd-gemma-s2",
+  "model": "Gemma-4-31B-IT",
+  "backend": "amd",
+  "sample": 2,
+  "rerun": false,
+  "status": "provider_unavailable",
+  "manifest_sha256": "511b83e3a3250f0a8c0f2833632154f94fb8ac201eca7373f806e1ee3eb38e6c",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 1
+   }
+  }
+ },
+ {
+  "run": "extra",
+  "dir": "extra-amd-gemma-s3",
+  "model": "Gemma-4-31B-IT",
+  "backend": "amd",
+  "sample": 3,
+  "rerun": false,
+  "status": "provider_unavailable",
+  "manifest_sha256": "511b83e3a3250f0a8c0f2833632154f94fb8ac201eca7373f806e1ee3eb38e6c",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "validation_passed",
+    "failure_stage": null,
+    "category": null,
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "provider_unavailable",
+    "failure_stage": "provider_http_error",
+    "category": "infrastructure",
+    "requests": 1
+   }
+  }
+ },
+ {
+  "run": "extra",
+  "dir": "extra-north-mini-code-s1",
+  "model": "cohere/north-mini-code:free",
+  "backend": "openrouter",
+  "sample": 1,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "511b83e3a3250f0a8c0f2833632154f94fb8ac201eca7373f806e1ee3eb38e6c",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "extra",
+  "dir": "extra-north-mini-code-s2",
+  "model": "cohere/north-mini-code:free",
+  "backend": "openrouter",
+  "sample": 2,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "511b83e3a3250f0a8c0f2833632154f94fb8ac201eca7373f806e1ee3eb38e6c",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "truncated_at_token_limit",
+    "category": "model_budget",
+    "requests": 3
+   }
+  }
+ },
+ {
+  "run": "extra",
+  "dir": "extra-north-mini-code-s3",
+  "model": "cohere/north-mini-code:free",
+  "backend": "openrouter",
+  "sample": 3,
+  "rerun": false,
+  "status": "completed",
+  "manifest_sha256": "511b83e3a3250f0a8c0f2833632154f94fb8ac201eca7373f806e1ee3eb38e6c",
+  "cases": {
+   "fresh-entity-name-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-speed-presence": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-telemetry-asset-rename": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-quantity-unsigned": {
+    "status": "failed",
+    "failure_stage": "model_validation",
+    "category": "model",
+    "requests": 3
+   },
+   "fresh-inventory-state-bool": {
+    "status": "failed",
+    "failure_stage": "truncated_at_token_limit",
+    "category": "model_budget",
+    "requests": 3
+   }
+  }
+ }
+]
