@@ -336,6 +336,8 @@ class FreshPipelineTests(unittest.TestCase):
                 invocation=next(c for c in commands if str(output/'fresh-oracle-source.py') in c)
                 self.assertEqual(invocation[invocation.index('--case')+1],name)
 
+    @unittest.skipIf(os.environ.get('SCHEMA_SENTINEL_SKIP_LOOPBACK') == '1',
+                     'loopback/e2e disabled by SCHEMA_SENTINEL_SKIP_LOOPBACK')
     def test_full_pipeline_reference_controls_and_review_when_loopback_is_available(self):
         try:
             with socket.socket() as probe:probe.bind(('127.0.0.1',0))

@@ -35,6 +35,7 @@ class LiveSuiteTests(unittest.TestCase):
             result=collect(Path(tmp),1,3)
             self.assertFalse(result['generated_patch_validated'])
             self.assertEqual(result['model_requests'],0)
+            self.assertEqual(result['failure_category'],'harness')
 
     def test_deterministic_pass_never_counts_as_model_success(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -56,3 +57,25 @@ class LiveSuiteTests(unittest.TestCase):
             self.assertEqual(result['requests'][0]['edit_validation']['error'],'bad site id')
             self.assertNotIn('memory_samples',result['requests'][0]['measurement'])
             self.assertFalse(result['generated_patch_validated'])
+
+    def test_zero_request_infrastructure_failure_takes_priority_over_harness(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            request = Path(tmp)/'run/proposal/requests/01'
+            request.mkdir(parents=True)
+            (request/'request-measurement.json').write_text(json.dumps(
+                dict(failure_stage='tls_error', status='failed')))
+            result = collect(Path(tmp), 1, 1)
+            self.assertEqual(result['model_requests'], 0)
+            self.assertEqual(result['failure_category'], 'infrastructure')
+
+    def test_zero_request_live_report_is_a_harness_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root/'run').mkdir()
+            (root/'review').mkdir()
+            (root/'review/index.html').write_text('synthetic review')
+            (root/'run/report.json').write_text(json.dumps(dict(
+                status='validation_passed', proposal_report=dict(mode='live_model'))))
+            result = collect(root, 0, 1)
+            self.assertFalse(result['generated_patch_validated'])
+            self.assertEqual(result['failure_category'], 'harness')

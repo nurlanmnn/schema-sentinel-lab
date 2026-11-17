@@ -29,6 +29,7 @@ class FreshSuiteTests(unittest.TestCase):
              patch.object(live_suite.subprocess,'check_output',return_value='a'*40), \
              patch('patchgen.nvidia_client.credential') as nvidia, \
              patch('patchgen.openrouter_client.credential') as openrouter, \
+             patch('patchgen.amd_client.credential') as amd, \
              patch.object(Path,'read_bytes',autospec=True,return_value=b'test sealed inputs'):
             process.return_value.returncode=0
             code=live_suite.execute(output,model,strategy,backend=backend,**kwargs)
@@ -43,10 +44,11 @@ class FreshSuiteTests(unittest.TestCase):
                 self.assertEqual(command[command.index('--strategy')+1],strategy)
             if backend=='nvidia':nvidia.assert_called_once()
             if backend=='openrouter':openrouter.assert_called_once()
+            if backend=='amd':amd.assert_called_once()
             return summary
 
     def test_fresh_runs_exactly_five_with_all_allowed_backends_models_and_strategies(self):
-        configs=[('ollama',m) for m in LOCAL_MODELS]+[('openrouter',OPENROUTER_MODEL)]+[('nvidia',m) for m in NVIDIA_MODELS]
+        configs=[('ollama',m) for m in LOCAL_MODELS]+[('openrouter',OPENROUTER_MODEL)]+[('nvidia',m) for m in NVIDIA_MODELS]+[('amd','Gemma-4-31B-IT')]
         strategies=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks')
         with tempfile.TemporaryDirectory() as tmp:
             index=0

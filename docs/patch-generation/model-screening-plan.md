@@ -96,3 +96,34 @@ Excluded: Chinese-origin models (user preference), models already tried
   outcome (reported separately).
 - No prompt, oracle, case or parser change after sealing. If a case proves
   broken, it is withdrawn for all models with the reason, not fixed.
+
+## Extra run (deviation, NOT part of the pre-registered screen)
+
+Written 2026-11-17, before any extra-run model request. Branch
+`claude/amd-screen`.
+
+Why: during the pre-registered screen NVIDIA's free endpoint returned many
+504s, timeouts and connection errors (Mistral and Muse lost most cases), and
+North Mini Code never ran because `pipeline.py` rejected its model id (exit 2,
+zero requests; the runner wrongly labelled these "model" failures). The
+pre-registered reruns were stopped early by the user's decision because NVIDIA
+was too slow; finished reruns are kept, the in-progress Mistral sample-2 rerun
+is recorded as aborted.
+
+What changed (code only, no case, fixture, oracle or prompt change; the
+manifest diff shows `cases`, `split` and `prompt_fingerprints` identical):
+- New `--backend amd` (`patchgen/amd_client.py`, `https://api.tokenlab.amd.com/v1`),
+  model `Gemma-4-31B-IT` with the exact locked Gemma options (temperature 0.5,
+  top_p 1, seed 0, max_tokens 4096). Purpose: same model, different provider.
+- `pipeline.py` accepts all OpenRouter screening models (North Mini Code fix).
+- Zero-request failures are labelled `harness` and counted separately.
+- Original seal kept as `fresh-screen/manifest-v1-preregistered.json`
+  (sha256 6b9b9c71…). Extra-run seal: `fresh-screen/manifest.json`
+  (sha256 511b83e3…).
+
+Extra-run protocol: 3 samples each, interleaved by sample: AMD Gemma, then
+North Mini Code (OpenRouter), `candidate_semantic_blocks`, no repair, one run
+at a time. Same counting rules as above. These numbers are reported in their
+own table and never added to the pre-registered headline. Other AMD models were
+not used: DeepSeek, Qwen and MiniCPM are Chinese-origin (user preference);
+Clef, d3 and d3-flash are not chat models.

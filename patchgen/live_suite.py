@@ -1,4 +1,5 @@
 """Measure actual local LLM proposals on migrations supported by the live route."""
+from patchgen.amd_client import MODEL as AMD_MODEL, MODELS as AMD_MODELS
 from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 import argparse
 import hashlib
@@ -92,7 +93,7 @@ def resolve_configuration(args):
             raise ValueError('--locked fixes backend, model and strategy; omit those options')
         return dict(LOCKED_CONFIG)
     backend = args.backend or 'ollama'
-    model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL}.get(backend, 'ministral-3:8b'))
+    model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL, 'amd': AMD_MODEL}.get(backend, 'ministral-3:8b'))
     return dict(backend=backend, model=model, strategy=args.strategy or 'candidate_edits')
 
 
@@ -140,7 +141,7 @@ def collect(target, exit_code, elapsed):
         result['generation_seconds']+=item.get('measurement',{}).get('elapsed_seconds',0)
         if (directory/'raw-response.json').is_file():
             raw=json.loads((directory/'raw-response.json').read_text())
-            fields = ('id','model','provider','usage') if result.get('backend') in ('openrouter', 'nvidia') else (
+            fields = ('id','model','provider','usage') if result.get('backend') in ('openrouter', 'nvidia', 'amd') else (
                 'done','done_reason','prompt_eval_count','eval_count','total_duration','load_duration','prompt_eval_duration','eval_duration')
             item['serving_counts']={key:raw.get(key) for key in fields}
         stage = request_stage(item.get('measurement', {}), raw)
@@ -165,10 +166,11 @@ def collect(target, exit_code, elapsed):
                                'model_validation' if result.get('mode') == 'live_model' and not result['generated_patch_validated'] else None)
     result['infrastructure_failure'] = any(stage in INFRASTRUCTURE_STAGES for stage in stages)
     result['truncated_at_token_limit'] = 'truncated_at_token_limit' in stages
+    result['generated_patch_validated'] &= result['model_requests'] > 0 and not stages
     result['failure_category'] = ('infrastructure' if result['infrastructure_failure'] else
+                                  'harness' if result['model_requests'] == 0 and not result['generated_patch_validated'] else
                                   'model_budget' if result['truncated_at_token_limit'] else
                                   'model' if not result['generated_patch_validated'] else None)
-    result['generated_patch_validated'] &= result['model_requests'] > 0 and not stages
     return result
 
 
@@ -201,7 +203,7 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         raise ValueError('--rerun-reason applies only to held-out or --fresh runs')
     if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
-    if backend in ('openrouter', 'nvidia'):
+    if backend in ('openrouter', 'nvidia', 'amd'):
         from importlib import import_module
         transport = import_module('patchgen.' + backend + '_client')
         credential = transport.credential
@@ -219,7 +221,7 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         from patchgen.fresh_attempts import begin
         fresh_attempt = begin(output, backend, model, strategy, sample,
             hashlib.sha256((ROOT/'fresh-screen/manifest.json').read_bytes()).hexdigest(), rerun_reason)
-    if fresh and backend in ('openrouter', 'nvidia'):
+    if fresh and backend in ('openrouter', 'nvidia', 'amd'):
         credential()
     if registry:
         # Recorded before the output exists or any request is sent, wherever the output lives.
@@ -241,7 +243,7 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
     options = OPTIONS
-    if backend in ('openrouter', 'nvidia'):
+    if backend in ('openrouter', 'nvidia', 'amd'):
         options = transport.options_for(model) if hasattr(transport, 'options_for') else transport.OPTIONS
     report=dict(status='running',mode='live_model',model=model,strategy=strategy,backend=backend,
                 prompt_version=STRATEGY_VERSIONS[strategy],options=options,
@@ -294,7 +296,8 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
                   provider_unavailable_cases=unavailable,
                   infrastructure_failures=sum(bool(r.get('infrastructure_failure', r['status'] == 'provider_unavailable')) for r in report['results']),
                   truncated_at_token_limit=sum(bool(r.get('truncated_at_token_limit')) for r in report['results']),
-                  model_failures=sum(not r['generated_patch_validated'] and not r.get('infrastructure_failure', r['status'] == 'provider_unavailable') and not r.get('truncated_at_token_limit') for r in report['results']),
+                  harness_failures=sum(r.get('failure_category') == 'harness' for r in report['results']),
+                  model_failures=sum(r.get('failure_category') != 'harness' and not r['generated_patch_validated'] and not r.get('infrastructure_failure', r['status'] == 'provider_unavailable') and not r.get('truncated_at_token_limit') for r in report['results']),
                   validated_model_patches=passed,
                   model_patch_validation_rate=None if (unavailable and not selected_fresh) or not denominator else passed/denominator,
                   validated_by_split={split: f"{sum(r['generated_patch_validated'] for r in report['results'] if splits[r['case']] == split)}/{sum(value == split for value in splits.values())}"
@@ -314,8 +317,8 @@ def main():
                         help='record eligibility across the complete deterministic benchmark and run its supported live cases')
     parser.add_argument('--locked', action='store_true',
                         help='use the decision 0041 configuration: Gemma 4 31B via NVIDIA, semantic blocks 3.1')
-    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default=None)
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,*OPENROUTER_MODELS,*NVIDIA_MODELS), default=None)
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia','amd'), default=None)
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,*OPENROUTER_MODELS,*NVIDIA_MODELS,*AMD_MODELS), default=None)
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES+FRESH_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'),default=None)

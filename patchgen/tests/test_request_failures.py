@@ -7,12 +7,12 @@ import tempfile
 import unittest
 import urllib.error
 from unittest.mock import patch
-from patchgen import nvidia_client, openrouter_client, live_suite, fresh_attempts, fresh_manifest
+from patchgen import amd_client, nvidia_client, openrouter_client, live_suite, fresh_attempts, fresh_manifest
 
 
 class RequestFailureTests(unittest.TestCase):
     def test_cloud_measurements_and_collection_distinguish_transport_budget_and_model(self):
-        for client in (nvidia_client, openrouter_client):
+        for client in (amd_client, nvidia_client, openrouter_client):
             def response(content='{}', finish='stop', **extra):
                 return dict(model=client.MODEL, choices=[dict(finish_reason=finish, message=dict(content=content))], **extra)
             scenarios = [
@@ -51,9 +51,9 @@ class RequestFailureTests(unittest.TestCase):
         outcomes = [dict(failure_category='infrastructure', infrastructure_failure=True, truncated_at_token_limit=False),
                     dict(failure_category='model_budget', infrastructure_failure=False, truncated_at_token_limit=True),
                     dict(failure_category='model', infrastructure_failure=False, truncated_at_token_limit=False),
-                    {}, {}]
-        rows = [dict(status='failed' if i < 3 else 'validation_passed', generated_patch_validated=i >= 3,
-                     model_requests=1, generation_seconds=1, **outcome) for i, outcome in enumerate(outcomes)]
+                    dict(failure_category='harness', infrastructure_failure=False, truncated_at_token_limit=False), {}]
+        rows = [dict(status='failed' if i < 4 else 'validation_passed', generated_patch_validated=i >= 4,
+                     model_requests=0 if i == 3 else 1, generation_seconds=1, **outcome) for i, outcome in enumerate(outcomes)]
         with tempfile.TemporaryDirectory() as tmp, patch('builtins.print'), \
              patch.object(fresh_attempts, 'DEFAULT', Path(tmp)/'attempts.jsonl'), \
              patch.object(fresh_manifest, 'verify', return_value={}), \
@@ -65,9 +65,10 @@ class RequestFailureTests(unittest.TestCase):
             output = Path(tmp)/'out'
             self.assertEqual(live_suite.execute(output, 'ministral-3:8b', fresh=True, sample=1), 1)
             report = json.loads((output/'summary.json').read_text())
-            self.assertEqual(report['validated_by_split']['fresh_screen'], '2/5')
-            self.assertEqual(report['model_patch_validation_rate'], 2/5)
+            self.assertEqual(report['validated_by_split']['fresh_screen'], '1/5')
+            self.assertEqual(report['model_patch_validation_rate'], 1/5)
             self.assertEqual(report['infrastructure_failures'], 1)
             self.assertEqual(report['truncated_at_token_limit'], 1)
             self.assertEqual(report['model_failures'], 1)
+            self.assertEqual(report['harness_failures'], 1)
             self.assertEqual(process.call_count, 5)
