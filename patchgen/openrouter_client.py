@@ -21,6 +21,20 @@ OPTIONS = {
     'response_format': {'type': 'json_object'},
     'provider': {'only': ['Google AI Studio'], 'allow_fallbacks': False},
 }
+# Draft decision 0043: post-lock screening candidate. Provider-recommended sampling, pinned to the
+# model's own provider, and no JSON mode so the response contract matches the NVIDIA route.
+COHERE_MODEL = 'cohere/north-mini-code:free'
+SCREENING_OPTIONS = {
+    COHERE_MODEL: {'temperature': 1.0, 'top_p': 0.95, 'max_tokens': 16384,
+                   'provider': {'only': ['Cohere'], 'allow_fallbacks': False}},
+}
+MODELS = (MODEL, *SCREENING_OPTIONS)
+
+
+def options_for(model):
+    if model not in MODELS:
+        raise ProviderError('Unsupported model')
+    return dict(SCREENING_OPTIONS.get(model, OPTIONS))
 
 
 class ProviderError(ValueError):
@@ -51,12 +65,12 @@ def save(path, value):
 
 
 def request_model(messages, model, output):
-    if model != MODEL:
-        raise ProviderError('This transport permits only the explicitly selected free Gemma model.')
+    if model not in MODELS:
+        raise ProviderError('This transport permits only explicitly allowed OpenRouter models.')
     token = credential()
     output.mkdir(parents=True, exist_ok=False)
     payload = json.loads(messages[-1]['content'])
-    request = dict(OPTIONS, model=model, messages=messages, stream=False)
+    request = dict(options_for(model), model=model, messages=messages, stream=False)
     save(output / 'request.json', request)
     save(output / 'prompt.json', dict(version=payload['prompt_version'],
          sha256=hashlib.sha256(json.dumps(messages).encode()).hexdigest(), messages=messages))
@@ -86,8 +100,14 @@ def request_model(messages, model, output):
             raise ProviderError('OpenRouter returned a different model identifier.')
         choices = raw.get('choices')
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict) or choices[0].get('finish_reason') != 'stop':
-            raise ProviderError('Gemma response was incomplete, refused, or truncated.')
-        value = json.loads(choices[0]['message']['content'])
+            raise ProviderError('Model response was incomplete, refused, or truncated.')
+        if model in SCREENING_OPTIONS:
+            # Same envelope rule as the NVIDIA route: raw JSON or one complete outer json fence.
+            from patchgen.nvidia_client import parse_content
+            value, normalized = parse_content(choices[0]['message']['content'])
+            measurement['json_fence_removed'] = normalized
+        else:
+            value = json.loads(choices[0]['message']['content'])
         if not isinstance(value, dict):
             raise ProviderError('Gemma response must be a JSON object.')
         measurement.update(status='response_received', provider=raw.get('provider'),
