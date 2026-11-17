@@ -89,10 +89,10 @@ def validate_malformed(state, message_id, exit_codes, decoder_failures):
             raise RuntimeError('Malformed payload did not remain pending for ' + name)
 
 
-def execute(root, output, case='baseline', scenario='valid'):
+def execute(root, output, case='baseline', scenario='valid', *, sample_provider=None, nullable_fields=()):
     if scenario not in ('valid', 'malformed'):
         raise RuntimeError('Unknown pubsub validation scenario')
-    if case not in CASES:
+    if case not in CASES and sample_provider is None:
         raise RuntimeError('Unknown pubsub validation case')
     root, output = root.resolve(), output.resolve()
     if output.exists() or root == output or root.is_relative_to(output):
@@ -103,7 +103,7 @@ def execute(root, output, case='baseline', scenario='valid'):
               'timing_scope': 'local publish-to-ack including polling, HTTP and decode; not schema propagation or human review',
               'human_approval_required': True, 'generated_patch_approval': False}
     processes, logs = [], []
-    server = create_server()
+    server = create_server(nullable_fields=nullable_fields)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     url = f'http://127.0.0.1:{server.server_port}'
@@ -167,7 +167,7 @@ def execute(root, output, case='baseline', scenario='valid'):
                           meaning='all three actual processes rejected truncated protobuf; not successful delivery or migration')
         else:
             # Publish the entire sequence without waiting for any consumer ack.
-            for sample in samples(case):
+            for sample in (sample_provider or samples)(case):
                 publication = request(url, '/publish', {'topic': sample['topic'], 'payload': base64.b64encode(sample['payload']).decode()})
                 published.append({'message_id': publication['message_id'], 'topic': sample['topic'], 'fields': sample['fields'],
                                   'sha256': hashlib.sha256(sample['payload']).hexdigest(), 'bytes': len(sample['payload'])})

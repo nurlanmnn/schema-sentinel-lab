@@ -1,0 +1,29 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change_id": "fresh-telemetry-asset-rename",
+  "category": "field_renamed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/telemetry_runtime.py",
+      "lines": [
+        10,
+        11
+      ]
+    },
+    {
+      "path": "runtimes/typescript/telemetry.ts",
+      "lines": [
+        9,
+        10
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Telemetry.cs",
+      "lines": [
+        12,
+        13
+      ]
+    }
+  ],
+  "method": "Authored source roles, no model outcomes consulted."
+}

@@ -1,5 +1,6 @@
 """Versioned fixture -> local Ollama proposal -> isolated, fixed validation gate."""
 from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
+from patchgen.fresh_cases import PROFILES as FRESH_PROFILES
 import argparse
 import ast
 import difflib
@@ -14,8 +15,9 @@ import sys
 import threading
 import time
 import urllib.request
+from patchgen.request_failures import response_stage, transport_stage
 from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
-from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL, ProviderHTTPError, ProviderIdentityError
+from patchgen.openrouter_client import MODEL as OPENROUTER_MODEL, MODELS as OPENROUTER_MODELS, ProviderHTTPError, ProviderIdentityError
 
 PROMPT_VERSION = '2.3'
 OPTIONS = {'temperature': 0, 'seed': 42, 'num_ctx': 16384, 'num_predict': 8192}
@@ -170,6 +172,8 @@ STRATEGY_VERSIONS['candidate_semantic_blocks']='3.1-semantic-blocks'
 STRATEGY_VERSIONS['candidate_semantic_edits']='3.0-semantic'
 STRATEGY_VERSIONS['candidate_feedback_blocks']='2.9-feedback'
 STRATEGY_VERSIONS['candidate_semantic_feedback_blocks']='3.1-feedback'
+STRATEGY_VERSIONS['deterministic_fresh'] = 'host-fresh/1.0'
+
 FEEDBACK_STRATEGIES = ('candidate_feedback_blocks', 'candidate_semantic_feedback_blocks')
 
 
@@ -474,6 +478,7 @@ def request_model(messages, model, endpoint, output):
     save(output / 'request.json',request)
     save(output / 'prompt.json',{'version':payload['prompt_version'],'sha256':hashlib.sha256(json.dumps(messages).encode()).hexdigest(),'messages':messages})
     samples = []
+    measurement = {}
     stop = threading.Event()
     def sample():
         while not stop.is_set():
@@ -487,10 +492,20 @@ def request_model(messages, model, endpoint, output):
     try:
         raw = api(endpoint,'/api/chat',request)
         save(output / 'raw-response.json',raw)
+        stage = response_stage(raw)
+        if stage:
+            measurement['failure_stage'] = stage
+    except (OSError, ValueError) as error:
+        stage = 'provider_http_error' if isinstance(error, urllib.error.HTTPError) else transport_stage(error) or 'incomplete_provider_response'
+        if stage:
+            measurement['failure_stage'] = stage
+        if isinstance(error, urllib.error.HTTPError):
+            measurement['http_status'] = error.code
+        raise
     finally:
         stop.set(); thread.join(timeout=2)
         save(output / 'request-measurement.json',{'elapsed_seconds':time.monotonic()-start,'memory_samples':samples,
-            'memory_scope':'Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded'})
+            **measurement, 'memory_scope':'Ollama /api/ps model allocation size and size_vram samples, not whole-system peak RSS; setup/download excluded'})
     if not raw.get('done') or raw.get('done_reason') == 'length':
         raise ContractError('model response incomplete or truncated at token limit')
     parsed = json.loads(raw['message']['content'])
@@ -602,6 +617,7 @@ VALIDATION_PROFILES = {
     'pubsub-name-rename': ('entity-name-rename', 'rename'),
     'pubsub-identifier-utf8': ('v2-identifier-bytes', 'utf8'),
 }
+VALIDATION_PROFILES.update({name: (name, None) for name in FRESH_PROFILES})
 INVENTORY_VALIDATION_CASES = {
     'inventory-quantity-width': 'width',
     'inventory-quantity-zigzag': 'zigzag',
@@ -634,7 +650,12 @@ def load_validation_profile(case, name):
     patch = (directory / 'validation-tests.patch').read_text()
     oracle_case, pubsub_case = VALIDATION_PROFILES[name]
     dedicated_oracle = (oracle_case == 'v2-identifier-bytes' or oracle_case in INVENTORY_VALIDATION_CASES
-                        or oracle_case in TELEMETRY_VALIDATION_CASES)
+                        or oracle_case in TELEMETRY_VALIDATION_CASES or oracle_case in FRESH_PROFILES)
+    if profile.get('fresh_case') != (name if name in FRESH_PROFILES else None):
+        raise ContractError('trusted profile has wrong fresh selection')
+    if name in FRESH_PROFILES:
+        from patchgen.fresh_cases import verify_target
+        verify_target(case)
     allowed = [] if dedicated_oracle else ['testbed/tests/e2e_test.py', 'testbed/tests/test_evidence.py']
     if profile.get('inventory_case') != INVENTORY_VALIDATION_CASES.get(name):
         raise ContractError('trusted profile has wrong inventory selection')
@@ -703,7 +724,16 @@ def apply_and_validate(repo, case, proposal, output, run_checks, validation_prof
             command([sys.executable,'run_local.py'],workspace,log,timeout=600)
             python = workspace / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
             oracle_case = validation_profile[0].get('oracle_case', case['change']['id']) if validation_profile else case['change']['id']
-            if validation_profile and validation_profile[0].get('inventory_case'):
+            if validation_profile and validation_profile[0].get('fresh_case'):
+                mode = validation_profile[0]['fresh_case']
+                from patchgen.fresh_oracle import count
+                command([str(python), str(output/'fresh-oracle-source.py'), '--root', str(workspace),
+                         '--case', mode, '--output', str(output/'fresh')], output/'fresh-harness', log)
+                result = json.loads((output/'fresh/report.json').read_text())
+                if (result.get('status') != 'passed' or result.get('runtime_cases') != count(mode)
+                        or result.get('case') != mode or result.get('runtime_revision') != case['source_revision']):
+                    raise ContractError('fresh validation did not retain passing evidence')
+            elif validation_profile and validation_profile[0].get('inventory_case'):
                 command([str(python), str(output/'inventory-oracle-source.py'), '--root', str(workspace),
                          '--case', validation_profile[0]['inventory_case'], '--output', str(output/'inventory')], workspace,log)
                 result = json.loads((output/'inventory/report.json').read_text())
@@ -799,7 +829,7 @@ def main():
     metadata_strategy = args.strategy == 'deterministic_telemetry_metadata'
     if metadata_strategy:
         (output/'telemetry-metadata-source.py').write_bytes(Path(__file__).with_name('telemetry_metadata.py').read_bytes())
-    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or metadata_strategy or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units','deterministic_telemetry_quantized','deterministic_telemetry_message_rename') else 'live_model'),
+    report = {'status':'failed','human_approval_required':True,'mode':'offline_replay' if args.response else ('deterministic_proposal' if inventory_migration or metadata_strategy or args.strategy == 'deterministic_fresh' or args.strategy in ('deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units','deterministic_telemetry_quantized','deterministic_telemetry_message_rename') else 'live_model'),
               'prompt_version':STRATEGY_VERSIONS[args.strategy],'strategy':args.strategy,'backend':args.backend,
               'generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'oracle_sha256':hashlib.sha256(Path(__file__).with_name('oracle.py').read_bytes()).hexdigest()}
@@ -839,7 +869,7 @@ def main():
         # Hosted feedback is limited to NVIDIA semantic-block repair rounds (decision 0042).
         cloud_feedback = args.backend == 'nvidia' and args.strategy == 'candidate_semantic_feedback_blocks'
         if args.backend in ('openrouter', 'nvidia') and (args.response or (args.feedback and not cloud_feedback)
-                or args.model not in ({'openrouter': (OPENROUTER_MODEL,), 'nvidia': NVIDIA_MODELS}[args.backend])
+                or args.model not in ({'openrouter': OPENROUTER_MODELS, 'nvidia': NVIDIA_MODELS}[args.backend])
                 or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks') + (('candidate_semantic_feedback_blocks',) if cloud_feedback else ())):
             raise ContractError('cloud backend requires an explicit request to its selected model')
         if bool(args.feedback)!=(args.strategy in FEEDBACK_STRATEGIES) or args.feedback and args.response:
@@ -874,8 +904,30 @@ def main():
                 not message_rename or args.response
                 or args.validate and (not validation_profile or validation_profile[0].get('telemetry_case') != 'message-rename')):
             raise ContractError('message rename requires its deterministic strategy and trusted profile')
+        if case['change']['id'] in FRESH_PROFILES:
+            from patchgen.fresh_cases import verify_target
+            verify_target(case)
+            if not validation_profile or validation_profile[0].get('fresh_case') != case['change']['id']:
+                raise ContractError('fresh validation requires its matching trusted profile')
+        if args.strategy == 'deterministic_fresh':
+            from patchgen.fresh_cases import verify_target
+            verify_target(case)
+            raw = Path(__file__).with_name('fresh_cases.py').read_bytes()
+            (output/'fresh-recipe-source.py').write_bytes(raw)
+            report['fresh_recipe_sha256'] = hashlib.sha256(raw).hexdigest()
         if validation_profile:
             report['validation_profile'] = validation_profile[0]
+            if validation_profile[0].get('fresh_case'):
+                raw = Path(__file__).with_name('fresh_oracle.py').read_bytes()
+                (output/'fresh-oracle-source.py').write_bytes(raw)
+                report['fresh_oracle_sha256'] = hashlib.sha256(raw).hexdigest()
+                harness = output/'fresh-harness/testbed/pubsub'
+                harness.mkdir(parents=True)
+                report['fresh_harness_sha256'] = {}
+                for name in ('run.py', 'broker.py', 'topics.json'):
+                    raw = (Path(__file__).resolve().parents[1]/'testbed/pubsub'/name).read_bytes()
+                    (harness/name).write_bytes(raw)
+                    report['fresh_harness_sha256'][name] = hashlib.sha256(raw).hexdigest()
             if validation_profile[0].get('inventory_case'):
                 raw = (Path(__file__).resolve().parents[1]/'testbed/inventory/run.py').read_bytes()
                 (output/'inventory-oracle-source.py').write_bytes(raw)
@@ -904,9 +956,12 @@ def main():
                        'field_added': 'reservation', 'enum_value_renamed': 'state-rename',
                        'field_packing_changed': 'packed-bins', 'fields_grouped_in_oneof': 'routing-oneof',
                        'enum_value_retired': 'state-retirement'}.get(case['change']['category'])
-        if pinned_mode and (inventory_migration != pinned_mode or args.response):
+        if pinned_mode and case['change']['id'] not in FRESH_PROFILES and (inventory_migration != pinned_mode or args.response):
             raise ContractError('this change requires its pinned deterministic strategy')
-        if args.strategy in INVENTORY_EVOLUTION_STRATEGIES:
+        if args.strategy == 'deterministic_fresh' and not args.response:
+            from patchgen.fresh_cases import propose
+            proposal = propose(case, output)
+        elif args.strategy in INVENTORY_EVOLUTION_STRATEGIES:
             from patchgen.inventory_evolution import propose
             proposal = propose(case, output, inventory_migration)
         elif inventory_migration == 'state-rename':
@@ -961,6 +1016,8 @@ def main():
             report['status'] = 'validation_passed' if args.validate else 'applied_unvalidated'
             if args.validate and args.local_codegen:
                 report['local_codegen_toolchain'] = json.loads((output/'local-codegen-toolchain.json').read_text())
+            if args.validate and validation_profile and validation_profile[0].get('fresh_case'):
+                report['fresh_validation'] = json.loads((output/'fresh/report.json').read_text())
             if args.validate and validation_profile and validation_profile[0].get('inventory_case'):
                 report['inventory_validation'] = json.loads((output/'inventory/report.json').read_text())
             if args.validate and validation_profile and validation_profile[0].get('telemetry_case'):

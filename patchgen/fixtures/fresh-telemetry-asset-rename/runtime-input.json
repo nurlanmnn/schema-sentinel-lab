@@ -1,0 +1,10 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change": {
+    "id": "fresh-telemetry-asset-rename",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string asset_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Rename VehicleTelemetry.vehicle_id to asset_id at wire field 1, retaining string type and all wire values. The external producer request key remains vehicle_id; write its exact value into asset_id. Consumer observations use asset_id instead of vehicle_id; preserve empty, Unicode, whitespace and escaped identifiers without trimming or normalization. Keep float32 speed_mps, expose the decoded float32 value as a JSON number; any decimal form that rounds to that float32 is accepted, and keep strict speeding >30.0. Producer input and incoming payload are independent. No json_name option is introduced. Other domains and tests are unchanged. NaN, infinity, out-of-float32-range inputs and signed-zero bit distinctions are outside this case."
+}

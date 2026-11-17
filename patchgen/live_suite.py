@@ -7,13 +7,17 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+from patchgen.request_failures import request_stage, INFRASTRUCTURE_STAGES
 from patchgen.generator import LOCAL_MODELS, OPENROUTER_MODEL, OPTIONS, STRATEGY_VERSIONS
+from patchgen.openrouter_client import MODELS as OPENROUTER_MODELS
 from run_benchmark import manifest
 from run_demo import check_output
+from patchgen.fresh_cases import PROFILES as FRESH_CASES
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ('pubsub-rename','pubsub-removal','pubsub-utf8','telemetry-rename','telemetry-precision','telemetry-units')
 ADDITIONAL_CASES = ('inventory-width', 'telemetry-quantized')
+
 SCHEMA_ONLY_CASES = ('inventory-zigzag', 'telemetry-tag-move', 'inventory-packed-bins')
 # Decision 0041: the frozen configuration for subsequent live evaluations.
 LOCKED_DECISION = '0041'
@@ -92,9 +96,20 @@ def resolve_configuration(args):
     return dict(backend=backend, model=model, strategy=args.strategy or 'candidate_edits')
 
 
+def fresh_entries():
+    from patchgen.fresh_cases import fixture
+    entries = []
+    for name in FRESH_CASES:
+        request = fixture(name)
+        path = ROOT/'patchgen/fixtures'/name/'runtime-input.json'
+        entries.append(dict(case=name, profile=name, id=name, source_revision=request['source_revision'],
+                            fixture_sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
+    return entries
+
+
 def benchmark_plan(entries):
     return {entry['case']: (
-        'eligible' if entry['case'] in CASES + ADDITIONAL_CASES else
+        'eligible' if entry['case'] in CASES + ADDITIONAL_CASES + FRESH_CASES else
         'schema_only' if entry['case'] in SCHEMA_ONLY_CASES else
         'requires_pinned_policy'
     ) for entry in entries}
@@ -111,11 +126,12 @@ def collect(target, exit_code, elapsed):
                       error=proposal.get('error',pipeline.get('error')),mode=proposal.get('mode'))
         result['generated_patch_validated'] = bool(exit_code==0 and pipeline['status']=='validation_passed'
             and proposal.get('mode')=='live_model' and (target/'review/index.html').is_file())
-        result['runtime_validation'] = proposal.get('inventory_validation',
-            proposal.get('telemetry_validation', proposal.get('pubsub_validation')))
+        result['runtime_validation'] = proposal.get('fresh_validation', proposal.get('inventory_validation',
+            proposal.get('telemetry_validation', proposal.get('pubsub_validation'))))
     requests=[]
     for directory in sorted((target/'run/proposal/requests').glob('*')):
         item = {'request':directory.name}
+        raw = None
         for filename,key in [('edit-validation.json','edit_validation'),('request-measurement.json','measurement')]:
             if (directory/filename).is_file():item[key]=json.loads((directory/filename).read_text())
         if (directory/'request.json').is_file():
@@ -127,6 +143,9 @@ def collect(target, exit_code, elapsed):
             fields = ('id','model','provider','usage') if result.get('backend') in ('openrouter', 'nvidia') else (
                 'done','done_reason','prompt_eval_count','eval_count','total_duration','load_duration','prompt_eval_duration','eval_duration')
             item['serving_counts']={key:raw.get(key) for key in fields}
+        stage = request_stage(item.get('measurement', {}), raw)
+        if stage:
+            item['failure_stage'] = stage
         # Full memory samples remain in their original request-measurement artifacts.
         if 'measurement' in item:item['measurement']={key:value for key,value in item['measurement'].items() if key!='memory_samples'}
         requests.append(item)
@@ -139,16 +158,38 @@ def collect(target, exit_code, elapsed):
         for item in requests if item.get('measurement', {}).get('status') == 'provider_identity_mismatch']
     if result['provider_errors']:
         result['status'] = 'provider_unavailable'
-    result['generated_patch_validated'] &= result['model_requests'] > 0
+    stages = sorted({item['failure_stage'] for item in requests if item.get('failure_stage')})
+    result['failure_stages'] = stages
+    result['failure_stage'] = ('truncated_at_token_limit' if 'truncated_at_token_limit' in stages else
+                               stages[0] if stages else
+                               'model_validation' if result.get('mode') == 'live_model' and not result['generated_patch_validated'] else None)
+    result['infrastructure_failure'] = any(stage in INFRASTRUCTURE_STAGES for stage in stages)
+    result['truncated_at_token_limit'] = 'truncated_at_token_limit' in stages
+    result['failure_category'] = ('infrastructure' if result['infrastructure_failure'] else
+                                  'model_budget' if result['truncated_at_token_limit'] else
+                                  'model' if not result['generated_patch_validated'] else None)
+    result['generated_patch_validated'] &= result['model_requests'] > 0 and not stages
     return result
 
 
 def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None, locked=False,
-            held_out=None, rerun_reason=None):
+            held_out=None, rerun_reason=None, fresh=False, sample=None):
     if locked and dict(backend=backend, model=model, strategy=strategy) != LOCKED_CONFIG:
         raise ValueError('locked run must use the decision 0041 configuration')
     if locked:
         require_locked_prompts()
+    if fresh and (held_out is not None or cases is not None or full_benchmark):
+        raise ValueError('--fresh runs exactly FRESH_CASES; cannot combine with --held-out, --case or --full-benchmark')
+    if fresh and (type(sample) is not int or sample < 1):
+        raise ValueError('--fresh requires --sample N (1-based)')
+    if sample is not None and not fresh:
+        raise ValueError('--sample applies only to --fresh')
+    if rerun_reason is not None and not rerun_reason.strip():
+        raise ValueError('--rerun-reason must be nonempty')
+    selected_fresh = fresh or bool(cases and set(cases) & set(FRESH_CASES))
+    if selected_fresh:
+        from patchgen import fresh_manifest
+        fresh_manifest.verify()  # before credentials, output creation or network use
     registry = None
     if held_out is not None:
         from patchgen import held_out as sealed
@@ -156,8 +197,8 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
             raise ValueError('a held-out run requires --locked and cannot select development cases')
         # Verify before any credential or network use; a mismatch must never reach the model.
         registry = sealed.verify(held_out)
-    elif rerun_reason:
-        raise ValueError('--rerun-reason applies only to held-out runs')
+    elif rerun_reason and not fresh:
+        raise ValueError('--rerun-reason applies only to held-out or --fresh runs')
     if strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'):
         raise ValueError('live suite requires a supported live model strategy')
     if backend in ('openrouter', 'nvidia'):
@@ -166,13 +207,20 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         credential = transport.credential
         if model not in getattr(transport, 'MODELS', (transport.MODEL,)):
             raise ValueError('Cloud evaluation requires its selected model')
-        credential()
+        if not fresh:
+            credential()
     elif backend != 'ollama' or model not in LOCAL_MODELS:
         raise ValueError('unsupported local backend or model')
-    if cases is not None and (not cases or len(set(cases)) != len(cases) or not set(cases) <= set(CASES + ADDITIONAL_CASES)):
+    if cases is not None and (not cases or len(set(cases)) != len(cases) or not set(cases) <= set(CASES + ADDITIONAL_CASES + FRESH_CASES)):
         raise ValueError('select distinct cases supported by the live route')
     output=check_output(output)
-    withdrawn, attempt = {}, None
+    withdrawn, attempt, fresh_attempt = {}, None, None
+    if fresh:
+        from patchgen.fresh_attempts import begin
+        fresh_attempt = begin(output, backend, model, strategy, sample,
+            hashlib.sha256((ROOT/'fresh-screen/manifest.json').read_bytes()).hexdigest(), rerun_reason)
+    if fresh and backend in ('openrouter', 'nvidia'):
+        credential()
     if registry:
         # Recorded before the output exists or any request is sent, wherever the output lives.
         attempt = sealed.begin_one_shot(held_out, output, rerun_reason)
@@ -182,14 +230,14 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         available = entries
         plan = {**{entry['case']: 'eligible' for entry in entries}, **{name: 'withdrawn' for name in withdrawn}}
     else:
-        available = manifest()
-        plan = benchmark_plan(available) if full_benchmark else {name: 'eligible' for name in CASES}
+        available = fresh_entries() if fresh else manifest() + (fresh_entries() if selected_fresh else [])
+        plan = benchmark_plan(available) if full_benchmark else {name: 'eligible' for name in (FRESH_CASES if fresh else CASES)}
         if cases:
             plan = benchmark_plan(available)
             plan = {name: 'not_selected' if state == 'eligible' and name not in cases else state
                     for name, state in plan.items()}
         entries = [entry for entry in available if plan.get(entry['case']) == 'eligible']
-    splits = {entry['case']: 'held_out' if registry else 'development' for entry in entries}
+    splits = {entry['case']: 'held_out' if registry else 'fresh_screen' if entry['case'] in FRESH_CASES else 'development' for entry in entries}
     (output/'runner-source.py').write_bytes(Path(__file__).read_bytes())
     (output/'manifest.json').write_text(json.dumps(entries,indent=2)+'\n')
     options = OPTIONS
@@ -200,9 +248,11 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
                 locked_configuration=LOCKED_DECISION if locked else None,
                 prompt_fingerprints=prompt_fingerprints() if locked else None,
                 case_split=splits,
+                fresh_manifest_sha256=hashlib.sha256((ROOT/'fresh-screen/manifest.json').read_bytes()).hexdigest() if selected_fresh else None,
                 held_out_registry=str(Path(held_out).resolve().relative_to(ROOT)) if registry else None,
                 held_out_registry_sha256=hashlib.sha256(Path(held_out).read_bytes()).hexdigest() if registry else None,
                 held_out_attempt=attempt['attempt'] if attempt else None,
+                fresh_attempt=fresh_attempt, sample=sample,
                 cohorts=held_out_cohorts(registry) if registry else None,
                 case_labels={entry['case']: entry['label'] for entry in entries} if registry else None,
                 withdrawn_cases=withdrawn if registry else None,
@@ -232,7 +282,6 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
             break
     passed=sum(r['generated_patch_validated'] for r in report['results'])
     unavailable = sum(row['status'] == 'provider_unavailable' for row in report['results'])
-    count = lambda rows: f"{sum(r['generated_patch_validated'] for r in rows)}/{len(rows)}"
     denominator = len(entries)
     if registry:
         # Every denominator comes from the registry: withdrawn and unattempted cases count as unvalidated.
@@ -242,10 +291,14 @@ def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, ba
         passed, denominator = len(validated & set(headline)), len(headline)
         report.update(validated_by_cohort=scored, headline_validated=scored['headline'])
     report.update(status='provider_unavailable' if unavailable else 'completed',
-                  provider_unavailable_cases=unavailable,validated_model_patches=passed,
-                  model_patch_validation_rate=None if unavailable or not denominator else passed/denominator,
-                  validated_by_split={split: count([r for r in report['results'] if splits[r['case']] == split])
-                                      for split in ('development', 'held_out')},
+                  provider_unavailable_cases=unavailable,
+                  infrastructure_failures=sum(bool(r.get('infrastructure_failure', r['status'] == 'provider_unavailable')) for r in report['results']),
+                  truncated_at_token_limit=sum(bool(r.get('truncated_at_token_limit')) for r in report['results']),
+                  model_failures=sum(not r['generated_patch_validated'] and not r.get('infrastructure_failure', r['status'] == 'provider_unavailable') and not r.get('truncated_at_token_limit') for r in report['results']),
+                  validated_model_patches=passed,
+                  model_patch_validation_rate=None if (unavailable and not selected_fresh) or not denominator else passed/denominator,
+                  validated_by_split={split: f"{sum(r['generated_patch_validated'] for r in report['results'] if splits[r['case']] == split)}/{sum(value == split for value in splits.values())}"
+                                      for split in ('development', 'held_out', 'fresh_screen')},
                   model_requests=sum(r['model_requests'] for r in report['results']),
                   generation_seconds=sum(r['generation_seconds'] for r in report['results']))
     save()
@@ -262,18 +315,20 @@ def main():
     parser.add_argument('--locked', action='store_true',
                         help='use the decision 0041 configuration: Gemma 4 31B via NVIDIA, semantic blocks 3.1')
     parser.add_argument('--backend', choices=('ollama','openrouter','nvidia'), default=None)
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,OPENROUTER_MODEL,*NVIDIA_MODELS), default=None)
-    parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES, action='append',
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,*OPENROUTER_MODELS,*NVIDIA_MODELS), default=None)
+    parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES+FRESH_CASES, action='append',
                         help='run selected cases as a smaller initial trial')
     parser.add_argument('--strategy',choices=('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks'),default=None)
+    parser.add_argument('--fresh', action='store_true', help='run exactly the sealed fresh screening cases')
+    parser.add_argument('--sample', type=int, help='1-based sample index; required with --fresh')
     parser.add_argument('--held-out', type=Path, help='sealed held-out registry; requires --locked')
-    parser.add_argument('--rerun-reason', help='record a separate, non-substituting rerun of already-scored held-out cases')
+    parser.add_argument('--rerun-reason', help='record a separate, non-substituting rerun of already-attempted held-out or fresh cases')
     args=parser.parse_args()
     try:
         config = resolve_configuration(args)
         return execute(args.output,config['model'],config['strategy'], full_benchmark=args.full_benchmark,
                        backend=config['backend'],cases=args.case,locked=args.locked,
-                       held_out=args.held_out, rerun_reason=args.rerun_reason)
+                       held_out=args.held_out, rerun_reason=args.rerun_reason, fresh=args.fresh, sample=args.sample)
     except (OSError, ValueError, RuntimeError) as error:
         print(str(error), file=sys.stderr)
         return 1

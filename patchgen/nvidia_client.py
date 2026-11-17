@@ -9,6 +9,7 @@ import ssl
 import time
 import urllib.error
 import urllib.request
+from patchgen.request_failures import response_stage, transport_stage
 
 MODEL = 'nvidia/nemotron-3-ultra-550b-a55b'
 # Provider-recommended sampling for post-lock screening candidates (draft decision 0043).
@@ -101,9 +102,16 @@ def request_model(messages, model, output):
     measurement = dict(backend='nvidia', status='request_started', model=model)
     try:
         with urllib.request.urlopen(http_request, timeout=600, context=context) as response:
-            raw = json.load(response)
+            try:
+                raw = json.load(response)
+            except (ValueError, UnicodeError):
+                measurement['failure_stage'] = 'incomplete_provider_response'
+                raise
         # Credentials belong only in the HTTP header, including on malformed responses.
         raw = json.loads(json.dumps(raw).replace(token, '[REDACTED]'))
+        stage = response_stage(raw)
+        if stage:
+            measurement['failure_stage'] = stage
         if not isinstance(raw, dict):
             raise ProviderError('NVIDIA response must be a JSON object.')
         save(output / 'raw-response.json', raw)
@@ -123,10 +131,10 @@ def request_model(messages, model, output):
         save(output / 'parsed-response.json', value)
         return value
     except ProviderIdentityError:
-        measurement['status'] = 'provider_identity_mismatch'
+        measurement.update(status='provider_identity_mismatch', failure_stage='provider_identity_mismatch')
         raise
     except urllib.error.HTTPError as error:
-        measurement.update(status='http_error', http_status=error.code,
+        measurement.update(status='http_error', failure_stage='provider_http_error', http_status=error.code,
                            retry_after=error.headers.get('Retry-After'))
         message = error.read(65536).decode('utf8', errors='replace').replace(token, '[REDACTED]')
         try:
@@ -140,6 +148,9 @@ def request_model(messages, model, output):
         raise ProviderHTTPError(f'NVIDIA HTTP {error.code}: {message[:1000]}') from None
     except (OSError, ValueError, KeyError, TypeError) as error:
         measurement['status'] = 'failed'
+        stage = transport_stage(error)
+        if stage:
+            measurement['failure_stage'] = stage
         raise ProviderError(str(error).replace(token, '[REDACTED]')) from None
     finally:
         measurement['elapsed_seconds'] = time.monotonic() - started

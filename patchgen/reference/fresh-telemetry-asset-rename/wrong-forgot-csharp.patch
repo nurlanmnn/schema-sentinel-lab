@@ -1,0 +1,40 @@
+diff --git a/proto/telemetry/vehicle.proto b/proto/telemetry/vehicle.proto
+--- a/proto/telemetry/vehicle.proto
++++ b/proto/telemetry/vehicle.proto
+@@ -1,7 +1,7 @@
+ syntax = "proto3";
+ package simulation.telemetry;
+ message VehicleTelemetry {
+-  string vehicle_id = 1;
++  string asset_id = 1;
+   // Ground speed in meters per second.
+   float speed_mps = 2;
+ }
+diff --git a/runtimes/python/telemetry_runtime.py b/runtimes/python/telemetry_runtime.py
+--- a/runtimes/python/telemetry_runtime.py
++++ b/runtimes/python/telemetry_runtime.py
+@@ -7,8 +7,8 @@
+ 
+ def evaluate(request):
+     entity = VehicleTelemetry.FromString(base64.b64decode(request['payload'], validate=True))
+-    sample = VehicleTelemetry(vehicle_id=request['vehicle_id'], speed_mps=request['speed'])
+-    fields = {'vehicle_id': entity.vehicle_id, 'speed_mps': entity.speed_mps}
++    sample = VehicleTelemetry(asset_id=request['vehicle_id'], speed_mps=request['speed'])
++    fields = {'asset_id': entity.asset_id, 'speed_mps': entity.speed_mps}
+     return {'fields': fields, 'speeding': entity.speed_mps > 30.0,
+             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
+ 
+diff --git a/runtimes/typescript/telemetry.ts b/runtimes/typescript/telemetry.ts
+--- a/runtimes/typescript/telemetry.ts
++++ b/runtimes/typescript/telemetry.ts
+@@ -6,8 +6,8 @@
+   const requests: Request[] = JSON.parse(readFileSync(0, "utf8"));
+   const results = requests.map(request => {
+     const entity = VehicleTelemetry.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+-    const sample = VehicleTelemetry.encode({ vehicleId: request.vehicle_id, speedMps: request.speed }).finish();
+-    const fields = { vehicle_id: entity.vehicleId, speed_mps: entity.speedMps };
++    const sample = VehicleTelemetry.encode({ assetId: request.vehicle_id, speedMps: request.speed }).finish();
++    const fields = { asset_id: entity.assetId, speed_mps: entity.speedMps };
+     return { fields, speeding: entity.speedMps > 30.0, constructed_payload: Buffer.from(sample).toString("base64") };
+   });
+   console.log(JSON.stringify(results));

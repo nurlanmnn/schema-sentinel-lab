@@ -1,0 +1,10 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change": {
+    "id": "fresh-inventory-state-bool",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  bool state = 3;\n  repeated string display_labels = 4;\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n"
+  },
+  "intended_behavior": "Replace StockItem.state at field 3 from StockState enum with bool, retaining the field name and tag. false means not quarantined and true means quarantined. Producers accept optional JSON quarantined (boolean, default false) and encode it in state. Consumers report state_label UNSPECIFIED for false and QUARANTINED for true when include_state is requested, with no UNKNOWN label for this bool field. Under protobuf bool decoding every nonzero incoming varint, including historical unknown enum numbers, means true and must block stock. in_stock is true exactly when quantity is positive and state is false. Keep signed int32 quantity as a decimal string and preserve sku, label/route options and all other domains. Producer input and incoming payload are independent. Leave the now-unused enum declaration in the schema; do not edit generated code or tests. Coordinated rollout only."
+}

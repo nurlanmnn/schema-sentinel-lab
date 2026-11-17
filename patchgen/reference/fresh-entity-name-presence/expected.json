@@ -1,0 +1,28 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change_id": "fresh-entity-name-presence",
+  "category": "field_presence_added",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/main.py",
+      "lines": [
+        33
+      ]
+    },
+    {
+      "path": "runtimes/typescript/main.ts",
+      "lines": [
+        15
+      ]
+    },
+    {
+      "path": "runtimes/csharp/main.cs",
+      "lines": [
+        7,
+        10,
+        15
+      ]
+    }
+  ],
+  "method": "Authored source roles, no model outcomes consulted."
+}

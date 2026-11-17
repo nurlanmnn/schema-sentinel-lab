@@ -14,7 +14,8 @@ RUNTIMES = ('python', 'typescript', 'csharp')
 
 
 class Broker:
-    def __init__(self):
+    def __init__(self, *, nullable_fields=()):
+        self.nullable_fields = frozenset(nullable_fields)
         self.subscribers = {}
         self.publications = []
         self.acknowledgements = []
@@ -66,8 +67,9 @@ class Broker:
             message_id, fields = data.get('message_id'), data.get('fields')
             if type(message_id) is not int or not queue or queue[0]['message_id'] != message_id:
                 raise ValueError('Acknowledgement must match the pending head')
-            if not isinstance(fields, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in fields.items()):
-                raise ValueError('Observation fields must be string-to-string')
+            if not isinstance(fields, dict) or any(not isinstance(k, str) or not (isinstance(v, str) or v is None and k in self.nullable_fields)
+                                                   for k, v in fields.items()):
+                raise ValueError('Observation fields must be strings or explicitly allowed nulls')
             delivery = queue.pop(0)
             self.acknowledgements.append({'subscriber': subscriber, 'runtime': self.subscribers[subscriber]['runtime'],
                                          'message_id': message_id, 'topic': delivery['topic'], 'fields': fields.copy(),
@@ -119,8 +121,8 @@ class Handler(BaseHTTPRequestHandler):
             self.respond(400, {'error': str(error)})
 
 
-def create_server():
+def create_server(*, nullable_fields=()):
     server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
     server.daemon_threads = True
-    server.broker = Broker()
+    server.broker = Broker(nullable_fields=nullable_fields)
     return server

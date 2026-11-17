@@ -1,0 +1,39 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change_id": "fresh-inventory-state-bool",
+  "category": "field_type_changed",
+  "runtime_sites": [
+    {
+      "path": "runtimes/python/inventory_runtime.py",
+      "lines": [
+        10,
+        21,
+        22,
+        24
+      ]
+    },
+    {
+      "path": "runtimes/typescript/inventory.ts",
+      "lines": [
+        4,
+        5,
+        7,
+        8,
+        16,
+        25
+      ]
+    },
+    {
+      "path": "runtimes/csharp/Inventory.cs",
+      "lines": [
+        14,
+        27,
+        28,
+        29,
+        31,
+        37
+      ]
+    }
+  ],
+  "method": "Authored source roles, no model outcomes consulted."
+}

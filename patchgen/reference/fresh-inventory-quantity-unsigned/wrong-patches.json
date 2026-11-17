@@ -1,0 +1,17 @@
+[
+  {
+    "patch": "wrong-forgot-csharp.patch",
+    "reason": "C# retains the baseline generated-property contract and fails compilation.",
+    "rejected_by": "compile"
+  },
+  {
+    "patch": "wrong-signed-ceiling.patch",
+    "reason": "Clamps to int32 max instead of uint32 max.",
+    "rejected_by": "oracle"
+  },
+  {
+    "patch": "wrong-wrap-negative.patch",
+    "reason": "Uses unsigned wraparound instead of lower-bound clamping.",
+    "rejected_by": "oracle"
+  }
+]

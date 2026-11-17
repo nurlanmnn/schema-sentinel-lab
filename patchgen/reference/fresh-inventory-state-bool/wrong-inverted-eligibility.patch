@@ -1,0 +1,108 @@
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -3,7 +3,7 @@
+ message StockItem {
+   string sku = 1;
+   int32 quantity = 2;
+-  StockState state = 3;
++  bool state = 3;
+   repeated string display_labels = 4;
+   string warehouse = 7;
+   string drop_zone = 8;
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -7,7 +7,7 @@
+ 
+ def evaluate(request):
+     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
+-    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']),
++    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']), state=request.get('quarantined', False),
+                        display_labels=request.get('display_labels', []),
+                        warehouse=request.get('warehouse', ''), drop_zone=request.get('drop_zone', ''))
+     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
+@@ -18,10 +18,10 @@
+         fields['drop_zone'] = entity.drop_zone
+     if request.get('include_state'):
+         fields['state_label'] = {
+-            STOCK_STATE_UNSPECIFIED: 'UNSPECIFIED',
+-            STOCK_STATE_QUARANTINED: 'QUARANTINED',
++            False: 'UNSPECIFIED',
++            True: 'QUARANTINED',
+         }.get(entity.state, 'UNKNOWN')
+-    return {'fields': fields, 'in_stock': entity.quantity > 0 and entity.state == STOCK_STATE_UNSPECIFIED,
++    return {'fields': fields, 'in_stock': entity.quantity > 0 and not entity.state,
+             'constructed_payload': base64.b64encode(sample.SerializeToString()).decode()}
+ 
+ 
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -1,11 +1,11 @@
+ import { readFileSync } from "node:fs";
+ import { StockItem, StockState } from "../../generated/ts/inventory/item";
+ 
+-interface Request { payload: string; sku: string; quantity: string; display_labels?: string[]; include_state?: boolean; warehouse?: string; drop_zone?: string; include_route?: boolean }
+-function stateLabel(state: StockState) {
++interface Request { payload: string; sku: string; quantity: string; display_labels?: string[]; include_state?: boolean; quarantined?: boolean; warehouse?: string; drop_zone?: string; include_route?: boolean }
++function stateLabel(state: boolean) {
+   switch (state) {
+-    case StockState.STOCK_STATE_UNSPECIFIED: return "UNSPECIFIED";
+-    case StockState.STOCK_STATE_QUARANTINED: return "QUARANTINED";
++    case false: return "UNSPECIFIED";
++    case true: return "QUARANTINED";
+     default: return "UNKNOWN";
+   }
+ }
+@@ -13,7 +13,7 @@
+   const requests: Request[] = JSON.parse(readFileSync(0, "utf8"));
+   const results = requests.map(request => {
+     const entity = StockItem.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+-    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED,
++    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: request.quarantined ?? false,
+       displayLabels: request.display_labels ?? [],
+       warehouse: request.warehouse ?? "", dropZone: request.drop_zone ?? "" }).finish();
+     const fields = {
+@@ -22,7 +22,7 @@
+       ...(request.include_route ? { warehouse: entity.warehouse, drop_zone: entity.dropZone } : {}),
+       ...(request.include_state ? { state_label: stateLabel(entity.state) } : {}),
+     };
+-    return { fields, in_stock: BigInt(entity.quantity) > 0n && entity.state === StockState.STOCK_STATE_UNSPECIFIED, constructed_payload: Buffer.from(sample).toString("base64") };
++    return { fields, in_stock: BigInt(entity.quantity) > 0n && entity.state, constructed_payload: Buffer.from(sample).toString("base64") };
+   });
+   console.log(JSON.stringify(results));
+ }
+diff --git a/runtimes/csharp/Inventory.cs b/runtimes/csharp/Inventory.cs
+--- a/runtimes/csharp/Inventory.cs
++++ b/runtimes/csharp/Inventory.cs
+@@ -11,7 +11,7 @@
+             new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException("Missing requests");
+         var results = requests.Select(request => {
+             var entity = Simulation.Inventory.StockItem.Parser.ParseFrom(Convert.FromBase64String(request.Payload));
+-            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture) };
++            var sample = new Simulation.Inventory.StockItem { Sku = request.Sku, Quantity = int.Parse(request.Quantity, CultureInfo.InvariantCulture), State = request.Quarantined };
+             sample.DisplayLabels.Add(request.DisplayLabels ?? Array.Empty<string>());
+             sample.Warehouse = request.Warehouse ?? "";
+             sample.DropZone = request.DropZone ?? "";
+@@ -24,16 +24,15 @@
+             }
+             if (request.IncludeState)
+                 fields["state_label"] = entity.State switch {
+-                    StockState.Unspecified => "UNSPECIFIED",
+-                    StockState.Quarantined => "QUARANTINED",
+-                    _ => "UNKNOWN",
++                    false => "UNSPECIFIED",
++                    true => "QUARANTINED",
+                 };
+-            return new { fields, in_stock = entity.Quantity > 0 && entity.State == Simulation.Inventory.StockState.Unspecified, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
++            return new { fields, in_stock = entity.Quantity > 0 && !entity.State, constructed_payload = Convert.ToBase64String(sample.ToByteArray()) };
+         });
+         Console.WriteLine(JsonSerializer.Serialize(results));
+     }
+ }
+ record InventoryRequest(string Payload, string Sku, string Quantity, [property: System.Text.Json.Serialization.JsonPropertyName("display_labels")] string[]? DisplayLabels,
+-    [property: System.Text.Json.Serialization.JsonPropertyName("include_state")] bool IncludeState = false,
++    [property: System.Text.Json.Serialization.JsonPropertyName("include_state")] bool IncludeState = false, bool Quarantined = false,
+     string? Warehouse = null, [property: System.Text.Json.Serialization.JsonPropertyName("drop_zone")] string? DropZone = null,
+     [property: System.Text.Json.Serialization.JsonPropertyName("include_route")] bool IncludeRoute = false);

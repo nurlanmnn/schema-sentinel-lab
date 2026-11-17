@@ -1,0 +1,10 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change_id": "fresh-entity-name-presence",
+  "new_schema_sha256": "fe8995f1825f3e5a5459db542e2186f9f842a0a888323561d8f7096261d640a0",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "fresh_case": "fresh-entity-name-presence",
+  "model_editable": false
+}

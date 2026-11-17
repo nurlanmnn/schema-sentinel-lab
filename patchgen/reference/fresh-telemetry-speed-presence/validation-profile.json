@@ -1,0 +1,10 @@
+{
+  "profile_version": "1.0",
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change_id": "fresh-telemetry-speed-presence",
+  "new_schema_sha256": "ac5a27a446a5184b03757af9458c043744db50fb5d3a9fdf5fb73058a0ecea31",
+  "test_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_test_paths": [],
+  "fresh_case": "fresh-telemetry-speed-presence",
+  "model_editable": false
+}

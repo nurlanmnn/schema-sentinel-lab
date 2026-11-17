@@ -1,0 +1,34 @@
+diff --git a/proto/v1/entity.proto b/proto/v1/entity.proto
+--- a/proto/v1/entity.proto
++++ b/proto/v1/entity.proto
+@@ -4,5 +4,5 @@
+ 
+ message Entity {
+   string entity_id = 1;
+-  string name = 2;
++  optional string name = 2;
+ }
+diff --git a/runtimes/python/main.py b/runtimes/python/main.py
+--- a/runtimes/python/main.py
++++ b/runtimes/python/main.py
+@@ -30,7 +30,7 @@
+     entity = importlib.import_module(f"{version}.entity_pb2").Entity.FromString(raw_bytes)
+     fields = {"entity_id": entity.entity_id}
+     if version == "v1":
+-        fields["name"] = entity.name
++        fields["name"] = entity.name if entity.HasField("name") else None
+     print(json.dumps({"runtime": "python", "version": version, "fields": fields}, ensure_ascii=True), flush=True)
+     return entity, fields
+ 
+diff --git a/runtimes/typescript/main.ts b/runtimes/typescript/main.ts
+--- a/runtimes/typescript/main.ts
++++ b/runtimes/typescript/main.ts
+@@ -12,7 +12,7 @@
+   // Plain Uint8Array selects the bounds-checked Reader rather than BufferReader.string clamping.
+   rawBytes = new Uint8Array(rawBytes);
+   const entity = version === "v1" ? EntityV1.decode(rawBytes) : EntityV2.decode(rawBytes);
+-  const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name } : {}) };
++  const fields = { entity_id: entity.entityId, ...(version === "v1" ? { name: (entity as EntityV1).name ?? null } : {}) };
+   console.log(JSON.stringify({ runtime: "typescript", version, fields }));
+   return { entity, fields };
+ }

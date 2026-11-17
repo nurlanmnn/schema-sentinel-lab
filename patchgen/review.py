@@ -21,6 +21,13 @@ TELEMETRY_ARTIFACTS = tuple('proposal/telemetry/'+name for name in TELEMETRY_FIL
 LOCAL_CODEGEN_ARTIFACTS = ('proposal/local-codegen-source.py', 'proposal/local-codegen-toolchain.json')
 INVENTORY_ARTIFACTS = tuple('proposal/inventory/'+name for name in INVENTORY_FILES) + ('proposal/inventory-oracle-source.py',)
 ARTIFACTS += INVENTORY_ARTIFACTS + PUBSUB_REVIEW_ARTIFACTS + PUBSUB_NEGATIVE_ARTIFACTS + TELEMETRY_ARTIFACTS + LOCAL_CODEGEN_ARTIFACTS
+from patchgen.fresh_oracle import ARTIFACTS as FRESH_FILES, PUBSUB_ARTIFACTS as FRESH_PUBSUB_FILES, RELAY_ARTIFACTS as FRESH_RELAY_FILES
+FRESH_ARTIFACTS = tuple('proposal/fresh/'+name for name in FRESH_FILES) + tuple(
+    'proposal/fresh/'+directory+'/'+name for directory in ('pubsub','malformed') for name in FRESH_PUBSUB_FILES) + (
+    'proposal/fresh-oracle-source.py','proposal/fresh-recipe-source.py') + tuple(
+    'proposal/fresh-harness/testbed/pubsub/'+name for name in ('run.py','broker.py','topics.json')) + tuple(
+    'proposal/fresh/'+name for name in FRESH_RELAY_FILES)
+ARTIFACTS += FRESH_ARTIFACTS
 ASSETS = Path(__file__).with_name('review_assets')
 
 
@@ -84,6 +91,34 @@ def check_host_evidence(root, report, available=None):
             raise ContractError('passing review requires complete host evidence')
         if any(not artifact_path(root,name).is_file() for name in names):
             raise ContractError('passing review requires complete host evidence')
+    mode = report.get('validation_profile', {}).get('fresh_case')
+    if mode:
+        from patchgen.fresh_cases import PROFILES
+        from patchgen.fresh_oracle import CASES, check_evidence
+        if mode not in PROFILES or mode not in CASES:
+            raise ContractError('unknown fresh review mode')
+        names = ['proposal/fresh/report.json', 'proposal/fresh-oracle-source.py']
+        if mode == CASES[0]:
+            names += ['proposal/fresh/'+name for name in FRESH_RELAY_FILES]
+            names += ['proposal/fresh/'+directory+'/'+name for directory in ('pubsub','malformed') for name in FRESH_PUBSUB_FILES]
+        else:
+            names += ['proposal/fresh/'+name for name in FRESH_FILES]
+        names += ['proposal/fresh-harness/testbed/pubsub/'+name for name in ('run.py','broker.py','topics.json')]
+        required(names)
+        if sha(artifact_path(root,'proposal/fresh-oracle-source.py').read_bytes()) != report.get('fresh_oracle_sha256'):
+            raise ContractError('fresh oracle source hash mismatch')
+        for name in ('run.py','broker.py','topics.json'):
+            if sha(artifact_path(root,'proposal/fresh-harness/testbed/pubsub/'+name).read_bytes()) != report.get('fresh_harness_sha256',{}).get(name):
+                raise ContractError('fresh pubsub harness source hash mismatch')
+        if report.get('strategy') == 'deterministic_fresh':
+            required(('proposal/fresh-recipe-source.py',))
+            if sha(artifact_path(root,'proposal/fresh-recipe-source.py').read_bytes()) != report.get('fresh_recipe_sha256'):
+                raise ContractError('fresh recipe source hash mismatch')
+        try:
+            if check_evidence(root/'proposal/fresh', mode, report['source_revision']) != report.get('fresh_validation'):
+                raise ValueError('fresh validation report mismatch')
+        except (OSError,ValueError,KeyError,RuntimeError) as error:
+            raise ContractError('fresh review has inconsistent validation evidence') from error
     inventory_strategy = INVENTORY_STRATEGIES.get(report.get('strategy'))
     if inventory_strategy:
         if report.get('validation_profile', {}).get('inventory_case') != inventory_strategy:

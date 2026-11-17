@@ -1,0 +1,17 @@
+[
+ {
+  "patch": "wrong-forgot-csharp.patch",
+  "reason": "C# retains the baseline default/presence behavior and fails the all-runtime oracle.",
+  "rejected_by": "oracle"
+ },
+ {
+  "patch": "wrong-empty-is-absent.patch",
+  "reason": "Conflates explicitly present empty names with absence; the existing end-to-end round-trip test rejects it before the fresh oracle runs.",
+  "rejected_by": "tests"
+ },
+ {
+  "patch": "wrong-absent-is-empty.patch",
+  "reason": "Defaults an absent name to empty text instead of JSON null.",
+  "rejected_by": "oracle"
+ }
+]

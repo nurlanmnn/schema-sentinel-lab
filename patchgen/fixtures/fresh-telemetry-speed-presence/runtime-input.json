@@ -1,0 +1,10 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change": {
+    "id": "fresh-telemetry-speed-presence",
+    "schema_path": "proto/telemetry/vehicle.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  float speed_mps = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.telemetry;\nmessage VehicleTelemetry {\n  string vehicle_id = 1;\n  // Ground speed in meters per second.\n  optional float speed_mps = 2;\n}\n"
+  },
+  "intended_behavior": "Add explicit presence to VehicleTelemetry.speed_mps at field 2. request.speed may be missing or null, in which case producers omit speed_mps; any supplied number within the finite float32 range, including zero, must be explicitly present after float32 serialization. Consumers expose speed_mps as JSON null when absent, otherwise the decoded float32 value as a JSON number; any decimal form that rounds to that float32 is accepted. speeding is true exactly when speed_mps is present and greater than 30.0; missing, zero and negative values are not speeding. Preserve vehicle_id, including empty and Unicode identifiers. Producer input and incoming payload are independent. Preserve other domains and tests. Coordinated rollout only; legacy writers omit zero. NaN, infinity, out-of-float32-range inputs and signed-zero bit distinctions are outside this case."
+}

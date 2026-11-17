@@ -63,3 +63,36 @@ Excluded: Chinese-origin models (user preference), models already tried
 - 2026-11-17: NVIDIA probes: Mistral Large 4 and Gemma answer; Muse Glimmer
   and Nemotron Lightning returned empty content at 64 tokens (likely reasoning
   output); gpt-oss-20b timed out at 120 s.
+- 2026-11-17 ~02:00: Codex (gpt-6.1-sol, memories disabled) authored 5 fresh
+  cases. An independent read-only Cursor review (claude-opus-5-5-high) found
+  the telemetry cases mostly tested C# float formatting, infrastructure errors
+  scored as model failures, no attempt limit, and manifest gaps. Codex fixed
+  all of them before sealing. One wrong patch was relabelled (rejected by an
+  existing e2e test, not the fresh oracle).
+- Dev screen (biased; prompt 3.1 was tuned on these cases): Gemma rerun 4
+  validated, 1 model failure (pubsub-utf8 C# compile), then an NVIDIA 504 on
+  telemetry-units stopped the cohort (3 cases not attempted). Mistral Large 4:
+  5/8. A Muse Glimmer dev run was aborted by me within seconds so the ports
+  were free for tests; it made no scored attempt and its directory was deleted.
+- Before sealing: full patchgen suite 331/331 OK with loopback (no skips),
+  `make test-unit` 29/29 OK, locked prompt fingerprints unchanged.
+
+## Pre-registered fresh-screen protocol (written before any model run)
+
+- Cases: exactly `FRESH_CASES` (5), sealed by `fresh-screen/manifest.json`,
+  committed and pushed before the first model request.
+- Models (in this order): Gemma 4 31B (locked config), Mistral Large 4,
+  Muse Glimmer 30B, gpt-oss-20b (NVIDIA), North Mini Code (OpenRouter).
+- Strategy `candidate_semantic_blocks` (prompt 3.1) for every model, no repair.
+- Samples: 3 per model (`--sample 1..3`), run interleaved by sample (all
+  models sample 1, then sample 2, then 3) so provider conditions are spread.
+- Headline per model: validated / 15 attempts. Also reported: sample-1 only,
+  per-case pass counts, failure stage, Wilson 95% interval.
+- Infrastructure failures (HTTP 5xx/429, timeouts, connection errors) and
+  cases a provider stop left unattempted are counted separately. One rerun of
+  that sample is allowed with `--rerun-reason` (the runner always runs all five);
+  only the cases that were infrastructure-failed or unattempted are taken from
+  it, it is reported as a rerun, and it never replaces a model failure. Token-limit truncation counts as a model
+  outcome (reported separately).
+- No prompt, oracle, case or parser change after sealing. If a case proves
+  broken, it is withdrawn for all models with the reason, not fixed.

@@ -1,0 +1,17 @@
+[
+  {
+    "patch": "wrong-forgot-csharp.patch",
+    "reason": "C# retains the baseline generated-property contract and fails compilation.",
+    "rejected_by": "compile"
+  },
+  {
+    "patch": "wrong-old-observation-key.patch",
+    "reason": "Still emits vehicle_id instead of asset_id.",
+    "rejected_by": "oracle"
+  },
+  {
+    "patch": "wrong-trim-identifiers.patch",
+    "reason": "Trims significant identifier whitespace on production.",
+    "rejected_by": "oracle"
+  }
+]

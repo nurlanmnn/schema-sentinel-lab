@@ -1,0 +1,17 @@
+[
+  {
+    "patch": "wrong-forgot-csharp.patch",
+    "reason": "C# retains the baseline generated-property contract and fails compilation.",
+    "rejected_by": "compile"
+  },
+  {
+    "patch": "wrong-producer-default-true.patch",
+    "reason": "Defaults missing quarantined to true.",
+    "rejected_by": "oracle"
+  },
+  {
+    "patch": "wrong-inverted-eligibility.patch",
+    "reason": "Allows quarantined stock and blocks unquarantined stock.",
+    "rejected_by": "oracle"
+  }
+]

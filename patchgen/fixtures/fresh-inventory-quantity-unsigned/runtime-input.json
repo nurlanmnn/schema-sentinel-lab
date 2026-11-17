@@ -1,0 +1,10 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change": {
+    "id": "fresh-inventory-quantity-unsigned",
+    "schema_path": "proto/inventory/item.proto",
+    "old_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  int32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n",
+    "new_schema": "syntax = \"proto3\";\npackage simulation.inventory;\nmessage StockItem {\n  string sku = 1;\n  uint32 quantity = 2;\n  StockState state = 3;\n  repeated string display_labels = 4;\n  string warehouse = 7;\n  string drop_zone = 8;\n}\n\nenum StockState {\n  STOCK_STATE_UNSPECIFIED = 0;\n  STOCK_STATE_QUARANTINED = 1;\n}\n"
+  },
+  "intended_behavior": "Change StockItem.quantity at field 2 from int32 to uint32 to represent nonnegative on-hand stock. Producer request.quantity remains a canonical signed decimal string in the signed int64 range; clamp it to [0, 4294967295] before encoding, without wrapping. Consumers expose the decoded uint32 quantity as a canonical decimal string. in_stock remains true exactly when decoded quantity is positive and decoded state is STOCK_STATE_UNSPECIFIED; quarantined and unknown states remain blocked. Preserve sku, optional label/route/state observations, labels and routing construction. Producer input and incoming payload are independent. No test edits. Coordinated rollout only; historical negative int32 payloads are outside the new input contract."
+}

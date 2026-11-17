@@ -1,0 +1,17 @@
+[
+  {
+    "patch": "wrong-forgot-csharp.patch",
+    "reason": "C# keeps a nonnullable speed request and fails when the new producer contract supplies null; the oracle rejects its nonzero exit.",
+    "rejected_by": "runtime"
+  },
+  {
+    "patch": "wrong-zero-is-absent.patch",
+    "reason": "Omits explicitly supplied zero; constructed payload presence must fail.",
+    "rejected_by": "oracle"
+  },
+  {
+    "patch": "wrong-inclusive-threshold.patch",
+    "reason": "Marks exactly 30 m/s as speeding.",
+    "rejected_by": "oracle"
+  }
+]

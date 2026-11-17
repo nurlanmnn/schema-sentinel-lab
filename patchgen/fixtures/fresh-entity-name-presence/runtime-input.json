@@ -1,0 +1,10 @@
+{
+  "source_revision": "3fe9f2d0512812216f47c1b89c7e9bd28e102d57",
+  "change": {
+    "id": "fresh-entity-name-presence",
+    "schema_path": "proto/v1/entity.proto",
+    "old_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  string name = 2;\n}\n",
+    "new_schema": "syntax = \"proto3\";\n\npackage simulation.v1;\n\nmessage Entity {\n  string entity_id = 1;\n  optional string name = 2;\n}\n"
+  },
+  "intended_behavior": "Add explicit presence to v1 Entity.name at field 2. Each relay and pub/sub subscriber must observe an absent name as JSON null and a present name as its exact string, including an explicitly present empty string. Preserve entity_id, Unicode, whitespace and escaped text exactly. Preserve name presence and value when relaying encoded messages; the standalone sample producers still set their existing nonempty names. v2 has no name and must keep its existing entity_id-only observations. Do not edit tests or generated bindings. Coordinated rollout only; legacy writers cannot distinguish an omitted empty name from absence."
+}

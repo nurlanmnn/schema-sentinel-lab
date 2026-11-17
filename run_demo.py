@@ -9,6 +9,9 @@ import sys
 import time
 from testbed.telemetry.run import VALIDATION_COUNTS as TELEMETRY_COUNTS
 
+from patchgen.fresh_cases import PROFILES as FRESH_PROFILES
+from patchgen.fresh_oracle import count as fresh_count
+
 ROOT = Path(__file__).resolve().parent
 CASES = {
     'inventory-packed-bins': ('inventory-packed-bins', 'deterministic_inventory_packed_bins'),
@@ -35,6 +38,8 @@ CASES = {
     'pubsub-rename': ('pubsub-name-rename', 'deterministic_rename_roles'),
     'pubsub-utf8': ('pubsub-identifier-utf8', 'deterministic_utf8_v2'),
 }
+
+CASES.update({name: (name, 'deterministic_fresh') for name in FRESH_PROFILES})
 
 
 def check_output(output):
@@ -113,6 +118,11 @@ def execute(case, output, local_codegen=False):
             pipeline = json.loads((output / 'run/report.json').read_text())
             if pipeline['status'] != 'validation_passed' or not (output / 'review/index.html').is_file():
                 raise RuntimeError('Demo did not produce a validated proposal and review bundle.')
+            if case in FRESH_PROFILES:
+                result = pipeline.get('proposal_report', {}).get('fresh_validation', {})
+                if result.get('status') != 'passed' or result.get('case') != case or result.get('runtime_cases') != fresh_count(case):
+                    raise RuntimeError('Fresh demo lacks complete passing oracle evidence.')
+                report['fresh_validation'] = result
             if case.startswith('inventory-'):
                 result = pipeline.get('proposal_report',{}).get('inventory_validation',{})
                 if (result.get('status') != 'passed' or result.get('runtime_cases') != 48

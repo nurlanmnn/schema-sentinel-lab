@@ -1,0 +1,36 @@
+diff --git a/proto/inventory/item.proto b/proto/inventory/item.proto
+--- a/proto/inventory/item.proto
++++ b/proto/inventory/item.proto
+@@ -2,7 +2,7 @@
+ package simulation.inventory;
+ message StockItem {
+   string sku = 1;
+-  int32 quantity = 2;
++  uint32 quantity = 2;
+   StockState state = 3;
+   repeated string display_labels = 4;
+   string warehouse = 7;
+diff --git a/runtimes/python/inventory_runtime.py b/runtimes/python/inventory_runtime.py
+--- a/runtimes/python/inventory_runtime.py
++++ b/runtimes/python/inventory_runtime.py
+@@ -7,7 +7,7 @@
+ 
+ def evaluate(request):
+     entity = StockItem.FromString(base64.b64decode(request['payload'], validate=True))
+-    sample = StockItem(sku=request['sku'], quantity=int(request['quantity']),
++    sample = StockItem(sku=request['sku'], quantity=max(0, min(4294967295, int(request['quantity']))),
+                        display_labels=request.get('display_labels', []),
+                        warehouse=request.get('warehouse', ''), drop_zone=request.get('drop_zone', ''))
+     fields = {'sku': entity.sku, 'quantity': str(entity.quantity)}
+diff --git a/runtimes/typescript/inventory.ts b/runtimes/typescript/inventory.ts
+--- a/runtimes/typescript/inventory.ts
++++ b/runtimes/typescript/inventory.ts
+@@ -13,7 +13,7 @@
+   const requests: Request[] = JSON.parse(readFileSync(0, "utf8"));
+   const results = requests.map(request => {
+     const entity = StockItem.decode(new Uint8Array(Buffer.from(request.payload, "base64")));
+-    const sample = StockItem.encode({ sku: request.sku, quantity: Number.parseInt(request.quantity, 10), state: StockState.STOCK_STATE_UNSPECIFIED,
++    const sample = StockItem.encode({ sku: request.sku, quantity: Math.max(0, Math.min(4294967295, Number.parseInt(request.quantity, 10))), state: StockState.STOCK_STATE_UNSPECIFIED,
+       displayLabels: request.display_labels ?? [],
+       warehouse: request.warehouse ?? "", dropZone: request.drop_zone ?? "" }).finish();
+     const fields = {

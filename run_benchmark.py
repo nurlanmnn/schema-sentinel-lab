@@ -62,7 +62,7 @@ def collect(entry, target, exit_code, elapsed):
                    extra_sites=len(metrics['extra']), classification_correct=metrics['classification_correct'] is True)
         proposal = pipeline.get('proposal_report', {})
         row['pipeline_seconds'] = proposal.get('workflow_elapsed_seconds')
-        row['runtime_validation'] = proposal.get('inventory_validation', proposal.get('telemetry_validation', proposal.get('pubsub_validation')))
+        row['runtime_validation'] = proposal.get('fresh_validation', proposal.get('inventory_validation', proposal.get('telemetry_validation', proposal.get('pubsub_validation'))))
         row['strategy_observed'] = proposal.get('strategy')
         if (exit_code == 0 and demo['status'] == pipeline['status'] == 'validation_passed'
                 and proposal.get('mode') == 'deterministic_proposal'
