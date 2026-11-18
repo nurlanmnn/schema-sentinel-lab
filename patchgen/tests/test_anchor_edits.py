@@ -32,6 +32,20 @@ class AnchorTests(unittest.TestCase):
         self.response['candidate_reviews'].pop('C002')
         with self.assertRaisesRegex(ContractError,'exactly the supplied'):resolve(self.source,self.response,self.inventory,self.positions)
 
+    def test_whole_lines_missing_only_the_final_line_break_are_accepted(self):
+        # Decision 0044: a single trailing LF is supplied to before and to a nonempty after.
+        for after in ('    new = 1\n    return new', '    new = 1\n    return new\n'):
+            response=dict(self.response,edits=[dict(before='    old = 1\n    return old',after=after)])
+            self.assertEqual(resolve(self.source,response,self.inventory,self.positions),
+                             'def f():\n    new = 1\n    return new\n')
+
+    def test_partial_lines_and_other_whitespace_are_still_rejected(self):
+        for before,error in (('    old = 1\n    return','complete source lines'),('old = 1\n','complete source lines'),
+                             ('    old = 1 \n','match exactly once'),('    old = 1\r\n','match exactly once')):
+            response=dict(self.response,edits=[dict(before=before,after='    new = 1\n')])
+            with self.subTest(before=before),self.assertRaisesRegex(ContractError,error):
+                resolve(self.source,response,self.inventory,self.positions)
+
     def test_unknown_and_unaffected_candidates_cannot_be_edited(self):
         for reviews in ({'wrong':dict(decision='edit',reason='test')},
                         list(self.response['candidate_reviews'].values())):

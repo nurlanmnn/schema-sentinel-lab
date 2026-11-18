@@ -35,8 +35,9 @@ class NewlineReplayTests(unittest.TestCase):
         value = dict(outcome='patch', rationale='rename', confidence=0.9, assumptions=[],
             candidate_reviews={'C001': dict(decision='edit', reason='rename')},
             edits=[dict(before='    old = 1', after='    new = 1')])
-        with self.assertRaisesRegex(ContractError, 'before must contain complete source lines'):
-            resolve(source, value, inventory, positions)
+        # Since decision 0044 the live resolver accepts this directly, identically to the replay.
+        self.assertEqual(resolve(source, value, inventory, positions),
+                         'def f():\n    new = 1\n    return old\n')
         normalized, _ = normalize_response(value)
         self.assertEqual(resolve(source, normalized, inventory, positions),
                          'def f():\n    new = 1\n    return old\n')

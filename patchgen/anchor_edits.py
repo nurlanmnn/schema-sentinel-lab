@@ -76,6 +76,11 @@ def resolve(source,value,inventory,positions):
         before,after=edit.get('before'),edit.get('after')
         if not isinstance(before,str) or not before or not isinstance(after,str):
             raise ContractError('edit requires nonempty before and string after')
+        # Decision 0044: whole lines quoted without their final line break are accepted as
+        # those lines. Only a single trailing LF is ever supplied; nothing else is normalised.
+        if not before.endswith('\n') and before+'\n' in source:
+            before+='\n'
+            if after and not after.endswith('\n'):after+='\n'
         offset=source.find(before)
         if offset<0 or source.find(before,offset+1)>=0:
             raise ContractError('before must match exactly once in original source')

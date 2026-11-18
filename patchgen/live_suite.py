@@ -36,7 +36,8 @@ _FINGERPRINT_CASE = dict(contract_version='1.0', source_revision='0'*40, intende
 LOCKED_PROMPT_SHA256 = dict(
     one_shot='9546791889d0d9ecd8a2baca015ce47a2740e0d179bdd92263dd55ac2d81cb23',
     repair='35dca82e6243080d902eeeb61963eb63a57350755f08fe476b31d216845204cb',
-    protocol='b6fa35136a3155377f0ae887d29d8bd6dcbef0617d350a08872078f9a4fb6487')
+    # Decision 0044 (trailing-newline acceptance in anchor_edits.resolve); was b6fa3513… under 0041.
+    protocol='6f648b9cc530f966c237997ee5c6f690643a02f0fbab36d61fe0d6b82d948dde')
 
 
 def prompt_fingerprints():
