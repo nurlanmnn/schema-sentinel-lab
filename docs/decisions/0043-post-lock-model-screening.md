@@ -75,3 +75,45 @@ NVIDIA's free endpoint failed most of its requests.
    (0042) has never been run live; running it on these failures is the
    cheapest next experiment. Any prompt change must be judged on cases it was
    not tuned on.
+
+## Addendum: repair loop and the trailing-newline rule (2026-11-17)
+
+**Repair loop (0042), first live run** on Gemma's 6 rejected fresh attempts
+(two cases × three samples), 2 rounds max, NVIDIA:
+
+| Case | Round 1 | Within 2 rounds |
+| --- | --- | --- |
+| `telemetry-speed-presence` (wrong behavior in TypeScript) | 0/3 | 1/3 |
+| `inventory-state-bool` (edit-format rejection) | 0/3 | 0/3 |
+
+Before the run, a bug was fixed: the fresh oracle was missing from
+`repair_suite.ORACLES`, so its verdict never reached the model. Repaired passes
+are not first-pass successes, and the feedback comes from the same oracle that
+scores the result.
+
+**Why `inventory-state-bool` never passes:** `anchor_edits.resolve` rejects an
+edit whose `before` text is a run of complete source lines without the trailing
+`\n`. The error text ("before must contain complete source lines") does not say
+that, and Gemma repeated the omission in every repair round. Across all
+retained evidence, 23 of the 26 rejections with this message would apply after
+appending the newline (Gemma 10, North Mini Code 9, gpt-oss 3, Laguna 1).
+
+**Offline counterfactual** (`patchgen/newline_replay.py`; recorded responses
+only, no model requests; results in `patchgen/evidence/newline-replay/`):
+appending only the missing trailing newlines, with every other byte unchanged
+(verified), lets **all three** recorded first-pass `inventory-state-bool`
+answers pass full validation (30 oracle cases each). A control case that had
+already validated still validates. The six repair-round answers clear the edit
+contract, but the CLI refuses offline replay of the feedback strategy, so their
+full-validation outcome is unknown.
+
+Read carefully: with this rule relaxed, Gemma's fresh first-pass score would
+have been 12/15 rather than 9/15. That is a post-hoc counterfactual on cases
+already seen. It is not a measured score. The other models were not replayed.
+
+**Recommendation (needs the user's decision; changes how the locked
+configuration is scored):** either have the harness append a missing trailing
+newline when `before` otherwise matches whole lines exactly once, or change the
+error text to name the missing newline. Then measure the effect only on cases
+not used to find it (the unspent held-out set). Until then, 0041's numbers stand
+as measured.

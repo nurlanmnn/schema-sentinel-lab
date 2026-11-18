@@ -1,0 +1,16 @@
+=== repair source fresh-gemma-s1 Tue Nov 17 19:31:56 EST 2026
+fresh-telemetry-speed-presence round 1: runtime_semantics; actual requests=3
+fresh-telemetry-speed-presence round 2: runtime_semantics; actual requests=3
+fresh-inventory-state-bool round 1: response_or_edit_contract; actual requests=3
+fresh-inventory-state-bool round 2: response_or_edit_contract; actual requests=3
+=== repair source fresh-gemma-s2 Tue Nov 17 19:42:32 EST 2026
+fresh-telemetry-speed-presence round 1: runtime_semantics; actual requests=3
+fresh-telemetry-speed-presence round 2: validated; actual requests=3
+fresh-inventory-state-bool round 1: response_or_edit_contract; actual requests=3
+fresh-inventory-state-bool round 2: response_or_edit_contract; actual requests=3
+=== repair source fresh-gemma-s3 Tue Nov 17 19:53:36 EST 2026
+fresh-telemetry-speed-presence round 1: runtime_semantics; actual requests=3
+fresh-telemetry-speed-presence round 2: runtime_semantics; actual requests=3
+fresh-inventory-state-bool round 1: response_or_edit_contract; actual requests=3
+fresh-inventory-state-bool round 2: response_or_edit_contract; actual requests=3
+=== done Tue Nov 17 20:03:07 EST 2026
