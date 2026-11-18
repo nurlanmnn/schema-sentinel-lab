@@ -87,6 +87,16 @@ class RepairSuiteTests(unittest.TestCase):
             write(root/'report.json', dict(status='validation_passed'))
             with self.assertRaises(ValueError):build_feedback(root, CASE)
 
+    def test_fresh_oracle_verdict_reaches_feedback_without_values(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rejected_proposal(root)
+            write(root/'fresh/report.json', dict(status='failed', expected={'speed': 12.5},
+                  error='typescript: fresh wire/behavior mismatch at vector 1: fields speed=12.5'))
+            text = json.dumps(build_feedback(root, CASE)[0])
+            self.assertIn('fresh runtime check failed in the typescript service', text)
+            for leaked in ('12.5', 'speed', 'vector'):self.assertNotIn(leaked, text)
+
     def test_failure_stages_are_reported_separately(self):
         result = lambda status='failed', requests=1, edit='passed': dict(status=status, model_requests=requests,
                                                                         requests=[dict(edit_validation=dict(status=edit))])

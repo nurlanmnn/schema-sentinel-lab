@@ -134,3 +134,22 @@ See `docs/decisions/0043-post-lock-model-screening.md`. Summary: keep 0041;
 Gemma 9/15 on NVIDIA and an identical per-case pattern on AMD; gpt-oss-20b
 4/15; North Mini Code 0/15 (extra run); Mistral Large 4 and Muse Glimmer not
 measurable because of NVIDIA provider failures.
+
+## Repair-loop trial on the fresh failures (written before any repair request)
+
+Source: the three pre-registered locked Gemma runs (`fresh-gemma-s1..s3`), each
+with 2 rejected cases (`telemetry-speed-presence`, `inventory-state-bool`), so
+6 repair targets. `repair_suite --max-rounds 2` (decision 0042), NVIDIA, locked
+Gemma, prompt `3.1-feedback`, run one source at a time.
+
+Fix made first: `repair_suite.ORACLES` did not include the fresh oracle, so its
+verdict never reached the model (only "another check rejected the proposal").
+The verdict now arrives in the existing fixed wording (runtime name only; no
+values or vector contents; covered by a test).
+
+Reported: validated within 1 round and within 2 rounds, out of 6 targets, and
+per case. A repaired pass is never counted as a first-pass success. The
+feedback comes from the same oracle that scores the result, so this measures
+"can it fix the patch when told which runtime failed", not first-pass
+quality. Gemma at seed 0 gave identical first passes, so the 3 sources are
+close to one target per case; that is stated with the result.

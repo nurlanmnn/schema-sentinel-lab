@@ -14,7 +14,7 @@ from run_demo import check_output
 
 ROOT = Path(__file__).resolve().parents[1]
 STRATEGY = 'candidate_semantic_feedback_blocks'
-ORACLES = ('telemetry', 'pubsub', 'pubsub-malformed', 'inventory')
+ORACLES = ('telemetry', 'pubsub', 'pubsub-malformed', 'inventory', 'fresh')
 COMPILER = re.compile(r'error (?:TS\d+|CS\d+)|SyntaxError:|IndentationError:')
 LINE_LIMIT, LINES_PER_FILE = 500, 20
 
