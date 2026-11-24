@@ -25,9 +25,13 @@ OPTIONS = {
 # Draft decision 0043: post-lock screening candidate. Provider-recommended sampling, pinned to the
 # model's own provider, and no JSON mode so the response contract matches the NVIDIA route.
 COHERE_MODEL = 'cohere/north-mini-code:free'
+DEVSTRAL_MODEL = 'mistralai/devstral-2512'
 SCREENING_OPTIONS = {
     COHERE_MODEL: {'temperature': 1.0, 'top_p': 0.95, 'max_tokens': 16384,
                    'provider': {'only': ['Cohere'], 'allow_fallbacks': False}},
+    # Devstral 2 (123B dense, open weights). Temperature 0.15 is the model card's recommendation.
+    DEVSTRAL_MODEL: {'temperature': 0.15, 'max_tokens': 16384,
+                     'provider': {'only': ['Mistral'], 'allow_fallbacks': False}},
 }
 MODELS = (MODEL, *SCREENING_OPTIONS)
 
