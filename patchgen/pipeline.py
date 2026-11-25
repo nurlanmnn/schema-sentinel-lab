@@ -1,5 +1,6 @@
 """One-command independent descriptor -> syntax candidates -> adapter workflow."""
 from patchgen.amd_client import MODEL as AMD_MODEL, MODELS as AMD_MODELS
+from patchgen.selfhosted_client import MODEL as SELFHOSTED_MODEL, MODELS as SELFHOSTED_MODELS
 from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 import argparse
 import hashlib
@@ -134,8 +135,8 @@ def main():
     parser.add_argument('--fixture',type=Path,default=ROOT/'patchgen/fixtures/entity-name-rename/runtime-input.json')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--generate',action='store_true')
-    parser.add_argument('--model',choices=(*LOCAL_MODELS,*OPENROUTER_MODELS,*NVIDIA_MODELS,*AMD_MODELS),default=None,help='explicit model identifier')
-    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia','amd'),default='ollama')
+    parser.add_argument('--model',choices=(*LOCAL_MODELS,*OPENROUTER_MODELS,*NVIDIA_MODELS,*AMD_MODELS,*SELFHOSTED_MODELS),default=None,help='explicit model identifier')
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia','amd','selfhosted'),default='ollama')
     parser.add_argument('--local-codegen',action='store_true',help='explicit pinned local alternative to remote Buf plugins')
     parser.add_argument('--review-output',type=Path,help='export portable human-review evidence after a proposal run; must be outside pipeline output')
     parser.add_argument('--strategy',choices=('deterministic_fresh',*INVENTORY_EVOLUTION_STRATEGIES,'deterministic_telemetry_metadata','deterministic_telemetry_message_rename','deterministic_inventory_state_rename','deterministic_telemetry_quantized','deterministic_inventory_reservation','deterministic_inventory_labels','deterministic_inventory_presence','deterministic_inventory_stock_release','deterministic_inventory_width','deterministic_inventory_zigzag','candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks','candidate_feedback_blocks','candidate_semantic_feedback_blocks','syntax_rename','syntax_rename_roles','deterministic_rename_roles','deterministic_utf8_v2','deterministic_remove_name_v1','deterministic_telemetry_precision','deterministic_telemetry_units'),default='candidate_edits')
@@ -143,8 +144,8 @@ def main():
     parser.add_argument('--response',type=Path,help='explicit offline evaluator replay, not model success')
     args = parser.parse_args()
     try:
-        args.model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL, 'amd': AMD_MODEL}.get(args.backend, 'ministral-3:8b'))
-        if args.backend in ('openrouter', 'nvidia', 'amd'):
+        args.model = args.model or ({'openrouter': OPENROUTER_MODEL, 'nvidia': NVIDIA_MODEL, 'amd': AMD_MODEL, 'selfhosted': SELFHOSTED_MODEL}.get(args.backend, 'ministral-3:8b'))
+        if args.backend in ('openrouter', 'nvidia', 'amd', 'selfhosted'):
             from importlib import import_module
             transport = import_module('patchgen.' + args.backend + '_client')
             credential = transport.credential

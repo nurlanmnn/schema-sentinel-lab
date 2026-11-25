@@ -1,5 +1,6 @@
 """Versioned fixture -> local Ollama proposal -> isolated, fixed validation gate."""
 from patchgen.amd_client import MODEL as AMD_MODEL, MODELS as AMD_MODELS
+from patchgen.selfhosted_client import MODEL as SELFHOSTED_MODEL, MODELS as SELFHOSTED_MODELS
 from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 from patchgen.fresh_cases import PROFILES as FRESH_PROFILES
 import argparse
@@ -515,7 +516,7 @@ def request_model(messages, model, endpoint, output):
 
 
 def generate(case, model, endpoint, output, strategy='line_edits', backend='ollama'):
-    if backend in ('openrouter', 'nvidia', 'amd'):
+    if backend in ('openrouter', 'nvidia', 'amd', 'selfhosted'):
         from importlib import import_module
         transport = import_module('patchgen.' + backend + '_client')
         credential, cloud_request = transport.credential, transport.request_model
@@ -784,7 +785,7 @@ def main():
     parser.add_argument('--prepare-source',action='store_true',help='explicitly snapshot fixture revision into output/source before generation')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--model',default='ministral-3:8b')
-    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia','amd'), default='ollama')
+    parser.add_argument('--backend', choices=('ollama','openrouter','nvidia','amd','selfhosted'), default='ollama')
     parser.add_argument('--strategy',choices=tuple(STRATEGY_VERSIONS),default='line_edits')
     parser.add_argument('--validation-profile',choices=tuple(VALIDATION_PROFILES),help='explicit independent test migration; never sent to the model')
     parser.add_argument('--endpoint',default='http://127.0.0.1:11434')
@@ -860,7 +861,7 @@ def main():
             Path(__file__).with_name(inventory_policy).read_bytes()).hexdigest()
     if metadata_strategy:
         report['telemetry_metadata_sha256'] = hashlib.sha256((output/'telemetry-metadata-source.py').read_bytes()).hexdigest()
-    if args.backend in ('openrouter', 'nvidia', 'amd'):
+    if args.backend in ('openrouter', 'nvidia', 'amd', 'selfhosted'):
         raw = Path(__file__).with_name(args.backend + '_client.py').read_bytes()
         (output/(args.backend + '-client-source.py')).write_bytes(raw)
         report[args.backend + '_client_sha256'] = hashlib.sha256(raw).hexdigest()
@@ -869,8 +870,8 @@ def main():
         case = validate_input(json.loads(args.fixture.read_text()))
         # Hosted feedback is limited to NVIDIA semantic-block repair rounds (decision 0042).
         cloud_feedback = args.backend == 'nvidia' and args.strategy == 'candidate_semantic_feedback_blocks'
-        if args.backend in ('openrouter', 'nvidia', 'amd') and (args.response or (args.feedback and not cloud_feedback)
-                or args.model not in ({'openrouter': OPENROUTER_MODELS, 'nvidia': NVIDIA_MODELS, 'amd': AMD_MODELS}[args.backend])
+        if args.backend in ('openrouter', 'nvidia', 'amd', 'selfhosted') and (args.response or (args.feedback and not cloud_feedback)
+                or args.model not in ({'openrouter': OPENROUTER_MODELS, 'nvidia': NVIDIA_MODELS, 'amd': AMD_MODELS, 'selfhosted': SELFHOSTED_MODELS}[args.backend])
                 or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks') + (('candidate_semantic_feedback_blocks',) if cloud_feedback else ())):
             raise ContractError('cloud backend requires an explicit request to its selected model')
         if bool(args.feedback)!=(args.strategy in FEEDBACK_STRATEGIES) or args.feedback and args.response:
