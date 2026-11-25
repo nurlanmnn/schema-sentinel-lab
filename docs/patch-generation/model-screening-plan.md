@@ -184,3 +184,12 @@ locked options). Samples run concurrently (the server has 4 slots). Same countin
 Inkling had already seen the 8 development cases (8/8) earlier the same day; it had never seen a fresh case.
 Reported in its own table, never added to the pre-registered headline. The fresh cases have been seen by
 the people tuning this pipeline since 2026-11-17, so this is a screening comparison, not a held-out result.
+
+First attempt (2026-11-25, attempts 1-6 in `fresh-screen/attempts.jsonl`): every sample stopped on its first
+case with infrastructure failures, before any model failure. Inkling: HTTP 500 "Context size has been
+exceeded"; my server setup was at fault (llama.cpp `-c 32768` is one KV cache shared by all slots, and three
+concurrent samples at ~11k tokens each overflowed it). Gemma: TokenLab HTTP 503 (Retry-After 10) with three
+concurrent samples. Fix before rerun: server restarted with `-c 131072` (same GGUF, build, alias and
+sampling); Gemma samples run one at a time. Reruns are recorded with `--rerun-reason`; no model failure is
+replaced. One Gemma case passed in the first attempt (s3 entity-name-presence); it is reported but the
+rerun's results are the ones counted.
