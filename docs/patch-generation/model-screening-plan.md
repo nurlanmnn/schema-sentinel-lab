@@ -193,3 +193,28 @@ concurrent samples. Fix before rerun: server restarted with `-c 131072` (same GG
 sampling); Gemma samples run one at a time. Reruns are recorded with `--rerun-reason`; no model failure is
 replaced. One Gemma case passed in the first attempt (s3 entity-name-presence); it is reported but the
 rerun's results are the ones counted.
+
+Second attempt: Inkling ran all cases, but `entity-name-presence` failed with 0 requests in every sample
+(harness: renaming the attempt-1 folders left a stale git worktree registration at the reused path). Gemma on
+TokenLab again returned HTTP 503 even one sample at a time. Folders kept as `fresh2-attempt2-*`.
+
+Third attempt (counted): `git worktree prune`, all three Inkling samples rerun with `--rerun-reason`.
+Locked Gemma (`--locked`, NVIDIA) was tried instead of TokenLab and returned **HTTP 410: NVIDIA retired
+`google/gemma-4-31b-it` on 2026-11-24**. The 0041 locked configuration can no longer be run as specified.
+
+### Result (screening comparison, not held-out)
+
+| Case | Inkling 2 Mini Q8 (self-hosted, rule 0044) | Gemma locked, sealed 2026-11-17 (before 0044) |
+|---|---|---|
+| entity-name-presence | 1/3 (2 hit the 16384-token cap) | 3/3 |
+| telemetry-speed-presence | 1/3 | 0/3 |
+| telemetry-asset-rename | 3/3 | 3/3 |
+| inventory-quantity-unsigned | 3/3 | 3/3 |
+| inventory-state-bool | 3/3 | 0/3 |
+| **Total** | **11/15** | **9/15** (12/15 post-hoc under 0044) |
+
+No infrastructure or harness failure in the counted Inkling run. Gemma could not be re-run under 0044 (TokenLab
+503, NVIDIA 410), so the Gemma column is from different code; its 12/15 is a counterfactual, not a run.
+Gemma at seed 0 is deterministic, so its 15 attempts are close to 5 independent ones; Inkling samples at
+temperature 1.0 and varied. Inkling's two entity-name failures were reasoning that ran to the token cap, the
+failure the model card warns about. Per request Inkling took about 2-3 minutes on one MI300X.
