@@ -153,3 +153,34 @@ feedback comes from the same oracle that scores the result, so this measures
 "can it fix the patch when told which runtime failed", not first-pass
 quality. Gemma at seed 0 gave identical first passes, so the 3 sources are
 close to one target per case; that is stated with the result.
+
+## Second extra run: Inkling 2 Mini vs Gemma under rule 0044 (deviation, NOT pre-registered)
+
+Written 2026-11-25, before any request in this run. Branch `claude/selfhosted-inkling`.
+
+Why: to compare Inkling 2 Mini (Thinking Machines, US, Apache 2.0, 26B total / 3.4B active, fits the
+sponsor's one-GPU workstation path) with locked Gemma on cases neither was tuned on. The extra-run seal no
+longer matches the code, so this run needs its own seal.
+
+What changed since the extra-run seal (code only; no case, fixture, oracle or prompt change):
+- Decision 0044 (`anchor_edits.py`): whole-line edits missing only the final newline are now accepted.
+  **This changes scoring**, so earlier fresh numbers (Gemma 9/15) are not comparable. Gemma is therefore
+  re-run here under the same code.
+- New `--backend selfhosted` (`patchgen/selfhosted_client.py`): llama.cpp on one AMD MI300X (AMD Developer
+  Cloud), reached only through an SSH tunnel. GGUF `ggml-org/Inkling-2-Mini-GGUF` `Inkling-2-Mini-Q8_0.gguf`,
+  sha256 `652b8594fa321dadbd6af4966aa1c22578c7746ba2faa4c0046b3c108075274a`, llama.cpp build b12723-abca69200,
+  served as `inkling-2-mini-q8_0`. Sampling: temperature 1.0 (the model's generation config), seed 0,
+  max_tokens 16384, reasoning_effort "high" (the chat template's default).
+- Devstral 2 added to the OpenRouter allow-list (never ran).
+- Seal diff (checked before any request): `cases` and `split` identical; `prompt_fingerprints.one_shot` and
+  `.repair` identical (prompt text unchanged); only `prompt_fingerprints.protocol` changed, because it hashes
+  `anchor_edits.resolve`, which 0044 changed. Changed files: anchor_edits.py, generator.py, live_suite.py,
+  openrouter_client.py, pipeline.py.
+- Extra-run seal kept as `fresh-screen/manifest-v2-extra.json`; this run's seal is `fresh-screen/manifest.json`
+  (sha256 cb1b16ad…).
+
+Protocol: 3 samples each, `candidate_semantic_blocks`, no repair. Gemma via `--backend amd` (TokenLab,
+locked options). Samples run concurrently (the server has 4 slots). Same counting rules as above.
+Inkling had already seen the 8 development cases (8/8) earlier the same day; it had never seen a fresh case.
+Reported in its own table, never added to the pre-registered headline. The fresh cases have been seen by
+the people tuning this pipeline since 2026-11-17, so this is a screening comparison, not a held-out result.
