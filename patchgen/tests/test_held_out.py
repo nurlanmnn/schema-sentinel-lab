@@ -82,7 +82,10 @@ class SealTests(unittest.TestCase):
     def test_seal_covers_whole_reference_folder_and_harness(self):
         with tempfile.TemporaryDirectory() as tmp:
             root, registry = sealed_root(tmp)
-            files = json.loads(registry.read_text())['cases'][0]['files']
+            value = json.loads(registry.read_text())
+            self.assertEqual(value['locked_configuration'], '0045')
+            self.assertEqual(value['prompt_fingerprints'], live_suite.LOCKED_PROMPT_SHA256)
+            files = value['cases'][0]['files']
             self.assertIn(f'patchgen/reference/{PROFILE}/expected.json', files)  # not listed in the draft
             verify(registry, root, require_git=False)
             for change in (lambda: write(root/f'patchgen/reference/{PROFILE}/hint.json', '{}'),  # new file in sealed folder
@@ -199,7 +202,7 @@ class ReportingTests(unittest.TestCase):
                 mock.patch.object(held_out, 'begin_one_shot', return_value=dict(attempt=1)) as begin, \
                 mock.patch.object(held_out, 'finish') as done, \
                 mock.patch.object(live_suite, 'held_out_entries', return_value=(entries, {'telemetry-timestamp': 'x'})), \
-                mock.patch('patchgen.nvidia_client.credential'), mock.patch.object(live_suite.subprocess, 'run', side_effect=fake):
+                mock.patch('patchgen.selfhosted_client.credential'), mock.patch.object(live_suite.subprocess, 'run', side_effect=fake):
             registry_file = live_suite.ROOT/'README.md'  # any file inside ROOT
             live_suite.execute(Path(tmp)/'out', **LOCKED_CONFIG, locked=True, held_out=registry_file)
             summary = json.loads((Path(tmp)/'out/summary.json').read_text())
@@ -219,12 +222,12 @@ class ReportingTests(unittest.TestCase):
             live_suite.execute(Path('/missing'), 'ministral-3:8b', rerun_reason='outage')
 
     def test_repair_refuses_a_different_registry_than_the_scored_run(self):
-        from patchgen.nvidia_client import options_for
+        from patchgen.selfhosted_client import options_for
         from patchgen.live_suite import prompt_fingerprints
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp)/'source'; source.mkdir()
             write(source/'summary.json', json.dumps(dict(status='completed', mode='live_model', automatic_repairs=0,
-                locked_configuration='0041', prompt_fingerprints=prompt_fingerprints(), options=options_for(LOCKED_CONFIG['model']),
+                locked_configuration='0045', prompt_fingerprints=prompt_fingerprints(), options=options_for(LOCKED_CONFIG['model']),
                 results=[], held_out_registry='README.md', held_out_registry_sha256='0'*64, **LOCKED_CONFIG)))
             with mock.patch.object(held_out, 'verify'), mock.patch.object(held_out, 'begin_repair') as begin, \
                     self.assertRaisesRegex(ValueError, 'differs'):

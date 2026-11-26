@@ -35,7 +35,7 @@ class AMDTests(unittest.TestCase):
             self.assertEqual(request.get_method(), 'POST')
             self.assertEqual(request.get_header('Authorization'), 'Bearer ' + TOKEN)
             self.assertEqual(request.get_header('Content-type'), 'application/json')
-            expected = nvidia_client.options_for(live_suite.LOCKED_CONFIG['model'])
+            expected = nvidia_client.options_for('google/gemma-4-31b-it')
             self.assertEqual(json.loads(request.data), dict(expected, model=client.MODEL,
                                                           messages=MESSAGES, stream=False))
             self.assertEqual(http.call_args.kwargs['timeout'], 600)
@@ -47,15 +47,15 @@ class AMDTests(unittest.TestCase):
             for path in output.iterdir():
                 self.assertNotIn(TOKEN, path.read_text())
 
-    def test_options_equal_locked_gemma_and_are_independent(self):
-        expected = nvidia_client.options_for(live_suite.LOCKED_CONFIG['model'])
+    def test_options_equal_nvidia_gemma_and_are_independent(self):
+        expected = nvidia_client.options_for('google/gemma-4-31b-it')
         self.assertEqual(client.MODELS, ('Gemma-4-31B-IT',))
         self.assertEqual(client.options_for(client.MODEL), expected)
         options = client.options_for(client.MODEL)
         options['temperature'] = 99
         self.assertEqual(client.options_for(client.MODEL), expected)
         self.assertEqual(live_suite.prompt_fingerprints(), live_suite.LOCKED_PROMPT_SHA256)
-        self.assertEqual(live_suite.LOCKED_CONFIG['backend'], 'nvidia')
+        self.assertEqual(live_suite.LOCKED_CONFIG['backend'], 'selfhosted')
 
     def test_system_ca_bundle_and_default_fallback(self):
         for exists in (True, False):

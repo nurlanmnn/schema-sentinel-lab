@@ -522,7 +522,7 @@ def generate(case, model, endpoint, output, strategy='line_edits', backend='olla
         credential, cloud_request = transport.credential, transport.request_model
         cloud_options = transport.options_for(model) if hasattr(transport, 'options_for') else transport.OPTIONS
         cloud_strategies = ('candidate_edits', 'candidate_semantic_edits', 'candidate_blocks', 'candidate_semantic_blocks') + (
-            ('candidate_semantic_feedback_blocks',) if backend == 'nvidia' else ())
+            ('candidate_semantic_feedback_blocks',) if backend in ('nvidia', 'selfhosted') else ())
         if model not in getattr(transport, 'MODELS', (transport.MODEL,)) or strategy not in cloud_strategies:
             raise ContractError('Cloud backend requires its selected model and a supported live editing strategy')
         credential()
@@ -868,8 +868,8 @@ def main():
     start = time.monotonic()
     try:
         case = validate_input(json.loads(args.fixture.read_text()))
-        # Hosted feedback is limited to NVIDIA semantic-block repair rounds (decision 0042).
-        cloud_feedback = args.backend == 'nvidia' and args.strategy == 'candidate_semantic_feedback_blocks'
+        # Hosted feedback supports NVIDIA and the self-hosted lock (decisions 0042 and 0045).
+        cloud_feedback = args.backend in ('nvidia', 'selfhosted') and args.strategy == 'candidate_semantic_feedback_blocks'
         if args.backend in ('openrouter', 'nvidia', 'amd', 'selfhosted') and (args.response or (args.feedback and not cloud_feedback)
                 or args.model not in ({'openrouter': OPENROUTER_MODELS, 'nvidia': NVIDIA_MODELS, 'amd': AMD_MODELS, 'selfhosted': SELFHOSTED_MODELS}[args.backend])
                 or args.strategy not in ('candidate_edits','candidate_semantic_edits','candidate_blocks','candidate_semantic_blocks') + (('candidate_semantic_feedback_blocks',) if cloud_feedback else ())):

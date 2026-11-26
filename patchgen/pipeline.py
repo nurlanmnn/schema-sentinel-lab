@@ -149,7 +149,7 @@ def main():
             from importlib import import_module
             transport = import_module('patchgen.' + args.backend + '_client')
             credential = transport.credential
-            cloud_feedback = args.backend == 'nvidia' and args.strategy == 'candidate_semantic_feedback_blocks'
+            cloud_feedback = args.backend in ('nvidia', 'selfhosted') and args.strategy == 'candidate_semantic_feedback_blocks'
             if (not args.generate or args.response or (args.feedback and not cloud_feedback)
                     or args.model not in getattr(transport, 'MODELS', (transport.MODEL,))):
                 raise ContractError('Cloud backend requires an explicit generation run for its selected model')

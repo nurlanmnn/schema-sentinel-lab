@@ -30,6 +30,7 @@ class FreshSuiteTests(unittest.TestCase):
              patch('patchgen.nvidia_client.credential') as nvidia, \
              patch('patchgen.openrouter_client.credential') as openrouter, \
              patch('patchgen.amd_client.credential') as amd, \
+             patch('patchgen.selfhosted_client.credential') as selfhosted, \
              patch.object(Path,'read_bytes',autospec=True,return_value=b'test sealed inputs'):
             process.return_value.returncode=0
             code=live_suite.execute(output,model,strategy,backend=backend,**kwargs)
@@ -45,6 +46,7 @@ class FreshSuiteTests(unittest.TestCase):
             if backend=='nvidia':nvidia.assert_called_once()
             if backend=='openrouter':openrouter.assert_called_once()
             if backend=='amd':amd.assert_called_once()
+            if backend=='selfhosted':selfhosted.assert_called_once()
             return summary
 
     def test_fresh_runs_exactly_five_with_all_allowed_backends_models_and_strategies(self):
@@ -65,7 +67,9 @@ class FreshSuiteTests(unittest.TestCase):
     def test_locked_fresh_and_explicit_case_selection(self):
         with tempfile.TemporaryDirectory() as tmp:
             summary=self.execute_fake(Path(tmp)/'locked',**live_suite.LOCKED_CONFIG,fresh=True,locked=True)
-            self.assertEqual(summary['locked_configuration'],live_suite.LOCKED_DECISION)
+            self.assertEqual(summary['locked_configuration'],'0045')
+            self.assertEqual(summary['backend'],'selfhosted')
+            self.assertEqual(summary['model'],'inkling-2-mini-q8_0')
             self.assertEqual(summary['prompt_fingerprints'],live_suite.LOCKED_PROMPT_SHA256)
             summary=self.execute_fake(Path(tmp)/'single',cases=[live_suite.FRESH_CASES[0]])
             self.assertEqual(summary['validated_by_split']['fresh_screen'],'1/1')

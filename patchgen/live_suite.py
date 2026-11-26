@@ -4,6 +4,7 @@ from patchgen.selfhosted_client import MODEL as SELFHOSTED_MODEL, MODELS as SELF
 from patchgen.nvidia_client import MODEL as NVIDIA_MODEL, MODELS as NVIDIA_MODELS
 import argparse
 import hashlib
+from importlib import import_module
 import json
 from pathlib import Path
 import subprocess
@@ -21,9 +22,9 @@ CASES = ('pubsub-rename','pubsub-removal','pubsub-utf8','telemetry-rename','tele
 ADDITIONAL_CASES = ('inventory-width', 'telemetry-quantized')
 
 SCHEMA_ONLY_CASES = ('inventory-zigzag', 'telemetry-tag-move', 'inventory-packed-bins')
-# Decision 0041: the frozen configuration for subsequent live evaluations.
-LOCKED_DECISION = '0041'
-LOCKED_CONFIG = dict(backend='nvidia', model='google/gemma-4-31b-it', strategy='candidate_semantic_blocks')
+# Decision 0045: the frozen configuration for subsequent live evaluations.
+LOCKED_DECISION = '0045'
+LOCKED_CONFIG = dict(backend='selfhosted', model='inkling-2-mini-q8_0', strategy='candidate_semantic_blocks')
 
 
 # Every authored benchmark case informed prompt development. Held-out cases come only from a
@@ -37,15 +38,16 @@ _FINGERPRINT_CASE = dict(contract_version='1.0', source_revision='0'*40, intende
 LOCKED_PROMPT_SHA256 = dict(
     one_shot='9546791889d0d9ecd8a2baca015ce47a2740e0d179bdd92263dd55ac2d81cb23',
     repair='35dca82e6243080d902eeeb61963eb63a57350755f08fe476b31d216845204cb',
-    # Decision 0044 (trailing-newline acceptance in anchor_edits.resolve); was b6fa3513… under 0041.
-    protocol='6f648b9cc530f966c237997ee5c6f690643a02f0fbab36d61fe0d6b82d948dde')
+    # Decision 0045: self-hosted Inkling sampling; resolver and envelope parsing unchanged.
+    protocol='4fc43c9f9bdcde051cede0ac70e0dcf8e1f0f18e6b714829d77050057e8f4750')
 
 
 def prompt_fingerprints():
     """Hash the locked prompts, edit resolver, envelope parser and sampling so silent tuning is detectable."""
     import inspect
-    from patchgen import anchor_edits, generator, nvidia_client
+    from patchgen import anchor_edits, generator
     from patchgen.feedback_blocks import make_prompt as repair_prompt
+    transport = import_module('patchgen.' + LOCKED_CONFIG['backend'] + '_client')
     # A second file exercises the binding-specific prompt branch.
     bound = dict(_FINGERPRINT_FILE, path='runtimes/typescript/main.ts', language='typescript',
                  positions=[dict(start_line=1, end_line=1, reason='candidate', required_reference=True)])
@@ -54,7 +56,7 @@ def prompt_fingerprints():
         files={file['path']: dict(previous_response={}, validation_diagnostics=['fingerprint']) for file in (_FINGERPRINT_FILE, bound)}))
     digest = lambda value: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
     protocol = [inspect.getsource(function) for function in (generator.prompt, generator.file_context, anchor_edits.candidates,
-                anchor_edits.resolve, nvidia_client.parse_content)] + [nvidia_client.options_for(LOCKED_CONFIG['model'])]
+                anchor_edits.resolve, transport.parse_content)] + [transport.options_for(LOCKED_CONFIG['model'])]
     return dict(one_shot=digest([anchor_edits.make_prompt(case, file, semantic=True)[0] for file in (_FINGERPRINT_FILE, bound)]),
                 repair=digest([repair_prompt(feedback, file, semantic=True)[0] for file in (_FINGERPRINT_FILE, bound)]),
                 protocol=digest(protocol))
@@ -179,7 +181,7 @@ def collect(target, exit_code, elapsed):
 def execute(output,model,strategy='candidate_edits', *, full_benchmark=False, backend='ollama', cases=None, locked=False,
             held_out=None, rerun_reason=None, fresh=False, sample=None):
     if locked and dict(backend=backend, model=model, strategy=strategy) != LOCKED_CONFIG:
-        raise ValueError('locked run must use the decision 0041 configuration')
+        raise ValueError('locked run must use the decision ' + LOCKED_DECISION + ' configuration')
     if locked:
         require_locked_prompts()
     if fresh and (held_out is not None or cases is not None or full_benchmark):
@@ -318,7 +320,7 @@ def main():
     parser.add_argument('--full-benchmark', action='store_true',
                         help='record eligibility across the complete deterministic benchmark and run its supported live cases')
     parser.add_argument('--locked', action='store_true',
-                        help='use the decision 0041 configuration: Gemma 4 31B via NVIDIA, semantic blocks 3.1')
+                        help='use the decision 0045 configuration: Inkling 2 Mini self-hosted, semantic blocks 3.1')
     parser.add_argument('--backend', choices=('ollama','openrouter','nvidia','amd','selfhosted'), default=None)
     parser.add_argument('--model',choices=(*LOCAL_MODELS,*OPENROUTER_MODELS,*NVIDIA_MODELS,*AMD_MODELS,*SELFHOSTED_MODELS), default=None)
     parser.add_argument('--case', choices=CASES+ADDITIONAL_CASES+FRESH_CASES, action='append',

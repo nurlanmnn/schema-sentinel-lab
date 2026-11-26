@@ -153,14 +153,16 @@ three runtimes, and hands the result to a person. **It never merges anything by 
 
 ### The model setup (locked)
 
-Model choice was frozen on 5 Nov 2026 ([decision 0041](docs/decisions/0041-locked-gemma-configuration.md)).
-The setup is **Gemma 4 31B (`google/gemma-4-31b-it`) on NVIDIA's hosted API**, strategy
-`candidate_semantic_blocks` (prompt 3.1), temperature 0.5, seed 0. `--locked` selects exactly
-this setup and refuses any override. Prompt, sampling and parser fingerprints are checked
-on every run, so silent prompt tuning is caught.
+The current lock is [decision 0045](docs/decisions/0045-locked-inkling-configuration.md) (25 Nov 2026).
+It replaced [decision 0041](docs/decisions/0041-locked-gemma-configuration.md) after NVIDIA retired
+the Gemma 4 31B endpoint. The setup is **Inkling 2 Mini, 8-bit GGUF (`inkling-2-mini-q8_0`), served
+by llama.cpp on our own GPU** (`--backend selfhosted`), strategy `candidate_semantic_blocks`
+(prompt 3.1), temperature 1.0, seed 0, reasoning effort "high". `--locked` selects exactly this
+setup and refuses any override. Prompt, sampling and parser fingerprints are checked on every
+run, so silent prompt tuning is caught.
 
-- **API key:** set `NVIDIA_API_KEY`, or run `.venv/bin/python -m patchgen.nvidia_client setup-key`
-  once. That stores it in `~/.config/schema-sentinel/nvidia.key`, outside the repo.
+- **Server:** follow [the self-hosted guide](docs/patch-generation/selfhosted-amd-inkling.md). The
+  client only talks to a loopback address (an SSH tunnel to the GPU machine), and no API key is used.
 - Without `--locked`, the CLI default is still local **Ollama** (Ministral 3 models), so
   nothing calls a hosted model unless you ask for it. OpenRouter and other NVIDIA models
   remain as recorded experiments.
@@ -178,8 +180,9 @@ on every run, so silent prompt tuning is caught.
 | NVIDIA comparison (8 model-eligible cases) | Nemotron Ultra 2/8 → 5/8 as prompts improved; Gemma 6/8; Laguna 2/8 | [decision 0038](docs/decisions/0038-nvidia-model-prompt-evaluation.md), [decision 0039](docs/decisions/0039-laguna-coding-model-trial.md) |
 | Locked Gemma, first pass | 6/8 validated | [decision 0042](docs/decisions/0042-bounded-repair-loop.md) |
 | Locked Gemma + repair loop | 7/8 within one round (33 requests in total) | [decision 0042](docs/decisions/0042-bounded-repair-loop.md) |
+| Inkling 2 Mini Q8, self-hosted | 8/8 development cases; 11/15 on 5 sealed fresh cases (Gemma 9/15) | [decision 0045](docs/decisions/0045-locked-inkling-configuration.md), [screening plan](docs/patch-generation/model-screening-plan.md) |
 
-**Caveat:** all eight model cases were also used while developing the prompt, so 6/8 and 7/8
+**Caveat:** all eight model cases were also used while developing the prompt, so 6/8, 7/8 and 8/8
 are *development* numbers, not proof the model works on new changes. The fix is **held-out
 cases**: new migrations written after the lock, approved by someone who hasn't seen the model's
 failures, sealed, and scored once. The runner exists (`patchgen/held_out.py`,
@@ -200,7 +203,7 @@ python3.13 run_demo.py --case telemetry-units --output patchgen/evidence/my-unit
 # All 20 authored migrations, one after another (pinned local code generators: tools/codegen/README.md)
 python3.13 run_benchmark.py --local-codegen --output patchgen/evidence/my-benchmark
 
-# The locked LLM evaluation, then the repair loop on its failures (needs the NVIDIA key)
+# The locked LLM evaluation, then the repair loop on its failures (needs the self-hosted server and tunnel)
 .venv/bin/python -m patchgen.live_suite --locked --full-benchmark --output patchgen/evidence/my-locked
 .venv/bin/python -m patchgen.repair_suite --source patchgen/evidence/my-locked --output patchgen/evidence/my-repair
 
@@ -254,7 +257,8 @@ For steps 3 to 5: `test_generator.py`, `test_anchor_edits.py`, `test_live_suite.
 | `patchgen/pipeline.py`, `adapter.py` | Run the whole chain; check the detector and locator records before drafting |
 | `patchgen/generator.py`, `anchor_edits.py`, `feedback_blocks.py` | Step 3 (draft and apply) and step 4 (validate) |
 | `patchgen/type_utf8.py`, `inventory_*.py`, `telemetry_*.py`, `remove_name.py`, ... | Deterministic per-case recipes (no model) |
-| `patchgen/nvidia_client.py` | Hosted model access for the locked Gemma setup (`openrouter_client.py` is an older experiment) |
+| `patchgen/selfhosted_client.py` | Model access for the locked Inkling setup (loopback llama.cpp server) |
+| `patchgen/nvidia_client.py`, `amd_client.py`, `openrouter_client.py` | Hosted model access used in earlier experiments |
 | `patchgen/live_suite.py`, `repair_suite.py`, `held_out.py` | LLM evaluation, repair loop, held-out sealing |
 | `patchgen/oracle.py`, `benchmark_oracle.py`, `testbed/{telemetry,inventory,pubsub}/` | Independent checkers used by validation |
 | `patchgen/review.py`, `review_assets/` | Step 5: review page export and decision check |

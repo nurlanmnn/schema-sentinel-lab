@@ -37,9 +37,11 @@ docker run -d --name inkling --device /dev/kfd --device /dev/dri --group-add vid
   --security-opt seccomp=unconfined -v ~/models:/models -p 127.0.0.1:8080:8080 \
   ghcr.io/ggml-org/llama.cpp:server-rocm \
   -m /models/Inkling-2-Mini-Q8_0.gguf --alias inkling-2-mini-q8_0 \
-  --host 0.0.0.0 --port 8080 -ngl 999 -c 32768 --jinja
+  --host 0.0.0.0 --port 8080 -ngl 999 -c 131072 --jinja
 docker logs -f inkling
 ```
+
+The context is shared by llama.cpp's 4 parallel slots, so 131072 gives each concurrent request 32768 tokens. With `-c 32768`, concurrent requests fail with "context size has been exceeded".
 
 Record the `sha256sum` output and the llama.cpp build line from the log with the evidence.
 

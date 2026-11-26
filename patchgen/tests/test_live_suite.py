@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 from patchgen.live_suite import collect
 
 
@@ -18,10 +19,12 @@ class LiveSuiteTests(unittest.TestCase):
 
     def test_locked_configuration_is_exact_and_refuses_overrides(self):
         from argparse import Namespace
-        from patchgen.live_suite import LOCKED_CONFIG, execute, resolve_configuration
+        from patchgen.live_suite import LOCKED_CONFIG, LOCKED_DECISION, execute, resolve_configuration
         args=dict(locked=True,backend=None,model=None,strategy=None)
+        self.assertEqual(LOCKED_DECISION,'0045')
+        self.assertEqual(LOCKED_CONFIG,dict(backend='selfhosted',model='inkling-2-mini-q8_0',strategy='candidate_semantic_blocks'))
         self.assertEqual(resolve_configuration(Namespace(**args)),LOCKED_CONFIG)
-        for key,value in [('backend','ollama'),('model','ministral-3:8b'),('strategy','candidate_edits')]:
+        for key,value in [('backend','ollama'),('model','ministral-3:8b'),('strategy','candidate_edits'), *LOCKED_CONFIG.items()]:
             with self.assertRaises(ValueError):resolve_configuration(Namespace(**{**args,key:value}))
         unlocked=resolve_configuration(Namespace(locked=False,backend=None,model=None,strategy=None))
         self.assertEqual(unlocked,dict(backend='ollama',model='ministral-3:8b',strategy='candidate_edits'))
@@ -29,6 +32,20 @@ class LiveSuiteTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 execute(Path(tmp)/'out','ministral-3:8b','candidate_edits',locked=True)
             self.assertFalse((Path(tmp)/'out').exists())
+
+    def test_locked_cli_selects_0045_and_refuses_overrides(self):
+        from patchgen import live_suite
+        args=['live_suite','--output','unused','--locked']
+        with mock.patch('sys.argv',args), mock.patch.object(live_suite,'execute',return_value=0) as execute:
+            self.assertEqual(live_suite.main(),0)
+            self.assertEqual(execute.call_args.args[1:],('inkling-2-mini-q8_0','candidate_semantic_blocks'))
+            self.assertEqual(execute.call_args.kwargs['backend'],'selfhosted')
+            self.assertTrue(execute.call_args.kwargs['locked'])
+        for key,value in live_suite.LOCKED_CONFIG.items():
+            with self.subTest(option=key), mock.patch('sys.argv',args+['--'+key,value]), \
+                 mock.patch.object(live_suite,'execute') as execute, mock.patch('sys.stderr'):
+                self.assertEqual(live_suite.main(),1)
+                execute.assert_not_called()
 
     def test_missing_report_is_failed_not_a_success(self):
         with tempfile.TemporaryDirectory() as tmp:

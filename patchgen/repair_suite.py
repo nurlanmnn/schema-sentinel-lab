@@ -1,6 +1,7 @@
 """Bounded validation-feedback repair rounds on a completed locked suite (decision 0042)."""
 import argparse
 import hashlib
+from importlib import import_module
 import json
 from pathlib import Path
 import re
@@ -8,7 +9,6 @@ import subprocess
 import sys
 import time
 from patchgen.generator import save
-from patchgen.nvidia_client import options_for
 from patchgen.live_suite import LOCKED_CONFIG, LOCKED_DECISION, collect, prompt_fingerprints, require_locked_prompts
 from run_demo import check_output
 
@@ -97,17 +97,19 @@ def failure_stage(target, result):
 
 
 def require_locked_source(source):
+    transport = import_module('patchgen.' + LOCKED_CONFIG['backend'] + '_client')
+    options = transport.options_for(LOCKED_CONFIG['model'])
     summary = read(source/'summary.json')
     if (summary.get('status') != 'completed' or summary.get('mode') != 'live_model' or summary.get('automatic_repairs') != 0
             or summary.get('locked_configuration') != LOCKED_DECISION
             or {key: summary.get(key) for key in LOCKED_CONFIG} != LOCKED_CONFIG
             or summary.get('prompt_fingerprints') != prompt_fingerprints()
-            or summary.get('options') != options_for(LOCKED_CONFIG['model'])):
+            or summary.get('options') != options):
         raise ValueError('repair source must be a completed one-shot locked suite with unchanged prompts')
     # Retained requests must show the locked model and sampling actually sent.
     for request in source.glob('*/run/proposal/requests/*/request.json'):
         sent = read(request)
-        if sent.get('model') != LOCKED_CONFIG['model'] or {k: sent.get(k) for k in options_for(LOCKED_CONFIG['model'])} != options_for(LOCKED_CONFIG['model']):
+        if sent.get('model') != LOCKED_CONFIG['model'] or {k: sent.get(k) for k in options} != options:
             raise ValueError('retained request does not match the locked model and sampling: ' + str(request.relative_to(source)))
     return summary
 
