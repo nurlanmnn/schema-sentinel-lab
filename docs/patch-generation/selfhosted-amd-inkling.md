@@ -23,19 +23,20 @@ ggml-org publishes GGUF conversions that llama.cpp runs on ROCm:
 
 1. Go to the AMD Developer Cloud console and choose **Create → GPU Droplet**.
 2. Pick **1× MI300X** and the **ROCm** software image (Ubuntu with ROCm and Docker).
-3. Under SSH keys, add the contents of `~/.ssh/id_ed25519.pub`. That's the public key; never paste the file without `.pub`.
+3. Under SSH keys, select `schema-sentinel-amd` (the public half of `~/.ssh/schema_sentinel_amd`, which has no passphrase). The web console may not work on newer images, so the key must be chosen at creation.
 4. Create the droplet and copy its public IP address.
 
 ## 2. Start the server (on the droplet)
 
 ```bash
 ssh root@<IP>
-pip install -U "huggingface_hub[cli]"
-hf download ggml-org/Inkling-2-Mini-GGUF Inkling-2-Mini-Q8_0.gguf --local-dir ~/models
-sha256sum ~/models/Inkling-2-Mini-Q8_0.gguf
+mkdir -p ~/models
+curl -fL -o ~/models/Inkling-2-Mini-Q8_0.gguf \
+  https://huggingface.co/ggml-org/Inkling-2-Mini-GGUF/resolve/main/Inkling-2-Mini-Q8_0.gguf
+sha256sum ~/models/Inkling-2-Mini-Q8_0.gguf   # must be d57542f8aea5d7639beba5fc4ae7f584754916f63ac5d5a69328c27f652f45da
 docker run -d --name inkling --device /dev/kfd --device /dev/dri --group-add video \
   --security-opt seccomp=unconfined -v ~/models:/models -p 127.0.0.1:8080:8080 \
-  ghcr.io/ggml-org/llama.cpp:server-rocm \
+  ghcr.io/ggml-org/llama.cpp:server-rocm-b12723 \
   -m /models/Inkling-2-Mini-Q8_0.gguf --alias inkling-2-mini-q8_0 \
   --host 0.0.0.0 --port 8080 -ngl 999 -c 131072 --jinja
 docker logs -f inkling

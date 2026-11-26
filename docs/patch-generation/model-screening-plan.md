@@ -168,7 +168,7 @@ What changed since the extra-run seal (code only; no case, fixture, oracle or pr
   re-run here under the same code.
 - New `--backend selfhosted` (`patchgen/selfhosted_client.py`): llama.cpp on one AMD MI300X (AMD Developer
   Cloud), reached only through an SSH tunnel. GGUF `ggml-org/Inkling-2-Mini-GGUF` `Inkling-2-Mini-Q8_0.gguf`,
-  sha256 `652b8594fa321dadbd6af4966aa1c22578c7746ba2faa4c0046b3c108075274a`, llama.cpp build b12723-abca69200,
+  sha256 recorded as `652b8594fa321dadbd6af4966aa1c22578c7746ba2faa4c0046b3c108075274a` (see the 2026-11-26 note in decision 0045: this matches no published revision; the published file is `d57542f8…45da`), llama.cpp build b12723-abca69200,
   served as `inkling-2-mini-q8_0`. Sampling: temperature 1.0 (the model's generation config), seed 0,
   max_tokens 16384, reasoning_effort "high" (the chat template's default).
 - Devstral 2 added to the OpenRouter allow-list (never ran).
